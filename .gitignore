@@ -5,6 +5,17 @@
 # Recommended: add any editor/OS/tool-specific ignore rules from the Global/ templates as needed.
 # See: https://github.com/github/gitignore/tree/main/Global
 #
+# The Unity project is stored one level below this repository root.
+/Slave Ship Tycoon/[Ll]ibrary/
+/Slave Ship Tycoon/[Tt]emp/
+/Slave Ship Tycoon/[Oo]bj/
+/Slave Ship Tycoon/[Bb]uild/
+/Slave Ship Tycoon/[Bb]uilds/
+/Slave Ship Tycoon/[Ll]ogs/
+/Slave Ship Tycoon/[Uu]ser[Ss]ettings/
+/Slave Ship Tycoon/[Mm]emoryCaptures/
+/Slave Ship Tycoon/[Rr]ecordings/
+
 .utmp/
 /[Ll]ibrary/
 /[Tt]emp/
@@ -36,6 +47,9 @@
 
 # Visual Studio cache directory
 .vs/
+
+# JetBrains Rider project settings
+.idea/
 
 # Gradle cache directory
 .gradle/
