@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f441b5c726a04924c9efc601f8e903b0, type: 3}
+  m_Name: StageEnemyLayoutDatabase
+  m_EditorClassIdentifier: 
+  layouts:
+  - {fileID: 11400000, guid: 9c8a278c3788b3d42822b7b5f63e4ce3, type: 2}
+  - {fileID: 11400000, guid: 974a99dcf23db1346b1d66a085e5c152, type: 2}
+  - {fileID: 11400000, guid: 1b5594ce098afe6458bf2bc40c13c8d3, type: 2}

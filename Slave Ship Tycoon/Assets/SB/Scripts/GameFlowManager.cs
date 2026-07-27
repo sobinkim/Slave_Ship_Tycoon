@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using SB.Core.EventBus;
 using UnityEngine;
 
@@ -21,7 +21,6 @@ namespace SB.Scripts
         private int currentChapter = 1;
         private int currentStage = 1;
         private StageRoomType currentStageType;
-        //시작 하는 시점에 현재 상태를 저장하기
 
         public ChapterData[] Chapters;
 
@@ -37,9 +36,16 @@ namespace SB.Scripts
             Bus<StageBattleEndedEvent>.OnEvent -= UpdateCurrentChapterData;
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+                StartStage();
+
+        }
+
         public void StartStage()
         {
-            //입력 받은 정보에 맞는 전투 진행 시키기
+            print(currentChapter + "-" + currentStage + " 시작 ");
             Bus<StageStartedEvent>.Raise(new StageStartedEvent(currentChapter, currentStage));
         }
 
@@ -60,10 +66,13 @@ namespace SB.Scripts
 
         private void CheckRoomType(StageStartedEvent evt)
         {
+        
             if (evt.Stage == Chapters[currentChapter - 1].MaxStage)
                 currentStageType = StageRoomType.ChapterEnd;
             else
                 currentStageType = StageRoomType.Normal;
+            
+            print("현재 방 상태 확인 결과>>> "+ currentStageType );
         }
 
         private void UpdateCurrentChapterData(StageBattleEndedEvent evt)
@@ -71,7 +80,7 @@ namespace SB.Scripts
             if (evt.IsClear)
             {
                 StageClear();
-
+                print("스테이지 격파 성공");
                 if (currentStageType == StageRoomType.Normal)
                     currentStage++;
                 else if (currentStageType == StageRoomType.ChapterEnd)
@@ -83,10 +92,10 @@ namespace SB.Scripts
             }
             else
             {
+                print("스테이지 격파 실패");
                 StageFail();
             }
 
-            //상황에 따라 재전투, 다음 스테이지 전투로 넘어가는 역할
             StartStage();
         }
     }

@@ -1,14 +1,14 @@
-﻿namespace SB.Core.EventBus
+namespace SB.Core.EventBus
 {
-    public struct EnemyEvents
+    public static class EnemyEvents
     {
-        public struct EnemyDead : IEvent
+        public readonly struct EnemyDead : IEvent
         {
-            public Entity _entity;
+            public readonly Entity Entity;
 
             public EnemyDead(Entity entity)
             {
-                _entity = entity;
+                Entity = entity;
             }
         }
     }

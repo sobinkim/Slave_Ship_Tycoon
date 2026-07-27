@@ -1,61 +1,43 @@
-﻿using SB.Core.EventBus;
+using System;
+using SB.Core.EventBus;
 using UnityEngine;
 
 namespace SB.Scripts
 {
     public class BattleManager : MonoBehaviour
     {
-        private int spawnedEnemyCount = 0;
         private bool isBattleEnded;
-
-        [SerializeField] private MainShip mainShip;
+        
 
         private void OnEnable()
         {
-            Bus<StageStartedEvent>.OnEvent += SpawnStageEnemies;
-            Bus<EnemyEvents.EnemyDead>.OnEvent += EnemyDead;
-
-            if (mainShip != null)
-                mainShip.OnDeathEvent.AddListener(DeadMainShip);
-            else
-                Debug.LogWarning($"{nameof(BattleManager)} has no {nameof(MainShip)} assigned.");
+            Bus<BattleStartEvent>.OnEvent += StartBattle;
+            Bus<StageEnemiesDefeatedEvent>.OnEvent += StageEnemiesDefeated;
+            Bus<MainShipDeadEvent>.OnEvent += DeadMainShip;
         }
 
         private void OnDisable()
         {
-            Bus<StageStartedEvent>.OnEvent -= SpawnStageEnemies;
-            Bus<EnemyEvents.EnemyDead>.OnEvent -= EnemyDead;
-
-            if (mainShip != null)
-                mainShip.OnDeathEvent.RemoveListener(DeadMainShip);
+            Bus<BattleStartEvent>.OnEvent -= StartBattle;
+            Bus<StageEnemiesDefeatedEvent>.OnEvent -= StageEnemiesDefeated;
+            Bus<MainShipDeadEvent>.OnEvent -= DeadMainShip;
         }
 
-        private void DeadMainShip()
+        private void StartBattle(BattleStartEvent evt)
+        {
+            print("전투 시작");
+            isBattleEnded = false;
+            
+        }
+
+        private void DeadMainShip(MainShipDeadEvent evt)
         {
             EndBattle(false);
         }
 
-        private void AllEnemiesDead()
+        private void StageEnemiesDefeated(StageEnemiesDefeatedEvent evt)
         {
             EndBattle(true);
-        }
-
-        private void EnemyDead(EnemyEvents.EnemyDead evt)
-        {
-            if (spawnedEnemyCount <= 0)
-                return;
-
-            spawnedEnemyCount--;
-
-            if (spawnedEnemyCount == 0)
-            {
-                AllEnemiesDead();
-            }
-        }
-
-        private void SpawnStageEnemies(StageStartedEvent evt)
-        {
-            isBattleEnded = false;
         }
 
         private void EndBattle(bool isClear)
