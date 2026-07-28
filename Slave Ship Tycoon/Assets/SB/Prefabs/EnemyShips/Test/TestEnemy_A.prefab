@@ -103,6 +103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 73880341243569136}
+  - component: {fileID: 978930553866855467}
   m_Layer: 0
   m_Name: ShipAttackCompo
   m_TagString: Untagged
@@ -125,6 +126,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8455825842036440912}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &978930553866855467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698542367781877375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b145ee71204b629935da4ab1d127c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackCooldown: 1
 --- !u!1 &2953866507785636575
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityName: TestEnemy_A
   _myShipType: 2
-  _shipRole: 57
+  _shipRole: 1
 --- !u!1 &8089436742323163358
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,6 +384,7 @@ GameObject:
   - component: {fileID: 5648407895672082940}
   - component: {fileID: 4843906815021235314}
   - component: {fileID: 6715820834156563740}
+  - component: {fileID: 4103047314734227497}
   m_Layer: 0
   m_Name: EntitiyAnimator
   m_TagString: Untagged
@@ -418,7 +433,7 @@ Animator:
   m_GameObject: {fileID: 8838354041166555176}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0c2b89b6cb4ff0440ac4cced74b5487a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -430,3 +445,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4103047314734227497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8838354041166555176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807a79f21f29c4b418b1cbdba4e4ea41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

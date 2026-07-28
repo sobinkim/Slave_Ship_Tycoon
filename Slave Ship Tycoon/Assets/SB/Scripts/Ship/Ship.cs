@@ -1,5 +1,6 @@
 ﻿using System;
 using SB.Core;
+using SB.Scripts.AttackCompo;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -42,10 +43,12 @@ namespace SB.Scripts
         protected EntityAnimatorTrigger _animatorTrigger;
         protected EntityStatCompo _statCompo;
         protected EntityHealth _healthCompo;
+        protected Base_ShipAttackCompo _attackCompo;
 
         public MyShipData myShipData;
-
-        private void OnEnable()
+        
+        
+        protected virtual void OnEnable()
         {
             myShipData = new MyShipData();
             myShipData.Role = _shipRole;
@@ -65,16 +68,20 @@ namespace SB.Scripts
             _animatorTrigger = GetCompo<EntityAnimatorTrigger>();
             _statCompo = GetCompo<EntityStatCompo>();
             _healthCompo = GetCompo<EntityHealth>();
+            _attackCompo = GetCompo<Base_ShipAttackCompo>();
         }
 
         public virtual void OnSpawnedFromPool()
         {
             IsDead = false;
             _healthCompo?.ResetHealth();
+            _attackCompo?.ResetAttackState();
         }
 
         public virtual void OnDespawnedToPool()
         {
         }
+        
+        
     }
 }

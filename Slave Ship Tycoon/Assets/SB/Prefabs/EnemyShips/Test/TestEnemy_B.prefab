@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4248290324539223801}
   - component: {fileID: 3083529436596834602}
   - component: {fileID: 8040440873167396146}
+  - component: {fileID: 6976167472356647315}
   m_Layer: 0
   m_Name: EntitiyAnimator
   m_TagString: Untagged
@@ -59,7 +60,7 @@ Animator:
   m_GameObject: {fileID: 595124017595767679}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0c2b89b6cb4ff0440ac4cced74b5487a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -71,6 +72,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6976167472356647315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595124017595767679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807a79f21f29c4b418b1cbdba4e4ea41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1817684044173219014
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,6 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6884149b1ca4fd48f13504718d31b4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetRules: []
 --- !u!1 &2171686501910539465
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +179,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityName: TestEnemy_B
-  myShipType: 2
+  _myShipType: 2
+  _shipRole: 2
 --- !u!1 &4591137614061985864
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,6 +239,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6997694292792309781}
+  - component: {fileID: 8997429336869518242}
   m_Layer: 0
   m_Name: ShipAttackCompo
   m_TagString: Untagged
@@ -246,6 +262,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1013978060691389359}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8997429336869518242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6686558206230213393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b145ee71204b629935da4ab1d127c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackCooldown: 1
 --- !u!1 &6865856567926038592
 GameObject:
   m_ObjectHideFlags: 0

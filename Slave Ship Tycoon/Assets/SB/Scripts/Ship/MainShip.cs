@@ -6,8 +6,9 @@ namespace SB.Scripts
 {
     public class MainShip : Ship
     {
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             OnDeathEvent.AddListener(Death);
         }
         

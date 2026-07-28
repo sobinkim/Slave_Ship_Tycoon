@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6884149b1ca4fd48f13504718d31b4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetRules: []
 --- !u!1 &1540060333775515753
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,7 +128,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityName: TestEnemy_C
-  myShipType: 2
+  _myShipType: 2
+  _shipRole: 4
 --- !u!1 &3420720795256366998
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,6 +186,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 25673163842812386}
+  - component: {fileID: 1794974252660412674}
   m_Layer: 0
   m_Name: ShipAttackCompo
   m_TagString: Untagged
@@ -206,6 +209,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3348057075698838263}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1794974252660412674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3551258836028065399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b145ee71204b629935da4ab1d127c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackCooldown: 1
 --- !u!1 &3591212185791550079
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,6 +382,7 @@ GameObject:
   - component: {fileID: 1463555195956650583}
   - component: {fileID: 5356138100562529686}
   - component: {fileID: 1976506691658453437}
+  - component: {fileID: 1782385534981339289}
   m_Layer: 0
   m_Name: EntitiyAnimator
   m_TagString: Untagged
@@ -414,7 +431,7 @@ Animator:
   m_GameObject: {fileID: 6884647776499735864}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0c2b89b6cb4ff0440ac4cced74b5487a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -426,3 +443,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1782385534981339289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6884647776499735864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807a79f21f29c4b418b1cbdba4e4ea41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
