@@ -134,6 +134,7 @@ namespace SB.Scripts
                 if (mainShip == null)
                     return false;
 
+                mainShip.SetSpawnSlot(new Vector2Int(-1, -1));
                 spawnedMainShip = mainShip;
             }
 
@@ -166,6 +167,10 @@ namespace SB.Scripts
 
                 if (escortShip == null)
                     continue;
+
+                escortShip.SetSpawnSlot(new Vector2Int(
+                    i % PlayerFleetLoadout.ColumnCount,
+                    i / PlayerFleetLoadout.ColumnCount));
 
                 spawnedEscortShips.Add(escortShip);
                 escortShips.Add(escortShip);
@@ -206,6 +211,10 @@ namespace SB.Scripts
 
                 if (enemy == null)
                     continue;
+
+                enemy.SetSpawnSlot(new Vector2Int(
+                    slotIndex % StageEnemyLayout.GridSize,
+                    slotIndex / StageEnemyLayout.GridSize));
 
                 activeEnemies.Add(enemy);
                 spawnedEnemies.Add(enemy);
@@ -348,7 +357,7 @@ namespace SB.Scripts
                 Array.Resize(ref spawnPoints, StageEnemyLayout.SlotCount);
         }
 
-        private void OnDrawGizmosSelected()
+        private void OnDrawGizmos()
         {
             DrawSpawnPointGizmos(spawnPoints, new Color(1f, 0.35f, 0.15f, 0.9f));
             DrawSpawnPointGizmos(escortShipSpawnPoints, new Color(0.2f, 0.7f, 1f, 0.9f));
