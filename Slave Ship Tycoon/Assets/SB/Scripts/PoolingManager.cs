@@ -14,7 +14,6 @@ namespace SB.Scripts
     {
         public GameObject Prefab;
         public int PreloadCount;
-        public Transform Parent;
     }
 
     [DisallowMultipleComponent]
@@ -52,7 +51,7 @@ namespace SB.Scripts
                 return null;
 
             if (!pools.ContainsKey(prefab))
-                CreatePool(prefab, 0, parent);
+                CreatePool(prefab, 0);
 
             GameObject instance = pools[prefab].Count > 0
                 ? pools[prefab].Dequeue()
@@ -124,17 +123,17 @@ namespace SB.Scripts
                 if (data == null || data.Prefab == null)
                     continue;
 
-                CreatePool(data.Prefab, data.PreloadCount, data.Parent);
+                CreatePool(data.Prefab, data.PreloadCount);
             }
         }
 
-        private void CreatePool(GameObject prefab, int preloadCount, Transform parent)
+        private void CreatePool(GameObject prefab, int preloadCount)
         {
             if (pools.ContainsKey(prefab))
                 return;
 
             pools.Add(prefab, new Queue<GameObject>());
-            parentByPrefab.Add(prefab, parent != null ? parent : transform);
+            parentByPrefab.Add(prefab, transform);
 
             for (int i = 0; i < preloadCount; i++)
             {
