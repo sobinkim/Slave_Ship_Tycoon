@@ -6,7 +6,7 @@ namespace SB.Editor
 {
     public sealed class StageEnemyLayoutEditorWindow : EditorWindow
     {
-        private StageEnemyLayoutDatabase database;
+        private ChapterDatabase database;
         private StageEnemyLayout loadedLayout;
         private Enemy[] enemySlots = new Enemy[StageEnemyLayout.SlotCount];
         private int chapter = 1;
@@ -24,7 +24,7 @@ namespace SB.Editor
 
         private void OnEnable()
         {
-            database = StageEnemyAssetUtility.FindOrCreateDatabase();
+            database = StageEnemyAssetUtility.FindOrCreateChapterDatabase();
             LoadStage(false);
         }
 
@@ -34,10 +34,10 @@ namespace SB.Editor
             EditorGUILayout.LabelField("Stage Enemy Layout", EditorStyles.boldLabel);
             EditorGUILayout.Space(4f);
 
-            database = (StageEnemyLayoutDatabase)EditorGUILayout.ObjectField(
+            database = (ChapterDatabase)EditorGUILayout.ObjectField(
                 "Database",
                 database,
-                typeof(StageEnemyLayoutDatabase),
+                typeof(ChapterDatabase),
                 false);
 
             DrawStageSelector();
@@ -118,7 +118,7 @@ namespace SB.Editor
             if (GUILayout.Button("Create 3 Test Enemies"))
             {
                 StageEnemyTestContentCreator.CreateTestContent();
-                database = StageEnemyAssetUtility.FindOrCreateDatabase();
+                database = StageEnemyAssetUtility.FindOrCreateChapterDatabase();
                 LoadStage(false);
             }
         }
@@ -127,7 +127,7 @@ namespace SB.Editor
         {
             if (database == null)
             {
-                EditorGUILayout.HelpBox("Select or create a layout database.", MessageType.Error);
+                EditorGUILayout.HelpBox("Select or create a chapter database.", MessageType.Error);
                 return;
             }
 
@@ -180,7 +180,7 @@ namespace SB.Editor
                 return;
             }
 
-            if (database != null && database.TryGetLayout(chapter, stage, out StageEnemyLayout layout))
+            if (database != null && database.TryGetStage(chapter, stage, out StageEnemyLayout layout))
             {
                 loadedLayout = layout;
                 enemySlots = StageEnemyAssetUtility.CopySlots(layout);

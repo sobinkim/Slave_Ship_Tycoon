@@ -15,19 +15,14 @@ namespace SB.Scripts
         [SerializeField] private Transform spawnedPlayerFleetParent;
 
         [Header("Enemies")]
-        [SerializeField] private StageEnemyLayoutDatabase layoutDatabase;
+        [SerializeField] private ChapterDatabase chapterDatabase;
         [SerializeField] private Transform[] spawnPoints = new Transform[StageEnemyLayout.SlotCount];
         [SerializeField] private Transform spawnedEnemyParent;
 
         [Header("Gizmos")]
         [SerializeField, Min(0.05f)] private float gizmoRadius = 0.35f;
 
-        private readonly HashSet<Enemy> activeEnemies = new HashSet<Enemy>();
-        private readonly HashSet<Enemy> pooledEnemies = new HashSet<Enemy>();
-        private readonly HashSet<Ship> pooledPlayerShips = new HashSet<Ship>();
-        private readonly List<Ship> spawnedEscortShips = new List<Ship>();
-
-        private MainShip spawnedMainShip;
+        private readonly BattleParticipantTracker participantTracker = new BattleParticipantTracker();
         private PlayerFleetLoadout runtimePlayerFleetLoadout;
 
         public PlayerFleetLoadout PlayerFleetLoadout => runtimePlayerFleetLoadout;
@@ -44,14 +39,14 @@ namespace SB.Scripts
         private void OnEnable()
         {
             Bus<StageStartedEvent>.OnEvent += SpawnCurrentStageBattle;
-            Bus<EnemyEvents.EnemyDead>.OnEvent += HandleEnemyDead;
+            participantTracker.StartListening();
         }
 
         private void OnDisable()
         {
             Bus<StageStartedEvent>.OnEvent -= SpawnCurrentStageBattle;
-            Bus<EnemyEvents.EnemyDead>.OnEvent -= HandleEnemyDead;
-            ClearSpawnedBattleParticipants();
+            participantTracker.StopListening();
+            participantTracker.ClearBattleParticipants();
         }
 
         private void OnDestroy()
@@ -86,21 +81,12 @@ namespace SB.Scripts
 
         public void ClearSpawnedBattleParticipants()
         {
-            ClearSpawnedPlayerFleet();
-            ClearSpawnedEnemies();
+            participantTracker.ClearBattleParticipants();
         }
 
         public void ClearSpawnedEnemies()
         {
-            if (activeEnemies.Count == 0)
-                return;
-
-            Enemy[] enemies = new Enemy[activeEnemies.Count];
-            activeEnemies.CopyTo(enemies);
-            activeEnemies.Clear();
-
-            for (int i = 0; i < enemies.Length; i++)
-                ReleaseEnemy(enemies[i]);
+            participantTracker.ClearEnemies();
         }
 
         private void SpawnCurrentStageBattle(StageStartedEvent evt)
@@ -129,13 +115,17 @@ namespace SB.Scripts
                     return false;
                 }
 
-                mainShip = SpawnShip(mainShipPrefab, mainShipSpawnPoint, spawnedPlayerFleetParent);
+                mainShip = SpawnShip(
+                    mainShipPrefab,
+                    mainShipSpawnPoint,
+                    spawnedPlayerFleetParent,
+                    out bool isMainShipPooled);
 
                 if (mainShip == null)
                     return false;
 
                 mainShip.SetSpawnSlot(new Vector2Int(-1, -1));
-                spawnedMainShip = mainShip;
+                participantTracker.RegisterMainShip(mainShip, isMainShipPooled);
             }
 
             int count = runtimePlayerFleetLoadout.EscortSlotCount;
@@ -163,7 +153,11 @@ namespace SB.Scripts
                     return false;
                 }
 
-                Ship escortShip = SpawnShip(prefab, spawnPoint, spawnedPlayerFleetParent);
+                Ship escortShip = SpawnShip(
+                    prefab,
+                    spawnPoint,
+                    spawnedPlayerFleetParent,
+                    out bool isEscortShipPooled);
 
                 if (escortShip == null)
                     continue;
@@ -172,7 +166,7 @@ namespace SB.Scripts
                     i % PlayerFleetLoadout.ColumnCount,
                     i / PlayerFleetLoadout.ColumnCount));
 
-                spawnedEscortShips.Add(escortShip);
+                participantTracker.RegisterEscortShip(escortShip, isEscortShipPooled);
                 escortShips.Add(escortShip);
             }
 
@@ -183,13 +177,13 @@ namespace SB.Scripts
         {
             spawnedEnemies = null;
 
-            if (layoutDatabase == null)
+            if (chapterDatabase == null)
             {
-                Debug.LogError($"{nameof(StageSpawnManager)} needs a layout database.", this);
+                Debug.LogError($"{nameof(StageSpawnManager)} needs a chapter database.", this);
                 return false;
             }
 
-            if (!layoutDatabase.TryGetLayout(chapter, stage, out StageEnemyLayout layout))
+            if (!chapterDatabase.TryGetStage(chapter, stage, out StageEnemyLayout layout))
             {
                 Debug.LogError($"Enemy layout not found for Chapter {chapter}, Stage {stage}.", this);
                 return false;
@@ -207,7 +201,7 @@ namespace SB.Scripts
                 if (prefab == null)
                     continue;
 
-                Enemy enemy = SpawnEnemy(prefab, spawnPoints[slotIndex]);
+                Enemy enemy = SpawnEnemy(prefab, spawnPoints[slotIndex], out bool isPooled);
 
                 if (enemy == null)
                     continue;
@@ -216,7 +210,7 @@ namespace SB.Scripts
                     slotIndex % StageEnemyLayout.GridSize,
                     slotIndex / StageEnemyLayout.GridSize));
 
-                activeEnemies.Add(enemy);
+                participantTracker.RegisterEnemy(enemy, isPooled);
                 spawnedEnemies.Add(enemy);
             }
 
@@ -229,40 +223,19 @@ namespace SB.Scripts
 
         private void ClearSpawnedPlayerFleet()
         {
-            for (int i = 0; i < spawnedEscortShips.Count; i++)
-                ReleaseShip(spawnedEscortShips[i]);
-
-            spawnedEscortShips.Clear();
-
-            if (spawnedMainShip != null)
-            {
-                ReleaseShip(spawnedMainShip);
-                spawnedMainShip = null;
-            }
+            participantTracker.ClearPlayerFleet();
         }
 
-        private void HandleEnemyDead(EnemyEvents.EnemyDead evt)
-        {
-            if (evt.Entity is not Enemy enemy || !activeEnemies.Remove(enemy))
-                return;
-
-            ReleaseEnemy(enemy);
-
-            if (activeEnemies.Count == 0)
-                Bus<StageEnemiesDefeatedEvent>.Raise(new StageEnemiesDefeatedEvent());
-        }
-
-        private T SpawnShip<T>(T prefab, Transform spawnPoint, Transform parent) where T : Ship
+        private T SpawnShip<T>(T prefab, Transform spawnPoint, Transform parent, out bool isPooled)
+            where T : Ship
         {
             PoolingManager poolingManager = PoolingManager.Instance;
             T ship;
+            isPooled = poolingManager != null;
 
             if (poolingManager != null)
             {
                 ship = poolingManager.Get(prefab, spawnPoint.position, spawnPoint.rotation, parent);
-
-                if (ship != null)
-                    pooledPlayerShips.Add(ship);
             }
             else
             {
@@ -273,17 +246,15 @@ namespace SB.Scripts
             return ship;
         }
 
-        private Enemy SpawnEnemy(Enemy prefab, Transform spawnPoint)
+        private Enemy SpawnEnemy(Enemy prefab, Transform spawnPoint, out bool isPooled)
         {
             PoolingManager poolingManager = PoolingManager.Instance;
             Enemy enemy;
+            isPooled = poolingManager != null;
 
             if (poolingManager != null)
             {
                 enemy = poolingManager.Get(prefab, spawnPoint.position, spawnPoint.rotation, spawnedEnemyParent);
-
-                if (enemy != null)
-                    pooledEnemies.Add(enemy);
             }
             else
             {
@@ -293,29 +264,6 @@ namespace SB.Scripts
 
             return enemy;
         }
-
-        private void ReleaseShip(Ship ship)
-        {
-            if (ship == null)
-                return;
-
-            if (pooledPlayerShips.Remove(ship) && PoolingManager.Instance != null)
-                PoolingManager.Instance.Release(ship);
-            else
-                Destroy(ship.gameObject);
-        }
-
-        private void ReleaseEnemy(Enemy enemy)
-        {
-            if (enemy == null)
-                return;
-
-            if (pooledEnemies.Remove(enemy) && PoolingManager.Instance != null)
-                PoolingManager.Instance.Release(enemy);
-            else
-                Destroy(enemy.gameObject);
-        }
-
         private bool ValidateLayout(StageEnemyLayout layout)
         {
             if (layout.EnemyCount == 0)

@@ -44,7 +44,12 @@ namespace SB.Scripts
 
         private void GetCurrentStageSpawnData(BattleStartEvent evt)
         {
-            currentStageBattleSpawnData = evt.BattleSpawnData;
+            SetBattleSpawnData(evt.BattleSpawnData);
+        }
+
+        public void SetBattleSpawnData(BattleSpawnData battleSpawnData)
+        {
+            currentStageBattleSpawnData = battleSpawnData;
         }
 
         public Ship GetTarget()

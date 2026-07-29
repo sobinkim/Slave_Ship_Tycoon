@@ -18,14 +18,21 @@ namespace SB.Scripts.AttackCompo
         private ShipAttackStateMachine stateMachine;
 
         private TargetSelector targetSelector;
+        private ShipCombatStatCompo combatStatCompo;
         private EntityAnimator animator;
         private EntityAnimatorTrigger animatorTrigger;
         private float currentCooldown;
 
+        private static readonly int AttackSpeedMultiplierHash = UnityEngine.Animator.StringToHash("AttackSpeedMultiplier");
+
         protected TargetSelector TargetSelector => targetSelector;
+        protected ShipCombatStatCompo CombatStatCompo => combatStatCompo;
         protected EntityAnimator Animator => animator;
         protected EntityAnimatorTrigger AnimatorTrigger => animatorTrigger;
         protected Ship CurrentTarget { get; private set; }
+        protected float FinalAttackDamage => combatStatCompo != null ? combatStatCompo.FinalAttackDamage : 0f;
+        protected float FinalAttackSpeed => combatStatCompo != null ? combatStatCompo.FinalAttackSpeed : 1f;
+        protected float FinalAttackCooldown => attackCooldown / FinalAttackSpeed;
         public bool HasAliveTarget => CurrentTarget != null && CurrentTarget.IsDead == false;
         public bool CanAttack => currentCooldown <= 0f;
 
@@ -44,6 +51,7 @@ namespace SB.Scripts.AttackCompo
             base.Initialize(entity);
 
             targetSelector = GetCompo<TargetSelector>();
+            combatStatCompo = GetCompo<ShipCombatStatCompo>();
             animator = GetCompo<EntityAnimator>();
             animatorTrigger = GetCompo<EntityAnimatorTrigger>();
 
@@ -79,11 +87,13 @@ namespace SB.Scripts.AttackCompo
         {
             CurrentTarget = null;
             currentCooldown = 0f;
+            ResetAttackAnimationSpeed();
             ChangeState(AttackStateType.Idle);
         }
 
         private void RequestTarget(BattleStartEvent evt)
         {
+            targetSelector?.SetBattleSpawnData(evt.BattleSpawnData);
             ResetAttackState();
             TryAcquireTarget();
         }
@@ -110,7 +120,7 @@ namespace SB.Scripts.AttackCompo
 
         public void ResetCooldown()
         {
-            currentCooldown = attackCooldown;
+            currentCooldown = FinalAttackCooldown;
         }
 
         protected virtual void AttackStart()
@@ -121,8 +131,24 @@ namespace SB.Scripts.AttackCompo
 
         protected virtual void AttackEnd()
         {
+            ResetAttackAnimationSpeed();
             ResetCooldown();
             ChangeState(AttackStateType.Idle);
+        }
+
+        public void ApplyAttackAnimationSpeed()
+        {
+            SetAttackAnimationSpeed(FinalAttackSpeed);
+        }
+
+        public void ResetAttackAnimationSpeed()
+        {
+            SetAttackAnimationSpeed(1f);
+        }
+
+        private void SetAttackAnimationSpeed(float speed)
+        {
+            animator?.SetParam(AttackSpeedMultiplierHash, speed);
         }
     }
 }

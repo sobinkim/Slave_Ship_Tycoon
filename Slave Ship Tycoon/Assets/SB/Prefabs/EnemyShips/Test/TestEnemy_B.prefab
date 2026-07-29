@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3083529436596834602}
   - component: {fileID: 8040440873167396146}
   - component: {fileID: 6976167472356647315}
+  - component: {fileID: 1382728923}
   m_Layer: 0
   m_Name: EntitiyAnimator
   m_TagString: Untagged
@@ -190,7 +191,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 962192171765148986}
-  - component: {fileID: 2557238986185907272}
+  - component: {fileID: 7608860877758622623}
   m_Layer: 0
   m_Name: EntityStatCompo
   m_TagString: Untagged
@@ -213,7 +214,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 169978767863309615}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2557238986185907272
+--- !u!114 &7608860877758622623
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,14 +223,51 @@ MonoBehaviour:
   m_GameObject: {fileID: 4591137614061985864}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cda3d813826e4247841f0a85678fecb, type: 3}
+  m_Script: {fileID: 11500000, guid: e7824fd0189746ebbdff00b6ca8fe6b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   statContainer:
     StatOverrides:
-    - stat: {fileID: 11400000, guid: a3f022b2460482141aa96c821ce36e44, type: 2}
+    - stat: {fileID: 11400000, guid: 33d8c6041f2e435791483decab42cb5c, type: 2}
       useOverride: 0
       overrideBaseValue: 0
+    - stat: {fileID: 11400000, guid: 563ad0fbb37547efb3ce6eca795c4b56, type: 2}
+      useOverride: 0
+      overrideBaseValue: 0
+    - stat: {fileID: 11400000, guid: a4cf50aab72d4e6cb51db4a794375d75, type: 2}
+      useOverride: 0
+      overrideBaseValue: 0
+    - stat: {fileID: 11400000, guid: 90e7fb9023854cc48cef798ac5ea507f, type: 2}
+      useOverride: 0
+      overrideBaseValue: 0
+    - stat: {fileID: 11400000, guid: 6599574ae37549b6a4ed656027bf6c6d, type: 2}
+      useOverride: 0
+      overrideBaseValue: 0
+    - stat: {fileID: 11400000, guid: 4d5524dab23e43c3b636f724c96322e0, type: 2}
+      useOverride: 0
+      overrideBaseValue: 0
+    - stat: {fileID: 11400000, guid: 1cc2eb38aa4947d4981265fb799e4a39, type: 2}
+      useOverride: 0
+      overrideBaseValue: 0
+  _health_Stat: {fileID: 11400000, guid: 33d8c6041f2e435791483decab42cb5c, type: 2}
+  _attackDamage_Stat: {fileID: 11400000, guid: 563ad0fbb37547efb3ce6eca795c4b56, type: 2}
+  _attackSpeed_Stat: {fileID: 11400000, guid: a4cf50aab72d4e6cb51db4a794375d75, type: 2}
+  _playerFleet_AttackPowerPercent_Stat: {fileID: 11400000, guid: 90e7fb9023854cc48cef798ac5ea507f, type: 2}
+  _playerFleet_AttackSpeedPercent_Stat: {fileID: 11400000, guid: 6599574ae37549b6a4ed656027bf6c6d, type: 2}
+  _mainShip_CargoCapacity_Stat: {fileID: 11400000, guid: 4d5524dab23e43c3b636f724c96322e0, type: 2}
+  _mainShip_Luck_Stat: {fileID: 11400000, guid: 1cc2eb38aa4947d4981265fb799e4a39, type: 2}
+--- !u!114 &1382728923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595124017595767679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2db3bf878a50450695f97159bf2a9c3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6686558206230213393
 GameObject:
   m_ObjectHideFlags: 0
@@ -452,6 +490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c82492da41ed114ead28247c4aa5f43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthStat: {fileID: 11400000, guid: a3f022b2460482141aa96c821ce36e44, type: 2}
+  maxHealthStat: {fileID: 11400000, guid: 33d8c6041f2e435791483decab42cb5c, type: 2}
   fallbackMaxHealth: 100
   resetHealthOnInitialize: 1

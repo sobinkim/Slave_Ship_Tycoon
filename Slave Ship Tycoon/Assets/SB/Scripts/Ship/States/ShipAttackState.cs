@@ -23,6 +23,7 @@ namespace SB.Scripts.States
                 return;
             }
 
+            _owner.ApplyAttackAnimationSpeed();
             _entityAnimator?.SetParam("ATTACK", true);
         }
 
@@ -37,6 +38,7 @@ namespace SB.Scripts.States
         public void Exit()
         {
             _entityAnimator?.SetParam("ATTACK", false);
+            _owner.ResetAttackAnimationSpeed();
         }
     }
 }

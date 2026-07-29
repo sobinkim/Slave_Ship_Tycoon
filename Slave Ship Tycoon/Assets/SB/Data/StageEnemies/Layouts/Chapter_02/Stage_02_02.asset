@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a16a4795a17b8ba499c9be963a24f3ce, type: 3}
+  m_Name: Stage_02_02
+  m_EditorClassIdentifier: 
+  chapter: 2
+  stage: 2
+  enemySlots:
+  - {fileID: 0}
+  - {fileID: 1689721241314480839, guid: 7497113a48356294f9ea4c97d1472d78, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 7526993113934916792, guid: 2ca352d100fdf3c47905fba161e257ac, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 1845999461184479991, guid: e98ddc3ed0b7c264481673123ca0d983, type: 3}
+  - {fileID: 0}

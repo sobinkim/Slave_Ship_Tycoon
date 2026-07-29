@@ -41,11 +41,13 @@ namespace SB.Scripts
 
         protected EntityAnimator _animator;
         protected EntityAnimatorTrigger _animatorTrigger;
-        protected EntityStatCompo _statCompo;
+        protected ShipStatCompo _statCompo;
+        protected ShipStatCompo _shipStatCompo;
         protected EntityHealth _healthCompo;
         protected Base_ShipAttackCompo _attackCompo;
 
         public MyShipData myShipData;
+        public ShipStatCompo ShipStatCompo => _shipStatCompo;
         
         
         protected virtual void OnEnable()
@@ -66,7 +68,8 @@ namespace SB.Scripts
             base.InitializeComponents();
             _animator = GetCompo<EntityAnimator>();
             _animatorTrigger = GetCompo<EntityAnimatorTrigger>();
-            _statCompo = GetCompo<EntityStatCompo>();
+            _statCompo = GetCompo<ShipStatCompo>();
+            _shipStatCompo = GetCompo<ShipStatCompo>();
             _healthCompo = GetCompo<EntityHealth>();
             _attackCompo = GetCompo<Base_ShipAttackCompo>();
         }
