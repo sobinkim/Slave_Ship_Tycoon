@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e28ee99f8194e5581a724b88b72cda2, type: 3}
+  m_Name: Chapter_03
+  m_EditorClassIdentifier: 
+  chapter: 3
+  routeType: 0
+  enemyFaction: 0
+  stages:
+  - {fileID: 11400000, guid: f8304183f4004d28b88b57b2ab8bb913, type: 2}
+  - {fileID: 11400000, guid: 3a772dcd5b2e45cd90bad3ce2e67433e, type: 2}
+  - {fileID: 11400000, guid: 298b36fdc0804f5d97f2f46f3ffcda8c, type: 2}
+  - {fileID: 11400000, guid: 9625ab9107cc460797cfd7b6b2747603, type: 2}
+  - {fileID: 11400000, guid: 47ce678678f641ebb61ad5c83e518d67, type: 2}

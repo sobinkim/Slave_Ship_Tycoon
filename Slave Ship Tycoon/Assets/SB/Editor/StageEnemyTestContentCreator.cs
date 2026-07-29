@@ -9,12 +9,12 @@ namespace SB.Editor
         [MenuItem("SB/Stage Enemies/Create Test Content")]
         public static void CreateTestContent()
         {
-            StageEnemyLayoutDatabase database = StageEnemyAssetUtility.FindOrCreateDatabase();
+            ChapterDatabase database = StageEnemyAssetUtility.FindOrCreateChapterDatabase();
             Enemy enemyA = StageEnemyAssetUtility.CreateTestEnemyPrefab("TestEnemy_A");
             Enemy enemyB = StageEnemyAssetUtility.CreateTestEnemyPrefab("TestEnemy_B");
             Enemy enemyC = StageEnemyAssetUtility.CreateTestEnemyPrefab("TestEnemy_C");
 
-            if (!database.TryGetLayout(1, 1, out _))
+            if (!database.TryGetStage(1, 1, out _))
             {
                 Enemy[] slots = new Enemy[StageEnemyLayout.SlotCount];
                 slots[1] = enemyA;

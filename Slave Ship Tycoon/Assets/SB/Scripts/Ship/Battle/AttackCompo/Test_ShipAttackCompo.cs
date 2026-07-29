@@ -11,8 +11,8 @@ namespace SB.Scripts.AttackCompo
             if (CurrentTarget == null)
                 return;
 
-            print($"{Owner.name} -> {CurrentTarget.name} Damage 10");
-            CurrentTarget.GetCompo<EntityHealth>()?.ApplyDamage(10);
+            print($"{Owner.name} -> {CurrentTarget.name} Damage {FinalAttackDamage}");
+            CurrentTarget.GetCompo<EntityHealth>()?.ApplyDamage(FinalAttackDamage);
         }
     }
 }

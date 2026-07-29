@@ -1,15 +1,8 @@
-﻿using System;
 using SB.Core.EventBus;
 using UnityEngine;
 
 namespace SB.Scripts
 {
-    [Serializable]
-    public struct ChapterData
-    {
-        public int MaxStage;
-    }
-
     public enum StageRoomType
     {
         Normal,
@@ -18,11 +11,11 @@ namespace SB.Scripts
 
     public class GameFlowManager : MonoBehaviour
     {
+        [SerializeField] private ChapterDatabase chapterDatabase;
+
         private int currentChapter = 1;
         private int currentStage = 1;
         private StageRoomType currentStageType;
-
-        public ChapterData[] Chapters;
 
         private void OnEnable()
         {
@@ -40,11 +33,16 @@ namespace SB.Scripts
         {
             if (Input.GetKeyDown(KeyCode.Space))
                 StartStage();
-
         }
 
         public void StartStage()
         {
+            if (HasCurrentChapter() == false)
+            {
+                Debug.Log($"Chapter {currentChapter} data was not found. Stage loop stopped.", this);
+                return;
+            }
+
             print(currentChapter + "-" + currentStage + " 시작 ");
             Bus<StageStartedEvent>.Raise(new StageStartedEvent(currentChapter, currentStage));
         }
@@ -66,13 +64,22 @@ namespace SB.Scripts
 
         private void CheckRoomType(StageStartedEvent evt)
         {
-        
-            if (evt.Stage == Chapters[currentChapter - 1].MaxStage)
-                currentStageType = StageRoomType.ChapterEnd;
-            else
+            if (chapterDatabase == null)
+            {
+                Debug.LogError($"{nameof(GameFlowManager)} needs a chapter database.", this);
                 currentStageType = StageRoomType.Normal;
-            
-            print("현재 방 상태 확인 결과>>> "+ currentStageType );
+                return;
+            }
+
+            if (chapterDatabase.IsFinalStage(evt.Chapter, evt.Stage, out bool isFinalStage) == false)
+            {
+                Debug.LogError($"Chapter data not found for Chapter {evt.Chapter}, Stage {evt.Stage}.", this);
+                currentStageType = StageRoomType.Normal;
+                return;
+            }
+
+            currentStageType = isFinalStage ? StageRoomType.ChapterEnd : StageRoomType.Normal;
+            print("현재 방 상태 확인 결과>>> " + currentStageType);
         }
 
         private void UpdateCurrentChapterData(StageBattleEndedEvent evt)
@@ -81,8 +88,11 @@ namespace SB.Scripts
             {
                 StageClear();
                 print("스테이지 격파 성공");
+
                 if (currentStageType == StageRoomType.Normal)
+                {
                     currentStage++;
+                }
                 else if (currentStageType == StageRoomType.ChapterEnd)
                 {
                     LoopClear();
@@ -97,6 +107,12 @@ namespace SB.Scripts
             }
 
             StartStage();
+        }
+
+        private bool HasCurrentChapter()
+        {
+            return chapterDatabase != null &&
+                   chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer _);
         }
     }
 }

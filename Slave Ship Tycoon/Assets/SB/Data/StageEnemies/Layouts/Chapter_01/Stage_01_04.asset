@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stage_01_04
   m_EditorClassIdentifier: 
   chapter: 1
-  stage: 1
+  stage: 4
   enemySlots:
   - {fileID: 0}
   - {fileID: 1689721241314480839, guid: 7497113a48356294f9ea4c97d1472d78, type: 3}

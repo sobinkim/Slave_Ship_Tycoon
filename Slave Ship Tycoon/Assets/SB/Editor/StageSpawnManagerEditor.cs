@@ -9,14 +9,14 @@ namespace SB.Editor
     public sealed class StageSpawnManagerEditor : UnityEditor.Editor
     {
         private SerializedProperty escortShipSpawnPointsProperty;
-        private SerializedProperty layoutDatabaseProperty;
+        private SerializedProperty chapterDatabaseProperty;
         private SerializedProperty spawnPointsProperty;
 
         private void OnEnable()
         {
             escortShipSpawnPointsProperty =
                 serializedObject.FindProperty("escortShipSpawnPoints");
-            layoutDatabaseProperty = serializedObject.FindProperty("layoutDatabase");
+            chapterDatabaseProperty = serializedObject.FindProperty("chapterDatabase");
             spawnPointsProperty = serializedObject.FindProperty("spawnPoints");
         }
 
@@ -27,12 +27,12 @@ namespace SB.Editor
                 serializedObject,
                 "m_Script",
                 "escortShipSpawnPoints",
-                "layoutDatabase",
+                "chapterDatabase",
                 "spawnPoints");
 
             DrawEscortSpawnPointGrid();
             EditorGUILayout.Space(8f);
-            EditorGUILayout.PropertyField(layoutDatabaseProperty);
+            EditorGUILayout.PropertyField(chapterDatabaseProperty);
             EditorGUILayout.Space(6f);
             DrawEnemySpawnPointGrid();
             DrawEnemyValidation();
@@ -40,8 +40,8 @@ namespace SB.Editor
 
             if (GUILayout.Button("Assign Default Database"))
             {
-                layoutDatabaseProperty.objectReferenceValue =
-                    StageEnemyAssetUtility.FindOrCreateDatabase();
+                chapterDatabaseProperty.objectReferenceValue =
+                    StageEnemyAssetUtility.FindOrCreateChapterDatabase();
             }
 
             if (GUILayout.Button("Open Enemy Layout Editor"))

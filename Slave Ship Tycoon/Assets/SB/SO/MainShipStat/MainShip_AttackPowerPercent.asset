@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30032e0214ff83d46bbb10d495ac5fac, type: 3}
-  m_Name: Hp
+  m_Name: MainShip_AttackPowerPercent
   m_EditorClassIdentifier: 
-  statName: Hp
-  displayName: 
+  statName: MainShip.AttackPowerPercent
+  displayName: Fleet Attack Power %
   description: 
   icon: {fileID: 0}
-  baseValue: 100
+  baseValue: 0
   minValue: 0
   maxValue: 999999
   incrementStep: 1
-  isPercent: 0
+  isPercent: 1
