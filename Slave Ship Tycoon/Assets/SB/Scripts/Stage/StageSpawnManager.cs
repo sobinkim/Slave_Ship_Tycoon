@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using SB.Core.EventBus;
+using SB.Scripts.AttackCompo;
+using SB.Scripts.Upgrade;
 using UnityEngine;
 
 namespace SB.Scripts
@@ -10,6 +12,7 @@ namespace SB.Scripts
     {
         [Header("Player Fleet")]
         [SerializeField] private PlayerFleetLoadout playerFleetLoadout;
+        [SerializeField] private PlayerFleetUpgradeProvider playerFleetUpgradeProvider;
         [SerializeField] private Transform mainShipSpawnPoint;
         [SerializeField] private Transform[] escortShipSpawnPoints = Array.Empty<Transform>();
         [SerializeField] private Transform spawnedPlayerFleetParent;
@@ -125,6 +128,7 @@ namespace SB.Scripts
                     return false;
 
                 mainShip.SetSpawnSlot(new Vector2Int(-1, -1));
+                SetPlayerFleetUpgradeProvider(mainShip);
                 participantTracker.RegisterMainShip(mainShip, isMainShipPooled);
             }
 
@@ -166,6 +170,7 @@ namespace SB.Scripts
                     i % PlayerFleetLoadout.ColumnCount,
                     i / PlayerFleetLoadout.ColumnCount));
 
+                SetPlayerFleetUpgradeProvider(escortShip);
                 participantTracker.RegisterEscortShip(escortShip, isEscortShipPooled);
                 escortShips.Add(escortShip);
             }
@@ -224,6 +229,15 @@ namespace SB.Scripts
         private void ClearSpawnedPlayerFleet()
         {
             participantTracker.ClearPlayerFleet();
+        }
+
+        private void SetPlayerFleetUpgradeProvider(Ship ship)
+        {
+            if (ship == null)
+                return;
+
+            ShipCombatStatCompo combatStatCompo = ship.GetCompo<ShipCombatStatCompo>();
+            combatStatCompo?.SetPlayerFleetUpgradeProvider(playerFleetUpgradeProvider);
         }
 
         private T SpawnShip<T>(T prefab, Transform spawnPoint, Transform parent, out bool isPooled)

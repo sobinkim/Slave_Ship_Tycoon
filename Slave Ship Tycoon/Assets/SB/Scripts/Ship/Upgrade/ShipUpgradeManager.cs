@@ -40,7 +40,7 @@ namespace SB.Scripts.Upgrade
         [SerializeField] private UpgradeGrowthData[] upgradeGrowthDatas;
         [SerializeField] private MainShipUpgradeData _mainShipUpgradeData;
 
-        private float _currentGold = 0;
+        private float _currentGold = 1000000000;
 
         public MainShipUpgradeData MainShipUpgradeData => _mainShipUpgradeData;
 
@@ -91,7 +91,7 @@ namespace SB.Scripts.Upgrade
             return true;
         }
 
-        private UpgradeGrowthData GetTargetUpdateData(MainShipUpgradeType upgradeType)
+        public UpgradeGrowthData GetTargetUpdateData(MainShipUpgradeType upgradeType)
         {
             foreach (UpgradeGrowthData data in upgradeGrowthDatas)
             {

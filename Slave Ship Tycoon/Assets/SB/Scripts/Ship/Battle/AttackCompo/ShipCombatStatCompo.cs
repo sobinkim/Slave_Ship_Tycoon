@@ -11,7 +11,7 @@ namespace SB.Scripts.AttackCompo
 
         private Ship ownerShip;
         private ShipStatCompo shipStatCompo;
-        private ShipUpgradeManager shipUpgradeManager;
+        private PlayerFleetUpgradeProvider playerFleetUpgradeProvider;
 
         private bool UsesPlayerFleetUpgrade =>
             ownerShip != null &&
@@ -56,7 +56,11 @@ namespace SB.Scripts.AttackCompo
 
             ownerShip = entity as Ship;
             shipStatCompo = GetCompo<ShipStatCompo>();
-            shipUpgradeManager = FindAnyObjectByType<ShipUpgradeManager>();
+        }
+
+        public void SetPlayerFleetUpgradeProvider(PlayerFleetUpgradeProvider upgradeProvider)
+        {
+            playerFleetUpgradeProvider = upgradeProvider;
         }
 
         private float GetCommonStatValue(ShipCommonStatType statType, float defaultValue)
@@ -70,12 +74,12 @@ namespace SB.Scripts.AttackCompo
 
         private float GetPlayerFleetAttackPowerPercent()
         {
-            return shipUpgradeManager != null ? shipUpgradeManager.MainShipUpgradeData.attackPowerPercent : 0f;
+            return playerFleetUpgradeProvider != null ? playerFleetUpgradeProvider.AttackPowerPercent : 0f;
         }
 
         private float GetPlayerFleetAttackSpeedPercent()
         {
-            return shipUpgradeManager != null ? shipUpgradeManager.MainShipUpgradeData.attackSpeedPercent : 0f;
+            return playerFleetUpgradeProvider != null ? playerFleetUpgradeProvider.AttackSpeedPercent : 0f;
         }
     }
 }
