@@ -1,25 +1,24 @@
 using SB.Core;
-using SB.Scripts.AttackCompo;
 using UnityEngine;
 
 namespace SB.Scripts.States
 {
     public class ShipAttackState : IState
     {
-        private Base_ShipAttackCompo _owner;
+        private Ship _owner;
         private EntityAnimator _entityAnimator;
 
-        public ShipAttackState(Base_ShipAttackCompo owner)
+        public ShipAttackState(Ship owner)
         {
             _owner = owner;
-            _entityAnimator = _owner.Owner.GetCompo<EntityAnimator>();
+            _entityAnimator = _owner.GetCompo<EntityAnimator>();
         }
 
         public void Enter()
         {
-            if (_owner.EnsureTarget() == false)
+            if (_owner.EnsureAttackTarget() == false)
             {
-                _owner.ChangeState(AttackStateType.Idle);
+                _owner.ChangeState(ShipStateType.Idle);
                 return;
             }
 
@@ -29,9 +28,9 @@ namespace SB.Scripts.States
 
         public void Update()
         {
-            if (_owner.Owner.IsDead)
+            if (_owner.IsDead)
             {
-                _owner.ChangeState(AttackStateType.Dead);
+                _owner.ChangeState(ShipStateType.Dead);
             }
         }
 

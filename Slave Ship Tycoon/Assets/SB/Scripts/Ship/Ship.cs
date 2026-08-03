@@ -13,6 +13,14 @@ namespace SB.Scripts
         Enemy
     }
 
+    public enum ShipStateType
+    {
+        Idle,
+        Move,
+        Attack,
+        Dead
+    }
+
     [System.Flags]
     public enum ShipRole
     {
@@ -45,9 +53,11 @@ namespace SB.Scripts
         protected ShipStatCompo _shipStatCompo;
         protected EntityHealth _healthCompo;
         protected Base_ShipAttackCompo _attackCompo;
+        private ShipStateMachine _stateMachine;
 
         public MyShipData myShipData;
         public ShipStatCompo ShipStatCompo => _shipStatCompo;
+        public bool CanAttack => _attackCompo != null && _attackCompo.CanAttack;
         
         
         protected virtual void OnEnable()
@@ -72,13 +82,55 @@ namespace SB.Scripts
             _shipStatCompo = GetCompo<ShipStatCompo>();
             _healthCompo = GetCompo<EntityHealth>();
             _attackCompo = GetCompo<Base_ShipAttackCompo>();
+            _stateMachine = new ShipStateMachine(this);
+        }
+
+        protected virtual void Update()
+        {
+            UpdateShipState();
+        }
+
+        protected void UpdateShipState()
+        {
+            _stateMachine?.Update();
+        }
+
+        public void ChangeState(ShipStateType state)
+        {
+            _stateMachine?.ChangeState(state);
+        }
+
+        public void ResetShipState()
+        {
+            _attackCompo?.ResetAttackState();
+            ChangeState(ShipStateType.Idle);
+        }
+
+        public bool EnsureAttackTarget()
+        {
+            return _attackCompo != null && _attackCompo.EnsureTarget();
+        }
+
+        public void TickAttackCooldown(float deltaTime)
+        {
+            _attackCompo?.TickCooldown(deltaTime);
+        }
+
+        public void ApplyAttackAnimationSpeed()
+        {
+            _attackCompo?.ApplyAttackAnimationSpeed();
+        }
+
+        public void ResetAttackAnimationSpeed()
+        {
+            _attackCompo?.ResetAttackAnimationSpeed();
         }
 
         public virtual void OnSpawnedFromPool()
         {
             IsDead = false;
             _healthCompo?.ResetHealth();
-            _attackCompo?.ResetAttackState();
+            ResetShipState();
         }
 
         public virtual void OnDespawnedToPool()

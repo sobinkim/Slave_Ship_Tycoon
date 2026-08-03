@@ -1,18 +1,17 @@
 using SB.Core;
-using SB.Scripts.AttackCompo;
 using UnityEngine;
 
 namespace SB.Scripts.States
 {
     public class ShipDeadState : IState
     {
-        private Base_ShipAttackCompo _owner;
+        private Ship _owner;
         private EntityAnimator _entityAnimator;
 
-        public ShipDeadState(Base_ShipAttackCompo owner)
+        public ShipDeadState(Ship owner)
         {
             _owner = owner;
-            _entityAnimator = _owner.Owner.GetCompo<EntityAnimator>();
+            _entityAnimator = _owner.GetCompo<EntityAnimator>();
         }
 
         public void Enter()

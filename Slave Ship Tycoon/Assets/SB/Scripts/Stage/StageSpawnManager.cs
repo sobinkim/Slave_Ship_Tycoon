@@ -16,6 +16,7 @@ namespace SB.Scripts
         [SerializeField] private Transform mainShipSpawnPoint;
         [SerializeField] private Transform[] escortShipSpawnPoints = Array.Empty<Transform>();
         [SerializeField] private Transform spawnedPlayerFleetParent;
+        [SerializeField] private StageEncounterDirector stageEncounterDirector;
 
         [Header("Enemies")]
         [SerializeField] private ChapterDatabase chapterDatabase;
@@ -74,7 +75,13 @@ namespace SB.Scripts
             StageEnemySpawnData enemySpawnData = new StageEnemySpawnData(spawnedEnemies);
             BattleSpawnData battleSpawnData = new BattleSpawnData(mainShip, escortShips, enemySpawnData);
 
-            Bus<BattleStartEvent>.Raise(new BattleStartEvent(battleSpawnData));
+            if (stageEncounterDirector == null)
+            {
+                Debug.LogError($"{nameof(StageSpawnManager)} needs a {nameof(StageEncounterDirector)}.", this);
+                return;
+            }
+
+            stageEncounterDirector.PlayEncounterSequence(battleSpawnData);
         }
 
         public void SpawnStageEnemies(int chapter, int stage)
@@ -121,7 +128,7 @@ namespace SB.Scripts
                 mainShip = SpawnShip(
                     mainShipPrefab,
                     mainShipSpawnPoint,
-                    spawnedPlayerFleetParent,
+                    mainShipSpawnPoint,
                     out bool isMainShipPooled);
 
                 if (mainShip == null)
@@ -160,7 +167,7 @@ namespace SB.Scripts
                 Ship escortShip = SpawnShip(
                     prefab,
                     spawnPoint,
-                    spawnedPlayerFleetParent,
+                    spawnPoint,
                     out bool isEscortShipPooled);
 
                 if (escortShip == null)
@@ -268,11 +275,11 @@ namespace SB.Scripts
 
             if (poolingManager != null)
             {
-                enemy = poolingManager.Get(prefab, spawnPoint.position, spawnPoint.rotation, spawnedEnemyParent);
+                enemy = poolingManager.Get(prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
             }
             else
             {
-                enemy = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, spawnedEnemyParent);
+                enemy = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
                 Debug.LogWarning($"{nameof(PoolingManager)} was not found. Enemy was instantiated normally.", this);
             }
 

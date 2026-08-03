@@ -4,19 +4,11 @@ using UnityEngine;
 
 namespace SB.Scripts.AttackCompo
 {
-    public enum AttackStateType
-    {
-        Idle,
-        Attack,
-        Dead
-    }
-
     public abstract class Base_ShipAttackCompo : EntityComponent
     {
         [SerializeField, Min(0.01f)] private float attackCooldown = 1f;
 
-        private ShipAttackStateMachine stateMachine;
-
+        private Ship ownerShip;
         private TargetSelector targetSelector;
         private ShipCombatStatCompo combatStatCompo;
         private EntityAnimator animator;
@@ -50,12 +42,11 @@ namespace SB.Scripts.AttackCompo
         {
             base.Initialize(entity);
 
+            ownerShip = entity as Ship;
             targetSelector = GetCompo<TargetSelector>();
             combatStatCompo = GetCompo<ShipCombatStatCompo>();
             animator = GetCompo<EntityAnimator>();
             animatorTrigger = GetCompo<EntityAnimatorTrigger>();
-
-            stateMachine = new ShipAttackStateMachine(this);
 
             if (animatorTrigger != null)
             {
@@ -73,22 +64,11 @@ namespace SB.Scripts.AttackCompo
             animatorTrigger.OnAttackEndTrigger -= AttackEnd;
         }
 
-        private void Update()
-        {
-            stateMachine?.Update();
-        }
-
-        public void ChangeState(AttackStateType state)
-        {
-            stateMachine?.ChangeState(state);
-        }
-
         public void ResetAttackState()
         {
             CurrentTarget = null;
             currentCooldown = 0f;
             ResetAttackAnimationSpeed();
-            ChangeState(AttackStateType.Idle);
         }
 
         private void RequestTarget(BattleStartEvent evt)
@@ -96,6 +76,7 @@ namespace SB.Scripts.AttackCompo
             targetSelector?.SetBattleSpawnData(evt.BattleSpawnData);
             ResetAttackState();
             TryAcquireTarget();
+            ownerShip?.ChangeState(ShipStateType.Idle);
         }
 
         public bool TryAcquireTarget()
@@ -133,7 +114,7 @@ namespace SB.Scripts.AttackCompo
         {
             ResetAttackAnimationSpeed();
             ResetCooldown();
-            ChangeState(AttackStateType.Idle);
+            ownerShip?.ChangeState(ShipStateType.Idle);
         }
 
         public void ApplyAttackAnimationSpeed()
