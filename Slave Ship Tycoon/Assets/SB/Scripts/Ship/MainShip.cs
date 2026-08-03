@@ -39,8 +39,10 @@ namespace SB.Scripts
             Bus<MainShipDeadEvent>.Raise(new MainShipDeadEvent());
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+
             if (Input.GetKeyDown(KeyCode.D))
                 _healthCompo.ApplyDamage(50);
         }

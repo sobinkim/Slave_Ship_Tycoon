@@ -1,14 +1,13 @@
 using SB.Core;
-using SB.Scripts.AttackCompo;
 using UnityEngine;
 
 namespace SB.Scripts.States
 {
     public class ShipIdleState : IState
     {
-        private Base_ShipAttackCompo _owner;
+        private Ship _owner;
 
-        public ShipIdleState(Base_ShipAttackCompo owner)
+        public ShipIdleState(Ship owner)
         {
             _owner = owner;
         }
@@ -19,19 +18,19 @@ namespace SB.Scripts.States
 
         public void Update()
         {
-            if (_owner.Owner.IsDead)
+            if (_owner.IsDead)
             {
-                _owner.ChangeState(AttackStateType.Dead);
+                _owner.ChangeState(ShipStateType.Dead);
                 return;
             }
 
-            if (_owner.EnsureTarget() == false)
+            if (_owner.EnsureAttackTarget() == false)
                 return;
 
-            _owner.TickCooldown(Time.deltaTime);
+            _owner.TickAttackCooldown(Time.deltaTime);
 
             if (_owner.CanAttack)
-                _owner.ChangeState(AttackStateType.Attack);
+                _owner.ChangeState(ShipStateType.Attack);
         }
 
         public void Exit()

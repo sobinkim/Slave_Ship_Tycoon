@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 57d4aebd17aa8cc449eec81f9929b884
+guid: 39c5d6b339bad08409c259c5f00af724
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4777156044246465367
-    second: ApprenticeGunship_Charming_0
+      213: -203387305076869828
+    second: Sea_01_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1920
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ApprenticeGunship_Charming_0
+      name: Sea_01_0
       rect:
         serializedVersion: 2
-        x: 145
-        y: 96
-        width: 1275
-        height: 841
+        x: 0
+        y: 0
+        width: 1656
+        height: 316
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 75bbbed9c1edb4240800000000000000
-      internalID: 4777156044246465367
+      spriteID: c35b119d25c6d2df0800000000000000
+      internalID: -203387305076869828
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ApprenticeGunship_Charming_0: 4777156044246465367
+      Sea_01_0: -203387305076869828
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

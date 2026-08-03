@@ -23,8 +23,10 @@ namespace SB.Scripts
             base.OnSpawnedFromPool();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 _healthCompo.ApplyDamage(50);

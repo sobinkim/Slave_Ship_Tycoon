@@ -35,6 +35,8 @@ namespace SB.Scripts.UI.Upgrade
         private void HandleUpgradeButtonClicked()
         {
             OnUpgradeButtonClicked?.Invoke(_upgradeType);
+            
+            
         }
     }
 }
