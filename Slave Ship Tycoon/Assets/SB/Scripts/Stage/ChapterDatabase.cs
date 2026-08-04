@@ -40,6 +40,32 @@ namespace SB.Scripts
             return false;
         }
 
+        public bool TryGetRandomWave(int chapter, out StageEnemyLayout layout)
+        {
+            if (TryGetChapter(chapter, out ChapterContainer container))
+                return container.TryGetRandomWave(out layout);
+
+            layout = null;
+            return false;
+        }
+
+        public bool TryGetBoss(int chapter, out StageEnemyLayout layout)
+        {
+            if (TryGetChapter(chapter, out ChapterContainer container))
+                return container.TryGetBoss(out layout);
+
+            layout = null;
+            return false;
+        }
+
+        public bool TryGetBattleLayout(int chapter, int stage, bool isBossBattle, out StageEnemyLayout layout)
+        {
+            if (isBossBattle)
+                return TryGetBoss(chapter, out layout);
+
+            return TryGetStage(chapter, stage, out layout);
+        }
+
         public bool IsFinalStage(int chapter, int stage, out bool isFinalStage)
         {
             if (TryGetChapter(chapter, out ChapterContainer container))

@@ -16,13 +16,12 @@ namespace SB.Scripts.States
 
         public void Enter()
         {
-            if (_owner.EnsureAttackTarget() == false)
+            if (_owner.EnterAttack() == false)
             {
                 _owner.ChangeState(ShipStateType.Idle);
                 return;
             }
 
-            _owner.ApplyAttackAnimationSpeed();
             _entityAnimator?.SetParam("ATTACK", true);
         }
 

@@ -16,16 +16,16 @@ namespace SB.Scripts
         private int currentChapter = 1;
         private int currentStage = 1;
         private StageRoomType currentStageType;
+        private ChapterRouteType currentRouteType;
+        private bool currentBattleIsBoss;
 
         private void OnEnable()
         {
-            Bus<StageStartedEvent>.OnEvent += CheckRoomType;
             Bus<StageBattleEndedEvent>.OnEvent += UpdateCurrentChapterData;
         }
 
         private void OnDisable()
         {
-            Bus<StageStartedEvent>.OnEvent -= CheckRoomType;
             Bus<StageBattleEndedEvent>.OnEvent -= UpdateCurrentChapterData;
         }
 
@@ -37,49 +37,126 @@ namespace SB.Scripts
 
         public void StartStage()
         {
-            if (HasCurrentChapter() == false)
+            if (chapterDatabase == null ||
+                chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer chapter) == false)
             {
                 Debug.Log($"Chapter {currentChapter} data was not found. Stage loop stopped.", this);
                 return;
             }
 
-            print(currentChapter + "-" + currentStage + " 시작 ");
-            Bus<StageStartedEvent>.Raise(new StageStartedEvent(currentChapter, currentStage));
+            currentRouteType = chapter.RouteType;
+            currentBattleIsBoss = false;
+
+            if (currentRouteType == ChapterRouteType.Obtain)
+            {
+                if (chapterDatabase.TryGetRandomWave(currentChapter, out StageEnemyLayout wave) == false)
+                {
+                    Debug.LogError($"No wave layouts found for Obtain Chapter {currentChapter}.", this);
+                    return;
+                }
+
+                currentStage = wave.Stage;
+                currentStageType = StageRoomType.Normal;
+            }
+            else
+            {
+                if (chapterDatabase.TryGetStage(currentChapter, currentStage, out StageEnemyLayout stage) == false)
+                {
+                    Debug.LogError($"Stage {currentChapter}-{currentStage} data was not found.", this);
+                    return;
+                }
+
+                currentStageType = chapter.IsFinalStage(currentStage)
+                    ? StageRoomType.ChapterEnd
+                    : StageRoomType.Normal;
+            }
+
+            Debug.Log($"{currentChapter}-{currentStage} {currentRouteType} started.", this);
+            RaiseStageStartedEvent();
+        }
+
+        public void StartBossBattle()
+        {
+            if (chapterDatabase == null ||
+                chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer chapter) == false)
+            {
+                Debug.LogError($"Chapter {currentChapter} data was not found. Boss battle cannot start.", this);
+                return;
+            }
+
+            if (chapter.RouteType != ChapterRouteType.Obtain)
+            {
+                Debug.LogWarning("Boss battle can only be started during an Obtain chapter.", this);
+                return;
+            }
+
+            if (chapterDatabase.TryGetBoss(currentChapter, out StageEnemyLayout _) == false)
+            {
+                Debug.LogError($"Boss layout was not assigned for Chapter {currentChapter}.", this);
+                return;
+            }
+
+            currentRouteType = chapter.RouteType;
+            currentBattleIsBoss = true;
+            currentStageType = StageRoomType.ChapterEnd;
+            currentStage = 0;
+
+            Debug.Log($"Chapter {currentChapter} boss battle started.", this);
+            RaiseStageStartedEvent();
+        }
+
+        private void RaiseStageStartedEvent()
+        {
+            Bus<StageStartedEvent>.Raise(new StageStartedEvent(
+                currentChapter,
+                currentStage,
+                currentRouteType,
+                currentBattleIsBoss));
         }
 
         private void StageClear()
         {
-            Bus<StageClearedEvent>.Raise(new StageClearedEvent(currentChapter, currentStage));
+            Bus<StageClearedEvent>.Raise(new StageClearedEvent(currentChapter, currentStage,currentBattleIsBoss));
+
+            if (currentRouteType == ChapterRouteType.Obtain)
+            {
+                Bus<OddStageClearedEvent>.Raise(new OddStageClearedEvent(
+                    currentChapter,
+                    currentStage,
+                    currentBattleIsBoss));
+            }
+            else
+            {
+                Bus<EvenStageClearedEvent>.Raise(new EvenStageClearedEvent(
+                    currentChapter,
+                    currentStage,
+                    currentBattleIsBoss));
+            }
         }
 
         private void StageFail()
         {
-            Bus<StageFailedEvent>.Raise(new StageFailedEvent(currentChapter, currentStage));
+            Bus<StageFailedEvent>.Raise(new StageFailedEvent(currentChapter, currentStage,currentBattleIsBoss));
+
+            if (currentRouteType == ChapterRouteType.Obtain)
+            {
+                Bus<OddStageFailedEvent>.Raise(new OddStageFailedEvent(
+                    currentChapter,
+                    currentStage,
+                    currentBattleIsBoss));
+            }
+            else
+            {
+                Bus<EvenStageFailedEvent>.Raise(new EvenStageFailedEvent(
+                    currentChapter,
+                    currentStage,
+                    currentBattleIsBoss));
+            }
         }
 
         public void LoopClear()
         {
-            Bus<LoopClearEvent>.Raise(new LoopClearEvent(currentChapter, currentStage));
-        }
-
-        private void CheckRoomType(StageStartedEvent evt)
-        {
-            if (chapterDatabase == null)
-            {
-                Debug.LogError($"{nameof(GameFlowManager)} needs a chapter database.", this);
-                currentStageType = StageRoomType.Normal;
-                return;
-            }
-
-            if (chapterDatabase.IsFinalStage(evt.Chapter, evt.Stage, out bool isFinalStage) == false)
-            {
-                Debug.LogError($"Chapter data not found for Chapter {evt.Chapter}, Stage {evt.Stage}.", this);
-                currentStageType = StageRoomType.Normal;
-                return;
-            }
-
-            currentStageType = isFinalStage ? StageRoomType.ChapterEnd : StageRoomType.Normal;
-            print("현재 방 상태 확인 결과>>> " + currentStageType);
+            Bus<LoopClearEvent>.Raise(new LoopClearEvent(currentChapter, currentStage,currentRouteType));
         }
 
         private void UpdateCurrentChapterData(StageBattleEndedEvent evt)
@@ -87,32 +164,30 @@ namespace SB.Scripts
             if (evt.IsClear)
             {
                 StageClear();
-                print("스테이지 격파 성공");
 
-                if (currentStageType == StageRoomType.Normal)
+                if (currentRouteType == ChapterRouteType.Obtain && currentBattleIsBoss == false)
                 {
-                    currentStage++;
+                    StartStage();
+                    return;
                 }
-                else if (currentStageType == StageRoomType.ChapterEnd)
+
+                if (currentStageType == StageRoomType.ChapterEnd)
                 {
                     LoopClear();
                     currentChapter++;
                     currentStage = 1;
                 }
+                else
+                {
+                    currentStage++;
+                }
             }
             else
             {
-                print("스테이지 격파 실패");
                 StageFail();
             }
 
             StartStage();
-        }
-
-        private bool HasCurrentChapter()
-        {
-            return chapterDatabase != null &&
-                   chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer _);
         }
     }
 }

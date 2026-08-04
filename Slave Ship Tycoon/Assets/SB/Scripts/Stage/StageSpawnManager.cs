@@ -15,19 +15,20 @@ namespace SB.Scripts
         [SerializeField] private PlayerFleetUpgradeProvider playerFleetUpgradeProvider;
         [SerializeField] private Transform mainShipSpawnPoint;
         [SerializeField] private Transform[] escortShipSpawnPoints = Array.Empty<Transform>();
-        [SerializeField] private Transform spawnedPlayerFleetParent;
         [SerializeField] private StageEncounterDirector stageEncounterDirector;
 
         [Header("Enemies")]
         [SerializeField] private ChapterDatabase chapterDatabase;
         [SerializeField] private Transform[] spawnPoints = new Transform[StageEnemyLayout.SlotCount];
-        [SerializeField] private Transform spawnedEnemyParent;
 
         [Header("Gizmos")]
         [SerializeField, Min(0.05f)] private float gizmoRadius = 0.35f;
 
         private readonly BattleParticipantTracker participantTracker = new BattleParticipantTracker();
         private PlayerFleetLoadout runtimePlayerFleetLoadout;
+        private MainShip spawnedMainShip;
+        private Ship[] spawnedEscortShipsBySlot = Array.Empty<Ship>();
+        private int spawnedPlayerFleetVersion = -1;
 
         public PlayerFleetLoadout PlayerFleetLoadout => runtimePlayerFleetLoadout;
 
@@ -50,7 +51,7 @@ namespace SB.Scripts
         {
             Bus<StageStartedEvent>.OnEvent -= SpawnCurrentStageBattle;
             participantTracker.StopListening();
-            participantTracker.ClearBattleParticipants();
+            ClearSpawnedBattleParticipants();
         }
 
         private void OnDestroy()
@@ -61,14 +62,18 @@ namespace SB.Scripts
 
         public void SpawnStageBattle(int chapter, int stage)
         {
-            ClearSpawnedBattleParticipants();
+            SpawnStageBattle(chapter, stage, false);
+        }
 
-            if (!TrySpawnPlayerFleet(out MainShip mainShip, out List<Ship> escortShips))
+        public void SpawnStageBattle(int chapter, int stage, bool isBossBattle)
+        {
+            ClearSpawnedEnemies();
+
+            if (!TryPreparePlayerFleet(out MainShip mainShip, out List<Ship> escortShips))
                 return;
 
-            if (!TrySpawnEnemies(chapter, stage, out List<Enemy> spawnedEnemies))
+            if (!TrySpawnEnemies(chapter, stage, isBossBattle, out List<Enemy> spawnedEnemies))
             {
-                ClearSpawnedPlayerFleet();
                 return;
             }
 
@@ -91,7 +96,8 @@ namespace SB.Scripts
 
         public void ClearSpawnedBattleParticipants()
         {
-            participantTracker.ClearBattleParticipants();
+            ClearSpawnedPlayerFleet();
+            ClearSpawnedEnemies();
         }
 
         public void ClearSpawnedEnemies()
@@ -101,13 +107,14 @@ namespace SB.Scripts
 
         private void SpawnCurrentStageBattle(StageStartedEvent evt)
         {
-            SpawnStageBattle(evt.Chapter, evt.Stage);
+            SpawnStageBattle(evt.Chapter, evt.Stage, evt.IsBossBattle);
         }
 
         private bool TrySpawnPlayerFleet(out MainShip mainShip, out List<Ship> escortShips)
         {
             mainShip = null;
             escortShips = new List<Ship>();
+            Ship[] escortShipsBySlot = new Ship[PlayerFleetLoadout.SlotCount];
 
             if (runtimePlayerFleetLoadout == null)
             {
@@ -127,7 +134,6 @@ namespace SB.Scripts
 
                 mainShip = SpawnShip(
                     mainShipPrefab,
-                    mainShipSpawnPoint,
                     mainShipSpawnPoint,
                     out bool isMainShipPooled);
 
@@ -167,7 +173,6 @@ namespace SB.Scripts
                 Ship escortShip = SpawnShip(
                     prefab,
                     spawnPoint,
-                    spawnPoint,
                     out bool isEscortShipPooled);
 
                 if (escortShip == null)
@@ -179,13 +184,103 @@ namespace SB.Scripts
 
                 SetPlayerFleetUpgradeProvider(escortShip);
                 participantTracker.RegisterEscortShip(escortShip, isEscortShipPooled);
+                escortShipsBySlot[i] = escortShip;
                 escortShips.Add(escortShip);
+            }
+
+            spawnedMainShip = mainShip;
+            spawnedEscortShipsBySlot = escortShipsBySlot;
+            spawnedPlayerFleetVersion = runtimePlayerFleetLoadout.Version;
+            return true;
+        }
+
+        private bool TryPreparePlayerFleet(out MainShip mainShip, out List<Ship> escortShips)
+        {
+            mainShip = null;
+            escortShips = new List<Ship>();
+
+            if (runtimePlayerFleetLoadout == null)
+            {
+                Debug.LogError($"{nameof(StageSpawnManager)} needs a player fleet loadout.", this);
+                return false;
+            }
+
+            if (!IsSpawnedPlayerFleetCurrent())
+            {
+                ClearSpawnedPlayerFleet();
+                return TrySpawnPlayerFleet(out mainShip, out escortShips);
+            }
+
+            ResetSpawnedPlayerFleet(out mainShip, out escortShips);
+            return true;
+        }
+
+        private bool IsSpawnedPlayerFleetCurrent()
+        {
+            if (runtimePlayerFleetLoadout == null ||
+                spawnedPlayerFleetVersion != runtimePlayerFleetLoadout.Version)
+            {
+                return false;
+            }
+
+            if (runtimePlayerFleetLoadout.MainShipPrefab != null && spawnedMainShip == null)
+                return false;
+
+            if (spawnedEscortShipsBySlot == null ||
+                spawnedEscortShipsBySlot.Length != PlayerFleetLoadout.SlotCount)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < runtimePlayerFleetLoadout.EscortSlotCount; i++)
+            {
+                bool needsEscort = runtimePlayerFleetLoadout.GetEscortAt(i) != null;
+
+                if (needsEscort && spawnedEscortShipsBySlot[i] == null)
+                    return false;
             }
 
             return true;
         }
 
-        private bool TrySpawnEnemies(int chapter, int stage, out List<Enemy> spawnedEnemies)
+        private void ResetSpawnedPlayerFleet(out MainShip mainShip, out List<Ship> escortShips)
+        {
+            mainShip = spawnedMainShip;
+            escortShips = new List<Ship>();
+
+            ResetShipForBattle(spawnedMainShip, mainShipSpawnPoint);
+
+            for (int i = 0; i < spawnedEscortShipsBySlot.Length; i++)
+            {
+                Ship escortShip = spawnedEscortShipsBySlot[i];
+
+                if (escortShip == null)
+                    continue;
+
+                Transform spawnPoint = escortShipSpawnPoints != null && i < escortShipSpawnPoints.Length
+                    ? escortShipSpawnPoints[i]
+                    : null;
+                ResetShipForBattle(escortShip, spawnPoint);
+                escortShips.Add(escortShip);
+            }
+        }
+
+        private void ResetShipForBattle(Ship ship, Transform spawnPoint)
+        {
+            if (ship == null)
+                return;
+
+            if (spawnPoint != null)
+            {
+                ship.transform.SetParent(spawnPoint, false);
+                ship.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+            }
+
+            ship.gameObject.SetActive(true);
+            ship.OnSpawnedFromPool();
+        }
+
+        private bool TrySpawnEnemies(int chapter, int stage, bool isBossBattle, out List<Enemy> spawnedEnemies)
         {
             spawnedEnemies = null;
 
@@ -195,9 +290,10 @@ namespace SB.Scripts
                 return false;
             }
 
-            if (!chapterDatabase.TryGetStage(chapter, stage, out StageEnemyLayout layout))
+            if (!chapterDatabase.TryGetBattleLayout(chapter, stage, isBossBattle, out StageEnemyLayout layout))
             {
-                Debug.LogError($"Enemy layout not found for Chapter {chapter}, Stage {stage}.", this);
+                string battleName = isBossBattle ? "boss" : $"stage {stage}";
+                Debug.LogError($"Enemy layout not found for Chapter {chapter}, {battleName}.", this);
                 return false;
             }
 
@@ -236,6 +332,9 @@ namespace SB.Scripts
         private void ClearSpawnedPlayerFleet()
         {
             participantTracker.ClearPlayerFleet();
+            spawnedMainShip = null;
+            spawnedEscortShipsBySlot = Array.Empty<Ship>();
+            spawnedPlayerFleetVersion = -1;
         }
 
         private void SetPlayerFleetUpgradeProvider(Ship ship)
@@ -247,7 +346,7 @@ namespace SB.Scripts
             combatStatCompo?.SetPlayerFleetUpgradeProvider(playerFleetUpgradeProvider);
         }
 
-        private T SpawnShip<T>(T prefab, Transform spawnPoint, Transform parent, out bool isPooled)
+        private T SpawnShip<T>(T prefab, Transform spawnPoint, out bool isPooled)
             where T : Ship
         {
             PoolingManager poolingManager = PoolingManager.Instance;
@@ -256,11 +355,11 @@ namespace SB.Scripts
 
             if (poolingManager != null)
             {
-                ship = poolingManager.Get(prefab, spawnPoint.position, spawnPoint.rotation, parent);
+                ship = poolingManager.Get(prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
             }
             else
             {
-                ship = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, parent);
+                ship = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
                 Debug.LogWarning($"{nameof(PoolingManager)} was not found. Ship was instantiated normally.", this);
             }
 

@@ -50,8 +50,8 @@ namespace SB.Scripts.AttackCompo
 
             if (animatorTrigger != null)
             {
-                animatorTrigger.OnAttackStartTrigger += AttackStart;
-                animatorTrigger.OnAttackEndTrigger += AttackEnd;
+                animatorTrigger.OnAttackStartTrigger += HandleAttackStartTrigger;
+                animatorTrigger.OnAttackEndTrigger += HandleAttackEndTrigger;
             }
         }
 
@@ -60,8 +60,8 @@ namespace SB.Scripts.AttackCompo
             if (animatorTrigger == null)
                 return;
 
-            animatorTrigger.OnAttackStartTrigger -= AttackStart;
-            animatorTrigger.OnAttackEndTrigger -= AttackEnd;
+            animatorTrigger.OnAttackStartTrigger -= HandleAttackStartTrigger;
+            animatorTrigger.OnAttackEndTrigger -= HandleAttackEndTrigger;
         }
 
         public void ResetAttackState()
@@ -104,13 +104,36 @@ namespace SB.Scripts.AttackCompo
             currentCooldown = FinalAttackCooldown;
         }
 
-        protected virtual void AttackStart()
+        public bool EnterAttack()
         {
-            if (HasAliveTarget == false)
-                TryAcquireTarget();
+            if (EnsureTarget() == false)
+                return false;
+
+            ApplyAttackAnimationSpeed();
+            OnAttackEnter();
+            return true;
         }
 
-        protected virtual void AttackEnd()
+        private void HandleAttackStartTrigger()
+        {
+            if (EnsureTarget() == false)
+                return;
+
+            Fire();
+        }
+
+        private void HandleAttackEndTrigger()
+        {
+            OnAttackExit();
+        }
+
+        protected virtual void OnAttackEnter()
+        {
+        }
+
+        protected abstract void Fire();
+
+        protected virtual void OnAttackExit()
         {
             ResetAttackAnimationSpeed();
             ResetCooldown();

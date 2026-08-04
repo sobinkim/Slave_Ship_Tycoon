@@ -47,5 +47,8 @@ TagManager:
   - name: Ship
     uniqueID: 628891709
     locked: 0
+  - name: Projectile
+    uniqueID: 757315227
+    locked: 0
   m_RenderingLayers:
   - Default

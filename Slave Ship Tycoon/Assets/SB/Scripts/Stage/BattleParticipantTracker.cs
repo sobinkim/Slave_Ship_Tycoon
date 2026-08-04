@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using SB.Core.EventBus;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace SB.Scripts
 {
@@ -11,8 +10,6 @@ namespace SB.Scripts
         private readonly HashSet<Enemy> pooledEnemies = new HashSet<Enemy>();
         private readonly HashSet<Ship> playerShips = new HashSet<Ship>();
         private readonly HashSet<Ship> pooledPlayerShips = new HashSet<Ship>();
-        private readonly Dictionary<Ship, UnityAction> escortDeathHandlers =
-            new Dictionary<Ship, UnityAction>();
 
         private bool isListening;
 
@@ -41,12 +38,7 @@ namespace SB.Scripts
 
         public void RegisterEscortShip(Ship escortShip, bool isPooled)
         {
-            if (!RegisterPlayerShip(escortShip, isPooled))
-                return;
-
-            UnityAction handler = () => HandleEscortShipDead(escortShip);
-            escortShip.OnDeathEvent.AddListener(handler);
-            escortDeathHandlers.Add(escortShip, handler);
+            RegisterPlayerShip(escortShip, isPooled);
         }
 
         public void RegisterEnemy(Enemy enemy, bool isPooled)
@@ -112,20 +104,10 @@ namespace SB.Scripts
                 Bus<StageEnemiesDefeatedEvent>.Raise(new StageEnemiesDefeatedEvent());
         }
 
-        private void HandleEscortShipDead(Ship escortShip)
-        {
-            if (escortShip == null || !playerShips.Remove(escortShip))
-                return;
-
-            ReleasePlayerShip(escortShip);
-        }
-
         private void ReleasePlayerShip(Ship ship)
         {
             if (ship == null)
                 return;
-
-            RemoveEscortDeathHandler(ship);
 
             if (pooledPlayerShips.Remove(ship) && PoolingManager.Instance != null)
                 PoolingManager.Instance.Release(ship);
@@ -144,12 +126,5 @@ namespace SB.Scripts
                 Object.Destroy(enemy.gameObject);
         }
 
-        private void RemoveEscortDeathHandler(Ship escortShip)
-        {
-            if (!escortDeathHandlers.Remove(escortShip, out UnityAction handler))
-                return;
-
-            escortShip.OnDeathEvent.RemoveListener(handler);
-        }
     }
 }
