@@ -97,6 +97,89 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2db3bf878a50450695f97159bf2a9c3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &837791604944334624
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8416969164139327132}
+  m_Layer: 0
+  m_Name: WaterImpactPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8416969164139327132
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837791604944334624}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7035619235342021445}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.013, y: -0.213}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1234103926960978960
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3065251457047689782}
+  - component: {fileID: 2807618254757940703}
+  m_Layer: 0
+  m_Name: ShipProjectileAnchorCompo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3065251457047689782
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1234103926960978960}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1013978060691389359}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2807618254757940703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1234103926960978960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca0d7fed8f956242a5a072a6097c04e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitPoint: {fileID: 2101252597605551855}
+  waterImpactPoint: {fileID: 8416969164139327132}
+  hitOffset: {x: 0, y: 0, z: 0}
+  waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &1817684044173219014
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,6 +277,41 @@ MonoBehaviour:
   entityName: TestEnemy_B
   _myShipType: 2
   _shipRole: 2
+--- !u!1 &4039334063587973210
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2101252597605551855}
+  m_Layer: 0
+  m_Name: HitPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2101252597605551855
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039334063587973210}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7035619235342021445}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.013, y: 0.053999998}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4590822949661136768
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,7 +341,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.2, y: 1.4, z: 1.4}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1954125196113565037}
+  - {fileID: 2101252597605551855}
+  - {fileID: 8416969164139327132}
   m_Father: {fileID: 169978767863309615}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -368,7 +489,7 @@ MonoBehaviour:
   _playerFleet_AttackSpeedPercent_Stat: {fileID: 11400000, guid: 6599574ae37549b6a4ed656027bf6c6d, type: 2}
   _mainShip_CargoCapacity_Stat: {fileID: 11400000, guid: 4d5524dab23e43c3b636f724c96322e0, type: 2}
   _mainShip_Luck_Stat: {fileID: 11400000, guid: 1cc2eb38aa4947d4981265fb799e4a39, type: 2}
---- !u!1 &6686558206230213393
+--- !u!1 &6789959496525879273
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -376,44 +497,29 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6997694292792309781}
-  - component: {fileID: 8997429336869518242}
+  - component: {fileID: 1954125196113565037}
   m_Layer: 0
-  m_Name: ShipAttackCompo
+  m_Name: ShootPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6997694292792309781
+--- !u!4 &1954125196113565037
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6686558206230213393}
+  m_GameObject: {fileID: 6789959496525879273}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.30099997, y: 0.065, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1013978060691389359}
+  m_Father: {fileID: 7035619235342021445}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8997429336869518242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6686558206230213393}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71b145ee71204b629935da4ab1d127c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackCooldown: 1
-  projectilePrefab: {fileID: 1140000000000000000, guid: 7e6f9ad8c9b34f34b2e6d4cd95c824f1, type: 3}
 --- !u!1 &6865856567926038592
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,8 +549,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2256763336893648964}
+  - {fileID: 3065251457047689782}
   - {fileID: 7648478375074682279}
-  - {fileID: 6997694292792309781}
   m_Father: {fileID: 169978767863309615}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9206892413190619617
@@ -494,3 +601,69 @@ MonoBehaviour:
   maxHealthStat: {fileID: 11400000, guid: 33d8c6041f2e435791483decab42cb5c, type: 2}
   fallbackMaxHealth: 100
   resetHealthOnInitialize: 1
+--- !u!1001 &5114644864078240503
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1013978060691389359}
+    m_Modifications:
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: 'firePoints.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1954125196113565037}
+    - target: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6754852859054544690, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: m_Name
+      value: ArcProjectileAttackCompo
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+--- !u!4 &2256763336893648964 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6461394616901110451, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+  m_PrefabInstance: {fileID: 5114644864078240503}
+  m_PrefabAsset: {fileID: 0}

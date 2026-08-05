@@ -6,16 +6,14 @@ namespace SB.Scripts.AttackCompo
     public class ArcProjectileAttackCompo : Base_ShipAttackCompo
     {
         [SerializeField] private BaseProjectile projectilePrefab;
+        [SerializeField] private Transform[] firePoints;
+        [SerializeField] private ProjectileFlightData flightData = ProjectileFlightData.Default;
 
-        private Ship ownerShip;
-        private ShipProjectileAnchorCompo ownerAnchors;
+        private int currentFirePointIndex;
 
         public override void Initialize(SB.Core.Entity entity)
         {
             base.Initialize(entity);
-
-            ownerShip = entity as Ship;
-            ownerAnchors = GetCompo<ShipProjectileAnchorCompo>();
         }
 
         protected override void Fire()
@@ -37,16 +35,20 @@ namespace SB.Scripts.AttackCompo
 
             ShipProjectileAnchorCompo targetAnchors =
                 CurrentTarget.GetCompo<ShipProjectileAnchorCompo>();
+            if (targetAnchors == null)
+            {
+                Debug.LogError($"{CurrentTarget.name} needs a {nameof(ShipProjectileAnchorCompo)}.", CurrentTarget);
+                return;
+            }
 
-            Vector3 startPosition = ownerAnchors != null
-                ? ownerAnchors.FirePosition
-                : ownerShip.transform.position;
-            Vector3 targetImpactPosition = targetAnchors != null
-                ? targetAnchors.HitPosition
-                : CurrentTarget.transform.position;
-            Vector3 waterImpactPosition = targetAnchors != null
-                ? targetAnchors.WaterImpactPosition
-                : CurrentTarget.transform.position;
+            if (TryGetFirePosition(out Vector3 startPosition) == false)
+            {
+                Debug.LogError($"{name} needs at least one fire point.", this);
+                return;
+            }
+
+            Vector3 targetImpactPosition = targetAnchors.HitPosition;
+            Vector3 waterImpactPosition = targetAnchors.WaterImpactPosition;
 
             BaseProjectile projectile = PoolingManager.Instance.Get(
                 projectilePrefab,
@@ -61,9 +63,43 @@ namespace SB.Scripts.AttackCompo
                 startPosition,
                 targetImpactPosition,
                 waterImpactPosition,
+                flightData,
                 FinalAttackDamage);
 
             projectile.Launch(launchData);
+        }
+
+        private bool TryGetFirePosition(out Vector3 firePosition)
+        {
+            Transform firePoint = GetNextFirePoint();
+            if (firePoint == null)
+            {
+                firePosition = default;
+                return false;
+            }
+
+            firePosition = firePoint.position;
+            return true;
+        }
+
+        private Transform GetNextFirePoint()
+        {
+            if (firePoints == null || firePoints.Length == 0)
+                return null;
+
+            int startIndex = currentFirePointIndex;
+            for (int i = 0; i < firePoints.Length; i++)
+            {
+                int index = (startIndex + i) % firePoints.Length;
+                Transform firePoint = firePoints[index];
+                if (firePoint == null)
+                    continue;
+
+                currentFirePointIndex = (index + 1) % firePoints.Length;
+                return firePoint;
+            }
+
+            return null;
         }
     }
 }

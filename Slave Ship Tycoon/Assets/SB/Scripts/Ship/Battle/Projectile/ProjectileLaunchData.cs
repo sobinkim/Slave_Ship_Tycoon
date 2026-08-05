@@ -9,6 +9,7 @@ namespace SB.Scripts.Projectiles
         public readonly Vector3 StartPosition;
         public readonly Vector3 TargetImpactPosition;
         public readonly Vector3 WaterImpactPosition;
+        public readonly ProjectileFlightData FlightData;
         public readonly float Damage;
 
         public ProjectileLaunchData(
@@ -16,6 +17,7 @@ namespace SB.Scripts.Projectiles
             Vector3 startPosition,
             Vector3 targetImpactPosition,
             Vector3 waterImpactPosition,
+            ProjectileFlightData flightData,
             float damage)
         {
             Target = target;
@@ -23,6 +25,7 @@ namespace SB.Scripts.Projectiles
             StartPosition = startPosition;
             TargetImpactPosition = targetImpactPosition;
             WaterImpactPosition = waterImpactPosition;
+            FlightData = flightData;
             Damage = damage;
         }
     }

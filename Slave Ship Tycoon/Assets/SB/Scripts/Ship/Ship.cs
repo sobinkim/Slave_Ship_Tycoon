@@ -101,10 +101,10 @@ namespace SB.Scripts
             _stateMachine?.ChangeState(state);
         }
 
-        public void ResetShipState()
+        public void PrepareEncounterState()
         {
             _attackCompo?.ResetAttackState();
-            ChangeState(ShipStateType.Idle);
+            ChangeState(ShipStateType.Move);
         }
 
         public bool EnsureAttackTarget()
@@ -141,7 +141,7 @@ namespace SB.Scripts
 
             IsDead = false;
             _healthCompo?.ResetHealth();
-            ResetShipState();
+            PrepareEncounterState();
         }
 
         public virtual void OnDespawnedToPool()

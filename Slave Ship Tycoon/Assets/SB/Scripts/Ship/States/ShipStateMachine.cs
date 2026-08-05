@@ -11,6 +11,7 @@ namespace SB.Scripts
         {
             fsm = new StateMachine<ShipStateType>();
             fsm.AddState(ShipStateType.Idle, new ShipIdleState(owner));
+            fsm.AddState(ShipStateType.Move, new ShipMoveState(owner));
             fsm.AddState(ShipStateType.Attack, new ShipAttackState(owner));
             fsm.AddState(ShipStateType.Dead, new ShipDeadState(owner));
             fsm.ChangeState(ShipStateType.Idle);

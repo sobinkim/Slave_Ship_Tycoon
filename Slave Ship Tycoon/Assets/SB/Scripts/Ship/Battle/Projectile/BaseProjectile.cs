@@ -5,11 +5,6 @@ namespace SB.Scripts.Projectiles
     public abstract class BaseProjectile : MonoBehaviour, IPoolable
     {
         [Header("Flight")]
-        [SerializeField, Min(0.01f)] private float flightSpeed = 10f;
-        [SerializeField, Min(0f)] private float arcHeight = 2f;
-        [SerializeField, Range(0.05f, 0.45f)] private float controlPointRatio = 0.25f;
-        [SerializeField, Min(0.01f)] private float minimumFlightDuration = 0.15f;
-        [SerializeField, Min(0.01f)] private float lifeTime = 5f;
         [SerializeField] private bool rotateAlongPath = true;
         [SerializeField] private float rotationOffset;
 
@@ -19,10 +14,10 @@ namespace SB.Scripts.Projectiles
         [SerializeField] private int trailSortingOrderOffset = -1;
 
         private ProjectileLaunchData launchData;
-        private Vector3 point0;
-        private Vector3 point1;
-        private Vector3 point2;
-        private Vector3 point3;
+        private ProjectileFlightData flightData;
+        private Vector3 pathStartPosition;
+        private Vector3 pathEndPosition;
+        private Vector3 missControlPoint;
         private float flightDuration;
         private float flightElapsed;
         private float lifeElapsed;
@@ -39,7 +34,9 @@ namespace SB.Scripts.Projectiles
         public void Launch(ProjectileLaunchData data)
         {
             launchData = data;
+            flightData = data.FlightData.GetValidated();
             transform.position = data.StartPosition;
+            ClearTrails();
 
             flightElapsed = 0f;
             lifeElapsed = 0f;
@@ -47,7 +44,7 @@ namespace SB.Scripts.Projectiles
             isMissPath = false;
 
             ApplySortingOrder(data.StartPosition, data.TargetImpactPosition);
-            BuildInitialPath(data.StartPosition, data.TargetImpactPosition);
+            BuildFlightPath(data.StartPosition, data.TargetImpactPosition);
         }
 
         private void Update()
@@ -56,7 +53,7 @@ namespace SB.Scripts.Projectiles
                 return;
 
             lifeElapsed += Time.deltaTime;
-            if (lifeElapsed >= lifeTime)
+            if (lifeElapsed >= flightData.LifeTime)
             {
                 Expire();
                 return;
@@ -66,61 +63,50 @@ namespace SB.Scripts.Projectiles
                 SwitchToMissPath();
 
             flightElapsed += Time.deltaTime;
-            float progress = Mathf.Clamp01(flightElapsed / flightDuration);
+            float rawProgress = Mathf.Clamp01(flightElapsed / flightDuration);
+            transform.position = EvaluateArcPosition(rawProgress);
+            RotateToPath(rawProgress);
 
-            transform.position = EvaluateBezier(progress);
-            RotateToPath(progress);
-
-            if (progress >= 1f)
+            if (rawProgress >= 1f)
                 ResolveImpact();
         }
 
-        private void BuildInitialPath(Vector3 startPosition, Vector3 endPosition)
+        private void BuildFlightPath(Vector3 startPosition, Vector3 endPosition)
         {
-            float direction = ResolveHorizontalDirection(startPosition, endPosition);
             float distance = Vector3.Distance(startPosition, endPosition);
-            float controlDistance = Mathf.Max(0.1f, Mathf.Abs(endPosition.x - startPosition.x) * controlPointRatio);
-            float apexY = Mathf.Max(startPosition.y, endPosition.y) + arcHeight;
 
-            point0 = startPosition;
-            point1 = startPosition + Vector3.right * direction * controlDistance;
-            point2 = new Vector3(
-                endPosition.x - direction * controlDistance,
-                apexY,
-                Mathf.Lerp(startPosition.z, endPosition.z, 0.75f));
-            point3 = endPosition;
+            pathStartPosition = startPosition;
+            pathEndPosition = endPosition;
 
-            flightDuration = Mathf.Max(minimumFlightDuration, distance / flightSpeed);
+            flightDuration = Mathf.Max(flightData.MinimumFlightDuration, distance / flightData.FlightSpeed);
         }
 
         private void SwitchToMissPath()
         {
+            float currentProgress = Mathf.Clamp01(flightElapsed / flightDuration);
             Vector3 currentPosition = transform.position;
-            Vector3 currentDirection = EvaluateBezierTangent(
-                Mathf.Clamp01(flightElapsed / flightDuration)).normalized;
+            Vector3 currentDirection = EvaluateArcTangent(currentProgress).normalized;
             Vector3 waterPosition = launchData.WaterImpactPosition;
             float distance = Vector3.Distance(currentPosition, waterPosition);
-            float controlDistance = Mathf.Max(0.1f, distance * controlPointRatio);
 
             if (currentDirection.sqrMagnitude <= Mathf.Epsilon)
                 currentDirection = (waterPosition - currentPosition).normalized;
 
-            point0 = currentPosition;
-            point1 = currentPosition + currentDirection * controlDistance;
-            point2 = Vector3.Lerp(currentPosition, waterPosition, 0.7f) + Vector3.up * arcHeight * 0.2f;
-            point3 = waterPosition;
+            pathStartPosition = currentPosition;
+            pathEndPosition = waterPosition;
+            missControlPoint = currentPosition + currentDirection * distance * 0.5f;
 
             flightElapsed = 0f;
-            flightDuration = Mathf.Max(minimumFlightDuration, distance / flightSpeed);
+            flightDuration = Mathf.Max(flightData.MinimumFlightDuration, distance / flightData.FlightSpeed);
             isMissPath = true;
         }
 
         private void ResolveImpact()
         {
             if (isMissPath == false && IsOriginalTargetAlive())
-                OnTargetImpact(launchData.Target, launchData.Damage, point3);
+                OnTargetImpact(launchData.Target, launchData.Damage, pathEndPosition);
             else
-                OnWaterImpact(point3);
+                OnWaterImpact(pathEndPosition);
 
             ReleaseToPool();
         }
@@ -132,12 +118,12 @@ namespace SB.Scripts.Projectiles
                    launchData.Target.SpawnGeneration == launchData.TargetSpawnGeneration;
         }
 
-        private void RotateToPath(float progress)
+        private void RotateToPath(float rawProgress)
         {
             if (rotateAlongPath == false)
                 return;
 
-            Vector3 direction = EvaluateBezierTangent(progress);
+            Vector3 direction = EvaluateArcTangent(rawProgress);
             if (direction.sqrMagnitude <= Mathf.Epsilon)
                 return;
 
@@ -145,27 +131,33 @@ namespace SB.Scripts.Projectiles
             transform.rotation = Quaternion.Euler(0f, 0f, angle + rotationOffset);
         }
 
-        private Vector3 EvaluateBezier(float progress)
+        private Vector3 EvaluateArcPosition(float rawProgress)
         {
-            float inverse = 1f - progress;
-            return inverse * inverse * inverse * point0 +
-                   3f * inverse * inverse * progress * point1 +
-                   3f * inverse * progress * progress * point2 +
-                   progress * progress * progress * point3;
+            if (isMissPath)
+                return EvaluateMissPosition(rawProgress);
+
+            Vector3 basePosition = Vector3.Lerp(pathStartPosition, pathEndPosition, rawProgress);
+            float arcOffset = 4f * flightData.ArcHeight * rawProgress * (1f - rawProgress);
+            return basePosition + Vector3.up * arcOffset;
         }
 
-        private Vector3 EvaluateBezierTangent(float progress)
+        private Vector3 EvaluateMissPosition(float progress)
         {
             float inverse = 1f - progress;
-            return 3f * inverse * inverse * (point1 - point0) +
-                   6f * inverse * progress * (point2 - point1) +
-                   3f * progress * progress * (point3 - point2);
+            return inverse * inverse * pathStartPosition +
+                   2f * inverse * progress * missControlPoint +
+                   progress * progress * pathEndPosition;
         }
 
-        private static float ResolveHorizontalDirection(Vector3 startPosition, Vector3 endPosition)
+        private Vector3 EvaluateArcTangent(float rawProgress)
         {
-            float direction = Mathf.Sign(endPosition.x - startPosition.x);
-            return Mathf.Approximately(direction, 0f) ? 1f : direction;
+            const float sampleDistance = 0.01f;
+
+            float previousRawProgress = Mathf.Clamp01(rawProgress - sampleDistance);
+            float nextRawProgress = Mathf.Clamp01(rawProgress + sampleDistance);
+            Vector3 previousPosition = EvaluateArcPosition(previousRawProgress);
+            Vector3 nextPosition = EvaluateArcPosition(nextRawProgress);
+            return nextPosition - previousPosition;
         }
 
         private void Expire()
