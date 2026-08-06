@@ -12,7 +12,7 @@ namespace SB.Scripts.Projectiles
 
         protected override void OnTargetImpact(Ship target, float damage, Vector3 impactPosition)
         {
-            target.GetCompo<EntityHealth>()?.ApplyDamage(damage);
+            target.GetCompo<EntityHealth>()?.ApplyDamage(damage, impactPosition);
             SpawnEffect(hitEffectPrefab, impactPosition);
         }
 

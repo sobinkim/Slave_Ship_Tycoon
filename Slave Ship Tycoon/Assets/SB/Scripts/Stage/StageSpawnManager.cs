@@ -359,8 +359,8 @@ namespace SB.Scripts
             }
             else
             {
-                ship = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
-                Debug.LogWarning($"{nameof(PoolingManager)} was not found. Ship was instantiated normally.", this);
+                Debug.LogError($"{nameof(StageSpawnManager)} needs a {nameof(PoolingManager)} to spawn ships.", this);
+                ship = null;
             }
 
             return ship;
@@ -378,8 +378,8 @@ namespace SB.Scripts
             }
             else
             {
-                enemy = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
-                Debug.LogWarning($"{nameof(PoolingManager)} was not found. Enemy was instantiated normally.", this);
+                Debug.LogError($"{nameof(StageSpawnManager)} needs a {nameof(PoolingManager)} to spawn enemies.", this);
+                enemy = null;
             }
 
             return enemy;

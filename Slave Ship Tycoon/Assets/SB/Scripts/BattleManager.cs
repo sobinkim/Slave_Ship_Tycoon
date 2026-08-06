@@ -1,4 +1,3 @@
-using System;
 using SB.Core.EventBus;
 using UnityEngine;
 
@@ -7,7 +6,6 @@ namespace SB.Scripts
     public class BattleManager : MonoBehaviour
     {
         private bool isBattleEnded;
-        
 
         private void OnEnable()
         {
@@ -25,9 +23,7 @@ namespace SB.Scripts
 
         private void StartBattle(BattleStartEvent evt)
         {
-            print("전투 시작");
             isBattleEnded = false;
-            
         }
 
         private void DeadMainShip(MainShipDeadEvent evt)

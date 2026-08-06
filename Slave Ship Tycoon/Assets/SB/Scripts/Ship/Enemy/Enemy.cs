@@ -1,7 +1,5 @@
-using System;
-using SB.Core;
 using SB.Core.EventBus;
-using UnityEngine;
+using SB.Scripts.Reward;
 
 namespace SB.Scripts
 {
@@ -26,17 +24,13 @@ namespace SB.Scripts
         protected override void Update()
         {
             base.Update();
-
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                _healthCompo.ApplyDamage(50);
-                 
-            }
         }
 
         private void Death()
         {
-            print(EntityName+"사망");
+            EnemyRewardDropCompo rewardDropCompo = GetCompo<EnemyRewardDropCompo>();
+            rewardDropCompo?.DropReward();
+
             Bus<EnemyEvents.EnemyDead>.Raise(new EnemyEvents.EnemyDead(this));
         }
 

@@ -1,3 +1,4 @@
+using SB.Core.EventBus;
 using UnityEngine;
 
 namespace SB.Core
@@ -6,11 +7,13 @@ namespace SB.Core
     public class EntityHealth : EntityComponent, IAfterInitialize
     {
         public delegate void HealthChangedHandler(float currentHealth, float maxHealth);
+
         public event HealthChangedHandler OnHealthChanged;
 
         [SerializeField] private StatSO maxHealthStat;
         [SerializeField, Min(1f)] private float fallbackMaxHealth = 100f;
         [SerializeField] private bool resetHealthOnInitialize = true;
+        [SerializeField] private Transform hitDamageTexPos;
 
         private EntityStatCompo statCompo;
         private StatSO runtimeMaxHealthStat;
@@ -54,6 +57,11 @@ namespace SB.Core
 
         public virtual void ApplyDamage(float damage)
         {
+            ApplyDamage(damage, hitDamageTexPos.position);
+        }
+
+        public virtual void ApplyDamage(float damage, Vector3 hitPosition, bool isCritical = false)
+        {
             if (Owner == null || Owner.IsDead || Owner.IsInvincible)
                 return;
 
@@ -63,6 +71,9 @@ namespace SB.Core
             currentHealth = Mathf.Clamp(currentHealth - damage, 0f, maxHealth);
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
             Owner.OnHitEvent.Invoke();
+            Bus<DamageAppliedEvent>.Raise(
+                new DamageAppliedEvent(Mathf.CeilToInt(damage), hitPosition, isCritical)
+            );
 
             if (currentHealth <= 0f)
                 Die();

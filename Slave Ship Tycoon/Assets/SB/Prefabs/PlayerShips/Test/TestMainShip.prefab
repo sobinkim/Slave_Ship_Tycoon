@@ -116,6 +116,7 @@ MonoBehaviour:
   maxHealthStat: {fileID: 11400000, guid: 33d8c6041f2e435791483decab42cb5c, type: 2}
   fallbackMaxHealth: 100
   resetHealthOnInitialize: 1
+  hitDamageTexPos: {fileID: 5000541479486844656}
 --- !u!1 &1291273629588981364
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,6 +281,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityName: TestMainShip
+  onHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _myShipType: 0
   _shipRole: 0
 --- !u!1 &6335518732213277754
