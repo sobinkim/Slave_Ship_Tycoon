@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa6a6f9ac7b477795bbfb9272f3032a, type: 3}
+  m_Name: Chapter03_Obtain_RewardTable
+  m_EditorClassIdentifier: 
+  chapter: 3
+  routeType: 0
+  enemyRewards:
+  - rewardType: 0
+    rewards:
+    - currencyType: 0
+      minAmount: 2000
+      maxAmount: 4000
+    - currencyType: 1
+      minAmount: 0
+      maxAmount: 4
+    - currencyType: 2
+      minAmount: 0
+      maxAmount: 350
+  - rewardType: 1
+    rewards:
+    - currencyType: 0
+      minAmount: 3000
+      maxAmount: 5200
+    - currencyType: 1
+      minAmount: 1
+      maxAmount: 7
+    - currencyType: 2
+      minAmount: 100
+      maxAmount: 800
+  - rewardType: 2
+    rewards:
+    - currencyType: 0
+      minAmount: 2500000
+      maxAmount: 2500000
+    - currencyType: 1
+      minAmount: 35
+      maxAmount: 35
+    - currencyType: 2
+      minAmount: 1000
+      maxAmount: 1000

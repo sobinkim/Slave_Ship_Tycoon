@@ -15,6 +15,7 @@ MonoBehaviour:
   chapter: 3
   routeType: 0
   enemyFaction: 0
+  bossLayout: {fileID: 11400000, guid: 47ce678678f641ebb61ad5c83e518d67, type: 2}
   stages:
   - {fileID: 11400000, guid: f8304183f4004d28b88b57b2ab8bb913, type: 2}
   - {fileID: 11400000, guid: 3a772dcd5b2e45cd90bad3ce2e67433e, type: 2}

@@ -36,6 +36,12 @@ namespace SB.Scripts.UI.Upgrade
         
         private void OnClickUpgrade(MainShipUpgradeType upgradeType)
         {
+            if (model == null)
+            {
+                Debug.LogError($"{nameof(MainShipUpgradePresenter)} needs a {nameof(ShipUpgradeManager)}.", this);
+                return;
+            }
+
             if (model.TryUpgrade(upgradeType))
             {
                 UpgradeGrowthData upgradeData = model.GetTargetUpdateData(upgradeType);
@@ -71,10 +77,6 @@ namespace SB.Scripts.UI.Upgrade
         {
             if (view == null)
                 view = GetComponent<MainShipUpgradeView>();
-
-            GameObject managerObject = GameObject.Find("ShipUpgradeManager");
-            if (managerObject != null && managerObject.TryGetComponent(out ShipUpgradeManager upgradeManager))
-                model = upgradeManager;
         }
     }
 }

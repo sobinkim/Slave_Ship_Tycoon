@@ -1,5 +1,6 @@
 using System;
 using SB.Core.EventBus;
+using SB.Scripts.Currency;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -39,21 +40,11 @@ namespace SB.Scripts.Upgrade
     {
         [SerializeField] private UpgradeGrowthData[] upgradeGrowthDatas;
         [SerializeField] private MainShipUpgradeData _mainShipUpgradeData;
-
-        private float _currentGold = 1000000000;
+        [SerializeField] private CurrencyManager currencyManager;
+        [SerializeField] private CurrencyType upgradeCurrencyType = CurrencyType.Gold;
 
         public MainShipUpgradeData MainShipUpgradeData => _mainShipUpgradeData;
-
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-                DebugUpgrade(MainShipUpgradeType.AttackPowerPercent);
-
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-                DebugUpgrade(MainShipUpgradeType.AttackSpeedPercent);
-        }
-
+        
         private void OnEnable()
         {
             Bus<RefreshMainShipStatsEvent>.OnEvent += HandleRefreshStatsEvent;
@@ -71,16 +62,24 @@ namespace SB.Scripts.Upgrade
 
         private bool Upgrade(MainShipUpgradeType upgradeType)
         {
+            ResolveReferences();
+
             UpgradeGrowthData currentTargetUpdateData = GetTargetUpdateData(upgradeType);
 
             if (currentTargetUpdateData == null)
                 return false;
 
-            if (currentTargetUpdateData.currentCost > _currentGold)
+            if (currencyManager == null)
+            {
+                Debug.LogError($"{nameof(ShipUpgradeManager)} needs a {nameof(CurrencyManager)}.", this);
+                return false;
+            }
+
+            int cost = Mathf.CeilToInt(currentTargetUpdateData.currentCost);
+            if (!currencyManager.TrySpendCurrency(upgradeCurrencyType, cost))
                 return false;
 
             currentTargetUpdateData.level++;
-            _currentGold -= currentTargetUpdateData.currentCost;
             AddUpgradeValue(upgradeType, currentTargetUpdateData.IncreaseValue);
 
             currentTargetUpdateData.currentCost *= currentTargetUpdateData.costGrowthRate;
@@ -154,6 +153,12 @@ namespace SB.Scripts.Upgrade
         private void HandleRefreshStatsEvent(RefreshMainShipStatsEvent evt)
         {
             Bus<UpgradeEvent>.Raise(new UpgradeEvent(MainShipUpgradeData));
+        }
+
+        private void ResolveReferences()
+        {
+            if (currencyManager == null)
+                currencyManager = CurrencyManager.Instance;
         }
     }
 }

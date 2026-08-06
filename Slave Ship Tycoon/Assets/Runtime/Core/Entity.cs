@@ -8,11 +8,13 @@ namespace SB.Core
     public abstract class Entity : MonoBehaviour
     {
         [SerializeField] private string entityName;
+        [SerializeField] private UnityEvent onHitEvent = new();
+        [SerializeField] private UnityEvent onDeathEvent = new();
 
         private readonly Dictionary<Type, IEntityComponent> components = new();
 
-        public UnityEvent OnHitEvent { get; } = new();
-        public UnityEvent OnDeathEvent { get; } = new();
+        public UnityEvent OnHitEvent => onHitEvent;
+        public UnityEvent OnDeathEvent => onDeathEvent;
         public string EntityName
         {
             get => entityName;

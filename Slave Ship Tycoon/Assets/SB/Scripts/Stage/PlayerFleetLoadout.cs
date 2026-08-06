@@ -15,6 +15,7 @@ namespace SB.Scripts
 
         public MainShip MainShipPrefab => mainShipPrefab;
         public int EscortSlotCount => SlotCount;
+        public int Version { get; private set; }
 
         public Ship GetEscortAt(int index)
         {
@@ -28,7 +29,12 @@ namespace SB.Scripts
         {
             ValidateSlotIndex(index);
             EnsureSlotCount();
+
+            if (escortShipPrefabs[index] == escortShipPrefab)
+                return;
+
             escortShipPrefabs[index] = escortShipPrefab;
+            Version++;
         }
 
         public void RemoveEscortAt(int index)
@@ -42,8 +48,12 @@ namespace SB.Scripts
             ValidateSlotIndex(secondIndex);
             EnsureSlotCount();
 
+            if (escortShipPrefabs[firstIndex] == escortShipPrefabs[secondIndex])
+                return;
+
             (escortShipPrefabs[firstIndex], escortShipPrefabs[secondIndex]) =
                 (escortShipPrefabs[secondIndex], escortShipPrefabs[firstIndex]);
+            Version++;
         }
 
         private void OnValidate()

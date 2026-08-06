@@ -57,6 +57,7 @@ namespace SB.Scripts
 
         public MyShipData myShipData;
         public ShipStatCompo ShipStatCompo => _shipStatCompo;
+        public int SpawnGeneration { get; private set; }
         public bool CanAttack => _attackCompo != null && _attackCompo.CanAttack;
         
         
@@ -100,15 +101,20 @@ namespace SB.Scripts
             _stateMachine?.ChangeState(state);
         }
 
-        public void ResetShipState()
+        public void PrepareEncounterState()
         {
             _attackCompo?.ResetAttackState();
-            ChangeState(ShipStateType.Idle);
+            ChangeState(ShipStateType.Move);
         }
 
         public bool EnsureAttackTarget()
         {
             return _attackCompo != null && _attackCompo.EnsureTarget();
+        }
+
+        public bool EnterAttack()
+        {
+            return _attackCompo != null && _attackCompo.EnterAttack();
         }
 
         public void TickAttackCooldown(float deltaTime)
@@ -128,9 +134,14 @@ namespace SB.Scripts
 
         public virtual void OnSpawnedFromPool()
         {
+            unchecked
+            {
+                SpawnGeneration++;
+            }
+
             IsDead = false;
             _healthCompo?.ResetHealth();
-            ResetShipState();
+            PrepareEncounterState();
         }
 
         public virtual void OnDespawnedToPool()
