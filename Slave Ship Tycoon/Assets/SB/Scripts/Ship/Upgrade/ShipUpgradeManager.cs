@@ -44,7 +44,12 @@ namespace SB.Scripts.Upgrade
         [SerializeField] private CurrencyType upgradeCurrencyType = CurrencyType.Gold;
 
         public MainShipUpgradeData MainShipUpgradeData => _mainShipUpgradeData;
-        
+
+        private void Awake()
+        {
+            Bus<UpgradeEvent>.Raise(new UpgradeEvent(_mainShipUpgradeData));
+        }
+
         private void OnEnable()
         {
             Bus<RefreshMainShipStatsEvent>.OnEvent += HandleRefreshStatsEvent;
@@ -84,7 +89,7 @@ namespace SB.Scripts.Upgrade
 
             currentTargetUpdateData.currentCost *= currentTargetUpdateData.costGrowthRate;
             currentTargetUpdateData.IncreaseValue *= currentTargetUpdateData.increaseGrowthRate;
-            
+
             Bus<UpgradeEvent>.Raise(new UpgradeEvent(MainShipUpgradeData));
 
             return true;
@@ -118,7 +123,9 @@ namespace SB.Scripts.Upgrade
             currentTargetUpdateData.IncreaseValue *= currentTargetUpdateData.increaseGrowthRate;
 
             Bus<UpgradeEvent>.Raise(new UpgradeEvent(MainShipUpgradeData));
-            Debug.Log($"Debug Upgrade {upgradeType} / AttackPower: {_mainShipUpgradeData.attackPowerPercent}% / AttackSpeed: {_mainShipUpgradeData.attackSpeedPercent}%", this);
+            Debug.Log(
+                $"Debug Upgrade {upgradeType} / AttackPower: {_mainShipUpgradeData.attackPowerPercent}% / AttackSpeed: {_mainShipUpgradeData.attackSpeedPercent}%",
+                this);
         }
 
         private void AddUpgradeValue(MainShipUpgradeType upgradeType, float value)

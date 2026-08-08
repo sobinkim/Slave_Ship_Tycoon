@@ -38,9 +38,19 @@ namespace SB.Scripts.Currency
                 Instance = null;
         }
 
+        private void OnEnable()
+        {
+            Bus<CurrencyAddRequestEvent>.OnEvent += HandAddCurrencyRequest;
+        }
+
         public int GetCurrency(CurrencyType currencyType)
         {
             return currencyAmounts[(int)currencyType];
+        }
+
+        private void HandAddCurrencyRequest(CurrencyAddRequestEvent evt)
+        {
+            AddCurrency(evt.CurrencyType,evt.AddedAmount);
         }
 
         public void AddCurrency(CurrencyType currencyType, int amount)
@@ -51,8 +61,10 @@ namespace SB.Scripts.Currency
             int previousAmount = GetCurrency(currencyType);
             currencyAmounts[(int)currencyType] = previousAmount + amount;
 
-            Bus<CurrencyAddedEvent>.Raise(new CurrencyAddedEvent(currencyType, amount, currencyAmounts[(int)currencyType]));
-            Bus<CurrencyChangedEvent>.Raise(new CurrencyChangedEvent(currencyType, currencyAmounts[(int)currencyType], previousAmount));
+            Bus<CurrencyAddedEvent>.Raise(new CurrencyAddedEvent(currencyType, amount,
+                currencyAmounts[(int)currencyType]));
+            Bus<CurrencyChangedEvent>.Raise(new CurrencyChangedEvent(currencyType, currencyAmounts[(int)currencyType],
+                previousAmount));
         }
 
         public bool TrySpendCurrency(CurrencyType currencyType, int amount)
@@ -66,8 +78,10 @@ namespace SB.Scripts.Currency
 
             currencyAmounts[(int)currencyType] = previousAmount - amount;
 
-            Bus<CurrencySpentEvent>.Raise(new CurrencySpentEvent(currencyType, amount, currencyAmounts[(int)currencyType]));
-            Bus<CurrencyChangedEvent>.Raise(new CurrencyChangedEvent(currencyType, currencyAmounts[(int)currencyType], previousAmount));
+            Bus<CurrencySpentEvent>.Raise(new CurrencySpentEvent(currencyType, amount,
+                currencyAmounts[(int)currencyType]));
+            Bus<CurrencyChangedEvent>.Raise(new CurrencyChangedEvent(currencyType, currencyAmounts[(int)currencyType],
+                previousAmount));
             return true;
         }
 
