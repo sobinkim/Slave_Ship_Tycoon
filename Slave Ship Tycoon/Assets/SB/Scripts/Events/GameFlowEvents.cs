@@ -117,13 +117,28 @@ namespace SB.Core.EventBus
         }
     }
 
-    public readonly struct LoopClearEvent : IEvent
+    public readonly struct PlayStageClearEffectEvent : IEvent
     {
         public readonly ChapterRouteType ClearChapterType;
         public readonly int Chapter;
         public readonly int Stage;
 
-        public LoopClearEvent(int chapter, int stage, ChapterRouteType clearChapterType)
+        public PlayStageClearEffectEvent(int chapter, int stage, ChapterRouteType clearChapterType)
+        {
+            Chapter = chapter;
+            Stage = stage;
+            ClearChapterType = clearChapterType;
+        }
+    }
+    
+    
+    public readonly struct AffterStageClearEvent : IEvent
+    {
+        public readonly ChapterRouteType ClearChapterType;
+        public readonly int Chapter;
+        public readonly int Stage;
+
+        public AffterStageClearEvent(int chapter, int stage, ChapterRouteType clearChapterType)
         {
             Chapter = chapter;
             Stage = stage;

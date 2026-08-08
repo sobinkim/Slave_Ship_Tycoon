@@ -14,6 +14,6 @@ namespace SB.Core.EventBus
 
     public readonly struct RefreshMainShipStatsEvent : IEvent
     {
-        
     }
+    
 }

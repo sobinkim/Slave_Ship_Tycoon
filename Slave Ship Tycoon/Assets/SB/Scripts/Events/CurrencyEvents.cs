@@ -16,6 +16,18 @@ namespace SB.Core.EventBus
         }
     }
 
+    public readonly struct CurrencyAddRequestEvent : IEvent
+    {
+        public readonly CurrencyType CurrencyType;
+        public readonly int AddedAmount;
+
+        public CurrencyAddRequestEvent(CurrencyType currencyType, int addedAmount)
+        {
+            CurrencyType = currencyType;
+            AddedAmount = addedAmount;
+        }
+    }
+
     public readonly struct CurrencyAddedEvent : IEvent
     {
         public readonly CurrencyType CurrencyType;

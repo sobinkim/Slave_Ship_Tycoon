@@ -22,13 +22,14 @@ namespace SB.Scripts
         private void OnEnable()
         {
             Bus<StageBattleEndedEvent>.OnEvent += UpdateCurrentChapterData;
+            Bus<AffterStageClearEvent>.OnEvent += HandleAfterStageClear;
         }
 
         private void OnDisable()
         {
             Bus<StageBattleEndedEvent>.OnEvent -= UpdateCurrentChapterData;
+            Bus<AffterStageClearEvent>.OnEvent -= HandleAfterStageClear;
         }
-
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -156,7 +157,7 @@ namespace SB.Scripts
 
         public void LoopClear()
         {
-            Bus<LoopClearEvent>.Raise(new LoopClearEvent(currentChapter, currentStage,currentRouteType));
+            Bus<PlayStageClearEffectEvent>.Raise(new PlayStageClearEffectEvent(currentChapter, currentStage, currentRouteType));
         }
 
         private void UpdateCurrentChapterData(StageBattleEndedEvent evt)
@@ -174,8 +175,8 @@ namespace SB.Scripts
                 if (currentStageType == StageRoomType.ChapterEnd)
                 {
                     LoopClear();
-                    currentChapter++;
-                    currentStage = 1;
+                    return;
+                   
                 }
                 else
                 {
@@ -187,6 +188,13 @@ namespace SB.Scripts
                 StageFail();
             }
 
+            StartStage();
+        }
+        
+        private void HandleAfterStageClear(AffterStageClearEvent evt)
+        {
+            currentChapter++;
+            currentStage = 1;
             StartStage();
         }
     }

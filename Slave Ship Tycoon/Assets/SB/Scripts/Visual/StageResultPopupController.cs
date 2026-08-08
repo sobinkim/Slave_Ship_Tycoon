@@ -12,14 +12,14 @@ namespace SB.Scripts
         {
             Bus<EvenStageClearedEvent>.OnEvent += HandleClearPop;
             Bus<StageFailedEvent>.OnEvent += HandleFailPop;
-            Bus<LoopClearEvent>.OnEvent += HandleChapterEnterPop;
+            Bus<AffterStageClearEvent>.OnEvent += HandleChapterEnterPop;
         }
 
         private void OnDisable()
         {
             Bus<EvenStageClearedEvent>.OnEvent -= HandleClearPop;
             Bus<StageFailedEvent>.OnEvent -= HandleFailPop;
-            Bus<LoopClearEvent>.OnEvent -= HandleChapterEnterPop;
+            Bus<AffterStageClearEvent>.OnEvent -= HandleChapterEnterPop;
         }
 
         private void HandleFailPop(StageFailedEvent evt)
@@ -32,7 +32,7 @@ namespace SB.Scripts
             resultPopupView.Show(evt.Chapter, evt.Stage, "Stage Clear");
         }
 
-        private void HandleChapterEnterPop(LoopClearEvent evt)
+        private void HandleChapterEnterPop(AffterStageClearEvent evt)
         {
             int nextChapter = evt.Chapter + 1;
 
