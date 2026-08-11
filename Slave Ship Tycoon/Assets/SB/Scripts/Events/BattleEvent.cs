@@ -27,6 +27,16 @@ namespace SB.Scripts
 
 namespace SB.Core.EventBus
 {
+    public readonly struct StageBattleInitializedEvent : IEvent
+    {
+        public readonly BattleSpawnData BattleSpawnData;
+
+        public StageBattleInitializedEvent(BattleSpawnData battleSpawnData)
+        {
+            BattleSpawnData = battleSpawnData;
+        }
+    }
+
     public readonly struct BattleStartEvent : IEvent
     {
         public readonly BattleSpawnData BattleSpawnData;

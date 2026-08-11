@@ -12,13 +12,28 @@ namespace SB.Scripts
         [SerializeField] private Button _unLoadButton;
         [SerializeField] private TMP_Text _weightText;
 
-        public event Action OnloadButtonClicked;
-        public event Action OnunloadButtonClicked;
+        public event Func<bool> OnloadButtonClicked;
+        public event Func<bool> OnunloadButtonClicked;
+
+        private HoldRepeatButton _loadRepeatButton;
+        private HoldRepeatButton _unLoadRepeatButton;
 
         private void Awake()
         {
-            _loadButton.onClick.AddListener(() => OnloadButtonClicked?.Invoke());
-            _unLoadButton.onClick.AddListener(() => OnunloadButtonClicked?.Invoke());
+            _loadRepeatButton = GetRepeatButton(_loadButton);
+            _unLoadRepeatButton = GetRepeatButton(_unLoadButton);
+
+            _loadRepeatButton.OnTriggered += HandleLoadButtonTriggered;
+            _unLoadRepeatButton.OnTriggered += HandleUnloadButtonTriggered;
+        }
+
+        private void OnDestroy()
+        {
+            if (_loadRepeatButton != null)
+                _loadRepeatButton.OnTriggered -= HandleLoadButtonTriggered;
+
+            if (_unLoadRepeatButton != null)
+                _unLoadRepeatButton.OnTriggered -= HandleUnloadButtonTriggered;
         }
 
         public void SetWeight(float weight)
@@ -30,6 +45,22 @@ namespace SB.Scripts
         public void SetIcon(Sprite icon)
         {
             _icon.sprite = icon;
+        }
+
+        private HoldRepeatButton GetRepeatButton(Button button)
+        {
+            HoldRepeatButton repeatButton = button.GetComponent<HoldRepeatButton>();
+            return repeatButton != null ? repeatButton : button.gameObject.AddComponent<HoldRepeatButton>();
+        }
+
+        private bool HandleLoadButtonTriggered()
+        {
+            return OnloadButtonClicked?.Invoke() ?? false;
+        }
+
+        private bool HandleUnloadButtonTriggered()
+        {
+            return OnunloadButtonClicked?.Invoke() ?? false;
         }
     }
 }

@@ -145,4 +145,24 @@ namespace SB.Core.EventBus
             ClearChapterType = clearChapterType;
         }
     }
+
+    public readonly struct ObtainChapterStartedEvent : IEvent
+    {
+        public readonly int Chapter;
+
+        public ObtainChapterStartedEvent(int chapter)
+        {
+            Chapter = chapter;
+        }
+    }
+
+    public readonly struct SellChapterStartedEvent : IEvent
+    {
+        public readonly int Chapter;
+
+        public SellChapterStartedEvent(int chapter)
+        {
+            Chapter = chapter;
+        }
+    }
 }

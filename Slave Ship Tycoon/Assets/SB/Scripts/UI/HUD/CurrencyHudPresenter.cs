@@ -88,5 +88,16 @@ namespace SB.Scripts.UI.HUD
             if (currencyManager == null)
                 currencyManager = CurrencyManager.Instance;
         }
+
+        public bool TryGetCurrencyIcon(CurrencyType currencyType, out Sprite icon)
+        {
+            icon = null;
+
+            if (slotViews.TryGetValue(currencyType, out CurrencyHudSlotView slotView) == false || slotView == null)
+                return false;
+
+            icon = slotView.Icon != null ? slotView.Icon.sprite : null;
+            return icon != null;
+        }
     }
 }

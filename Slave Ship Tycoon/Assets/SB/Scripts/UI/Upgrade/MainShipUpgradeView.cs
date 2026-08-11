@@ -11,14 +11,18 @@ namespace SB.Scripts.UI.Upgrade
         [SerializeField] private MainShipUpgradeSlotView attackSpeedPercentUpgradeButton;
         [SerializeField] private MainShipUpgradeSlotView cargoCapacityUpgradeButton;
         [SerializeField] private MainShipUpgradeSlotView luckUpgradeButton;
+        [SerializeField] private MainShipUpgradeSlotView commanderGaugeMaxUpgradeButton;
+        [SerializeField] private MainShipUpgradeSlotView commanderGaugeRecoveryPerSecondUpgradeButton;
 
         public MainShipUpgradeSlotView HealthUpgradeButton => _healthUpgradeButton;
         public MainShipUpgradeSlotView AttackPowerPercentUpgradeButton => attackPowerPercentUpgradeButton;
         public MainShipUpgradeSlotView AttackSpeedPercentUpgradeButton => attackSpeedPercentUpgradeButton;
         public MainShipUpgradeSlotView CargoCapacityUpgradeButton => cargoCapacityUpgradeButton;
         public MainShipUpgradeSlotView LuckUpgradeButton => luckUpgradeButton;
+        public MainShipUpgradeSlotView CommanderGaugeMaxUpgradeButton => commanderGaugeMaxUpgradeButton;
+        public MainShipUpgradeSlotView CommanderGaugeRecoveryPerSecondUpgradeButton => commanderGaugeRecoveryPerSecondUpgradeButton;
 
-        public event Action<MainShipUpgradeType> OnUpgradeButtonClicked;
+        public event Func<MainShipUpgradeType, bool> OnUpgradeButtonClicked;
 
         private void OnEnable()
         {
@@ -53,6 +57,16 @@ namespace SB.Scripts.UI.Upgrade
                 case MainShipUpgradeType.Luck:
                     luckUpgradeButton.Refresh(level, cost);
                     break;
+
+                case MainShipUpgradeType.CommanderGaugeMax:
+                    if (commanderGaugeMaxUpgradeButton != null)
+                        commanderGaugeMaxUpgradeButton.Refresh(level, cost);
+                    break;
+
+                case MainShipUpgradeType.CommanderGaugeRecoveryPerSecond:
+                    if (commanderGaugeRecoveryPerSecondUpgradeButton != null)
+                        commanderGaugeRecoveryPerSecondUpgradeButton.Refresh(level, cost);
+                    break;
             }
         }
 
@@ -72,6 +86,12 @@ namespace SB.Scripts.UI.Upgrade
 
             if (luckUpgradeButton != null)
                 luckUpgradeButton.OnUpgradeButtonClicked += HandleUpgradeButtonClicked;
+
+            if (commanderGaugeMaxUpgradeButton != null)
+                commanderGaugeMaxUpgradeButton.OnUpgradeButtonClicked += HandleUpgradeButtonClicked;
+
+            if (commanderGaugeRecoveryPerSecondUpgradeButton != null)
+                commanderGaugeRecoveryPerSecondUpgradeButton.OnUpgradeButtonClicked += HandleUpgradeButtonClicked;
         }
 
         private void UnsubscribeSlotButtons()
@@ -90,11 +110,17 @@ namespace SB.Scripts.UI.Upgrade
 
             if (luckUpgradeButton != null)
                 luckUpgradeButton.OnUpgradeButtonClicked -= HandleUpgradeButtonClicked;
+
+            if (commanderGaugeMaxUpgradeButton != null)
+                commanderGaugeMaxUpgradeButton.OnUpgradeButtonClicked -= HandleUpgradeButtonClicked;
+
+            if (commanderGaugeRecoveryPerSecondUpgradeButton != null)
+                commanderGaugeRecoveryPerSecondUpgradeButton.OnUpgradeButtonClicked -= HandleUpgradeButtonClicked;
         }
 
-        private void HandleUpgradeButtonClicked(MainShipUpgradeType upgradeType)
+        private bool HandleUpgradeButtonClicked(MainShipUpgradeType upgradeType)
         {
-            OnUpgradeButtonClicked?.Invoke(upgradeType);
+            return OnUpgradeButtonClicked?.Invoke(upgradeType) ?? false;
         }
     }
 }

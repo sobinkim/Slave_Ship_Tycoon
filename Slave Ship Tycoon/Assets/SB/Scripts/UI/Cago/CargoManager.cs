@@ -39,28 +39,30 @@ namespace SB.Scripts
             return _statCargoCapacity;
         }
 
-        public void LoadCargo(ETransportItemType targetType)
+        public bool LoadCargo(ETransportItemType targetType)
         {
             if (!CanLoad(targetType, out CargoData cargoData))
-                return;
+                return false;
 
             cargoData.Amount++;
             _currentCargoCapacity += cargoData.Item.BaseWeight;
 
             Bus<ChangedCurrentCargoCapacityEvent>.Raise(new ChangedCurrentCargoCapacityEvent(_cargoData));
+            return true;
         }
 
-        public void UnloadCargo(ETransportItemType targetType)
+        public bool UnloadCargo(ETransportItemType targetType)
         {
             CargoData cargoData = GetCargo(targetType);
 
             if (cargoData == null || cargoData.Amount <= 0)
-                return;
+                return false;
 
             cargoData.Amount--;
             _currentCargoCapacity -= cargoData.Item.BaseWeight;
 
             Bus<ChangedCurrentCargoCapacityEvent>.Raise(new ChangedCurrentCargoCapacityEvent(_cargoData));
+            return true;
         }
 
         private bool CanLoad(ETransportItemType targetType, out CargoData cargoData)

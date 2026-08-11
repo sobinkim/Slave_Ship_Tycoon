@@ -34,22 +34,25 @@ namespace SB.Scripts.UI.Upgrade
                 view.OnUpgradeButtonClicked -= OnClickUpgrade;
         }
         
-        private void OnClickUpgrade(MainShipUpgradeType upgradeType)
+        private bool OnClickUpgrade(MainShipUpgradeType upgradeType)
         {
             if (model == null)
             {
                 Debug.LogError($"{nameof(MainShipUpgradePresenter)} needs a {nameof(ShipUpgradeManager)}.", this);
-                return;
+                return false;
             }
 
             if (model.TryUpgrade(upgradeType))
             {
                 UpgradeGrowthData upgradeData = model.GetTargetUpdateData(upgradeType);
                 if (upgradeData == null)
-                    return;
+                    return false;
 
                 view.SetRefresh(upgradeType, upgradeData.level, upgradeData.currentCost);
+                return true;
             }
+
+            return false;
         }
 
         private void RefreshAllSlots()
@@ -59,6 +62,8 @@ namespace SB.Scripts.UI.Upgrade
             RefreshSlot(MainShipUpgradeType.AttackSpeedPercent);
             RefreshSlot(MainShipUpgradeType.CargoCapacity);
             RefreshSlot(MainShipUpgradeType.Luck);
+            RefreshSlot(MainShipUpgradeType.CommanderGaugeMax);
+            RefreshSlot(MainShipUpgradeType.CommanderGaugeRecoveryPerSecond);
         }
 
         private void RefreshSlot(MainShipUpgradeType upgradeType)

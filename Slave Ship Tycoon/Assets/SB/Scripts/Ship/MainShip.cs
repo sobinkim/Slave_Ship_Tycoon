@@ -60,6 +60,10 @@ namespace SB.Scripts
             _shipStatCompo.SetShipBaseValue(MainShipUpgradeType.CargoCapacity, evt._mainShipUpgradeData.cargoCapacity);
             _shipStatCompo.SetShipBaseValue(MainShipUpgradeType.Luck, evt._mainShipUpgradeData.luck);
             _shipStatCompo.SetShipBaseValue(MainShipUpgradeType.Health, evt._mainShipUpgradeData.health);
+            _shipStatCompo.SetCommanderBaseValue(CommanderStatType.MaxGauge,
+                evt._mainShipUpgradeData.commanderGaugeMax);
+            _shipStatCompo.SetCommanderBaseValue(CommanderStatType.GaugeRecoveryPerSecond,
+                evt._mainShipUpgradeData.commanderGaugeRecoveryPerSecond);
         }
 
         private void RefreshMainShipStats()

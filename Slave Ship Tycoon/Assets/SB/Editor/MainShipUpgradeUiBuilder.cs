@@ -64,6 +64,8 @@ namespace SB.Editor
             MainShipUpgradeSlotView attackSpeed = CreateSlot(root.transform, "AttackSpeedPercentUpgradeButton", "Attack Speed", MainShipUpgradeType.AttackSpeedPercent);
             MainShipUpgradeSlotView cargo = CreateSlot(root.transform, "CargoCapacityUpgradeButton", "Cargo", MainShipUpgradeType.CargoCapacity);
             MainShipUpgradeSlotView luck = CreateSlot(root.transform, "LuckUpgradeButton", "Luck", MainShipUpgradeType.Luck);
+            MainShipUpgradeSlotView commanderGaugeMax = CreateSlot(root.transform, "CommanderGaugeMaxUpgradeButton", "Max Commander Gauge", MainShipUpgradeType.CommanderGaugeMax);
+            MainShipUpgradeSlotView commanderGaugeRecovery = CreateSlot(root.transform, "CommanderGaugeRecoveryUpgradeButton", "Commander Gauge Recovery", MainShipUpgradeType.CommanderGaugeRecoveryPerSecond);
 
             SerializedObject viewObject = new SerializedObject(view);
             viewObject.FindProperty("_healthUpgradeButton").objectReferenceValue = health;
@@ -71,6 +73,8 @@ namespace SB.Editor
             viewObject.FindProperty("attackSpeedPercentUpgradeButton").objectReferenceValue = attackSpeed;
             viewObject.FindProperty("cargoCapacityUpgradeButton").objectReferenceValue = cargo;
             viewObject.FindProperty("luckUpgradeButton").objectReferenceValue = luck;
+            viewObject.FindProperty("commanderGaugeMaxUpgradeButton").objectReferenceValue = commanderGaugeMax;
+            viewObject.FindProperty("commanderGaugeRecoveryPerSecondUpgradeButton").objectReferenceValue = commanderGaugeRecovery;
             viewObject.ApplyModifiedProperties();
 
             ShipUpgradeManager upgradeManager = FindUpgradeManager();
