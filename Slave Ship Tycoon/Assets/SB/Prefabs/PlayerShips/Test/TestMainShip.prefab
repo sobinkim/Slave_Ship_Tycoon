@@ -501,6 +501,12 @@ MonoBehaviour:
     - stat: {fileID: 11400000, guid: 4d5524dab23e43c3b636f724c96322e0, type: 2}
       useOverride: 0
       overrideBaseValue: 0
+    - stat: {fileID: 11400000, guid: 8c11e61fe12d46f29a9cdf9fd089da5f, type: 2}
+      useOverride: 0
+      overrideBaseValue: 0
+    - stat: {fileID: 11400000, guid: 6b8ae89fef8c4d5e8e8faf05e57c58b6, type: 2}
+      useOverride: 0
+      overrideBaseValue: 0
     - stat: {fileID: 11400000, guid: 1cc2eb38aa4947d4981265fb799e4a39, type: 2}
       useOverride: 0
       overrideBaseValue: 0
@@ -511,6 +517,8 @@ MonoBehaviour:
   _playerFleet_AttackSpeedPercent_Stat: {fileID: 11400000, guid: 6599574ae37549b6a4ed656027bf6c6d, type: 2}
   _mainShip_CargoCapacity_Stat: {fileID: 11400000, guid: 4d5524dab23e43c3b636f724c96322e0, type: 2}
   _mainShip_Luck_Stat: {fileID: 11400000, guid: 1cc2eb38aa4947d4981265fb799e4a39, type: 2}
+  _commander_MaxGauge_Stat: {fileID: 11400000, guid: 8c11e61fe12d46f29a9cdf9fd089da5f, type: 2}
+  _commander_GaugeRecoveryPerSecond_Stat: {fileID: 11400000, guid: 6b8ae89fef8c4d5e8e8faf05e57c58b6, type: 2}
 --- !u!1 &8838354041166555176
 GameObject:
   m_ObjectHideFlags: 0

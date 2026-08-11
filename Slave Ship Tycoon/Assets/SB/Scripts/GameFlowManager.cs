@@ -195,6 +195,19 @@ namespace SB.Scripts
         {
             currentChapter++;
             currentStage = 1;
+
+            if (chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer chapter) &&
+                chapter.RouteType == ChapterRouteType.Obtain)
+            {
+                Bus<ObtainChapterStartedEvent>.Raise(
+                    new ObtainChapterStartedEvent(currentChapter));
+            }
+            else if (chapter != null && chapter.RouteType == ChapterRouteType.Sell)
+            {
+                Bus<SellChapterStartedEvent>.Raise(
+                    new SellChapterStartedEvent(currentChapter));
+            }
+
             StartStage();
         }
     }

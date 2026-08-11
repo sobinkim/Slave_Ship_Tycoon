@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SB.Scripts;
 
 namespace SB.Core.EventBus
@@ -14,11 +15,12 @@ namespace SB.Core.EventBus
 
     public readonly struct GetMarketPriceEvent : IEvent
     {
-        public readonly TransportMarketPriceEntry[] _marketPrices;
+        public readonly Dictionary<ETransportItemType, TransportMarketPriceEntry> _marketPrices;
 
-        public GetMarketPriceEvent(TransportMarketPriceEntry[] marketPrices)
+        public GetMarketPriceEvent(Dictionary<ETransportItemType, TransportMarketPriceEntry> marketPrices)
         {
             _marketPrices = marketPrices;
         }
     }
+
 }

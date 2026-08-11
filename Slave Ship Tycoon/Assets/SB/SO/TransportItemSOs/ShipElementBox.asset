@@ -16,5 +16,5 @@ MonoBehaviour:
   Type: 1
   Rewards:
   - CurrencyType: 0
-    CurrencyAmount: 2000
+    CurrencyAmount: 20000
   BaseWeight: 24

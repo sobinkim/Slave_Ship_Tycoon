@@ -12,7 +12,9 @@ namespace SB.Scripts.Upgrade
         AttackPowerPercent,
         AttackSpeedPercent,
         CargoCapacity,
-        Luck
+        Luck,
+        CommanderGaugeMax,
+        CommanderGaugeRecoveryPerSecond
     }
 
     [Serializable]
@@ -23,6 +25,8 @@ namespace SB.Scripts.Upgrade
         public float attackSpeedPercent;
         public float cargoCapacity;
         public float luck;
+        public float commanderGaugeMax;
+        public float commanderGaugeRecoveryPerSecond;
     }
 
     [Serializable]
@@ -150,6 +154,14 @@ namespace SB.Scripts.Upgrade
 
                 case MainShipUpgradeType.Luck:
                     _mainShipUpgradeData.luck += value;
+                    break;
+
+                case MainShipUpgradeType.CommanderGaugeMax:
+                    _mainShipUpgradeData.commanderGaugeMax += value;
+                    break;
+
+                case MainShipUpgradeType.CommanderGaugeRecoveryPerSecond:
+                    _mainShipUpgradeData.commanderGaugeRecoveryPerSecond += value;
                     break;
 
                 default:

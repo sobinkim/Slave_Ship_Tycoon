@@ -86,6 +86,7 @@ namespace SB.Scripts
                 return;
             }
 
+            Bus<StageBattleInitializedEvent>.Raise(new StageBattleInitializedEvent(battleSpawnData));
             stageEncounterDirector.PlayEncounterSequence(battleSpawnData);
         }
 

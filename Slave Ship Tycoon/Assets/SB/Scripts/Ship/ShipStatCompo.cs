@@ -11,6 +11,12 @@ namespace SB.Scripts
         AttackSpeed
     }
 
+    public enum CommanderStatType
+    {
+        MaxGauge,
+        GaugeRecoveryPerSecond
+    }
+
     public class ShipStatCompo : EntityStatCompo
     {
         [Header("Common Stat SO")]
@@ -23,6 +29,10 @@ namespace SB.Scripts
         [SerializeField] private StatSO _playerFleet_AttackSpeedPercent_Stat;
         [SerializeField] private StatSO _mainShip_CargoCapacity_Stat;
         [SerializeField] private StatSO _mainShip_Luck_Stat;
+
+        [Header("Commander Stat SO")]
+        [SerializeField] private StatSO _commander_MaxGauge_Stat;
+        [SerializeField] private StatSO _commander_GaugeRecoveryPerSecond_Stat;
 
         public StatSO GetCommonStatSO(ShipCommonStatType targetStatType)
         {
@@ -69,6 +79,26 @@ namespace SB.Scripts
         public void SetShipBaseValue(MainShipUpgradeType targetStatType, float value)
         {
             SetBaseValue(GetShipStatSO(targetStatType), value);
+        }
+
+        public StatSO GetCommanderStatSO(CommanderStatType targetStatType)
+        {
+            switch (targetStatType)
+            {
+                case CommanderStatType.MaxGauge:
+                    return _commander_MaxGauge_Stat;
+
+                case CommanderStatType.GaugeRecoveryPerSecond:
+                    return _commander_GaugeRecoveryPerSecond_Stat;
+
+                default:
+                    throw new System.ArgumentOutOfRangeException(nameof(targetStatType), targetStatType, null);
+            }
+        }
+
+        public void SetCommanderBaseValue(CommanderStatType targetStatType, float value)
+        {
+            SetBaseValue(GetCommanderStatSO(targetStatType), value);
         }
     }
 }
