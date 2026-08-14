@@ -8,14 +8,14 @@ namespace SB.Scripts.Currency
     public struct CurrencyAmount
     {
         public CurrencyType currencyType;
-        public int amount;
+        public long amount;
     }
 
     public class CurrencyManager : MonoBehaviour
     {
         [SerializeField] private CurrencyAmount[] initialCurrencies;
 
-        private readonly int[] currencyAmounts = new int[Enum.GetValues(typeof(CurrencyType)).Length];
+        private readonly long[] currencyAmounts = new long[Enum.GetValues(typeof(CurrencyType)).Length];
 
         public static CurrencyManager Instance { get; private set; }
 
@@ -40,39 +40,52 @@ namespace SB.Scripts.Currency
 
         private void OnEnable()
         {
-            Bus<CurrencyAddRequestEvent>.OnEvent += HandAddCurrencyRequest;
+            Bus<CurrencyAddRequestEvent>.OnEvent += HandleAddCurrencyRequest;
         }
 
-        public int GetCurrency(CurrencyType currencyType)
+        private void OnDisable()
+        {
+            Bus<CurrencyAddRequestEvent>.OnEvent -= HandleAddCurrencyRequest;
+        }
+
+        public long GetCurrency(CurrencyType currencyType)
         {
             return currencyAmounts[(int)currencyType];
         }
 
-        private void HandAddCurrencyRequest(CurrencyAddRequestEvent evt)
+        private void HandleAddCurrencyRequest(CurrencyAddRequestEvent evt)
         {
-            AddCurrency(evt.CurrencyType,evt.AddedAmount);
+            AddCurrency(evt.CurrencyType, evt.AddedAmount);
         }
 
-        public void AddCurrency(CurrencyType currencyType, int amount)
+        public void AddCurrency(CurrencyType currencyType, long amount)
         {
             if (amount <= 0)
                 return;
 
-            int previousAmount = GetCurrency(currencyType);
-            currencyAmounts[(int)currencyType] = previousAmount + amount;
+            long previousAmount = GetCurrency(currencyType);
+            long currentAmount = amount > long.MaxValue - previousAmount
+                ? long.MaxValue
+                : previousAmount + amount;
+            long addedAmount = currentAmount - previousAmount;
 
-            Bus<CurrencyAddedEvent>.Raise(new CurrencyAddedEvent(currencyType, amount,
-                currencyAmounts[(int)currencyType]));
+            if (addedAmount <= 0)
+                return;
+
+            currencyAmounts[(int)currencyType] = currentAmount;
+
+            Bus<CurrencyAddedEvent>.Raise(new CurrencyAddedEvent(currencyType, addedAmount,
+                currentAmount));
             Bus<CurrencyChangedEvent>.Raise(new CurrencyChangedEvent(currencyType, currencyAmounts[(int)currencyType],
                 previousAmount));
         }
 
-        public bool TrySpendCurrency(CurrencyType currencyType, int amount)
+        public bool TrySpendCurrency(CurrencyType currencyType, long amount)
         {
             if (amount <= 0)
                 return true;
 
-            int previousAmount = GetCurrency(currencyType);
+            long previousAmount = GetCurrency(currencyType);
             if (previousAmount < amount)
                 return false;
 
@@ -93,7 +106,7 @@ namespace SB.Scripts.Currency
                 return;
 
             for (int i = 0; i < initialCurrencies.Length; i++)
-                currencyAmounts[(int)initialCurrencies[i].currencyType] = Mathf.Max(0, initialCurrencies[i].amount);
+                currencyAmounts[(int)initialCurrencies[i].currencyType] = Math.Max(0L, initialCurrencies[i].amount);
         }
     }
 }

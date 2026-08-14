@@ -29,6 +29,12 @@ namespace SB.Scripts
             Bus<UpgradeEvent>.OnEvent -= GetMainShipUpgradeData;
         }
 
+        private void Start()
+        {
+            GetTotalWeight();
+            RaiseCargoChanged();
+        }
+
         private void GetMainShipUpgradeData(UpgradeEvent evt)
         {
             _statCargoCapacity = evt._mainShipUpgradeData.cargoCapacity;
@@ -47,7 +53,7 @@ namespace SB.Scripts
             cargoData.Amount++;
             _currentCargoCapacity += cargoData.Item.BaseWeight;
 
-            Bus<ChangedCurrentCargoCapacityEvent>.Raise(new ChangedCurrentCargoCapacityEvent(_cargoData));
+            RaiseCargoChanged();
             return true;
         }
 
@@ -61,7 +67,7 @@ namespace SB.Scripts
             cargoData.Amount--;
             _currentCargoCapacity -= cargoData.Item.BaseWeight;
 
-            Bus<ChangedCurrentCargoCapacityEvent>.Raise(new ChangedCurrentCargoCapacityEvent(_cargoData));
+            RaiseCargoChanged();
             return true;
         }
 
@@ -119,7 +125,13 @@ namespace SB.Scripts
 
             _currentCargoCapacity = 0f;
 
-            Bus<ChangedCurrentCargoCapacityEvent>.Raise(new ChangedCurrentCargoCapacityEvent(_cargoData));
+            RaiseCargoChanged();
+        }
+
+        private void RaiseCargoChanged()
+        {
+            Bus<ChangedCurrentCargoCapacityEvent>.Raise(
+                new ChangedCurrentCargoCapacityEvent(_cargoData));
         }
     }
 }

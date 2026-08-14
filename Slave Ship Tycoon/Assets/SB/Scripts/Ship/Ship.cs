@@ -127,9 +127,28 @@ namespace SB.Scripts
             _attackCompo?.ApplyAttackAnimationSpeed();
         }
 
+        public void RefreshAttackSpeed(float previousAttackSpeed)
+        {
+            _attackCompo?.RefreshAttackSpeed(previousAttackSpeed);
+        }
+
         public void ResetAttackAnimationSpeed()
         {
             _attackCompo?.ResetAttackAnimationSpeed();
+        }
+
+        public void SetCommanderTargetColumn(int targetColumn)
+        {
+            TargetSelector targetSelector = GetCompo<TargetSelector>();
+            targetSelector?.SetCommanderTargetColumn(targetColumn);
+            _attackCompo?.ForceRetarget();
+        }
+
+        public void ClearCommanderTargetCommand()
+        {
+            TargetSelector targetSelector = GetCompo<TargetSelector>();
+            targetSelector?.ClearCommanderTargetCommand();
+            _attackCompo?.ForceRetarget();
         }
 
         public virtual void OnSpawnedFromPool()
@@ -146,6 +165,9 @@ namespace SB.Scripts
 
         public virtual void OnDespawnedToPool()
         {
+            ClearCommanderTargetCommand();
+            GetCompo<ShipCombatStatCompo>()?.ClearCommanderModifiers();
+            _attackCompo?.ResetAttackState();
         }
         
         

@@ -1,4 +1,5 @@
 using SB.Core.EventBus;
+using System.Collections;
 using UnityEngine;
 
 namespace SB.Scripts
@@ -18,6 +19,7 @@ namespace SB.Scripts
         private StageRoomType currentStageType;
         private ChapterRouteType currentRouteType;
         private bool currentBattleIsBoss;
+        private Coroutine _stageRestartRoutine;
 
         private void OnEnable()
         {
@@ -29,6 +31,12 @@ namespace SB.Scripts
         {
             Bus<StageBattleEndedEvent>.OnEvent -= UpdateCurrentChapterData;
             Bus<AffterStageClearEvent>.OnEvent -= HandleAfterStageClear;
+
+            if (_stageRestartRoutine != null)
+            {
+                StopCoroutine(_stageRestartRoutine);
+                _stageRestartRoutine = null;
+            }
         }
         private void Update()
         {
@@ -168,7 +176,7 @@ namespace SB.Scripts
 
                 if (currentRouteType == ChapterRouteType.Obtain && currentBattleIsBoss == false)
                 {
-                    StartStage();
+                    QueueStartStage();
                     return;
                 }
 
@@ -188,11 +196,17 @@ namespace SB.Scripts
                 StageFail();
             }
 
-            StartStage();
+            QueueStartStage();
         }
         
         private void HandleAfterStageClear(AffterStageClearEvent evt)
         {
+            if (evt.ClearChapterType == ChapterRouteType.Sell)
+            {
+                Bus<SellChapterCompletedEvent>.Raise(
+                    new SellChapterCompletedEvent(evt.Chapter));
+            }
+
             currentChapter++;
             currentStage = 1;
 
@@ -208,6 +222,21 @@ namespace SB.Scripts
                     new SellChapterStartedEvent(currentChapter));
             }
 
+            QueueStartStage();
+        }
+
+        private void QueueStartStage()
+        {
+            if (_stageRestartRoutine != null)
+                StopCoroutine(_stageRestartRoutine);
+
+            _stageRestartRoutine = StartCoroutine(StartStageNextFrame());
+        }
+
+        private IEnumerator StartStageNextFrame()
+        {
+            yield return null;
+            _stageRestartRoutine = null;
             StartStage();
         }
     }

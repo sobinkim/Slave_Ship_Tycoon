@@ -48,7 +48,7 @@ namespace SB.Scripts.UI.Upgrade
                 if (upgradeData == null)
                     return false;
 
-                view.SetRefresh(upgradeType, upgradeData.level, upgradeData.currentCost);
+                view.SetRefresh(upgradeType, upgradeData.level, upgradeData.CurrentCost);
                 return true;
             }
 
@@ -75,7 +75,7 @@ namespace SB.Scripts.UI.Upgrade
             if (upgradeData == null)
                 return;
 
-            view.SetRefresh(upgradeType, upgradeData.level, upgradeData.currentCost);
+            view.SetRefresh(upgradeType, upgradeData.level, upgradeData.CurrentCost);
         }
 
         private void ResolveReferences()

@@ -5,10 +5,10 @@ namespace SB.Core.EventBus
     public readonly struct CurrencyChangedEvent : IEvent
     {
         public readonly CurrencyType CurrencyType;
-        public readonly int CurrentAmount;
-        public readonly int PreviousAmount;
+        public readonly long CurrentAmount;
+        public readonly long PreviousAmount;
 
-        public CurrencyChangedEvent(CurrencyType currencyType, int currentAmount, int previousAmount)
+        public CurrencyChangedEvent(CurrencyType currencyType, long currentAmount, long previousAmount)
         {
             CurrencyType = currencyType;
             CurrentAmount = currentAmount;
@@ -19,9 +19,9 @@ namespace SB.Core.EventBus
     public readonly struct CurrencyAddRequestEvent : IEvent
     {
         public readonly CurrencyType CurrencyType;
-        public readonly int AddedAmount;
+        public readonly long AddedAmount;
 
-        public CurrencyAddRequestEvent(CurrencyType currencyType, int addedAmount)
+        public CurrencyAddRequestEvent(CurrencyType currencyType, long addedAmount)
         {
             CurrencyType = currencyType;
             AddedAmount = addedAmount;
@@ -31,10 +31,10 @@ namespace SB.Core.EventBus
     public readonly struct CurrencyAddedEvent : IEvent
     {
         public readonly CurrencyType CurrencyType;
-        public readonly int AddedAmount;
-        public readonly int CurrentAmount;
+        public readonly long AddedAmount;
+        public readonly long CurrentAmount;
 
-        public CurrencyAddedEvent(CurrencyType currencyType, int addedAmount, int currentAmount)
+        public CurrencyAddedEvent(CurrencyType currencyType, long addedAmount, long currentAmount)
         {
             CurrencyType = currencyType;
             AddedAmount = addedAmount;
@@ -45,10 +45,10 @@ namespace SB.Core.EventBus
     public readonly struct CurrencySpentEvent : IEvent
     {
         public readonly CurrencyType CurrencyType;
-        public readonly int SpentAmount;
-        public readonly int CurrentAmount;
+        public readonly long SpentAmount;
+        public readonly long CurrentAmount;
 
-        public CurrencySpentEvent(CurrencyType currencyType, int spentAmount, int currentAmount)
+        public CurrencySpentEvent(CurrencyType currencyType, long spentAmount, long currentAmount)
         {
             CurrencyType = currencyType;
             SpentAmount = spentAmount;

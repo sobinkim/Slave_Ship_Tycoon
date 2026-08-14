@@ -6,7 +6,9 @@ namespace SB.Scripts.Visual
     public enum PanelType
     {
         Upgrade,
-        Cago
+        Cago,
+        Fleet,
+        TransportEquipment
     }
     [Serializable]
     struct PanelInfo

@@ -1,4 +1,5 @@
 using TMPro;
+using SB.Scripts.Currency;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,10 +12,10 @@ namespace SB.Scripts.UI.HUD
 
         public Image Icon => icon;
 
-        public void SetValue(int value)
+        public void SetValue(long value)
         {
             if (valueText != null)
-                valueText.text = value.ToString();
+                valueText.text = CurrencyTextFormatter.Format(value);
         }
     }
 }

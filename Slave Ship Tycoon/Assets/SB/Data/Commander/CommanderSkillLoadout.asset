@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a06a193b07c17f044bc58b3f4b0fbf26, type: 3}
+  m_Name: CommanderSkillLoadout
+  m_EditorClassIdentifier: 
+  _equippedSkills:
+  - {fileID: 11400000, guid: a3ee701b20359c44b977ceafc76a2438, type: 2}
+  - {fileID: 11400000, guid: 7781e32d27ee1b348981401d85708abc, type: 2}

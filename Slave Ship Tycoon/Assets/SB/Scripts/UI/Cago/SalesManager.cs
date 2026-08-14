@@ -1,86 +1,157 @@
 using System;
 using System.Collections.Generic;
 using SB.Core.EventBus;
+using SB.SO.TransportItemSOs;
+using SB.Scripts.Currency;
+using SB.Scripts.TransportEquipment;
 using UnityEngine;
 
 namespace SB.Scripts
 {
     public class SalesManager : MonoBehaviour
     {
-        private CargoData[] _cargoData;
-        private CargoData[] _sellCargoData;
-        private Dictionary<ETransportItemType, TransportMarketPriceEntry> _marketPriceEntries;
+        [SerializeField] private TransportEquipmentManager _transportEquipmentManager;
+
+        private CargoData[] _currentCargoData = Array.Empty<CargoData>();
+        private CargoData[] _sellCargoData = Array.Empty<CargoData>();
+        private IReadOnlyDictionary<ETransportItemType, TransportMarketPriceEntry> _marketPriceEntries;
+        private int _sellChapter;
+        private bool _hasPendingSale;
 
         private void OnEnable()
         {
-            Bus<ChangedCurrentCargoCapacityEvent>.OnEvent += GetCargoDatas;
-            Bus<GetMarketPriceEvent>.OnEvent += GetMarketPrices;
-            Bus<SellChapterStartedEvent>.OnEvent += HandleSellChapterStarted;
-            Bus<ObtainChapterStartedEvent>.OnEvent += HandleObtainChapterStarted;
+            Bus<ChangedCurrentCargoCapacityEvent>.OnEvent += OnCargoChanged;
+            Bus<GetMarketPriceEvent>.OnEvent += OnMarketPricesChanged;
+            Bus<SellChapterStartedEvent>.OnEvent += OnSellChapterStarted;
+            Bus<SellChapterCompletedEvent>.OnEvent += OnSellChapterCompleted;
         }
 
         private void OnDisable()
         {
-            Bus<ChangedCurrentCargoCapacityEvent>.OnEvent -= GetCargoDatas;
-            Bus<GetMarketPriceEvent>.OnEvent -= GetMarketPrices;
-            Bus<SellChapterStartedEvent>.OnEvent -= HandleSellChapterStarted;
-            Bus<ObtainChapterStartedEvent>.OnEvent -= HandleObtainChapterStarted;
+            Bus<ChangedCurrentCargoCapacityEvent>.OnEvent -= OnCargoChanged;
+            Bus<GetMarketPriceEvent>.OnEvent -= OnMarketPricesChanged;
+            Bus<SellChapterStartedEvent>.OnEvent -= OnSellChapterStarted;
+            Bus<SellChapterCompletedEvent>.OnEvent -= OnSellChapterCompleted;
         }
 
-        private void HandleSellChapterStarted(SellChapterStartedEvent evt)
+        private void OnCargoChanged(ChangedCurrentCargoCapacityEvent evt)
         {
-            _sellCargoData = CopyCargoData(_cargoData);
+            _currentCargoData = evt.CargoData ?? Array.Empty<CargoData>();
         }
 
-        private void HandleObtainChapterStarted(ObtainChapterStartedEvent evt)
+        private void OnMarketPricesChanged(GetMarketPriceEvent evt)
         {
-            if (SaleCargo() == false)
+            _marketPriceEntries = evt.MarketPrices;
+        }
+
+        private void OnSellChapterStarted(SellChapterStartedEvent evt)
+        {
+            _sellChapter = evt.Chapter;
+            _sellCargoData = CopyCargoData(_currentCargoData);
+            _hasPendingSale = HasLoadedCargo(_sellCargoData);
+        }
+
+        private void OnSellChapterCompleted(SellChapterCompletedEvent evt)
+        {
+            if (_hasPendingSale == false)
                 return;
-        }
 
-        private void GetCargoDatas(ChangedCurrentCargoCapacityEvent evt)
-        {
-            _cargoData = evt.CargoData;
-        }
-
-        private void GetMarketPrices(GetMarketPriceEvent evt)
-        {
-            _marketPriceEntries = evt._marketPrices;
-        }
-
-        private bool SaleCargo()
-        {
-            if (_sellCargoData == null || _sellCargoData.Length == 0 ||
-                _marketPriceEntries == null || _marketPriceEntries.Count == 0)
+            if (TryCreateSettlementResult(out SaleSettlementResult settlementResult) == false)
             {
+                Debug.LogWarning("Sale settlement is waiting for cargo market data.", this);
+                return;
+            }
+
+            _hasPendingSale = false;
+
+            IReadOnlyList<SaleCurrencyReward> totalRewards = settlementResult.TotalRewards;
+
+            for (int i = 0; i < totalRewards.Count; i++)
+            {
+                SaleCurrencyReward reward = totalRewards[i];
+                Bus<CurrencyAddRequestEvent>.Raise(
+                    new CurrencyAddRequestEvent(reward.CurrencyType, reward.Amount));
+            }
+
+            Bus<SaleSettlementCompletedEvent>.Raise(
+                new SaleSettlementCompletedEvent(settlementResult));
+        }
+
+        private bool TryCreateSettlementResult(out SaleSettlementResult settlementResult)
+        {
+            settlementResult = null;
+
+            if (_sellCargoData.Length == 0 || _marketPriceEntries == null || _marketPriceEntries.Count == 0)
                 return false;
-            }
 
-            bool hasCargo = false;
+            List<CargoSaleResult> cargoResults = new List<CargoSaleResult>();
+            Dictionary<CurrencyType, long> totalRewards = new Dictionary<CurrencyType, long>();
 
-            foreach (CargoData cargoData in _sellCargoData)
+            for (int i = 0; i < _sellCargoData.Length; i++)
             {
-                if (cargoData == null || cargoData.Item == null || cargoData.Amount <= 0)
-                    continue;
+                CargoData cargoData = _sellCargoData[i];
 
-                if (_marketPriceEntries.TryGetValue(cargoData.Item.Type, out TransportMarketPriceEntry priceEntry) == false)
-                    continue;
-
-                hasCargo = true;
-
-                for (int i = 0; i < cargoData.Item.Rewards.Length; i++)
+                if (cargoData == null || cargoData.Item == null || cargoData.Amount <= 0 ||
+                    _marketPriceEntries.TryGetValue(
+                        cargoData.Item.Type,
+                        out TransportMarketPriceEntry priceEntry) == false)
                 {
-                    int totalAmount = cargoData.Amount * (cargoData.Item.Rewards[i].CurrencyAmount
-                                                          * priceEntry.GetAppliedMultiplier());
-                    Bus<CurrencyAddRequestEvent>.Raise(
-                        new CurrencyAddRequestEvent(cargoData.Item.Rewards[i].CurrencyType, totalAmount));
+                    continue;
                 }
+
+                CargoSalesRewardData[] rewardDatas = cargoData.Item.Rewards ?? Array.Empty<CargoSalesRewardData>();
+                List<SaleCurrencyReward> cargoRewards = new List<SaleCurrencyReward>(rewardDatas.Length);
+                int appliedMultiplier = priceEntry.GetAppliedMultiplier();
+
+                for (int rewardIndex = 0; rewardIndex < rewardDatas.Length; rewardIndex++)
+                {
+                    CargoSalesRewardData rewardData = rewardDatas[rewardIndex];
+                    long rewardAmount = SaturatingMultiply(
+                        SaturatingMultiply(cargoData.Amount, rewardData.CurrencyAmount),
+                        appliedMultiplier);
+
+                    if (rewardAmount <= 0)
+                        continue;
+
+                    cargoRewards.Add(new SaleCurrencyReward(rewardData.CurrencyType, rewardAmount));
+
+                    if (totalRewards.TryGetValue(rewardData.CurrencyType, out long currentAmount))
+                        totalRewards[rewardData.CurrencyType] = SaturatingAdd(currentAmount, rewardAmount);
+                    else
+                        totalRewards.Add(rewardData.CurrencyType, rewardAmount);
+                }
+
+                cargoResults.Add(new CargoSaleResult(
+                    cargoData.Item.Type,
+                    cargoData.Amount,
+                    appliedMultiplier,
+                    cargoRewards.ToArray()));
             }
 
-            return hasCargo;
+            if (cargoResults.Count == 0 || totalRewards.Count == 0)
+                return false;
+
+            if (_transportEquipmentManager != null)
+                _transportEquipmentManager.ApplySnapshotModifiers(totalRewards);
+
+            SaleCurrencyReward[] totalRewardEntries = new SaleCurrencyReward[totalRewards.Count];
+            int totalRewardIndex = 0;
+
+            foreach (KeyValuePair<CurrencyType, long> reward in totalRewards)
+            {
+                totalRewardEntries[totalRewardIndex++] = new SaleCurrencyReward(
+                    reward.Key,
+                    reward.Value);
+            }
+
+            settlementResult = new SaleSettlementResult(
+                _sellChapter,
+                cargoResults.ToArray(),
+                totalRewardEntries);
+            return true;
         }
 
-        private CargoData[] CopyCargoData(CargoData[] source)
+        private static CargoData[] CopyCargoData(CargoData[] source)
         {
             if (source == null || source.Length == 0)
                 return Array.Empty<CargoData>();
@@ -89,17 +160,47 @@ namespace SB.Scripts
 
             for (int i = 0; i < source.Length; i++)
             {
-                if (source[i] == null)
+                CargoData cargoData = source[i];
+
+                if (cargoData == null)
                     continue;
 
                 copy[i] = new CargoData
                 {
-                    Item = source[i].Item,
-                    Amount = source[i].Amount
+                    Item = cargoData.Item,
+                    Amount = cargoData.Amount
                 };
             }
 
             return copy;
+        }
+
+        private static bool HasLoadedCargo(CargoData[] cargoData)
+        {
+            for (int i = 0; i < cargoData.Length; i++)
+            {
+                if (cargoData[i] != null && cargoData[i].Item != null && cargoData[i].Amount > 0)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static long SaturatingMultiply(long left, long right)
+        {
+            if (left <= 0 || right <= 0)
+                return 0;
+
+            return left > long.MaxValue / right
+                ? long.MaxValue
+                : left * right;
+        }
+
+        private static long SaturatingAdd(long left, long right)
+        {
+            return right > long.MaxValue - left
+                ? long.MaxValue
+                : left + right;
         }
     }
 }

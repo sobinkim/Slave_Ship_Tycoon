@@ -85,6 +85,12 @@ namespace SB.Scripts.AttackCompo
             return HasAliveTarget;
         }
 
+        public void ForceRetarget()
+        {
+            CurrentTarget = null;
+            TryAcquireTarget();
+        }
+
         public bool EnsureTarget()
         {
             if (HasAliveTarget)
@@ -102,6 +108,16 @@ namespace SB.Scripts.AttackCompo
         public void ResetCooldown()
         {
             currentCooldown = FinalAttackCooldown;
+        }
+
+        public void RefreshAttackSpeed(float previousAttackSpeed)
+        {
+            float currentAttackSpeed = FinalAttackSpeed;
+
+            if (currentCooldown > 0f && previousAttackSpeed > 0f && currentAttackSpeed > 0f)
+                currentCooldown *= previousAttackSpeed / currentAttackSpeed;
+
+            ApplyAttackAnimationSpeed();
         }
 
         public bool EnterAttack()

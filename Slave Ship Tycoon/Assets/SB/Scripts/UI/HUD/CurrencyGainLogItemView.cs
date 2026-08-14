@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using TMPro;
+using SB.Scripts.Currency;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ namespace SB.Scripts.UI.HUD
         [SerializeField] private CanvasGroup _canvasGroup;
 
         private RectTransform _rectTransform;
+        private Vector3 _defaultScale;
         private Coroutine _playCoroutine;
         private Coroutine _moveCoroutine;
         private Action _onFinished;
@@ -20,6 +22,7 @@ namespace SB.Scripts.UI.HUD
         private void Awake()
         {
             _rectTransform = transform as RectTransform;
+            _defaultScale = _rectTransform.localScale;
         }
 
         private void OnDisable()
@@ -39,22 +42,15 @@ namespace SB.Scripts.UI.HUD
             _onFinished = null;
         }
 
-        public void SetReferences(Image icon, TMP_Text amountText, CanvasGroup canvasGroup)
-        {
-            _icon = icon;
-            _amountText = amountText;
-            _canvasGroup = canvasGroup;
-        }
-
-        public void Play(Sprite icon, int amount, float visibleDuration, float fadeOutDuration, Action onFinished)
+        public void Play(Sprite icon, long amount, float visibleDuration, float fadeOutDuration, Action onFinished)
         {
             if (_playCoroutine != null)
                 StopCoroutine(_playCoroutine);
 
             _icon.sprite = icon;
-            _amountText.text = $"+{amount:N0}";
+            _amountText.text = $"+{CurrencyTextFormatter.Format(amount)}";
             _canvasGroup.alpha = 0f;
-            _rectTransform.localScale = Vector3.one * 0.9f;
+            _rectTransform.localScale = _defaultScale * 1.1f;
             _onFinished = onFinished;
             _playCoroutine = StartCoroutine(PlayRoutine(visibleDuration, fadeOutDuration));
         }
@@ -78,16 +74,16 @@ namespace SB.Scripts.UI.HUD
 
         private IEnumerator PlayRoutine(float visibleDuration, float fadeOutDuration)
         {
-            yield return FadeAndScale(0f, 1f, 0.9f, 1f, 0.1f);
+            yield return FadeAndScale(0f, 1f, _defaultScale * 1.1f, _defaultScale, 0.1f);
             yield return new WaitForSecondsRealtime(visibleDuration);
-            yield return FadeAndScale(1f, 0f, 1f, 1f, fadeOutDuration);
+            yield return FadeAndScale(1f, 0f, _defaultScale, _defaultScale, fadeOutDuration);
 
             Finish();
         }
 
         private IEnumerator FadeOutRoutine(float duration)
         {
-            yield return FadeAndScale(_canvasGroup.alpha, 0f, _rectTransform.localScale.x, 1f, duration);
+            yield return FadeAndScale(_canvasGroup.alpha, 0f, _rectTransform.localScale, _defaultScale, duration);
             Finish();
         }
 
@@ -116,12 +112,17 @@ namespace SB.Scripts.UI.HUD
             _moveCoroutine = null;
         }
 
-        private IEnumerator FadeAndScale(float startAlpha, float endAlpha, float startScale, float endScale, float duration)
+        private IEnumerator FadeAndScale(
+            float startAlpha,
+            float endAlpha,
+            Vector3 startScale,
+            Vector3 endScale,
+            float duration)
         {
             if (duration <= 0f)
             {
                 _canvasGroup.alpha = endAlpha;
-                _rectTransform.localScale = Vector3.one * endScale;
+                _rectTransform.localScale = endScale;
                 yield break;
             }
 
@@ -133,12 +134,12 @@ namespace SB.Scripts.UI.HUD
                 float easedProgress = 1f - Mathf.Pow(1f - progress, 3f);
 
                 _canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, easedProgress);
-                _rectTransform.localScale = Vector3.one * Mathf.Lerp(startScale, endScale, easedProgress);
+                _rectTransform.localScale = Vector3.Lerp(startScale, endScale, easedProgress);
                 yield return null;
             }
 
             _canvasGroup.alpha = endAlpha;
-            _rectTransform.localScale = Vector3.one * endScale;
+            _rectTransform.localScale = endScale;
         }
 
         private void Finish()

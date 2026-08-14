@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SB.Core.EventBus;
+using SB.Scripts.Fleet;
 using SB.Scripts.AttackCompo;
 using SB.Scripts.Upgrade;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace SB.Scripts
     {
         [Header("Player Fleet")]
         [SerializeField] private PlayerFleetLoadout playerFleetLoadout;
+        [SerializeField] private PlayerFleetManager playerFleetManager;
         [SerializeField] private PlayerFleetUpgradeProvider playerFleetUpgradeProvider;
         [SerializeField] private Transform mainShipSpawnPoint;
         [SerializeField] private Transform[] escortShipSpawnPoints = Array.Empty<Transform>();
@@ -39,6 +41,7 @@ namespace SB.Scripts
 
             runtimePlayerFleetLoadout = Instantiate(playerFleetLoadout);
             runtimePlayerFleetLoadout.name = $"{playerFleetLoadout.name} (Runtime)";
+            playerFleetManager?.SetRuntimeLoadout(runtimePlayerFleetLoadout);
         }
 
         private void OnEnable()
@@ -57,7 +60,10 @@ namespace SB.Scripts
         private void OnDestroy()
         {
             if (runtimePlayerFleetLoadout != null)
+            {
+                playerFleetManager?.ReleaseRuntimeLoadout(runtimePlayerFleetLoadout);
                 Destroy(runtimePlayerFleetLoadout);
+            }
         }
 
         public void SpawnStageBattle(int chapter, int stage)

@@ -355,6 +355,8 @@ GameObject:
   - component: {fileID: 1666985546798591543}
   - component: {fileID: 3930112433125724580}
   - component: {fileID: 7709547532000577948}
+  - component: {fileID: 915585000646417350}
+  - component: {fileID: 2912785568065703182}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -447,6 +449,40 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &915585000646417350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6971714769204648576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807a79f21f29c4b418b1cbdba4e4ea41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &2912785568065703182
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6971714769204648576}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0c2b89b6cb4ff0440ac4cced74b5487a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7421802267642178058
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,6 +672,8 @@ MonoBehaviour:
   _playerFleet_AttackSpeedPercent_Stat: {fileID: 11400000, guid: 6599574ae37549b6a4ed656027bf6c6d, type: 2}
   _mainShip_CargoCapacity_Stat: {fileID: 11400000, guid: 4d5524dab23e43c3b636f724c96322e0, type: 2}
   _mainShip_Luck_Stat: {fileID: 11400000, guid: 1cc2eb38aa4947d4981265fb799e4a39, type: 2}
+  _commander_MaxGauge_Stat: {fileID: 0}
+  _commander_GaugeRecoveryPerSecond_Stat: {fileID: 0}
 --- !u!1 &8838354041166555176
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,8 +684,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5648407895672082940}
   - component: {fileID: 4843906815021235314}
-  - component: {fileID: 6715820834156563740}
-  - component: {fileID: 4103047314734227497}
   m_Layer: 0
   m_Name: EntitiyAnimator
   m_TagString: Untagged
@@ -682,44 +718,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ab28b851415d754aa5314190f441404, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 6715820834156563740}
+  animator: {fileID: 2912785568065703182}
   disableRootMotion: 0
   applyRootMotionToAnimatorTransform: 0
   resetTransformAfterAppliedRootMotion: 1
---- !u!95 &6715820834156563740
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8838354041166555176}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0c2b89b6cb4ff0440ac4cced74b5487a, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4103047314734227497
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8838354041166555176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807a79f21f29c4b418b1cbdba4e4ea41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6188412476888144154
 PrefabInstance:
   m_ObjectHideFlags: 0

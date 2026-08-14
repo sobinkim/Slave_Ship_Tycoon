@@ -19,7 +19,7 @@ namespace SB.Scripts
         [FormerlySerializedAs("CagoItemPrefab")]
         [SerializeField] private ItemElementView cargoItemPrefab;
 
-        private readonly List<GameObject> currentCargoItems = new();
+        private readonly Dictionary<ETransportItemType, ItemElementView> currentCargoItems = new();
 
         public void SetStageInfoBarMode(StageInfoBarMode mode)
         {
@@ -42,16 +42,23 @@ namespace SB.Scripts
 
                 ItemElementView newItem = Instantiate(cargoItemPrefab, cargoItemRoot);
                 newItem.SettingItemElementView(cargoData.Amount, cargoData.Item.Icon);
-                currentCargoItems.Add(newItem.gameObject);
+                newItem.SetMarketMultiplier(1);
+                currentCargoItems[cargoData.Item.Type] = newItem;
             }
+        }
+
+        public void SetMarketMultiplier(ETransportItemType cargoType, int multiplier)
+        {
+            if (currentCargoItems.TryGetValue(cargoType, out ItemElementView itemView))
+                itemView.SetMarketMultiplier(multiplier);
         }
 
         public void ClearCargoItems()
         {
-            foreach (GameObject item in currentCargoItems)
+            foreach (ItemElementView item in currentCargoItems.Values)
             {
                 if (item != null)
-                    Destroy(item);
+                    Destroy(item.gameObject);
             }
 
             currentCargoItems.Clear();
