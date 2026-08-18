@@ -165,4 +165,14 @@ namespace SB.Core.EventBus
             Chapter = chapter;
         }
     }
+
+    public readonly struct SellChapterCompletedEvent : IEvent
+    {
+        public readonly int Chapter;
+
+        public SellChapterCompletedEvent(int chapter)
+        {
+            Chapter = chapter;
+        }
+    }
 }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa672d57784c4ba1b4a986e56fe31fb5, type: 3}
+  m_Name: EscortShipCatalog
+  m_EditorClassIdentifier: 
+  _ships:
+  - {fileID: 11400000, guid: 1b4f34398a65c474eb2a824491c3d23c, type: 2}
+  - {fileID: 11400000, guid: 365cef7df00a79f4bb169b5242e8a533, type: 2}
+  - {fileID: 11400000, guid: 14f94e569641f7943b06edc4385c39d9, type: 2}
+  - {fileID: 11400000, guid: cb20a08f9d3f0234b858a38676764af9, type: 2}
+  - {fileID: 11400000, guid: 9ff2cb53343e75b46b2ed5c26690b6fc, type: 2}

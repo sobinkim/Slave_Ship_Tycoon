@@ -1,4 +1,5 @@
 using System;
+using SB.Scripts.Currency;
 using SB.Scripts.Upgrade;
 using TMPro;
 using UnityEngine;
@@ -44,10 +45,10 @@ namespace SB.Scripts.UI.Upgrade
             StopRepeatUpgrade();
         }
 
-        public void Refresh(int level, float cost)
+        public void Refresh(int level, long cost)
         {
             _level.text = level.ToString();
-            _cost.text = cost.ToString();
+            _cost.text = CurrencyTextFormatter.Format(cost);
         }
 
         private System.Collections.IEnumerator RepeatUpgrade()

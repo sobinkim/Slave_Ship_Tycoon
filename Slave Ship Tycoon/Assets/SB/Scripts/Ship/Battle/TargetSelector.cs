@@ -25,6 +25,7 @@ namespace SB.Scripts
         [SerializeField] private TargetRule[] targetRules;
         private Ship myship;
         private BattleSpawnData currentStageBattleSpawnData;
+        private int _commanderTargetColumn = -1;
 
 
         private void OnEnable()
@@ -65,6 +66,45 @@ namespace SB.Scripts
 
             if (targetList.Count == 0)
                 return null;
+
+            if (_commanderTargetColumn >= 0)
+                return SelectCommanderTarget(targetList);
+
+            return SelectTargetByRules(targetList);
+        }
+
+        public void SetCommanderTargetColumn(int targetColumn)
+        {
+            _commanderTargetColumn = targetColumn;
+        }
+
+        public void ClearCommanderTargetCommand()
+        {
+            _commanderTargetColumn = -1;
+        }
+
+        private Ship SelectCommanderTarget(List<Ship> targetList)
+        {
+            int ownerRow = myship.myShipData.SpawnSlot.y;
+
+            for (int i = 0; i < targetList.Count; i++)
+            {
+                Ship target = targetList[i];
+
+                if (target.myShipData.SpawnSlot.x == _commanderTargetColumn &&
+                    target.myShipData.SpawnSlot.y == ownerRow)
+                {
+                    return target;
+                }
+            }
+
+            for (int i = 0; i < targetList.Count; i++)
+            {
+                Ship target = targetList[i];
+
+                if (target.myShipData.SpawnSlot.x == _commanderTargetColumn)
+                    return target;
+            }
 
             return SelectTargetByRules(targetList);
         }
@@ -150,19 +190,26 @@ namespace SB.Scripts
 
         private bool IsMatchLine(Ship target, TargetLine line)
         {
-            switch (line)
+            if (line == TargetLine.Any)
+                return true;
+
+            if (target.myShipData.ShipType == ShipType.Enemy)
             {
-                case TargetLine.Any:
-                    return true;
-                case TargetLine.Front:
-                    return target.myShipData.SpawnSlot.x == 0;
-                case TargetLine.Middle:
-                    return target.myShipData.SpawnSlot.x == 1;
-                case TargetLine.Back:
-                    return target.myShipData.SpawnSlot.x == 2;
-                default:
-                    return false;
+                return line switch
+                {
+                    TargetLine.Front => target.myShipData.SpawnSlot.x == 0,
+                    TargetLine.Middle => target.myShipData.SpawnSlot.x == 1,
+                    TargetLine.Back => target.myShipData.SpawnSlot.x == 2,
+                    _ => false
+                };
             }
+
+            return line switch
+            {
+                TargetLine.Front => target.myShipData.SpawnSlot.x == PlayerFleetLoadout.ColumnCount - 1,
+                TargetLine.Back => target.myShipData.SpawnSlot.x == 0,
+                _ => false
+            };
         }
 
         private bool IsMatchRole(Ship target, ShipRole role)

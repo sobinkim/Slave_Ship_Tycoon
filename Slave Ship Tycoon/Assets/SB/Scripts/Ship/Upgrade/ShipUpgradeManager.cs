@@ -33,11 +33,18 @@ namespace SB.Scripts.Upgrade
     public class UpgradeGrowthData
     {
         public MainShipUpgradeType upgradeType;
+        public CurrencyType currencyType = CurrencyType.Gold;
         public int level = 0;
-        public float currentCost;
+        [SerializeField, InspectorName("Current Cost")] private long _currentCost;
         public float costGrowthRate;
         public float IncreaseValue;
         public float increaseGrowthRate;
+
+        public long CurrentCost
+        {
+            get => _currentCost;
+            set => _currentCost = value;
+        }
     }
 
     public class ShipUpgradeManager : MonoBehaviour
@@ -45,7 +52,6 @@ namespace SB.Scripts.Upgrade
         [SerializeField] private UpgradeGrowthData[] upgradeGrowthDatas;
         [SerializeField] private MainShipUpgradeData _mainShipUpgradeData;
         [SerializeField] private CurrencyManager currencyManager;
-        [SerializeField] private CurrencyType upgradeCurrencyType = CurrencyType.Gold;
 
         public MainShipUpgradeData MainShipUpgradeData => _mainShipUpgradeData;
 
@@ -84,14 +90,22 @@ namespace SB.Scripts.Upgrade
                 return false;
             }
 
-            int cost = Mathf.CeilToInt(currentTargetUpdateData.currentCost);
-            if (!currencyManager.TrySpendCurrency(upgradeCurrencyType, cost))
+            long cost = currentTargetUpdateData.CurrentCost;
+            if (cost <= 0)
+            {
+                Debug.LogError($"{upgradeType} upgrade cost must be greater than zero.", this);
+                return false;
+            }
+
+            if (!currencyManager.TrySpendCurrency(currentTargetUpdateData.currencyType, cost))
                 return false;
 
             currentTargetUpdateData.level++;
             AddUpgradeValue(upgradeType, currentTargetUpdateData.IncreaseValue);
 
-            currentTargetUpdateData.currentCost *= currentTargetUpdateData.costGrowthRate;
+            currentTargetUpdateData.CurrentCost = CalculateNextCost(
+                currentTargetUpdateData.CurrentCost,
+                currentTargetUpdateData.costGrowthRate);
             currentTargetUpdateData.IncreaseValue *= currentTargetUpdateData.increaseGrowthRate;
 
             Bus<UpgradeEvent>.Raise(new UpgradeEvent(MainShipUpgradeData));
@@ -123,7 +137,9 @@ namespace SB.Scripts.Upgrade
             currentTargetUpdateData.level++;
             AddUpgradeValue(upgradeType, currentTargetUpdateData.IncreaseValue);
 
-            currentTargetUpdateData.currentCost *= currentTargetUpdateData.costGrowthRate;
+            currentTargetUpdateData.CurrentCost = CalculateNextCost(
+                currentTargetUpdateData.CurrentCost,
+                currentTargetUpdateData.costGrowthRate);
             currentTargetUpdateData.IncreaseValue *= currentTargetUpdateData.increaseGrowthRate;
 
             Bus<UpgradeEvent>.Raise(new UpgradeEvent(MainShipUpgradeData));
@@ -178,6 +194,22 @@ namespace SB.Scripts.Upgrade
         {
             if (currencyManager == null)
                 currencyManager = CurrencyManager.Instance;
+        }
+
+        private static long CalculateNextCost(long currentCost, float growthRate)
+        {
+            if (currentCost <= 0)
+                return 1;
+
+            if (float.IsNaN(growthRate) || float.IsInfinity(growthRate) || growthRate < 1f)
+                return currentCost;
+
+            double nextCost = Math.Ceiling(currentCost * (double)growthRate);
+
+            if (double.IsInfinity(nextCost) || nextCost >= long.MaxValue)
+                return long.MaxValue;
+
+            return Math.Max(currentCost, (long)nextCost);
         }
     }
 }

@@ -15,12 +15,12 @@ namespace SB.Core.EventBus
 
     public readonly struct GetMarketPriceEvent : IEvent
     {
-        public readonly Dictionary<ETransportItemType, TransportMarketPriceEntry> _marketPrices;
+        public readonly IReadOnlyDictionary<ETransportItemType, TransportMarketPriceEntry> MarketPrices;
 
-        public GetMarketPriceEvent(Dictionary<ETransportItemType, TransportMarketPriceEntry> marketPrices)
+        public GetMarketPriceEvent(
+            IReadOnlyDictionary<ETransportItemType, TransportMarketPriceEntry> marketPrices)
         {
-            _marketPrices = marketPrices;
+            MarketPrices = marketPrices;
         }
     }
-
 }

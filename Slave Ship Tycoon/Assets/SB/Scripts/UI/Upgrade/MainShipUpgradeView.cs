@@ -34,7 +34,7 @@ namespace SB.Scripts.UI.Upgrade
             UnsubscribeSlotButtons();
         }
 
-        public void SetRefresh(MainShipUpgradeType type, int level, float cost)
+        public void SetRefresh(MainShipUpgradeType type, int level, long cost)
         {
             switch (type)
             {

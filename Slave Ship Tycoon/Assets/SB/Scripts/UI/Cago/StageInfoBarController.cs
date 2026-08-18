@@ -1,4 +1,5 @@
 using SB.Core.EventBus;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SB.Scripts
@@ -13,6 +14,7 @@ namespace SB.Scripts
             Bus<StageStartedEvent>.OnEvent += HandleStageStarted;
             Bus<SellChapterStartedEvent>.OnEvent += HandleSellChapterStarted;
             Bus<ObtainChapterStartedEvent>.OnEvent += HandleObtainChapterStarted;
+            Bus<GetMarketPriceEvent>.OnEvent += HandleMarketPriceChanged;
         }
 
         private void OnDisable()
@@ -20,6 +22,7 @@ namespace SB.Scripts
             Bus<StageStartedEvent>.OnEvent -= HandleStageStarted;
             Bus<SellChapterStartedEvent>.OnEvent -= HandleSellChapterStarted;
             Bus<ObtainChapterStartedEvent>.OnEvent -= HandleObtainChapterStarted;
+            Bus<GetMarketPriceEvent>.OnEvent -= HandleMarketPriceChanged;
         }
 
         private void HandleStageStarted(StageStartedEvent evt)
@@ -46,6 +49,19 @@ namespace SB.Scripts
         private void HandleObtainChapterStarted(ObtainChapterStartedEvent evt)
         {
             view?.ClearCargoItems();
+        }
+
+        private void HandleMarketPriceChanged(GetMarketPriceEvent evt)
+        {
+            if (view == null || evt.MarketPrices == null)
+                return;
+
+            foreach (KeyValuePair<ETransportItemType, TransportMarketPriceEntry> priceEntry in evt.MarketPrices)
+            {
+                view.SetMarketMultiplier(
+                    priceEntry.Key,
+                    priceEntry.Value.GetAppliedMultiplier());
+            }
         }
     }
 }
