@@ -14,6 +14,8 @@ namespace SB.Scripts.AttackCompo
         private EntityAnimator animator;
         private EntityAnimatorTrigger animatorTrigger;
         private float currentCooldown;
+        private bool _isBattleRunning;
+        private int _currentTargetSpawnGeneration;
 
         private static readonly int AttackSpeedMultiplierHash = UnityEngine.Animator.StringToHash("AttackSpeedMultiplier");
 
@@ -25,17 +27,23 @@ namespace SB.Scripts.AttackCompo
         protected float FinalAttackDamage => combatStatCompo != null ? combatStatCompo.FinalAttackDamage : 0f;
         protected float FinalAttackSpeed => combatStatCompo != null ? combatStatCompo.FinalAttackSpeed : 1f;
         protected float FinalAttackCooldown => attackCooldown / FinalAttackSpeed;
-        public bool HasAliveTarget => CurrentTarget != null && CurrentTarget.IsDead == false;
-        public bool CanAttack => currentCooldown <= 0f;
+        public bool HasAliveTarget => CurrentTarget != null && CurrentTarget.isActiveAndEnabled &&
+                                      CurrentTarget.IsDead == false &&
+                                      CurrentTarget.SpawnGeneration == _currentTargetSpawnGeneration;
+        public bool CanAttack => _isBattleRunning && currentCooldown <= 0f;
 
         private void OnEnable()
         {
             Bus<BattleStartEvent>.OnEvent += RequestTarget;
+            Bus<StageBattleEndedEvent>.OnEvent += HandleBattleEnded;
         }
 
         private void OnDisable()
         {
             Bus<BattleStartEvent>.OnEvent -= RequestTarget;
+            Bus<StageBattleEndedEvent>.OnEvent -= HandleBattleEnded;
+            _isBattleRunning = false;
+            CurrentTarget = null;
         }
 
         public override void Initialize(Entity entity)
@@ -67,6 +75,7 @@ namespace SB.Scripts.AttackCompo
         public void ResetAttackState()
         {
             CurrentTarget = null;
+            _currentTargetSpawnGeneration = 0;
             currentCooldown = 0f;
             ResetAttackAnimationSpeed();
         }
@@ -75,13 +84,24 @@ namespace SB.Scripts.AttackCompo
         {
             targetSelector?.SetBattleSpawnData(evt.BattleSpawnData);
             ResetAttackState();
+            _isBattleRunning = true;
             TryAcquireTarget();
             ownerShip?.ChangeState(ShipStateType.Idle);
         }
 
+        private void HandleBattleEnded(StageBattleEndedEvent evt)
+        {
+            _isBattleRunning = false;
+            ResetAttackState();
+        }
+
         public bool TryAcquireTarget()
         {
-            CurrentTarget = targetSelector != null ? targetSelector.GetTarget() : null;
+            CurrentTarget = _isBattleRunning && ownerShip != null && ownerShip.isActiveAndEnabled &&
+                            ownerShip.IsDead == false && targetSelector != null
+                ? targetSelector.GetTarget()
+                : null;
+            _currentTargetSpawnGeneration = CurrentTarget != null ? CurrentTarget.SpawnGeneration : 0;
             return HasAliveTarget;
         }
 
@@ -93,6 +113,13 @@ namespace SB.Scripts.AttackCompo
 
         public bool EnsureTarget()
         {
+            if (_isBattleRunning == false || ownerShip == null ||
+                ownerShip.isActiveAndEnabled == false || ownerShip.IsDead)
+            {
+                CurrentTarget = null;
+                return false;
+            }
+
             if (HasAliveTarget)
                 return true;
 
@@ -140,6 +167,10 @@ namespace SB.Scripts.AttackCompo
 
         private void HandleAttackEndTrigger()
         {
+            if (_isBattleRunning == false || ownerShip == null ||
+                ownerShip.isActiveAndEnabled == false || ownerShip.IsDead)
+                return;
+
             OnAttackExit();
         }
 

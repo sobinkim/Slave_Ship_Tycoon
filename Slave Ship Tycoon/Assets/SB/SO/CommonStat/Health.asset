@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Health
   m_EditorClassIdentifier: 
   statName: Health
-  displayName: Health
+  displayName: 체력
   description: 
   icon: {fileID: 0}
   baseValue: 100

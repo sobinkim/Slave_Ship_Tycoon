@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MainShip_AttackSpeedPercent
   m_EditorClassIdentifier: 
   statName: MainShip.AttackSpeedPercent
-  displayName: Fleet Attack Speed %
+  displayName: 함대 공격 속도 %
   description: 
   icon: {fileID: 0}
   baseValue: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AttackDamage
   m_EditorClassIdentifier: 
   statName: AttackDamage
-  displayName: Attack Damage
+  displayName: 공격력
   description: 
   icon: {fileID: 0}
   baseValue: 10

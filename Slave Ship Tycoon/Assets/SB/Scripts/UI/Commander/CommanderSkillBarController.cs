@@ -42,6 +42,7 @@ namespace SB.Scripts
         private void Update()
         {
             RefreshAllSlots();
+            RefreshAutoUse();
         }
 
         private void HandleSkillButtonClicked(int slotIndex)
@@ -112,7 +113,9 @@ namespace SB.Scripts
             _commanderSkillBarView.GetSlot(slotIndex)?.Refresh(
                 skillData,
                 runtimeState,
-                skillData != null && _commanderSkillManager.CanUseSkill(skillData.SkillType));
+                skillData != null && _commanderSkillManager.CanUseSkill(skillData.SkillType),
+                _commanderSkillManager.CurrentGauge,
+                _commanderSkillManager.IsBattleRunning);
         }
 
         private void RefreshSkillSlot(CommanderSkillType skillType)

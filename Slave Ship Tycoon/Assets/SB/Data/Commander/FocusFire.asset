@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: FocusFire
   m_EditorClassIdentifier: 
   _skillId: focus_fire
-  _displayName: Focus Fire
-  _description: Orders the fleet to focus one enemy column.
+  _displayName: 일제 사격
+  _description: 전방의 적 열을 집중 공격합니다.
   _icon: {fileID: 21300000, guid: 57d4aebd17aa8cc449eec81f9929b884, type: 3}
   _gaugeCost: 60
   _cooldown: 12

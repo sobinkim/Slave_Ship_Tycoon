@@ -40,7 +40,7 @@ namespace SB.Scripts
         }
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Time.timeScale > 0f && Input.GetKeyDown(KeyCode.Space))
                 StartStage();
         }
 
@@ -236,6 +236,8 @@ namespace SB.Scripts
         private IEnumerator StartStageNextFrame()
         {
             yield return null;
+            while (Time.timeScale == 0f)
+                yield return null;
             _stageRestartRoutine = null;
             StartStage();
         }

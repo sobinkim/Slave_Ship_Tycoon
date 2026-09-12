@@ -30,7 +30,11 @@ namespace SB.Scripts.States
             if (_owner.IsDead)
             {
                 _owner.ChangeState(ShipStateType.Dead);
+                return;
             }
+
+            if (_owner.EnsureAttackTarget() == false)
+                _owner.ChangeState(ShipStateType.Idle);
         }
 
         public void Exit()

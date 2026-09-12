@@ -17,7 +17,7 @@ namespace SB.Scripts
         public void SetReward(long amount)
         {
             if (_currencyNameText != null)
-                _currencyNameText.text = _currencyType.ToString();
+                _currencyNameText.text = CurrencyTextFormatter.FormatName(_currencyType);
 
             if (_amountText != null)
                 _amountText.text = $"+{CurrencyTextFormatter.Format(amount)}";

@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using SB.Scripts.Currency;
 using SB.Scripts.TransportEquipment;
 using TMPro;
 using UnityEngine;
@@ -15,6 +16,8 @@ namespace SB.Scripts
         [SerializeField] private TMP_Text _nameText;
         [SerializeField] private TMP_Text _effectText;
         [SerializeField] private GameObject _selectedEffect;
+
+        private bool _isSelected;
 
         public event Action<TransportEquipmentItemData> OnClicked;
 
@@ -36,8 +39,12 @@ namespace SB.Scripts
 
         public void SetSelected(bool isSelected)
         {
+            _isSelected = isSelected;
             if (_selectedEffect != null)
                 _selectedEffect.SetActive(isSelected);
+
+            if (_button != null)
+                _button.interactable = _itemData != null && isSelected == false;
         }
 
         private void Refresh()
@@ -45,7 +52,7 @@ namespace SB.Scripts
             bool hasItem = _itemData != null;
 
             if (_button != null)
-                _button.interactable = hasItem;
+                _button.interactable = hasItem && _isSelected == false;
 
             if (_icon != null)
             {
@@ -54,7 +61,7 @@ namespace SB.Scripts
             }
 
             if (_nameText != null)
-                _nameText.text = hasItem ? _itemData.DisplayName : "EMPTY";
+                _nameText.text = hasItem ? _itemData.DisplayName : "비어 있음";
 
             if (_effectText != null)
                 _effectText.text = hasItem ? BuildEffectText(_itemData) : string.Empty;
@@ -69,7 +76,7 @@ namespace SB.Scripts
         public static string BuildEffectText(TransportEquipmentItemData itemData)
         {
             if (itemData == null || itemData.SettlementModifiers.Count == 0)
-                return "No settlement effect";
+                return "정산 효과 없음";
 
             StringBuilder builder = new StringBuilder();
 
@@ -81,12 +88,12 @@ namespace SB.Scripts
                     continue;
 
                 if (builder.Length > 0)
-                    builder.Append("  ");
+                    builder.AppendLine();
 
                 if (modifier.ModifierType == TransportSettlementModifierType.RewardMultiplier)
-                    builder.Append($"{modifier.CurrencyType} x{modifier.Multiplier:0.##}");
+                    builder.Append($"{CurrencyTextFormatter.FormatName(modifier.CurrencyType)} x{modifier.Multiplier:0.##}");
                 else
-                    builder.Append($"{modifier.CurrencyType} +{modifier.FlatAmount:N0}");
+                    builder.Append($"{CurrencyTextFormatter.FormatName(modifier.CurrencyType)} +{modifier.FlatAmount:N0}");
             }
 
             return builder.ToString();

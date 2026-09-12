@@ -33,6 +33,7 @@ namespace SB.Scripts.Commander
             ? _gaugeRecoveryPerSecondStat.Value
             : 0f;
         public bool IsAutoUseEnabled => _isAutoUseEnabled;
+        public bool IsBattleRunning => _isBattleRunning;
         public int EquippedSlotCount => _equippedSkills.Length;
 
         private void Awake()

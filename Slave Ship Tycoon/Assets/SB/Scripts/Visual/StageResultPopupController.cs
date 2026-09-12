@@ -24,12 +24,12 @@ namespace SB.Scripts
 
         private void HandleFailPop(StageFailedEvent evt)
         {
-            resultPopupView.Show(evt.Chapter, evt.Stage, "Stage Failed");
+            resultPopupView.Show(evt.Chapter, evt.Stage, "스테이지 실패");
         }
 
         private void HandleClearPop(EvenStageClearedEvent evt)
         {
-            resultPopupView.Show(evt.Chapter, evt.Stage, "Stage Clear");
+            resultPopupView.Show(evt.Chapter, evt.Stage, "스테이지 클리어");
         }
 
         private void HandleChapterEnterPop(AffterStageClearEvent evt)

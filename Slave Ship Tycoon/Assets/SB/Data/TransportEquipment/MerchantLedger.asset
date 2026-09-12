@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MerchantLedger
   m_EditorClassIdentifier: 
   _itemId: merchant_ledger
-  _displayName: Merchant Ledger
+  _displayName: 상인 장부
   _icon: {fileID: 21300000, guid: 57d4aebd17aa8cc449eec81f9929b884, type: 3}
   _grade: 0
   _settlementModifiers:

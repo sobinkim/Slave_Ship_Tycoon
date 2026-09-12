@@ -14,6 +14,8 @@ namespace SB.Scripts.UI.Fleet
         [SerializeField] private TMP_Text _gradeText;
         [SerializeField] private TMP_Text _countText;
         [SerializeField] private GameObject _selectedEffect;
+        [SerializeField] private Image gradeBorder;
+        [SerializeField] private Color[] gradeColors = { new Color(.55f,.65f,.7f), new Color(.2f,.8f,.6f), new Color(.25f,.6f,1), new Color(.7f,.35f,1), new Color(1,.7f,.2f) };
 
         private EscortShipData _shipData;
 
@@ -45,12 +47,13 @@ namespace SB.Scripts.UI.Fleet
                 _nameText.text = _shipData != null ? _shipData.DisplayName : string.Empty;
 
             if (_gradeText != null)
-                _gradeText.text = _shipData != null ? _shipData.Grade.ToString() : string.Empty;
+                _gradeText.text = _shipData != null ? GradeLabel(_shipData.Grade) : string.Empty;
+            if (gradeBorder != null && _shipData != null) gradeBorder.color = gradeColors[(int)_shipData.Grade];
 
             if (_countText != null)
             {
                 _countText.text =
-                    $"Owned {ownership.OwnedCount}  Equipped {ownership.EquippedCount}  Free {ownership.UnequippedCount}";
+                    $"대기 {ownership.UnequippedCount:N0} · 편성 {ownership.EquippedCount:N0}";
             }
 
             if (_selectButton != null)
@@ -64,6 +67,19 @@ namespace SB.Scripts.UI.Fleet
         {
             if (_shipData != null)
                 OnSelected?.Invoke(_shipData);
+        }
+
+        public void SetMaterialState(bool canSelect, int selectedCount)
+        {
+            _selectButton.interactable = canSelect;
+            if (_selectedEffect != null) _selectedEffect.SetActive(selectedCount > 0);
+            if (selectedCount > 0) _countText.text = $"선택 {selectedCount}척";
+            else if (!canSelect) _countText.text = "선택 불가";
+        }
+
+        public static string GradeLabel(EscortShipGrade grade)
+        {
+            switch(grade) { case EscortShipGrade.Common:return "일반"; case EscortShipGrade.Uncommon:return "고급"; case EscortShipGrade.Rare:return "희귀"; case EscortShipGrade.Epic:return "영웅"; default:return "전설"; }
         }
     }
 }

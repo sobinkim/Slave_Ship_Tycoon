@@ -47,7 +47,7 @@ namespace SB.Scripts.UI.Upgrade
 
         public void Refresh(int level, long cost)
         {
-            _level.text = level.ToString();
+            _level.text = $"Lv. {level}";
             _cost.text = CurrencyTextFormatter.Format(cost);
         }
 

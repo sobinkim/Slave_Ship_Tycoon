@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AttackSpeed
   m_EditorClassIdentifier: 
   statName: AttackSpeed
-  displayName: Attack Speed
+  displayName: 공격 속도
   description: 
   icon: {fileID: 0}
   baseValue: 1

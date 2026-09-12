@@ -12,6 +12,7 @@ namespace SB.Scripts
         [SerializeField] private Image _skillIcon;
         [SerializeField] private Image _cooldownFill;
         [SerializeField] private TMP_Text _cooldownText;
+        [SerializeField] private TMP_Text _detailText;
         [SerializeField] private GameObject _activeEffect;
         [SerializeField] private GameObject _emptyEffect;
 
@@ -39,15 +40,20 @@ namespace SB.Scripts
         public void Refresh(
             CommanderSkillData skillData,
             CommanderSkillRuntimeState runtimeState,
-            bool canUse)
+            bool canUse,
+            float currentGauge = float.MaxValue,
+            bool isBattleRunning = true)
         {
             bool hasSkill = skillData != null && runtimeState != null;
 
             if (_skillIcon != null)
             {
                 _skillIcon.sprite = hasSkill ? skillData.Icon : null;
-                _skillIcon.enabled = hasSkill;
+                _skillIcon.enabled = hasSkill && skillData.Icon != null;
             }
+
+            if (_detailText != null)
+                _detailText.text = hasSkill ? $"{skillData.DisplayName}\n{skillData.GaugeCost:0.#} 지휘력" : string.Empty;
 
             if (_emptyEffect != null)
                 _emptyEffect.SetActive(hasSkill == false);
@@ -66,6 +72,19 @@ namespace SB.Scripts
             }
 
             SetCooldown(runtimeState.RemainingCooldown, skillData.Cooldown);
+
+            if (_cooldownText != null)
+            {
+                string status = runtimeState.IsActive
+                    ? $"발동\n{Mathf.CeilToInt(runtimeState.RemainingDuration)}초"
+                    : runtimeState.RemainingCooldown > 0f
+                        ? $"{Mathf.CeilToInt(runtimeState.RemainingCooldown)}초"
+                        : isBattleRunning == false ? "대기"
+                        : currentGauge < skillData.GaugeCost ? "지휘력 부족"
+                        : canUse ? string.Empty : "대기";
+                _cooldownText.text = status;
+                _cooldownText.gameObject.SetActive(string.IsNullOrEmpty(status) == false);
+            }
 
             if (_activeEffect != null)
                 _activeEffect.SetActive(runtimeState.IsActive);

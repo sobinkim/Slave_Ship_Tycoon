@@ -13,6 +13,7 @@ namespace SB.Scripts.UI.Fleet
         [Header("Inventory")]
         [SerializeField] private Transform _inventoryRoot;
         [SerializeField] private EscortInventoryItemView _inventoryItemPrefab;
+        [SerializeField] private ScrollRect _inventoryScroll;
 
         [Header("Formation")]
         [SerializeField] private FleetFormationSlotView[] _formationSlots =
@@ -24,6 +25,13 @@ namespace SB.Scripts.UI.Fleet
         [SerializeField] private TMP_Text _summonCostText;
         [SerializeField] private TMP_Text _selectedEscortText;
         [SerializeField] private TMP_Text _resultText;
+        [SerializeField] private TMP_Text _mergeStatusText;
+
+        [Header("Merge Preview")]
+        [SerializeField] private GameObject _mergePreviewPanel;
+        [SerializeField] private TMP_Text _mergePreviewText;
+        [SerializeField] private Button _confirmMergeButton;
+        [SerializeField] private Button _cancelMergeButton;
 
         private readonly Dictionary<EscortShipData, EscortInventoryItemView> _inventoryItems =
             new Dictionary<EscortShipData, EscortInventoryItemView>();
@@ -33,6 +41,8 @@ namespace SB.Scripts.UI.Fleet
         public event Action<int> OnFormationRemoveClicked;
         public event Action OnSummonClicked;
         public event Action OnMergeClicked;
+        public event Action OnMergeConfirmed;
+        public event Action OnMergeCancelled;
 
         private void Awake()
         {
@@ -41,6 +51,14 @@ namespace SB.Scripts.UI.Fleet
 
             if (_mergeButton != null)
                 _mergeButton.onClick.AddListener(HandleMergeClicked);
+
+            if (_confirmMergeButton != null)
+                _confirmMergeButton.onClick.AddListener(HandleMergeConfirmed);
+
+            if (_cancelMergeButton != null)
+                _cancelMergeButton.onClick.AddListener(HandleMergeCancelled);
+
+            HideMergePreview();
 
             SubscribeFormationSlots();
         }
@@ -52,6 +70,12 @@ namespace SB.Scripts.UI.Fleet
 
             if (_mergeButton != null)
                 _mergeButton.onClick.RemoveListener(HandleMergeClicked);
+
+            if (_confirmMergeButton != null)
+                _confirmMergeButton.onClick.RemoveListener(HandleMergeConfirmed);
+
+            if (_cancelMergeButton != null)
+                _cancelMergeButton.onClick.RemoveListener(HandleMergeCancelled);
 
             UnsubscribeFormationSlots();
 
@@ -74,14 +98,10 @@ namespace SB.Scripts.UI.Fleet
             IReadOnlyList<EscortOwnershipSnapshot> ownership,
             EscortShipData selectedEscort)
         {
-            foreach (KeyValuePair<EscortShipData, EscortInventoryItemView> pair in _inventoryItems)
-            {
-                if (pair.Value != null)
-                    pair.Value.gameObject.SetActive(false);
-            }
-
             if (ownership == null)
                 return;
+
+            HashSet<EscortShipData> visibleItems = new HashSet<EscortShipData>();
 
             for (int i = 0; i < ownership.Count; i++)
             {
@@ -96,7 +116,15 @@ namespace SB.Scripts.UI.Fleet
                     return;
 
                 itemView.gameObject.SetActive(true);
+                itemView.transform.SetSiblingIndex(i);
                 itemView.Refresh(snapshot, snapshot.ShipData == selectedEscort);
+                visibleItems.Add(snapshot.ShipData);
+            }
+
+            foreach (KeyValuePair<EscortShipData, EscortInventoryItemView> pair in _inventoryItems)
+            {
+                if (pair.Value != null && visibleItems.Contains(pair.Key) == false)
+                    pair.Value.gameObject.SetActive(false);
             }
         }
 
@@ -117,13 +145,67 @@ namespace SB.Scripts.UI.Fleet
         public void SetSelectedEscort(EscortShipData shipData)
         {
             if (_selectedEscortText != null)
-                _selectedEscortText.text = shipData != null ? shipData.DisplayName : string.Empty;
+                _selectedEscortText.text = shipData != null ? shipData.DisplayName : "선택한 호위선 없음";
+        }
+
+        public void SetFormationSelection(int selectedSlotIndex, EscortShipData selectedEscort, bool hasAvailableCopy)
+        {
+            for (int i = 0; i < _formationSlots.Length; i++)
+                _formationSlots[i]?.SetSelection(i == selectedSlotIndex, selectedEscort != null && hasAvailableCopy);
+        }
+
+        public void FocusEscort(EscortShipData shipData)
+        {
+            if (_inventoryScroll == null || _inventoryScroll.content == null ||
+                _inventoryScroll.viewport == null || _inventoryItems.TryGetValue(shipData, out var item) == false)
+                return;
+
+            Canvas.ForceUpdateCanvases();
+            RectTransform viewport = _inventoryScroll.viewport;
+            Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(viewport, item.transform);
+            float offset = bounds.max.y > viewport.rect.yMax
+                ? viewport.rect.yMax - bounds.max.y
+                : bounds.min.y < viewport.rect.yMin ? viewport.rect.yMin - bounds.min.y : 0f;
+            _inventoryScroll.StopMovement();
+            _inventoryScroll.content.anchoredPosition += new Vector2(0f, offset);
         }
 
         public void SetSummonCost(CurrencyType currencyType, int cost)
         {
             if (_summonCostText != null)
-                _summonCostText.text = $"{cost} {currencyType}";
+                _summonCostText.text = $"{CurrencyTextFormatter.Format(cost)} {CurrencyTextFormatter.FormatName(currencyType)}";
+        }
+
+        public void SetSummonStatus(CurrencyType currencyType, int cost, string message)
+        {
+            SetSummonCost(currencyType, cost);
+
+            if (_summonCostText != null && string.IsNullOrEmpty(message) == false)
+                _summonCostText.text += $"\n{message}";
+        }
+
+        public void SetMergeStatus(string message)
+        {
+            if (_mergeStatusText != null)
+                _mergeStatusText.text = message;
+        }
+
+        public void ShowMergePreview(string message)
+        {
+            if (_mergePreviewText != null)
+                _mergePreviewText.text = message;
+
+            if (_mergePreviewPanel != null)
+            {
+                _mergePreviewPanel.transform.SetAsLastSibling();
+                _mergePreviewPanel.SetActive(true);
+            }
+        }
+
+        public void HideMergePreview()
+        {
+            if (_mergePreviewPanel != null)
+                _mergePreviewPanel.SetActive(false);
         }
 
         public void SetSummonInteractable(bool interactable)
@@ -221,6 +303,16 @@ namespace SB.Scripts.UI.Fleet
         private void HandleMergeClicked()
         {
             OnMergeClicked?.Invoke();
+        }
+
+        private void HandleMergeConfirmed()
+        {
+            OnMergeConfirmed?.Invoke();
+        }
+
+        private void HandleMergeCancelled()
+        {
+            OnMergeCancelled?.Invoke();
         }
     }
 }

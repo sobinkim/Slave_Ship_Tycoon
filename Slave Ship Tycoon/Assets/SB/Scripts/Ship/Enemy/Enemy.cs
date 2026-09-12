@@ -36,6 +36,7 @@ namespace SB.Scripts
 
         public override void OnDespawnedToPool()
         {
+            base.OnDespawnedToPool();
         }
     }
 }
