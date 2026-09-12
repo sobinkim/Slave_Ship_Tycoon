@@ -20,6 +20,13 @@ namespace SB.Scripts.Visual
     public class PannelManager : MonoBehaviour
     {
         [SerializeField] private PanelInfo[] _panelInfo;
+        private PanelType currentPanel = PanelType.Upgrade;
+        private PanelType panelBeforeFleet = PanelType.Upgrade;
+
+        public void CloseFleet()
+        {
+            ClickPanelButton(panelBeforeFleet);
+        }
 
         private void Start()
         {
@@ -34,6 +41,9 @@ namespace SB.Scripts.Visual
 
         public void ClickPanelButton(PanelType type)
         {
+            if (type == PanelType.Fleet && currentPanel != PanelType.Fleet)
+                panelBeforeFleet = currentPanel;
+            currentPanel = type;
             foreach (PanelInfo panelInfo in _panelInfo)
             {
                 if (panelInfo.type == type)

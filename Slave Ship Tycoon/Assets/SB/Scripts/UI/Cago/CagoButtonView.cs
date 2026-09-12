@@ -38,7 +38,7 @@ namespace SB.Scripts
 
         public void SetWeight(float weight)
         {
-            _weightText.text = weight.ToString();
+            _weightText.text = $"무게 {weight:0.##}";
         }
 
 

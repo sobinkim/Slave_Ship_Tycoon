@@ -22,5 +22,20 @@ namespace SB.Scripts.Currency
 
             return scaledAmount.ToString("0.##", CultureInfo.InvariantCulture) + Suffixes[suffixIndex];
         }
+
+        public static string FormatName(CurrencyType currencyType)
+        {
+            switch (currencyType)
+            {
+                case CurrencyType.Gold:
+                    return "골드";
+                case CurrencyType.Diamond:
+                    return "다이아";
+                case CurrencyType.Emerald:
+                    return "에메랄드";
+                default:
+                    return currencyType.ToString();
+            }
+        }
     }
 }

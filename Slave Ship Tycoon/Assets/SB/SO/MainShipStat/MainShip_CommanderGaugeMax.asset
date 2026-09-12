@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MainShip_CommanderGaugeMax
   m_EditorClassIdentifier: 
   statName: MainShip.CommanderGaugeMax
-  displayName: Commander Gauge Max
+  displayName: 지휘 게이지 최대치
   description: 
   icon: {fileID: 0}
   baseValue: 100

@@ -148,7 +148,7 @@ namespace SB.Scripts.Commander
             {
                 Enemy enemy = enemies[i];
 
-                if (enemy != null && enemy.IsDead == false)
+                if (enemy != null && enemy.isActiveAndEnabled && enemy.IsDead == false)
                     frontColumn = UnityEngine.Mathf.Min(frontColumn, enemy.myShipData.SpawnSlot.x);
             }
 

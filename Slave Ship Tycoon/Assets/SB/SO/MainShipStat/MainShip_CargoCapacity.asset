@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MainShip_CargoCapacity
   m_EditorClassIdentifier: 
   statName: MainShip.CargoCapacity
-  displayName: Cargo Capacity
+  displayName: 최대 적재량
   description: 
   icon: {fileID: 0}
   baseValue: 0

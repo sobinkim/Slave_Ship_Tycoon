@@ -320,9 +320,49 @@ namespace SB.Scripts.Fleet
                 return failedResult;
             }
 
+            List<KeyValuePair<EscortShipData, int>> materials = GetMergeMaterials(source);
+            return CommitMerge(source, result, materials);
+        }
+
+        public bool TryGetMergePreview(EscortShipData source, out EscortShipData result)
+        {
+            InitializeRuntimeData();
+            result = null;
+            return source != null && _catalog != null && _catalog.TryGetMergeResult(source, out result);
+        }
+
+        public bool TryMergeSelected(IReadOnlyList<EscortShipData> selectedMaterials, out EscortShipData reward)
+        {
+            reward = null;
+            if (selectedMaterials == null || selectedMaterials.Count != MergeMaterialCount) return false;
+            EscortShipData source = selectedMaterials[0];
+            if (!CanMerge(source, out _, out EscortShipData result)) return false;
+            var counts = new Dictionary<EscortShipData, int>();
+            foreach (EscortShipData material in selectedMaterials)
+            {
+                if (material == null || material.Grade != source.Grade || !_catalog.Contains(material)) return false;
+                counts.TryGetValue(material, out int count);
+                counts[material] = count + 1;
+            }
+            var materials = new List<KeyValuePair<EscortShipData, int>>();
+            foreach (var entry in counts)
+            {
+                if (GetUnequippedCount(entry.Key) < entry.Value) return false;
+                materials.Add(entry);
+            }
+            CommitMerge(source, result, materials);
+            reward = result;
+            return true;
+        }
+
+        private EscortMergeResult CommitMerge(EscortShipData source, EscortShipData result,
+            List<KeyValuePair<EscortShipData, int>> materials)
+        {
             int resultOwnedCount = GetOwnedCount(result) + 1;
-            List<EscortShipData> consumedShips = new List<EscortShipData>();
-            ConsumeMergeMaterials(source, consumedShips);
+
+            for (int i = 0; i < materials.Count; i++)
+                SetOwnedCount(materials[i].Key, GetOwnedCount(materials[i].Key) - materials[i].Value);
+
             SetOwnedCount(result, resultOwnedCount);
 
             EscortMergeResult successResult = new EscortMergeResult(
@@ -333,8 +373,8 @@ namespace SB.Scripts.Fleet
                 MergeMaterialCount,
                 resultOwnedCount);
 
-            for (int i = 0; i < consumedShips.Count; i++)
-                RaiseOwnershipChanged(consumedShips[i]);
+            for (int i = 0; i < materials.Count; i++)
+                RaiseOwnershipChanged(materials[i].Key);
 
             RaiseOwnershipChanged(result);
             Bus<EscortMergeResultEvent>.Raise(new EscortMergeResultEvent(successResult));
@@ -483,12 +523,17 @@ namespace SB.Scripts.Fleet
             return count;
         }
 
-        private void ConsumeMergeMaterials(
-            EscortShipData selectedSource,
-            List<EscortShipData> consumedShips)
+        public List<KeyValuePair<EscortShipData, int>> GetMergeMaterials(EscortShipData selectedSource)
         {
+            InitializeRuntimeData();
+            List<KeyValuePair<EscortShipData, int>> materials =
+                new List<KeyValuePair<EscortShipData, int>>();
+
+            if (selectedSource == null || _catalog == null || _isConfigurationValid == false)
+                return materials;
+
             int remaining = MergeMaterialCount;
-            remaining -= ConsumeUnequippedCopies(selectedSource, remaining, consumedShips);
+            remaining -= AddMergeMaterial(selectedSource, remaining, materials);
 
             for (int i = 0; i < _catalog.Count && remaining > 0; i++)
             {
@@ -501,24 +546,23 @@ namespace SB.Scripts.Fleet
                     continue;
                 }
 
-                remaining -= ConsumeUnequippedCopies(candidate, remaining, consumedShips);
+                remaining -= AddMergeMaterial(candidate, remaining, materials);
             }
+
+            return materials;
         }
 
-        private int ConsumeUnequippedCopies(
+        private int AddMergeMaterial(
             EscortShipData shipData,
             int requestedAmount,
-            List<EscortShipData> consumedShips)
+            List<KeyValuePair<EscortShipData, int>> materials)
         {
             int consumeAmount = Mathf.Min(requestedAmount, GetUnequippedCount(shipData));
 
             if (consumeAmount <= 0)
                 return 0;
 
-            SetOwnedCount(shipData, GetOwnedCount(shipData) - consumeAmount);
-
-            if (consumedShips.Contains(shipData) == false)
-                consumedShips.Add(shipData);
+            materials.Add(new KeyValuePair<EscortShipData, int>(shipData, consumeAmount));
 
             return consumeAmount;
         }

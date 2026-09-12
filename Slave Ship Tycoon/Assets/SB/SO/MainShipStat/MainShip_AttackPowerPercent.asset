@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MainShip_AttackPowerPercent
   m_EditorClassIdentifier: 
   statName: MainShip.AttackPowerPercent
-  displayName: Fleet Attack Power %
+  displayName: 함대 공격력 %
   description: 
   icon: {fileID: 0}
   baseValue: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MainShip_Luck
   m_EditorClassIdentifier: 
   statName: MainShip.Luck
-  displayName: Luck
+  displayName: 운
   description: 
   icon: {fileID: 0}
   baseValue: 0

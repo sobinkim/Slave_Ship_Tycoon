@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MainShip_CommanderGaugeRecoveryPerSecond
   m_EditorClassIdentifier: 
   statName: MainShip.CommanderGaugeRecoveryPerSecond
-  displayName: Commander Gauge Recovery Per Second
+  displayName: 지휘 게이지 회복
   description: 
   icon: {fileID: 0}
   baseValue: 10

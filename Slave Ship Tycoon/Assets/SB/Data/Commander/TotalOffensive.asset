@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: TotalOffensive
   m_EditorClassIdentifier: 
   _skillId: total_offensive
-  _displayName: Total Offensive
-  _description: Temporarily increases every player ship's attack speed.
+  _displayName: 총공세
+  _description: 일정 시간 모든 아군 함선의 공격 속도가 증가합니다.
   _icon: {fileID: 21300000, guid: 57d4aebd17aa8cc449eec81f9929b884, type: 3}
   _gaugeCost: 40
   _cooldown: 10

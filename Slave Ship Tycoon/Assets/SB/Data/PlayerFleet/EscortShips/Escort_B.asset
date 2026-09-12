@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Escort_B
   m_EditorClassIdentifier: 
   _stableId: escort_b
-  _displayName: Test Escort B
+  _displayName: 정예 호위선
   _icon: {fileID: 21300000, guid: 57d4aebd17aa8cc449eec81f9929b884, type: 3}
   _grade: 1
   _shipPrefab: {fileID: 1689721241314480839, guid: ab245fc6a873463093a9c2ad468eec8a, type: 3}

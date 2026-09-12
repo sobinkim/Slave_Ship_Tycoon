@@ -121,7 +121,7 @@ namespace SB.Scripts
 
                 for (int i = 0; i < enemies.Count; i++)
                 {
-                    if (enemies[i] != null && enemies[i].IsDead == false)
+                    if (enemies[i] != null && enemies[i].isActiveAndEnabled && enemies[i].IsDead == false)
                         targetList.Add(enemies[i]);
                 }
 
@@ -134,12 +134,13 @@ namespace SB.Scripts
 
                 for (int i = 0; i < escortShips.Count; i++)
                 {
-                    if (escortShips[i] != null && escortShips[i].IsDead == false)
+                    if (escortShips[i] != null && escortShips[i].isActiveAndEnabled && escortShips[i].IsDead == false)
                         targetList.Add(escortShips[i]);
                 }
 
                 if (targetList.Count == 0 &&
                     currentStageBattleSpawnData.MainShip != null &&
+                    currentStageBattleSpawnData.MainShip.isActiveAndEnabled &&
                     currentStageBattleSpawnData.MainShip.IsDead == false)
                 {
                     targetList.Add(currentStageBattleSpawnData.MainShip);
@@ -182,7 +183,7 @@ namespace SB.Scripts
 
         private bool IsMatchRule(Ship target, TargetRule rule)
         {
-            if (target == null || target.IsDead)
+            if (target == null || target.isActiveAndEnabled == false || target.IsDead)
                 return false;
 
             return IsMatchLine(target, rule.Line) && IsMatchRole(target, rule.Role);

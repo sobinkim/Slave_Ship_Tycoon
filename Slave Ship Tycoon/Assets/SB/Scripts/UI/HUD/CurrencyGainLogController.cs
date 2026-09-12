@@ -17,17 +17,18 @@ namespace SB.Scripts.UI.HUD
         [SerializeField, Min(0.01f)] private float _moveDuration = 0.2f;
         [SerializeField] private RectTransform _logRoot;
         [SerializeField] private CurrencyGainLogItemView _logItemPrefab;
+        [SerializeField] private CurrencyHudPresenter _currencyHudPresenter;
 
         private readonly List<CurrencyGainLogItemView> _activeLogs = new();
         private readonly Stack<CurrencyGainLogItemView> _inactiveLogs = new();
         private readonly Queue<CurrencyAddedEvent> _pendingCurrencyEvents = new();
 
-        private CurrencyHudPresenter _currencyHudPresenter;
         private Coroutine _spawnCoroutine;
 
         private void Awake()
         {
-            _currencyHudPresenter = GetComponent<CurrencyHudPresenter>();
+            if (_currencyHudPresenter == null)
+                _currencyHudPresenter = GetComponent<CurrencyHudPresenter>();
 
             if (_logRoot == null || _logItemPrefab == null)
             {

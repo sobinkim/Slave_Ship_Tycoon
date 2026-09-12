@@ -114,6 +114,7 @@ namespace SB.Scripts.Projectiles
         private bool IsOriginalTargetAlive()
         {
             return launchData.Target != null &&
+                   launchData.Target.isActiveAndEnabled &&
                    launchData.Target.IsDead == false &&
                    launchData.Target.SpawnGeneration == launchData.TargetSpawnGeneration;
         }

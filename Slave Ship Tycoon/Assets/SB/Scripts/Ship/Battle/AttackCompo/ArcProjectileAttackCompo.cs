@@ -30,7 +30,7 @@ namespace SB.Scripts.AttackCompo
                 return;
             }
 
-            if (CurrentTarget == null || CurrentTarget.IsDead)
+            if (HasAliveTarget == false)
                 return;
 
             ShipProjectileAnchorCompo targetAnchors =

@@ -45,7 +45,7 @@ namespace SB.Scripts
             }
 
             if (_equippedNameText != null)
-                _equippedNameText.text = hasItem ? equippedItem.DisplayName : "NO EQUIPMENT";
+                _equippedNameText.text = hasItem ? equippedItem.DisplayName : "장착 장비 없음";
 
             if (_equippedEffectText != null)
             {

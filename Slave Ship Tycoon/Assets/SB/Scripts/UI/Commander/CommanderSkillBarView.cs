@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ namespace SB.Scripts
             Array.Empty<CommanderSkillSlotView>();
         [SerializeField] private Button _autoUseButton;
         [SerializeField] private GameObject _autoUseEnabledEffect;
+        [SerializeField] private TMP_Text _autoUseText;
 
         public event Action<int> OnSkillButtonClicked;
         public event Action OnAutoUseButtonClicked;
@@ -60,6 +62,9 @@ namespace SB.Scripts
         {
             if (_autoUseEnabledEffect != null)
                 _autoUseEnabledEffect.SetActive(isEnabled);
+
+            if (_autoUseText != null)
+                _autoUseText.text = isEnabled ? "자동\n켜짐" : "자동\n꺼짐";
         }
 
         private void HandleSkillButtonClicked(int slotIndex)

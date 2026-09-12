@@ -47,7 +47,7 @@ namespace SB.Scripts
         private void Refresh(SaleSettlementResult result)
         {
             if (_titleText != null)
-                _titleText.text = $"CHAPTER {result.SellChapter} SALE";
+                _titleText.text = $"챕터 {result.SellChapter} 판매";
 
             long totalCargo = 0;
             int highestMultiplier = 1;
@@ -60,7 +60,7 @@ namespace SB.Scripts
             }
 
             if (_cargoSummaryText != null)
-                _cargoSummaryText.text = $"CARGO {CurrencyTextFormatter.Format(totalCargo)}   BEST x{highestMultiplier}";
+                _cargoSummaryText.text = $"화물 {CurrencyTextFormatter.Format(totalCargo)}   최고 x{highestMultiplier}";
 
             for (int slotIndex = 0; slotIndex < _rewardSlots.Length; slotIndex++)
             {

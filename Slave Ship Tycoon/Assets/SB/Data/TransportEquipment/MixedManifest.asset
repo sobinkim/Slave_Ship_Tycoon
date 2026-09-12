@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MixedManifest
   m_EditorClassIdentifier: 
   _itemId: mixed_manifest
-  _displayName: Mixed Manifest
+  _displayName: 혼합 적하 목록
   _icon: {fileID: 21300000, guid: 57d4aebd17aa8cc449eec81f9929b884, type: 3}
   _grade: 2
   _settlementModifiers:
