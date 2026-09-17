@@ -8,7 +8,8 @@ namespace SB.Scripts
     {
         Health,
         AttackDamage,
-        AttackSpeed
+        AttackSpeed,
+        HealthRecoveryPerSecond
     }
 
     public enum CommanderStatType
@@ -23,6 +24,8 @@ namespace SB.Scripts
         [SerializeField] private StatSO _health_Stat;
         [SerializeField] private StatSO _attackDamage_Stat;
         [SerializeField] private StatSO _attackSpeed_Stat;
+        [SerializeField, Tooltip("전투 중과 웨이브 클리어 후 초당 회복하는 HP")]
+        private StatSO healthRecoveryPerSecondStat;
 
         [Header("Main Ship Stat SO")]
         [SerializeField] private StatSO _playerFleet_AttackPowerPercent_Stat;
@@ -46,6 +49,8 @@ namespace SB.Scripts
 
                 case ShipCommonStatType.AttackSpeed:
                     return _attackSpeed_Stat;
+                case ShipCommonStatType.HealthRecoveryPerSecond:
+                    return healthRecoveryPerSecondStat;
 
                 default:
                     throw new System.ArgumentOutOfRangeException(nameof(targetStatType), targetStatType, null);

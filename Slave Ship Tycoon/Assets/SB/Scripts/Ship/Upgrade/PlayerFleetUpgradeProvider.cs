@@ -11,6 +11,7 @@ namespace SB.Scripts.Upgrade
         public float Health => UpgradeData?.health ?? 0f;
         public float CargoCapacity => UpgradeData?.cargoCapacity ?? 0f;
         public float Luck => UpgradeData?.luck ?? 0f;
+        public float HealthRecoveryPerSecond => UpgradeData?.healthRecoveryPerSecond ?? 0f;
 
         private MainShipUpgradeData UpgradeData => shipUpgradeManager != null
             ? shipUpgradeManager.MainShipUpgradeData

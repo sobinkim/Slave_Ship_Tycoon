@@ -46,6 +46,9 @@ namespace SB.Scripts
         private ShipType _myShipType;
 
         [SerializeField] private ShipRole _shipRole;
+        [Header("Targeting")]
+        [SerializeField, Tooltip("습격함만 사용합니다. 보호 중인 함선을 직접 타겟 후보에 포함합니다.")]
+        private bool canTargetProtectedShips;
 
         protected EntityAnimator _animator;
         protected EntityAnimatorTrigger _animatorTrigger;
@@ -54,11 +57,14 @@ namespace SB.Scripts
         protected EntityHealth _healthCompo;
         protected Base_ShipAttackCompo _attackCompo;
         private ShipStateMachine _stateMachine;
+        private Fleet.Effects.FleetEffectReceiver effectReceiver;
+        public bool IsDirectTargetProtected => effectReceiver != null && effectReceiver.BlocksDirectTargeting;
 
         public MyShipData myShipData;
         public ShipStatCompo ShipStatCompo => _shipStatCompo;
         public int SpawnGeneration { get; private set; }
         public bool CanAttack => _attackCompo != null && _attackCompo.CanAttack;
+        public bool CanTargetProtectedShips => canTargetProtectedShips;
         
         
         protected virtual void OnEnable()
@@ -77,6 +83,7 @@ namespace SB.Scripts
         protected override void InitializeComponents()
         {
             base.InitializeComponents();
+            effectReceiver = GetCompo<Fleet.Effects.FleetEffectReceiver>();
             _animator = GetCompo<EntityAnimator>();
             _animatorTrigger = GetCompo<EntityAnimatorTrigger>();
             _statCompo = GetCompo<ShipStatCompo>();
@@ -160,6 +167,32 @@ namespace SB.Scripts
 
             IsDead = false;
             _healthCompo?.ResetHealth();
+            PrepareEncounterState();
+        }
+
+        public void PrepareForRecovery()
+        {
+            _attackCompo?.ResetAttackState();
+
+            if (IsDead)
+                return;
+
+            ChangeState(ShipStateType.Idle);
+        }
+
+        public void PrepareForNextBattle()
+        {
+            if (IsDead)
+            {
+                _healthCompo.ResetHealth();
+                var animator = _animator.RuntimeAnimator;
+                if (animator != null)
+                {
+                    animator.Rebind();
+                    animator.Update(0f);
+                }
+            }
+
             PrepareEncounterState();
         }
 

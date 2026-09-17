@@ -4,11 +4,12 @@ using SB.Scripts.Currency;
 using SB.Scripts.Fleet;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SB.Scripts.UI.Fleet
 {
-    public sealed class PlayerFleetPanelView : MonoBehaviour
+    public sealed class PlayerFleetPanelView : MonoBehaviour, IPointerClickHandler
     {
         [Header("Inventory")]
         [SerializeField] private Transform _inventoryRoot;
@@ -16,6 +17,7 @@ namespace SB.Scripts.UI.Fleet
         [SerializeField] private ScrollRect _inventoryScroll;
 
         [Header("Formation")]
+        [SerializeField] private FleetAttackPreview attackPreview;
         [SerializeField] private FleetFormationSlotView[] _formationSlots =
             new FleetFormationSlotView[PlayerFleetLoadout.SlotCount];
 
@@ -33,12 +35,14 @@ namespace SB.Scripts.UI.Fleet
         [SerializeField] private Button _confirmMergeButton;
         [SerializeField] private Button _cancelMergeButton;
 
-        private readonly Dictionary<EscortShipData, EscortInventoryItemView> _inventoryItems =
-            new Dictionary<EscortShipData, EscortInventoryItemView>();
+        private readonly List<EscortInventoryItemView> _inventoryItems =
+            new List<EscortInventoryItemView>();
 
         public event Action<EscortShipData> OnEscortSelected;
+        public event Action<EscortShipData, EscortInventoryItemView> OnInventoryItemSelected;
         public event Action<int> OnFormationSlotClicked;
         public event Action<int> OnFormationRemoveClicked;
+        public event Action OnSelectionCancelled;
         public event Action OnSummonClicked;
         public event Action OnMergeClicked;
         public event Action OnMergeConfirmed;
@@ -79,10 +83,13 @@ namespace SB.Scripts.UI.Fleet
 
             UnsubscribeFormationSlots();
 
-            foreach (KeyValuePair<EscortShipData, EscortInventoryItemView> pair in _inventoryItems)
+            for (int i = 0; i < _inventoryItems.Count; i++)
             {
-                if (pair.Value != null)
-                    pair.Value.OnSelected -= HandleEscortSelected;
+                if (_inventoryItems[i] != null)
+                {
+                    _inventoryItems[i].OnSelected -= HandleEscortSelected;
+                    _inventoryItems[i].OnItemSelected -= HandleInventoryItemSelected;
+                }
             }
         }
 
@@ -96,12 +103,11 @@ namespace SB.Scripts.UI.Fleet
 
         public void RefreshInventory(
             IReadOnlyList<EscortOwnershipSnapshot> ownership,
-            EscortShipData selectedEscort)
+            EscortShipData selectedEscort,
+            EscortInventoryItemView selectedInventoryItem)
         {
             if (ownership == null)
                 return;
-
-            HashSet<EscortShipData> visibleItems = new HashSet<EscortShipData>();
 
             for (int i = 0; i < ownership.Count; i++)
             {
@@ -110,7 +116,7 @@ namespace SB.Scripts.UI.Fleet
                 if (snapshot.ShipData == null)
                     continue;
 
-                EscortInventoryItemView itemView = GetOrCreateInventoryItem(snapshot.ShipData);
+                EscortInventoryItemView itemView = GetOrCreateInventoryItem(i);
 
                 if (itemView == null)
                     return;
@@ -118,13 +124,12 @@ namespace SB.Scripts.UI.Fleet
                 itemView.gameObject.SetActive(true);
                 itemView.transform.SetSiblingIndex(i);
                 itemView.Refresh(snapshot, snapshot.ShipData == selectedEscort);
-                visibleItems.Add(snapshot.ShipData);
             }
 
-            foreach (KeyValuePair<EscortShipData, EscortInventoryItemView> pair in _inventoryItems)
+            for (int i = ownership.Count; i < _inventoryItems.Count; i++)
             {
-                if (pair.Value != null && visibleItems.Contains(pair.Key) == false)
-                    pair.Value.gameObject.SetActive(false);
+                if (_inventoryItems[i] != null)
+                    _inventoryItems[i].gameObject.SetActive(false);
             }
         }
 
@@ -148,6 +153,11 @@ namespace SB.Scripts.UI.Fleet
                 _selectedEscortText.text = shipData != null ? shipData.DisplayName : "선택한 호위선 없음";
         }
 
+        public void ShowAttackPreview(EscortShipData shipData, int slotIndex)
+        {
+            attackPreview?.Refresh(shipData, slotIndex);
+        }
+
         public void SetFormationSelection(int selectedSlotIndex, EscortShipData selectedEscort, bool hasAvailableCopy)
         {
             for (int i = 0; i < _formationSlots.Length; i++)
@@ -157,7 +167,7 @@ namespace SB.Scripts.UI.Fleet
         public void FocusEscort(EscortShipData shipData)
         {
             if (_inventoryScroll == null || _inventoryScroll.content == null ||
-                _inventoryScroll.viewport == null || _inventoryItems.TryGetValue(shipData, out var item) == false)
+                _inventoryScroll.viewport == null || FindInventoryItem(shipData, out EscortInventoryItemView item) == false)
                 return;
 
             Canvas.ForceUpdateCanvases();
@@ -226,10 +236,26 @@ namespace SB.Scripts.UI.Fleet
                 _resultText.text = message;
         }
 
-        private EscortInventoryItemView GetOrCreateInventoryItem(EscortShipData shipData)
+        private bool FindInventoryItem(EscortShipData shipData, out EscortInventoryItemView itemView)
         {
-            if (_inventoryItems.TryGetValue(shipData, out EscortInventoryItemView itemView))
-                return itemView;
+            for (int i = 0; i < _inventoryItems.Count; i++)
+            {
+                EscortInventoryItemView candidate = _inventoryItems[i];
+                if (candidate != null && candidate.gameObject.activeSelf && candidate.ShipData == shipData)
+                {
+                    itemView = candidate;
+                    return true;
+                }
+            }
+
+            itemView = null;
+            return false;
+        }
+
+        private EscortInventoryItemView GetOrCreateInventoryItem(int index)
+        {
+            if (index < _inventoryItems.Count && _inventoryItems[index] != null)
+                return _inventoryItems[index];
 
             if (_inventoryRoot == null || _inventoryItemPrefab == null)
             {
@@ -239,9 +265,10 @@ namespace SB.Scripts.UI.Fleet
                 return null;
             }
 
-            itemView = Instantiate(_inventoryItemPrefab, _inventoryRoot);
+            EscortInventoryItemView itemView = Instantiate(_inventoryItemPrefab, _inventoryRoot);
             itemView.OnSelected += HandleEscortSelected;
-            _inventoryItems.Add(shipData, itemView);
+            itemView.OnItemSelected += HandleInventoryItemSelected;
+            _inventoryItems.Add(itemView);
             return itemView;
         }
 
@@ -283,6 +310,18 @@ namespace SB.Scripts.UI.Fleet
         private void HandleEscortSelected(EscortShipData shipData)
         {
             OnEscortSelected?.Invoke(shipData);
+        }
+
+        private void HandleInventoryItemSelected(EscortInventoryItemView itemView)
+        {
+            if (itemView != null && itemView.ShipData != null)
+                OnInventoryItemSelected?.Invoke(itemView.ShipData, itemView);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+                OnSelectionCancelled?.Invoke();
         }
 
         private void HandleFormationSlotClicked(int slotIndex)

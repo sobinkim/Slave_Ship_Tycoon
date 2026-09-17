@@ -1,3 +1,4 @@
+using System;
 using SB.Core.EventBus;
 using UnityEngine;
 
@@ -19,16 +20,19 @@ namespace SB.Core
         private StatSO runtimeMaxHealthStat;
         private float maxHealth;
         private float currentHealth;
+        private IIncomingDamageModifier[] incomingDamageModifiers = Array.Empty<IIncomingDamageModifier>();
 
         public float MaxHealth => maxHealth;
         public float CurrentHealth => currentHealth;
         public float NormalizedHealth => maxHealth <= 0f ? 0f : currentHealth / maxHealth;
         public bool IsAlive => Owner != null && !Owner.IsDead;
+        public double LastDamageTimeSeconds { get; private set; } = double.NegativeInfinity;
 
         public override void Initialize(Entity entity)
         {
             base.Initialize(entity);
             statCompo = entity.GetCompo<EntityStatCompo>();
+            incomingDamageModifiers = entity.GetComponentsInChildren<IIncomingDamageModifier>(true);
         }
 
         public void AfterInitialize()
@@ -47,11 +51,17 @@ namespace SB.Core
 
         public void ResetHealth()
         {
+            ResetHealth(1f);
+        }
+
+        public void ResetHealth(float initialHealthRatio)
+        {
             if (Owner != null)
                 Owner.IsDead = false;
 
             maxHealth = ResolveMaxHealth();
-            currentHealth = maxHealth;
+            currentHealth = maxHealth * Mathf.Clamp01(initialHealthRatio);
+            LastDamageTimeSeconds = double.NegativeInfinity;
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
         }
 
@@ -68,7 +78,12 @@ namespace SB.Core
             if (damage <= 0f)
                 return;
 
+            damage = ApplyIncomingDamageModifiers(damage);
+            if (damage <= 0f)
+                return;
+
             currentHealth = Mathf.Clamp(currentHealth - damage, 0f, maxHealth);
+            LastDamageTimeSeconds = Time.timeAsDouble;
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
             Owner.OnHitEvent.Invoke();
             Bus<DamageAppliedEvent>.Raise(
@@ -120,6 +135,21 @@ namespace SB.Core
             }
 
             maxHealth = ResolveMaxHealth();
+        }
+
+        private float ApplyIncomingDamageModifiers(float damage)
+        {
+            foreach (IIncomingDamageModifier modifier in incomingDamageModifiers)
+            {
+                if (modifier == null)
+                    continue;
+
+                damage = Mathf.Max(0f, modifier.ModifyIncomingDamage(damage));
+                if (damage <= 0f)
+                    return 0f;
+            }
+
+            return damage;
         }
 
         private float ResolveMaxHealth()

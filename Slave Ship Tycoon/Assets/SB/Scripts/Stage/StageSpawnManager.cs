@@ -31,8 +31,18 @@ namespace SB.Scripts
         private MainShip spawnedMainShip;
         private Ship[] spawnedEscortShipsBySlot = Array.Empty<Ship>();
         private int spawnedPlayerFleetVersion = -1;
+        private bool shouldResetPlayerFleetOnNextBattle;
 
         public PlayerFleetLoadout PlayerFleetLoadout => runtimePlayerFleetLoadout;
+        public PlayerFleetUpgradeProvider PlayerFleetUpgradeProvider => playerFleetUpgradeProvider;
+
+        public void CollectPlayerShips(List<Ship> ships)
+        {
+            ships.Clear();
+            if (spawnedMainShip != null) ships.Add(spawnedMainShip);
+            foreach (Ship ship in spawnedEscortShipsBySlot)
+                if (ship != null) ships.Add(ship);
+        }
 
         private void Awake()
         {
@@ -47,12 +57,14 @@ namespace SB.Scripts
         private void OnEnable()
         {
             Bus<StageStartedEvent>.OnEvent += SpawnCurrentStageBattle;
+            Bus<StageBattleEndedEvent>.OnEvent += HandleBattleEnded;
             participantTracker.StartListening();
         }
 
         private void OnDisable()
         {
             Bus<StageStartedEvent>.OnEvent -= SpawnCurrentStageBattle;
+            Bus<StageBattleEndedEvent>.OnEvent -= HandleBattleEnded;
             participantTracker.StopListening();
             ClearSpawnedBattleParticipants();
         }
@@ -74,6 +86,12 @@ namespace SB.Scripts
         public void SpawnStageBattle(int chapter, int stage, bool isBossBattle)
         {
             ClearSpawnedEnemies();
+
+            if (shouldResetPlayerFleetOnNextBattle)
+            {
+                ClearSpawnedPlayerFleet();
+                shouldResetPlayerFleetOnNextBattle = false;
+            }
 
             if (!TryPreparePlayerFleet(out MainShip mainShip, out List<Ship> escortShips))
                 return;
@@ -115,6 +133,12 @@ namespace SB.Scripts
         private void SpawnCurrentStageBattle(StageStartedEvent evt)
         {
             SpawnStageBattle(evt.Chapter, evt.Stage, evt.IsBossBattle);
+        }
+
+        private void HandleBattleEnded(StageBattleEndedEvent evt)
+        {
+            // Failed attempts retain their existing full-reset retry behavior.
+            shouldResetPlayerFleetOnNextBattle = !evt.IsClear;
         }
 
         private bool TrySpawnPlayerFleet(out MainShip mainShip, out List<Ship> escortShips)
@@ -255,7 +279,7 @@ namespace SB.Scripts
             mainShip = spawnedMainShip;
             escortShips = new List<Ship>();
 
-            ResetShipForBattle(spawnedMainShip, mainShipSpawnPoint);
+            PrepareShipForBattle(spawnedMainShip, mainShipSpawnPoint);
 
             for (int i = 0; i < spawnedEscortShipsBySlot.Length; i++)
             {
@@ -267,12 +291,12 @@ namespace SB.Scripts
                 Transform spawnPoint = escortShipSpawnPoints != null && i < escortShipSpawnPoints.Length
                     ? escortShipSpawnPoints[i]
                     : null;
-                ResetShipForBattle(escortShip, spawnPoint);
+                PrepareShipForBattle(escortShip, spawnPoint);
                 escortShips.Add(escortShip);
             }
         }
 
-        private void ResetShipForBattle(Ship ship, Transform spawnPoint)
+        private void PrepareShipForBattle(Ship ship, Transform spawnPoint)
         {
             if (ship == null)
                 return;
@@ -284,7 +308,9 @@ namespace SB.Scripts
             }
 
             ship.gameObject.SetActive(true);
-            ship.OnSpawnedFromPool();
+            // Cleared waves keep the same hull and current HP. PlayerFleetRecovery
+            // continues healing after the next encounter starts.
+            ship.PrepareForNextBattle();
         }
 
         private bool TrySpawnEnemies(int chapter, int stage, bool isBossBattle, out List<Enemy> spawnedEnemies)
@@ -322,8 +348,8 @@ namespace SB.Scripts
                     continue;
 
                 enemy.SetSpawnSlot(new Vector2Int(
-                    slotIndex % StageEnemyLayout.GridSize,
-                    slotIndex / StageEnemyLayout.GridSize));
+                    slotIndex % StageEnemyLayout.ColumnCount,
+                    slotIndex / StageEnemyLayout.ColumnCount));
 
                 participantTracker.RegisterEnemy(enemy, isPooled);
                 spawnedEnemies.Add(enemy);
@@ -406,7 +432,9 @@ namespace SB.Scripts
                 if (layout.GetEnemyAt(slotIndex) == null)
                     continue;
 
-                Transform spawnPoint = spawnPoints[slotIndex];
+                Transform spawnPoint = spawnPoints != null && slotIndex < spawnPoints.Length
+                    ? spawnPoints[slotIndex]
+                    : null;
 
                 if (spawnPoint == null)
                 {

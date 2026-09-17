@@ -35,10 +35,14 @@ namespace SB.Scripts.UI.Fleet
         [SerializeField] private TMP_Text resultCountText;
         [SerializeField] private UnityEngine.UI.Button singleButton;
         [SerializeField] private UnityEngine.UI.Button multiButton;
+        [SerializeField] private UnityEngine.UI.Button repeatMultiButton;
         [SerializeField] private GameObject skipButton;
         [SerializeField] private GameObject confirmButton;
         [SerializeField] private UnityEngine.UI.Image revealFlash;
         [SerializeField] private RewardCard[] cards;
+        [SerializeField] private SB.Scripts.Visual.PannelManager panelManager;
+        [SerializeField] private GameObject formationButton;
+        [SerializeField, Min(1f)] private float singleCardScale = 2.2f;
         [Header("Recruitment")]
         [SerializeField, Min(1)] private int multiCount = 11;
         [SerializeField] private Vector2 singleCardPosition = new Vector2(394, -100);
@@ -84,8 +88,17 @@ namespace SB.Scripts.UI.Fleet
             Refresh();
         }
 
+        public void OpenFormation()
+        {
+            Close();
+            if (panelManager != null) panelManager.ClickPanelButton(SB.Scripts.Visual.PanelType.Fleet);
+        }
+
+        private float CardScale => rewards.Count == 1 ? singleCardScale : 1f;
+
         public void SummonSingle() => Recruit(1);
         public void SummonMulti() => Recruit(multiCount);
+        public void RepeatMultiSummon() => Recruit(multiCount);
 
         private void Refresh()
         {
@@ -98,6 +111,13 @@ namespace SB.Scripts.UI.Fleet
             bool available = !isBusy && gachaManager.CanSummon(out _);
             singleButton.interactable = available;
             multiButton.interactable = available && balance >= (long)gachaManager.SummonCost * multiCount;
+            if (repeatMultiButton != null)
+            {
+                repeatMultiButton.interactable = available && balance >= (long)gachaManager.SummonCost * multiCount;
+                TMP_Text repeatLabel = repeatMultiButton.GetComponentInChildren<TMP_Text>(true);
+                if (repeatLabel != null)
+                    repeatLabel.text = $"{multiCount}회 다시 모집\n{(long)gachaManager.SummonCost * multiCount:N0} {unit}";
+            }
             if (!available && !isBusy)
                 statusText.text = balance < gachaManager.SummonCost ? "뽑기 재화가 부족해요. 운송 정산으로 모아보세요." : "모집 설정을 확인해주세요.";
         }
@@ -118,7 +138,7 @@ namespace SB.Scripts.UI.Fleet
                 rewards.Add(reward.Reward);
             }
             if (rewards.Count == 0) { isBusy = false; Refresh(); return; }
-            resultCountText.text = $"새로운 호위선 {rewards.Count}척 · 보유 함대에 추가되었습니다";
+            resultCountText.text = $"호위선 {rewards.Count}척 입항 · 미편성 상태입니다\n함대에 배치하면 다음 전투부터 합류합니다";
             for (int i = 0; i < cards.Length; i++)
             {
                 RewardCard card = cards[i];
@@ -134,11 +154,12 @@ namespace SB.Scripts.UI.Fleet
                 card.surface.color = Color.Lerp(new Color(.045f,.08f,.13f), card.grade.color, .24f);
                 card.root.GetComponent<UnityEngine.UI.Image>().color = card.grade.color;
                 card.visibility.alpha = 0;
-                card.root.localScale = Vector3.one * initialScale;
+                card.root.localScale = Vector3.one * (initialScale * CardScale);
             }
             resultPanel.SetActive(true);
             skipButton.SetActive(true);
             confirmButton.SetActive(false);
+            if (formationButton != null) formationButton.SetActive(false);
             Refresh();
             revealRoutine = StartCoroutine(Reveal());
         }
@@ -154,14 +175,14 @@ namespace SB.Scripts.UI.Fleet
                     float progress = Mathf.Clamp01(elapsed / revealSeconds);
                     float eased = 1 - Mathf.Pow(1-progress, 3);
                     cards[i].visibility.alpha = eased;
-                    cards[i].root.localScale = Vector3.one * Mathf.Lerp(initialScale, 1, eased);
+                    cards[i].root.localScale = Vector3.one * (Mathf.Lerp(initialScale, 1, eased) * CardScale);
                     Color glow = gradeColors[(int)rewards[i].Grade];
                     glow.a = (1-progress) * .18f;
                     revealFlash.color = glow;
                     yield return null;
                 }
                 cards[i].visibility.alpha = 1;
-                cards[i].root.localScale = Vector3.one;
+                cards[i].root.localScale = Vector3.one * CardScale;
                 yield return new WaitForSecondsRealtime(cardDelaySeconds);
             }
             revealRoutine = null;
@@ -180,11 +201,12 @@ namespace SB.Scripts.UI.Fleet
             if (cards != null) foreach (RewardCard card in cards)
             {
                 if (card.visibility != null) card.visibility.alpha = 1;
-                if (card.root != null) card.root.localScale = Vector3.one;
+                if (card.root != null) card.root.localScale = Vector3.one * CardScale;
             }
             if (revealFlash != null) revealFlash.color = Color.clear;
             if (skipButton != null) skipButton.SetActive(false);
             if (confirmButton != null) confirmButton.SetActive(true);
+            if (formationButton != null) formationButton.SetActive(true);
             isBusy = false;
             Refresh();
         }

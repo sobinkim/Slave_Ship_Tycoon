@@ -16,6 +16,7 @@ namespace SB.Scripts.UI.Fleet
         [SerializeField] private FleetMergeScreen mergeScreen;
 
         private EscortShipData _selectedEscort;
+        private EscortInventoryItemView _selectedInventoryItem;
         private int _selectedSlotIndex = -1;
         private EscortShipData _mergeSource;
         private EscortShipData _mergeResult;
@@ -32,9 +33,10 @@ namespace SB.Scripts.UI.Fleet
             if (_view == null)
                 return;
 
-            _view.OnEscortSelected += HandleEscortSelected;
+            _view.OnInventoryItemSelected += HandleEscortSelected;
             _view.OnFormationSlotClicked += HandleFormationSlotClicked;
             _view.OnFormationRemoveClicked += HandleFormationRemoveClicked;
+            _view.OnSelectionCancelled += HandleSelectionCancelled;
             _view.OnSummonClicked += HandleSummonClicked;
             _view.OnMergeClicked += HandleMergeClicked;
             _view.OnMergeConfirmed += HandleMergeConfirmed;
@@ -58,9 +60,10 @@ namespace SB.Scripts.UI.Fleet
             if (_view == null)
                 return;
 
-            _view.OnEscortSelected -= HandleEscortSelected;
+            _view.OnInventoryItemSelected -= HandleEscortSelected;
             _view.OnFormationSlotClicked -= HandleFormationSlotClicked;
             _view.OnFormationRemoveClicked -= HandleFormationRemoveClicked;
+            _view.OnSelectionCancelled -= HandleSelectionCancelled;
             _view.OnSummonClicked -= HandleSummonClicked;
             _view.OnMergeClicked -= HandleMergeClicked;
             _view.OnMergeConfirmed -= HandleMergeConfirmed;
@@ -68,9 +71,20 @@ namespace SB.Scripts.UI.Fleet
             CancelMerge();
         }
 
-        private void HandleEscortSelected(EscortShipData shipData)
+        private void HandleEscortSelected(
+            EscortShipData shipData,
+            EscortInventoryItemView selectedItem)
         {
-            _selectedEscort = _selectedEscort == shipData && _selectedSlotIndex < 0 ? null : shipData;
+            if (_selectedInventoryItem == selectedItem && _selectedSlotIndex < 0)
+            {
+                ClearInventorySelection();
+                _view.SetResult(string.Empty);
+                RefreshAll();
+                return;
+            }
+
+            _selectedEscort = shipData;
+            _selectedInventoryItem = selectedItem;
 
             if (_selectedSlotIndex >= 0 && _selectedEscort != null)
             {
@@ -87,16 +101,23 @@ namespace SB.Scripts.UI.Fleet
             if (_playerFleetManager == null || _view == null)
                 return;
 
-            if (_selectedEscort == null || _playerFleetManager.GetFormationAt(slotIndex) == _selectedEscort)
+            if (_selectedEscort != null)
             {
-                _selectedEscort = null;
+                PlaceSelectedEscort(slotIndex);
+                return;
+            }
+
+            if (_playerFleetManager.GetFormationAt(slotIndex) == null)
+            {
                 _selectedSlotIndex = _selectedSlotIndex == slotIndex ? -1 : slotIndex;
                 _view.SetResult(_selectedSlotIndex >= 0 ? $"{slotIndex + 1}번 슬롯 선택" : string.Empty);
                 RefreshAll();
                 return;
             }
 
-            PlaceSelectedEscort(slotIndex);
+            _selectedSlotIndex = _selectedSlotIndex == slotIndex ? -1 : slotIndex;
+            _view.SetResult(_selectedSlotIndex >= 0 ? $"{slotIndex + 1}번 슬롯 선택" : string.Empty);
+            RefreshAll();
         }
 
         private void PlaceSelectedEscort(int slotIndex)
@@ -113,7 +134,7 @@ namespace SB.Scripts.UI.Fleet
 
             _selectedSlotIndex = -1;
             _view.SetResult($"{_selectedEscort.DisplayName} - {slotIndex + 1}번 슬롯\n다음 전투부터 적용");
-            _selectedEscort = null;
+            ClearInventorySelection();
             RefreshAll();
         }
 
@@ -126,7 +147,24 @@ namespace SB.Scripts.UI.Fleet
                 _view.SetResult($"{slotIndex + 1}번 슬롯 해제\n다음 전투부터 적용");
 
             _selectedSlotIndex = -1;
+            ClearInventorySelection();
             RefreshAll();
+        }
+
+        private void HandleSelectionCancelled()
+        {
+            if (_selectedEscort == null)
+                return;
+
+            ClearInventorySelection();
+            _view.SetResult(string.Empty);
+            RefreshAll();
+        }
+
+        private void ClearInventorySelection()
+        {
+            _selectedEscort = null;
+            _selectedInventoryItem = null;
         }
 
         private void HandleSummonClicked()
@@ -226,6 +264,7 @@ namespace SB.Scripts.UI.Fleet
             if (result.IsSuccess)
             {
                 _selectedEscort = result.Reward;
+                _selectedInventoryItem = null;
                 _selectedSlotIndex = -1;
             }
 
@@ -246,7 +285,10 @@ namespace SB.Scripts.UI.Fleet
                 : GetMergeFailureMessage(result.FailureReason));
 
             if (result.IsSuccess)
+            {
                 _selectedEscort = result.Result;
+                _selectedInventoryItem = null;
+            }
 
             RefreshAll();
 
@@ -266,15 +308,19 @@ namespace SB.Scripts.UI.Fleet
                 return;
 
             if (_selectedEscort != null && _playerFleetManager.GetOwnedCount(_selectedEscort) <= 0)
-                _selectedEscort = null;
+                ClearInventorySelection();
 
             _view.RefreshInventory(
                 _playerFleetManager.GetOwnershipSnapshot(),
-                _selectedEscort);
+                _selectedEscort,
+                _selectedInventoryItem);
             _view.RefreshFormation(_playerFleetManager.GetFormationSnapshot());
             _view.SetSelectedEscort(_selectedEscort);
             _view.SetFormationSelection(_selectedSlotIndex, _selectedEscort,
                 _selectedEscort != null && _playerFleetManager.GetUnequippedCount(_selectedEscort) > 0);
+            _view.ShowAttackPreview(_selectedSlotIndex >= 0
+                ? _playerFleetManager.GetFormationAt(_selectedSlotIndex)
+                : _selectedEscort, _selectedSlotIndex);
             RefreshActions();
         }
 

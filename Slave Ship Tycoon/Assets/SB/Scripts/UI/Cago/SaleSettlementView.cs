@@ -17,7 +17,25 @@ namespace SB.Scripts
         [SerializeField, Min(0f)] private float _holdDuration = 2.5f;
         [SerializeField, Min(0.01f)] private float _fadeOutDuration = 0.35f;
 
+        [Header("Harbor ledger reveal")]
+        [SerializeField, Min(0.1f)] private float rewardCountSeconds = 0.65f;
+        [SerializeField, Min(0f)] private float rewardRowDelaySeconds = 0.12f;
+        [SerializeField, Range(0.8f, 1f)] private float entryScale = 0.94f;
+        private SaleSettlementResult lastResult;
         private Coroutine _showRoutine;
+
+        public void ReplayLastSettlement()
+        {
+            if (lastResult != null) Show(lastResult);
+        }
+
+        private void OnDisable()
+        {
+            if (_showRoutine != null) StopCoroutine(_showRoutine);
+            _showRoutine = null;
+            SetAlpha(0f);
+            if (_panel != null) _panel.SetActive(false);
+        }
 
         private void Awake()
         {
@@ -35,7 +53,9 @@ namespace SB.Scripts
             if (_showRoutine != null)
                 StopCoroutine(_showRoutine);
 
+            lastResult = result;
             Refresh(result);
+            foreach (var slot in _rewardSlots) if (slot != null) slot.ShowProgress(0f);
 
             if (_panel != null)
                 _panel.SetActive(true);
@@ -47,7 +67,7 @@ namespace SB.Scripts
         private void Refresh(SaleSettlementResult result)
         {
             if (_titleText != null)
-                _titleText.text = $"챕터 {result.SellChapter} 판매";
+                _titleText.text = $"항로 {result.SellChapter} · 목적지 도착";
 
             long totalCargo = 0;
             int highestMultiplier = 1;
@@ -60,7 +80,7 @@ namespace SB.Scripts
             }
 
             if (_cargoSummaryText != null)
-                _cargoSummaryText.text = $"화물 {CurrencyTextFormatter.Format(totalCargo)}   최고 x{highestMultiplier}";
+                _cargoSummaryText.text = $"화물 {CurrencyTextFormatter.Format(totalCargo)}개 하역  ·  최고 시세 x{highestMultiplier}\n운송 장비 효과를 포함한 최종 수익";
 
             for (int slotIndex = 0; slotIndex < _rewardSlots.Length; slotIndex++)
             {
@@ -89,9 +109,23 @@ namespace SB.Scripts
         private IEnumerator ShowRoutine()
         {
             yield return Fade(0f, 1f, _fadeInDuration);
+            foreach (var slot in _rewardSlots)
+            {
+                if (slot == null || !slot.gameObject.activeSelf) continue;
+                float elapsed = 0f;
+                while (elapsed < rewardCountSeconds)
+                {
+                    elapsed += Time.unscaledDeltaTime;
+                    float t = Mathf.Clamp01(elapsed / rewardCountSeconds);
+                    slot.ShowProgress(1f - Mathf.Pow(1f - t, 3f));
+                    yield return null;
+                }
+                slot.ShowProgress(1f);
+                if (rewardRowDelaySeconds > 0f) yield return new WaitForSecondsRealtime(rewardRowDelaySeconds);
+            }
 
             if (_holdDuration > 0f)
-                yield return new WaitForSeconds(_holdDuration);
+                yield return new WaitForSecondsRealtime(_holdDuration);
 
             yield return Fade(1f, 0f, _fadeOutDuration);
 
@@ -107,7 +141,7 @@ namespace SB.Scripts
 
             while (elapsedTime < duration)
             {
-                elapsedTime += Time.deltaTime;
+                elapsedTime += Time.unscaledDeltaTime;
                 SetAlpha(Mathf.Lerp(startAlpha, endAlpha, Mathf.Clamp01(elapsedTime / duration)));
                 yield return null;
             }
@@ -117,8 +151,8 @@ namespace SB.Scripts
 
         private void SetAlpha(float alpha)
         {
-            if (_canvasGroup != null)
-                _canvasGroup.alpha = alpha;
+            if (_canvasGroup != null) _canvasGroup.alpha = alpha;
+            if (_panel != null) _panel.transform.localScale = Vector3.one * Mathf.Lerp(entryScale, 1f, alpha);
         }
     }
 }

@@ -64,6 +64,7 @@ namespace SB.Scripts.UI.Upgrade
             RefreshSlot(MainShipUpgradeType.Luck);
             RefreshSlot(MainShipUpgradeType.CommanderGaugeMax);
             RefreshSlot(MainShipUpgradeType.CommanderGaugeRecoveryPerSecond);
+            RefreshSlot(MainShipUpgradeType.HealthRecoveryPerSecond);
         }
 
         private void RefreshSlot(MainShipUpgradeType upgradeType)

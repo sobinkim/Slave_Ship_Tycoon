@@ -15,6 +15,13 @@ namespace SB.Scripts
         [SerializeField] private TMP_Text _detailText;
         [SerializeField] private GameObject _activeEffect;
         [SerializeField] private GameObject _emptyEffect;
+        [Header("Icon charge presentation")]
+        [SerializeField] private Image chargeFill;
+        [SerializeField] private Image stateBorder;
+        [SerializeField] private Color chargingColor = new Color(.22f,.57f,.76f,.6f);
+        [SerializeField] private Color readyColor = new Color(.25f,.85f,.66f,.65f);
+        [SerializeField] private Color activeColor = new Color(1f,.72f,.3f,.7f);
+        [SerializeField] private Color idleColor = new Color(.3f,.37f,.42f,.6f);
 
         private int _slotIndex;
 
@@ -53,7 +60,7 @@ namespace SB.Scripts
             }
 
             if (_detailText != null)
-                _detailText.text = hasSkill ? $"{skillData.DisplayName}\n{skillData.GaugeCost:0.#} 지휘력" : string.Empty;
+                _detailText.text = hasSkill ? skillData.DisplayName : "빈 슬롯";
 
             if (_emptyEffect != null)
                 _emptyEffect.SetActive(hasSkill == false);
@@ -64,6 +71,8 @@ namespace SB.Scripts
             if (hasSkill == false)
             {
                 SetCooldown(0f, 0f);
+                if (chargeFill != null) chargeFill.fillAmount = 0f;
+                if (stateBorder != null) stateBorder.color = idleColor;
 
                 if (_activeEffect != null)
                     _activeEffect.SetActive(false);
@@ -76,15 +85,28 @@ namespace SB.Scripts
             if (_cooldownText != null)
             {
                 string status = runtimeState.IsActive
-                    ? $"발동\n{Mathf.CeilToInt(runtimeState.RemainingDuration)}초"
+                    ? $"{runtimeState.RemainingDuration:0.0}"
                     : runtimeState.RemainingCooldown > 0f
-                        ? $"{Mathf.CeilToInt(runtimeState.RemainingCooldown)}초"
-                        : isBattleRunning == false ? "대기"
-                        : currentGauge < skillData.GaugeCost ? "지휘력 부족"
-                        : canUse ? string.Empty : "대기";
+                        ? $"{runtimeState.RemainingCooldown:0.0}"
+                        : string.Empty;
                 _cooldownText.text = status;
                 _cooldownText.gameObject.SetActive(string.IsNullOrEmpty(status) == false);
             }
+
+            float gaugeProgress = skillData.GaugeCost > 0f ? Mathf.Clamp01(currentGauge / skillData.GaugeCost) : 1f;
+            float cooldownProgress = skillData.Cooldown > 0f ? 1f - Mathf.Clamp01(runtimeState.RemainingCooldown / skillData.Cooldown) : 1f;
+            bool isCharged = gaugeProgress >= 1f && cooldownProgress >= 1f;
+            bool showReady = canUse || (!isBattleRunning && isCharged);
+            Color stateColor = runtimeState.IsActive ? activeColor : showReady ? readyColor : chargingColor;
+            if (chargeFill != null)
+            {
+                chargeFill.color = stateColor;
+                chargeFill.fillAmount = runtimeState.IsActive
+                    ? Mathf.Clamp01(runtimeState.RemainingDuration / skillData.Duration)
+                    : Mathf.Min(gaugeProgress, cooldownProgress);
+            }
+            if (stateBorder != null) stateBorder.color = stateColor;
+            if (_skillIcon != null) _skillIcon.color = showReady || runtimeState.IsActive ? Color.white : new Color(.45f,.5f,.55f);
 
             if (_activeEffect != null)
                 _activeEffect.SetActive(runtimeState.IsActive);

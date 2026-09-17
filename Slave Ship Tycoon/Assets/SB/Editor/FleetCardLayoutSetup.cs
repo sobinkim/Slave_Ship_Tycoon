@@ -55,12 +55,13 @@ namespace SB.Editor
             var content=(RectTransform)Node(viewport.transform,"Content").transform;content.anchorMin=new Vector2(0,1);content.anchorMax=Vector2.one;content.pivot=new Vector2(.5f,1);content.sizeDelta=Vector2.zero;content.anchoredPosition=Vector2.zero;
             Grid(content);
             var scroll=viewport.GetComponent<UnityEngine.UI.ScrollRect>()??viewport.gameObject.AddComponent<UnityEngine.UI.ScrollRect>();scroll.content=content;scroll.viewport=(RectTransform)viewport.transform;scroll.horizontal=false;scroll.movementType=UnityEngine.UI.ScrollRect.MovementType.Clamped;
+            scroll.vertical=true;scroll.scrollSensitivity=45;
             return content;
         }
         private static void Grid(RectTransform content)
         {
             var vertical=content.GetComponent<UnityEngine.UI.VerticalLayoutGroup>();if(vertical!=null)Object.DestroyImmediate(vertical);
-            var grid=content.GetComponent<UnityEngine.UI.GridLayoutGroup>()??content.gameObject.AddComponent<UnityEngine.UI.GridLayoutGroup>();grid.cellSize=new Vector2(176,210);grid.spacing=new Vector2(25,36);grid.constraint=UnityEngine.UI.GridLayoutGroup.Constraint.FixedColumnCount;grid.constraintCount=5;grid.childAlignment=TextAnchor.UpperLeft;grid.padding=new RectOffset(3,3,6,8);
+            var grid=content.GetComponent<UnityEngine.UI.GridLayoutGroup>()??content.gameObject.AddComponent<UnityEngine.UI.GridLayoutGroup>();grid.cellSize=new Vector2(176,210);grid.spacing=new Vector2(25,36);grid.constraint=UnityEngine.UI.GridLayoutGroup.Constraint.FixedColumnCount;grid.constraintCount=5;grid.childAlignment=TextAnchor.UpperCenter;grid.padding=new RectOffset(3,3,6,8);
             var fit=content.GetComponent<UnityEngine.UI.ContentSizeFitter>()??content.gameObject.AddComponent<UnityEngine.UI.ContentSizeFitter>();fit.horizontalFit=UnityEngine.UI.ContentSizeFitter.FitMode.Unconstrained;fit.verticalFit=UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize;
         }
         public static string Apply()
@@ -81,7 +82,7 @@ namespace SB.Editor
 
             var root=GameObject.Find("Canvas").transform.Find("FleetPanel");root.GetComponent<UnityEngine.UI.Image>().color=Background;root.GetComponent<UnityEngine.UI.Image>().raycastTarget=true;Fade(root.gameObject);
             foreach(string hidden in new[]{"SummonButton","PauseNotice","SelectedEscort"})root.Find(hidden).gameObject.SetActive(false);
-            var view=new SerializedObject(root.GetComponent<PlayerFleetPanelView>());Ref(view,"_summonButton",null);Ref(view,"_summonCostText",null);Ref(view,"_mergeStatusText",null);view.ApplyModifiedProperties();
+            var view=new SerializedObject(root.GetComponent<PlayerFleetPanelView>());Ref(view,"_inventoryItemPrefab",AssetDatabase.LoadAssetAtPath<GameObject>(path).GetComponent<EscortInventoryItemView>());Ref(view,"_summonButton",null);Ref(view,"_summonCostText",null);Ref(view,"_mergeStatusText",null);view.ApplyModifiedProperties();
             Text(root,"Title","함대",40,75,1000,70,40);
             Text(root,"FormationHeading","항해 중인 함선",44,182,992,44,25).alignment=TextAlignmentOptions.Left;
             Rect(root.Find("FormationRoot"),44,244,992,390);var formation=root.Find("FormationRoot").GetComponent<UnityEngine.UI.GridLayoutGroup>();formation.cellSize=new Vector2(300,175);formation.spacing=new Vector2(32,26);formation.constraintCount=3;
@@ -95,11 +96,12 @@ namespace SB.Editor
             Text(root,"FleetHint","함선을 선택한 뒤 배치할 슬롯을 누르세요",44,745,992,40,22).color=new Color(.4f,.65f,.68f);
             Rect(root.Find("InventoryViewport"),40,818,1000,770);var content=(RectTransform)root.Find("InventoryViewport/InventoryRoot");Grid(content);content.anchorMin=new Vector2(0,1);content.anchorMax=Vector2.one;content.pivot=new Vector2(.5f,1);content.sizeDelta=Vector2.zero;
             Text(root,"Result","",44,1615,992,70,24);
+            content.GetComponent<UnityEngine.UI.GridLayoutGroup>().childAlignment=TextAnchor.UpperLeft;
             var footer=Image(root,"Footer",new Color(.02f,.17f,.20f),0,1730,1080,190);footer.transform.SetSiblingIndex(0);
-            var mergeButton=root.Find("MergeButton");Rect(mergeButton,35,1780,350,100);mergeButton.GetComponent<UnityEngine.UI.Image>().color=Surface;
+            var mergeButton=root.Find("MergeButton");Rect(mergeButton,380,1780,660,100);mergeButton.GetComponent<UnityEngine.UI.Image>().color=new Color(.025f,.5f,.52f);
             foreach(var t in mergeButton.GetComponentsInChildren<TMP_Text>(true))t.gameObject.SetActive(false);
-            Text(mergeButton,"CardMergeLabel","함선 합성",0,0,350,100,29);
-            var close=root.Find("CloseFleet");Rect(close,466,1780,148,100);close.GetComponent<UnityEngine.UI.Image>().color=new Color(.06f,.38f,.48f);Text(close,"Label","×",0,0,148,100,60);
+            Text(mergeButton,"CardMergeLabel","함선 합성",0,0,660,100,29);
+            var close=root.Find("CloseFleet");Rect(close,40,1780,320,100);close.GetComponent<UnityEngine.UI.Image>().color=Surface;Text(close,"Label","닫기",0,0,320,100,29);
 
             var screen=Node(root,"FleetMergeScreen");Fill(screen.transform);var screenImage=screen.GetComponent<UnityEngine.UI.Image>()??screen.AddComponent<UnityEngine.UI.Image>();screenImage.color=Background;screenImage.raycastTarget=true;Fade(screen);
             var logic=screen.GetComponent<FleetMergeScreen>()??screen.AddComponent<FleetMergeScreen>();
@@ -112,7 +114,7 @@ namespace SB.Editor
             var resultLabel=Text(screen.transform,"ResultLabel","상위 등급",614,355,180,36,23);
             Text(screen.transform,"Arrow","›",478,240,124,100,70).color=Accent;
             var status=Text(screen.transform,"Status","",40,435,1000,90,25);
-            var serialized=new SerializedObject(logic);Ref(serialized,"fleetManager",Object.FindFirstObjectByType<SB.Scripts.Fleet.PlayerFleetManager>(FindObjectsInactive.Include));Ref(serialized,"cardPrefab",AssetDatabase.LoadAssetAtPath<GameObject>(path).GetComponent<EscortInventoryItemView>());
+            var serialized=new SerializedObject(logic);Ref(serialized,"fleetManager",Object.FindFirstObjectByType<SB.Scripts.Fleet.PlayerFleetManager>(FindObjectsInactive.Include));Ref(serialized,"cardPrefab",AssetDatabase.LoadAssetAtPath<GameObject>("Assets/SB/Prefabs/UI/EscortInventoryGridItem.prefab").GetComponent<EscortInventoryItemView>());
             Ref(serialized,"sourceIcon",source);Ref(serialized,"resultIcon",result);Ref(serialized,"sourceLabel",sourceLabel);Ref(serialized,"resultLabel",resultLabel);Ref(serialized,"statusLabel",status);
             var icons=serialized.FindProperty("materialIcons");var labels=serialized.FindProperty("materialLabels");icons.arraySize=labels.arraySize=3;
             UnityEngine.Events.UnityAction[] remove={logic.RemoveFirst,logic.RemoveSecond,logic.RemoveThird};
@@ -125,10 +127,10 @@ namespace SB.Editor
             }
             Image(screen.transform,"Divider",new Color(.12f,.3f,.33f),40,790,1000,2);
             Text(screen.transform,"InventoryHeading","합성 재료 선택",44,820,992,45,25).alignment=TextAlignmentOptions.Left;
-            Ref(serialized,"inventoryRoot",Scroll(screen.transform,"Inventory",40,895,1000,740));
+            var mergeContent=Scroll(screen.transform,"Inventory",40,895,1000,740);var mergeGrid=mergeContent.GetComponent<UnityEngine.UI.GridLayoutGroup>();mergeGrid.cellSize=new Vector2(160,160);mergeGrid.spacing=new Vector2(16,16);mergeGrid.padding=new RectOffset();mergeGrid.childAlignment=TextAnchor.UpperCenter;Ref(serialized,"inventoryRoot",mergeContent);
             Image(screen.transform,"Footer",new Color(.02f,.17f,.2f),0,1730,1080,190);
-            Button(screen.transform,"Close","×",40,1780,120,100,logic.Close);
-            var confirm=Button(screen.transform,"Confirm","합성",350,1780,380,100,logic.Confirm);confirm.GetComponent<UnityEngine.UI.Image>().color=new Color(.025f,.5f,.52f);Ref(serialized,"confirmButton",confirm);serialized.ApplyModifiedProperties();
+            Button(screen.transform,"Close","닫기",40,1780,320,100,logic.Close);
+            var confirm=Button(screen.transform,"Confirm","선택 합성",380,1780,320,100,logic.Confirm);confirm.GetComponent<UnityEngine.UI.Image>().color=new Color(.025f,.5f,.52f);Ref(serialized,"confirmButton",confirm);serialized.ApplyModifiedProperties();
             var controller=new SerializedObject(root.GetComponent<PlayerFleetPanelController>());Ref(controller,"mergeScreen",logic);controller.ApplyModifiedProperties();
             screen.SetActive(false);screen.transform.SetAsLastSibling();root.Find("MergePreview").gameObject.SetActive(false);
             AssetDatabase.SaveAssets();EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());

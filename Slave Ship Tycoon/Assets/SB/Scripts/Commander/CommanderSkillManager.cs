@@ -61,13 +61,14 @@ namespace SB.Scripts.Commander
 
         private void Update()
         {
-            if (_isBattleRunning == false)
-                return;
-
             if (GaugeRecoveryPerSecond > 0f && _currentGauge < MaxGauge)
                 SetCurrentGauge(_currentGauge + GaugeRecoveryPerSecond * Time.deltaTime);
 
             TickSkillStates(Time.deltaTime);
+
+            if (_isBattleRunning == false)
+                return;
+
             TickAutoUse(Time.deltaTime);
         }
 

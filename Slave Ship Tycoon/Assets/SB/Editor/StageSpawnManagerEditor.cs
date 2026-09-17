@@ -85,15 +85,15 @@ namespace SB.Editor
             if (spawnPointsProperty.arraySize != StageEnemyLayout.SlotCount)
                 spawnPointsProperty.arraySize = StageEnemyLayout.SlotCount;
 
-            EditorGUILayout.LabelField("Spawn Points (Slots 1-9)", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Spawn Points (Slots 1-12: Front / Middle / Back)", EditorStyles.boldLabel);
 
-            for (int row = 0; row < StageEnemyLayout.GridSize; row++)
+            for (int row = 0; row < StageEnemyLayout.RowCount; row++)
             {
                 EditorGUILayout.BeginHorizontal();
 
-                for (int column = 0; column < StageEnemyLayout.GridSize; column++)
+                for (int column = 0; column < StageEnemyLayout.ColumnCount; column++)
                 {
-                    int slotIndex = row * StageEnemyLayout.GridSize + column;
+                    int slotIndex = row * StageEnemyLayout.ColumnCount + column;
                     SerializedProperty pointProperty =
                         spawnPointsProperty.GetArrayElementAtIndex(slotIndex);
 
@@ -186,3 +186,4 @@ namespace SB.Editor
         }
     }
 }
+

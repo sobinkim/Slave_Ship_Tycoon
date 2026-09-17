@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using SB.Core.EventBus;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace SB.Scripts
         [SerializeField] private Transform buttonRoot;
         [SerializeField] private CurrentCagoSliderView currentCagoSliderView;
         [SerializeField] private CagoButtonView viewPrefab;
+
+        private readonly Dictionary<CargoData, CagoButtonView> cargoViews = new Dictionary<CargoData, CagoButtonView>();
 
         private void Awake()
         {
@@ -31,6 +34,7 @@ namespace SB.Scripts
 
         private void UpdateCurrentCagoText(ChangedCurrentCargoCapacityEvent evt)
         {
+            foreach (var pair in cargoViews) pair.Value.RefreshCargo(pair.Key);
             currentCagoSliderView.SetCargoCapacityText(_cargoManager.GetStatCargoCapacity(), 
                 _cargoManager.GetCurrentCargoCapacity());
 
@@ -47,7 +51,8 @@ namespace SB.Scripts
                 ETransportItemType type = cargoData.Item.Type;
 
                 buttonView.SetIcon(cargoData.Item.Icon);
-                buttonView.SetWeight(cargoData.Item.BaseWeight);
+                buttonView.RefreshCargo(cargoData);
+                cargoViews.Add(cargoData, buttonView);
 
                 buttonView.OnloadButtonClicked +=
                     () => _cargoManager.LoadCargo(type);
