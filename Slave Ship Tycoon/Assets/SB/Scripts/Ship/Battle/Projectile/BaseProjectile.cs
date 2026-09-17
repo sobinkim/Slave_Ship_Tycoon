@@ -1,3 +1,4 @@
+using SB.Core.EventBus;
 using UnityEngine;
 
 namespace SB.Scripts.Projectiles
@@ -29,6 +30,16 @@ namespace SB.Scripts.Projectiles
         private void Awake()
         {
             CacheRenderers();
+        }
+
+        private void OnEnable()
+        {
+            Bus<StageBattleEndedEvent>.OnEvent += HandleStageBattleEnded;
+        }
+
+        private void OnDisable()
+        {
+            Bus<StageBattleEndedEvent>.OnEvent -= HandleStageBattleEnded;
         }
 
         public void Launch(ProjectileLaunchData data)
@@ -164,6 +175,11 @@ namespace SB.Scripts.Projectiles
         private void Expire()
         {
             OnExpired(transform.position);
+            ReleaseToPool();
+        }
+
+        private void HandleStageBattleEnded(StageBattleEndedEvent evt)
+        {
             ReleaseToPool();
         }
 

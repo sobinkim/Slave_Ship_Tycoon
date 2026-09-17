@@ -1,0 +1,74 @@
+using System.Text;
+using SB.Scripts.AttackCompo;
+using SB.Scripts.Fleet;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace SB.Scripts.UI.Fleet
+{
+    public sealed class FleetAttackPreview : MonoBehaviour
+    {
+        [SerializeField] private TMP_Text shipNameText;
+        [SerializeField] private TMP_Text attackInfoText;
+        [SerializeField] private TMP_Text targetSummaryText;
+        [SerializeField, Tooltip("전열, 중열, 후열 순서")]
+        private Image[] enemyColumns = new Image[3];
+        [SerializeField] private Color idleColor = new Color(.13f, .17f, .21f);
+        [SerializeField] private Color priorityColor = new Color(.60f, .29f, .12f);
+
+        public void Refresh(EscortShipData shipData, int slotIndex)
+        {
+            for (int i = 0; i < enemyColumns.Length; i++)
+                if (enemyColumns[i] != null) enemyColumns[i].color = idleColor;
+            if (shipData == null || shipData.ShipPrefab == null)
+            {
+                shipNameText.text = slotIndex >= 0 ? "빈 슬롯" : "함선을 선택하세요";
+                attackInfoText.text = slotIndex >= 0
+                    ? "아래 보유 함선을 누르면 이 슬롯에 배치됩니다."
+                    : "배치된 함선을 누르면 공격 우선순위를 확인할 수 있습니다.";
+                targetSummaryText.text = "공격 대상";
+                return;
+            }
+            string position = slotIndex >= 0
+                ? $" · {slotIndex / PlayerFleetLoadout.ColumnCount + 1}행 {(slotIndex % PlayerFleetLoadout.ColumnCount == 1 ? "전열" : "후열")}" : "";
+            shipNameText.text = shipData.DisplayName + position;
+            var selector = shipData.ShipPrefab.GetComponentInChildren<TargetSelector>(true);
+            var rules = selector != null ? selector.TargetRules : null;
+            TargetLine primary = rules != null && rules.Count > 0 ? rules[0].Line : TargetLine.Any;
+            for (int i = 0; i < enemyColumns.Length; i++)
+                if (enemyColumns[i] != null && (primary == TargetLine.Any || (int)primary == i))
+                    enemyColumns[i].color = priorityColor;
+            targetSummaryText.text = primary == TargetLine.Any ? "전열 제한 없음" : $"{LineName(primary)} 우선 공격";
+            var text = new StringBuilder();
+            bool hasCannon = shipData.ShipPrefab.GetComponentInChildren<ArcProjectileAttackCompo>(true) != null;
+            text.AppendLine(hasCannon ? "단일 대상 · 포탄 공격" : "공격 대상 우선순위");
+            if (rules == null || rules.Count == 0)
+                text.Append("전열 제한 없이 생존 적에게 화력을 분산합니다.");
+            else
+            {
+                for (int i = 0; i < rules.Count; i++)
+                {
+                    if (i > 0) text.Append(" → ");
+                    text.Append(LineName(rules[i].Line));
+                    if (rules[i].Role != ShipRole.None) text.Append(" / " + RoleName(rules[i].Role));
+                }
+                text.Append("\n조건에 맞는 적이 없으면 다른 생존 적을 공격합니다.");
+            }
+            attackInfoText.text = text.ToString();
+        }
+
+        private static string LineName(TargetLine line) => line switch
+        {
+            TargetLine.Front => "전열", TargetLine.Middle => "중열",
+            TargetLine.Back => "후열", _ => "전체 전열"
+        };
+
+        private static string RoleName(ShipRole role)
+        {
+            return role.ToString().Replace("Tanker", "방어형").Replace("Dealer", "공격형")
+                .Replace("Support", "지원형").Replace("Speedster", "속공형")
+                .Replace("AoE", "범위형").Replace("Piercer", "관통형");
+        }
+    }
+}

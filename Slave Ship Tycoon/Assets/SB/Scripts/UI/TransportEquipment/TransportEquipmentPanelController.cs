@@ -40,7 +40,10 @@ namespace SB.Scripts
         private void Refresh()
         {
             if (_equipmentManager != null && _view != null)
-                _view.Refresh(_equipmentManager.EquippedItem);
+                {
+                    _view.Refresh(_equipmentManager.EquippedItem);
+                    _view.SetApplicationText("목적지 정산 보상을 바꿉니다\n출항 후 장비 변경은 다음 운송부터 적용");
+                }
         }
     }
 }

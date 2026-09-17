@@ -19,6 +19,23 @@ namespace SB.Scripts
         [FormerlySerializedAs("CagoItemPrefab")]
         [SerializeField] private ItemElementView cargoItemPrefab;
 
+        [SerializeField] private TMPro.TMP_Text routeText;
+        [SerializeField] private TMPro.TMP_Text voyageText;
+        [SerializeField] private StageProgressGraphic stageProgress;
+
+        public void SetProgress(int stage,int total,bool visible)
+        {
+            if(stageProgress==null)return;
+            stageProgress.gameObject.SetActive(visible);
+            stageProgress.SetProgress(stage,total);
+        }
+
+        public void SetRoute(string route, string detail)
+        {
+            if (routeText != null) routeText.text = route;
+            if (voyageText != null) voyageText.text = detail;
+        }
+
         private readonly Dictionary<ETransportItemType, ItemElementView> currentCargoItems = new();
 
         public void SetStageInfoBarMode(StageInfoBarMode mode)

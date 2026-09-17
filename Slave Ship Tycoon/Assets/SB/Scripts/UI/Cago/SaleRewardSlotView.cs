@@ -12,10 +12,19 @@ namespace SB.Scripts
         [SerializeField] private TMP_Text _currencyNameText;
         [SerializeField] private TMP_Text _amountText;
 
+        private long rewardAmount;
+
         public CurrencyType CurrencyType => _currencyType;
+
+public void ShowProgress(float progress)
+        {
+            long amount = progress >= 1f ? rewardAmount : (long)(rewardAmount * (double)Mathf.Clamp01(progress));
+            if (_amountText != null) _amountText.text = $"+{CurrencyTextFormatter.Format(amount)}";
+        }
 
         public void SetReward(long amount)
         {
+            rewardAmount = amount;
             if (_currencyNameText != null)
                 _currencyNameText.text = CurrencyTextFormatter.FormatName(_currencyType);
 

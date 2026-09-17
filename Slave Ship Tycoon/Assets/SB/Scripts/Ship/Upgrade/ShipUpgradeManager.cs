@@ -14,7 +14,8 @@ namespace SB.Scripts.Upgrade
         CargoCapacity,
         Luck,
         CommanderGaugeMax,
-        CommanderGaugeRecoveryPerSecond
+        CommanderGaugeRecoveryPerSecond,
+        HealthRecoveryPerSecond
     }
 
     [Serializable]
@@ -27,6 +28,7 @@ namespace SB.Scripts.Upgrade
         public float luck;
         public float commanderGaugeMax;
         public float commanderGaugeRecoveryPerSecond;
+        public float healthRecoveryPerSecond;
     }
 
     [Serializable]
@@ -178,6 +180,10 @@ namespace SB.Scripts.Upgrade
 
                 case MainShipUpgradeType.CommanderGaugeRecoveryPerSecond:
                     _mainShipUpgradeData.commanderGaugeRecoveryPerSecond += value;
+                    break;
+
+                case MainShipUpgradeType.HealthRecoveryPerSecond:
+                    _mainShipUpgradeData.healthRecoveryPerSecond += value;
                     break;
 
                 default:

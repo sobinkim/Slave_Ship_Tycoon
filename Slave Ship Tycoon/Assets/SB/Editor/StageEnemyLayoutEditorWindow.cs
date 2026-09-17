@@ -18,7 +18,7 @@ namespace SB.Editor
         {
             StageEnemyLayoutEditorWindow window = GetWindow<StageEnemyLayoutEditorWindow>();
             window.titleContent = new GUIContent("Enemy Layout");
-            window.minSize = new Vector2(440f, 430f);
+            window.minSize = new Vector2(520f, 560f);
             window.Show();
         }
 
@@ -42,6 +42,7 @@ namespace SB.Editor
 
             DrawStageSelector();
             EditorGUILayout.Space(8f);
+            EditorGUILayout.HelpBox("3열 × 4행 · 각 행은 전열 / 중열 / 후열 순서. 빈칸에는 적이 생성되지 않습니다.", MessageType.Info);
             DrawGrid();
             EditorGUILayout.Space(10f);
             DrawActions();
@@ -74,17 +75,17 @@ namespace SB.Editor
 
         private void DrawGrid()
         {
-            EditorGUILayout.LabelField("Formation (Slots 1-9)", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Formation (Slots 1-12: Front / Middle / Back)", EditorStyles.boldLabel);
 
-            for (int row = 0; row < StageEnemyLayout.GridSize; row++)
+            for (int row = 0; row < StageEnemyLayout.RowCount; row++)
             {
                 EditorGUILayout.BeginHorizontal();
 
-                for (int column = 0; column < StageEnemyLayout.GridSize; column++)
+                for (int column = 0; column < StageEnemyLayout.ColumnCount; column++)
                 {
-                    int slotIndex = row * StageEnemyLayout.GridSize + column;
+                    int slotIndex = row * StageEnemyLayout.ColumnCount + column;
                     EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.ExpandWidth(true));
-                    EditorGUILayout.LabelField($"Slot {slotIndex + 1}", EditorStyles.miniBoldLabel);
+                    EditorGUILayout.LabelField($"Slot {slotIndex + 1} · Row {row + 1}", EditorStyles.miniBoldLabel);
 
                     EditorGUI.BeginChangeCheck();
                     Enemy enemy = (Enemy)EditorGUILayout.ObjectField(
@@ -213,3 +214,4 @@ namespace SB.Editor
         }
     }
 }
+

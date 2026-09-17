@@ -355,6 +355,78 @@ namespace SB.Scripts.Fleet
             return true;
         }
 
+
+        /// <summary>
+        /// Explicit button action. Uses only unequipped copies, in catalog order.
+        /// Lower grades are processed first, so newly merged ships can join this batch.
+        /// </summary>
+        public long MergeAllUnequipped(out List<KeyValuePair<EscortShipData, int>> rewards)
+        {
+            InitializeRuntimeData();
+            rewards = new List<KeyValuePair<EscortShipData, int>>();
+            if (!_isConfigurationValid || _catalog == null) return 0;
+
+            var originalCounts = new Dictionary<EscortShipData, int>();
+            var finalCounts = new Dictionary<EscortShipData, int>();
+            var equippedCounts = new Dictionary<EscortShipData, int>();
+            for (int i = 0; i < _catalog.Count; i++)
+            {
+                EscortShipData ship = _catalog.GetAt(i);
+                originalCounts[ship] = finalCounts[ship] = GetOwnedCount(ship);
+                equippedCounts[ship] = GetEquippedCount(ship);
+            }
+
+            long mergeCount = 0;
+            for (int gradeIndex = (int)EscortShipGrade.Common;
+                 gradeIndex < (int)EscortShipGrade.Legendary; gradeIndex++)
+            {
+                EscortShipGrade grade = (EscortShipGrade)gradeIndex;
+                EscortShipData source = null;
+                long availableCount = 0;
+                for (int i = 0; i < _catalog.Count; i++)
+                {
+                    EscortShipData ship = _catalog.GetAt(i);
+                    if (ship.Grade != grade) continue;
+                    int available = finalCounts[ship] - equippedCounts[ship];
+                    availableCount += available;
+                    if (available > 0 && source == null) source = ship;
+                }
+
+                if (availableCount < MergeMaterialCount || source == null ||
+                    !_catalog.TryGetMergeResult(source, out EscortShipData result) ||
+                    result == null || !result.IsConfigured || !_catalog.Contains(result)) continue;
+
+                // Compute the whole grade at once, without a loop per owned ship.
+                int batchCount = (int)Math.Min(availableCount / MergeMaterialCount,
+                    (long)int.MaxValue - finalCounts[result]);
+                long remainingMaterials = (long)batchCount * MergeMaterialCount;
+                for (int i = 0; i < _catalog.Count && remainingMaterials > 0; i++)
+                {
+                    EscortShipData ship = _catalog.GetAt(i);
+                    if (ship.Grade != grade) continue;
+                    int consumed = (int)Math.Min(remainingMaterials,
+                        (long)finalCounts[ship] - equippedCounts[ship]);
+                    finalCounts[ship] -= consumed;
+                    remainingMaterials -= consumed;
+                }
+                finalCounts[result] += batchCount;
+                mergeCount += batchCount;
+            }
+
+            if (mergeCount == 0) return 0;
+
+            // Commit before notifying UI so every listener sees the complete batch.
+            foreach (var entry in finalCounts)
+            {
+                SetOwnedCount(entry.Key, entry.Value);
+                int gained = entry.Value - originalCounts[entry.Key];
+                if (gained > 0) rewards.Add(new KeyValuePair<EscortShipData, int>(entry.Key, gained));
+            }
+            foreach (var entry in finalCounts)
+                if (entry.Value != originalCounts[entry.Key]) RaiseOwnershipChanged(entry.Key);
+            return mergeCount;
+        }
+
         private EscortMergeResult CommitMerge(EscortShipData source, EscortShipData result,
             List<KeyValuePair<EscortShipData, int>> materials)
         {

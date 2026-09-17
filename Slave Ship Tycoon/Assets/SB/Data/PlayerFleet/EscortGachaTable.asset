@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _entries:
   - _shipData: {fileID: 11400000, guid: 1b4f34398a65c474eb2a824491c3d23c, type: 2}
-    _weight: 70
+    _weight: 35
   - _shipData: {fileID: 11400000, guid: 365cef7df00a79f4bb169b5242e8a533, type: 2}
     _weight: 25
   - _shipData: {fileID: 11400000, guid: 14f94e569641f7943b06edc4385c39d9, type: 2}
     _weight: 5
+  - _shipData: {fileID: 11400000, guid: f9b883b2ca63c72488e823462df6af4e, type: 2}
+    _weight: 35

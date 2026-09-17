@@ -6,12 +6,13 @@ namespace SB.Scripts
     [CreateAssetMenu(fileName = "StageEnemyLayout", menuName = "SB/Stage/Enemy Layout")]
     public sealed class StageEnemyLayout : ScriptableObject
     {
-        public const int GridSize = 3;
-        public const int SlotCount = GridSize * GridSize;
+        public const int ColumnCount = 3;
+        public const int RowCount = 4;
+        public const int SlotCount = ColumnCount * RowCount;
 
         [SerializeField, Min(1)] private int chapter = 1;
         [SerializeField, Min(1)] private int stage = 1;
-        [SerializeField] private Enemy[] enemySlots = new Enemy[SlotCount];
+        [SerializeField, Tooltip("행 우선 12칸: 각 행은 전열, 중열, 후열 순서입니다. 비워 둔 칸은 생성하지 않습니다.")] private Enemy[] enemySlots = new Enemy[SlotCount];
 
         public int Chapter => chapter;
         public int Stage => stage;
@@ -42,7 +43,7 @@ namespace SB.Scripts
             if (slotIndex < 0 || slotIndex >= SlotCount)
                 throw new ArgumentOutOfRangeException(nameof(slotIndex));
 
-            return enemySlots[slotIndex];
+            return enemySlots != null && slotIndex < enemySlots.Length ? enemySlots[slotIndex] : null;
         }
 
         private void OnEnable()
@@ -66,3 +67,4 @@ namespace SB.Scripts
         }
     }
 }
+

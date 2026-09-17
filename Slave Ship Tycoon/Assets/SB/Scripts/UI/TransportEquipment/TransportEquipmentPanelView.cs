@@ -9,6 +9,12 @@ namespace SB.Scripts
     public sealed class TransportEquipmentPanelView : MonoBehaviour
     {
         [SerializeField] private Image _equippedIcon;
+        [SerializeField] private TMP_Text applicationText;
+
+        public void SetApplicationText(string text)
+        {
+            if (applicationText != null) applicationText.text = text;
+        }
         [SerializeField] private TMP_Text _equippedNameText;
         [SerializeField] private TMP_Text _equippedEffectText;
         [SerializeField] private TransportEquipmentItemButtonView[] _itemButtons =

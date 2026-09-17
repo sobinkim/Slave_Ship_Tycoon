@@ -54,6 +54,14 @@ namespace SB.Editor.Tests
             Assert.That(_selector.GetTarget(), Is.SameAs(_second));
         }
 
+        [Test]
+        public void SelectorDistributesTargetsByAttackerFormationSlot()
+        {
+            _attacker.SetSpawnSlot(new Vector2Int(1, 0));
+
+            Assert.That(_selector.GetTarget(), Is.SameAs(_second));
+        }
+
         [TestCase("dead")]
         [TestCase("inactive")]
         [TestCase("disabled")]

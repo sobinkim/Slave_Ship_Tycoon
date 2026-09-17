@@ -13,6 +13,7 @@ namespace SB.Scripts.UI.Upgrade
         [SerializeField] private MainShipUpgradeSlotView luckUpgradeButton;
         [SerializeField] private MainShipUpgradeSlotView commanderGaugeMaxUpgradeButton;
         [SerializeField] private MainShipUpgradeSlotView commanderGaugeRecoveryPerSecondUpgradeButton;
+        [SerializeField] private MainShipUpgradeSlotView healthRecoveryPerSecondUpgradeButton;
 
         public MainShipUpgradeSlotView HealthUpgradeButton => _healthUpgradeButton;
         public MainShipUpgradeSlotView AttackPowerPercentUpgradeButton => attackPowerPercentUpgradeButton;
@@ -21,6 +22,7 @@ namespace SB.Scripts.UI.Upgrade
         public MainShipUpgradeSlotView LuckUpgradeButton => luckUpgradeButton;
         public MainShipUpgradeSlotView CommanderGaugeMaxUpgradeButton => commanderGaugeMaxUpgradeButton;
         public MainShipUpgradeSlotView CommanderGaugeRecoveryPerSecondUpgradeButton => commanderGaugeRecoveryPerSecondUpgradeButton;
+        public MainShipUpgradeSlotView HealthRecoveryPerSecondUpgradeButton => healthRecoveryPerSecondUpgradeButton;
 
         public event Func<MainShipUpgradeType, bool> OnUpgradeButtonClicked;
 
@@ -67,6 +69,11 @@ namespace SB.Scripts.UI.Upgrade
                     if (commanderGaugeRecoveryPerSecondUpgradeButton != null)
                         commanderGaugeRecoveryPerSecondUpgradeButton.Refresh(level, cost);
                     break;
+
+                case MainShipUpgradeType.HealthRecoveryPerSecond:
+                    if (healthRecoveryPerSecondUpgradeButton != null)
+                        healthRecoveryPerSecondUpgradeButton.Refresh(level, cost);
+                    break;
             }
         }
 
@@ -92,6 +99,9 @@ namespace SB.Scripts.UI.Upgrade
 
             if (commanderGaugeRecoveryPerSecondUpgradeButton != null)
                 commanderGaugeRecoveryPerSecondUpgradeButton.OnUpgradeButtonClicked += HandleUpgradeButtonClicked;
+
+            if (healthRecoveryPerSecondUpgradeButton != null)
+                healthRecoveryPerSecondUpgradeButton.OnUpgradeButtonClicked += HandleUpgradeButtonClicked;
         }
 
         private void UnsubscribeSlotButtons()
@@ -116,6 +126,9 @@ namespace SB.Scripts.UI.Upgrade
 
             if (commanderGaugeRecoveryPerSecondUpgradeButton != null)
                 commanderGaugeRecoveryPerSecondUpgradeButton.OnUpgradeButtonClicked -= HandleUpgradeButtonClicked;
+
+            if (healthRecoveryPerSecondUpgradeButton != null)
+                healthRecoveryPerSecondUpgradeButton.OnUpgradeButtonClicked -= HandleUpgradeButtonClicked;
         }
 
         private bool HandleUpgradeButtonClicked(MainShipUpgradeType upgradeType)

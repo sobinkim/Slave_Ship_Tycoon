@@ -29,6 +29,8 @@ namespace SB.Scripts.AttackCompo
         protected float FinalAttackCooldown => attackCooldown / FinalAttackSpeed;
         public bool HasAliveTarget => CurrentTarget != null && CurrentTarget.isActiveAndEnabled &&
                                       CurrentTarget.IsDead == false &&
+                                      (CurrentTarget.IsDirectTargetProtected == false ||
+                                       (ownerShip != null && ownerShip.CanTargetProtectedShips)) &&
                                       CurrentTarget.SpawnGeneration == _currentTargetSpawnGeneration;
         public bool CanAttack => _isBattleRunning && currentCooldown <= 0f;
 

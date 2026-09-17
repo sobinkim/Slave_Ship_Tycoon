@@ -23,6 +23,7 @@ namespace SB.Scripts
     public class TargetSelector : MonoBehaviour, IEntityComponent
     {
         [SerializeField] private TargetRule[] targetRules;
+        public IReadOnlyList<TargetRule> TargetRules => targetRules;
         private Ship myship;
         private BattleSpawnData currentStageBattleSpawnData;
         private int _commanderTargetColumn = -1;
@@ -121,7 +122,7 @@ namespace SB.Scripts
 
                 for (int i = 0; i < enemies.Count; i++)
                 {
-                    if (enemies[i] != null && enemies[i].isActiveAndEnabled && enemies[i].IsDead == false)
+                    if (CanTarget(enemies[i]))
                         targetList.Add(enemies[i]);
                 }
 
@@ -134,14 +135,15 @@ namespace SB.Scripts
 
                 for (int i = 0; i < escortShips.Count; i++)
                 {
-                    if (escortShips[i] != null && escortShips[i].isActiveAndEnabled && escortShips[i].IsDead == false)
+                    if (CanTarget(escortShips[i]))
                         targetList.Add(escortShips[i]);
                 }
 
                 if (targetList.Count == 0 &&
                     currentStageBattleSpawnData.MainShip != null &&
                     currentStageBattleSpawnData.MainShip.isActiveAndEnabled &&
-                    currentStageBattleSpawnData.MainShip.IsDead == false)
+                    currentStageBattleSpawnData.MainShip.IsDead == false &&
+                    CanTarget(currentStageBattleSpawnData.MainShip))
                 {
                     targetList.Add(currentStageBattleSpawnData.MainShip);
                 }
@@ -152,33 +154,64 @@ namespace SB.Scripts
             return targetList;
         }
 
+        private bool CanTarget(Ship target)
+        {
+            return target != null && target.isActiveAndEnabled && target.IsDead == false &&
+                   (target.IsDirectTargetProtected == false || myship.CanTargetProtectedShips);
+        }
+
         private Ship SelectTargetByRules(List<Ship> targetList)
         {
             if (targetRules == null || targetRules.Length == 0)
-                return targetList[0];
+                return SelectDistributedTarget(targetList);
 
             for (int i = 0; i < targetRules.Length; i++)
             {
-                Ship target = FindTargetByRule(targetList, targetRules[i]);
+                Ship target = SelectDistributedTargetByRule(targetList, targetRules[i]);
 
                 if (target != null)
                     return target;
             }
 
-            return targetList[0];
+            return SelectDistributedTarget(targetList);
         }
 
-        private Ship FindTargetByRule(List<Ship> targetList, TargetRule rule)
+        private Ship SelectDistributedTargetByRule(List<Ship> targetList, TargetRule rule)
         {
+            List<Ship> matchingTargets = new List<Ship>();
+
             for (int i = 0; i < targetList.Count; i++)
             {
                 Ship target = targetList[i];
 
                 if (IsMatchRule(target, rule))
-                    return target;
+                    matchingTargets.Add(target);
             }
 
-            return null;
+            return SelectDistributedTarget(matchingTargets);
+        }
+
+        private Ship SelectDistributedTarget(List<Ship> targetList)
+        {
+            if (targetList == null || targetList.Count == 0)
+                return null;
+
+            int selectionIndex = GetFormationSelectionIndex() % targetList.Count;
+            return targetList[selectionIndex];
+        }
+
+        private int GetFormationSelectionIndex()
+        {
+            Vector2Int spawnSlot = myship.myShipData.SpawnSlot;
+
+            if (spawnSlot.x < 0 || spawnSlot.y < 0)
+                return 0;
+
+            int columnCount = myship.myShipData.ShipType == ShipType.Enemy
+                ? StageEnemyLayout.ColumnCount
+                : PlayerFleetLoadout.ColumnCount;
+
+            return spawnSlot.y * columnCount + spawnSlot.x;
         }
 
         private bool IsMatchRule(Ship target, TargetRule rule)
@@ -219,3 +252,4 @@ namespace SB.Scripts
         }
     }
 }
+

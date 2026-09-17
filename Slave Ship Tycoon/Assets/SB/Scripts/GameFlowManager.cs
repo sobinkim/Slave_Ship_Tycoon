@@ -13,7 +13,6 @@ namespace SB.Scripts
     public class GameFlowManager : MonoBehaviour
     {
         [SerializeField] private ChapterDatabase chapterDatabase;
-
         private int currentChapter = 1;
         private int currentStage = 1;
         private StageRoomType currentStageType;

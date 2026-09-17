@@ -2,11 +2,12 @@ using System;
 using SB.Scripts.Fleet;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SB.Scripts.UI.Fleet
 {
-    public sealed class FleetFormationSlotView : MonoBehaviour
+    public sealed class FleetFormationSlotView : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private Button _slotButton;
         [SerializeField] private Button _removeButton;
@@ -31,7 +32,6 @@ namespace SB.Scripts.UI.Fleet
             if (_slotButton != null)
             {
                 CacheColors();
-                _slotButton.onClick.AddListener(HandleSlotClicked);
             }
 
             if (_removeButton != null)
@@ -40,9 +40,6 @@ namespace SB.Scripts.UI.Fleet
 
         private void OnDestroy()
         {
-            if (_slotButton != null)
-                _slotButton.onClick.RemoveListener(HandleSlotClicked);
-
             if (_removeButton != null)
                 _removeButton.onClick.RemoveListener(HandleRemoveClicked);
         }
@@ -99,8 +96,17 @@ namespace SB.Scripts.UI.Fleet
             _hasDefaultColors = true;
         }
 
-        private void HandleSlotClicked()
+        public void OnPointerClick(PointerEventData eventData)
         {
+            if (eventData.button != PointerEventData.InputButton.Left)
+                return;
+
+            if (_hasEscort && eventData.clickCount >= 2)
+            {
+                OnRemoveClicked?.Invoke(_slotIndex);
+                return;
+            }
+
             OnSlotClicked?.Invoke(_slotIndex);
         }
 
