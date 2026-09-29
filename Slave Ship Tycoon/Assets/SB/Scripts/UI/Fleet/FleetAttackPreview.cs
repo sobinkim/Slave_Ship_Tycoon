@@ -44,7 +44,8 @@ namespace SB.Scripts.UI.Fleet
             bool hasCannon = shipData.ShipPrefab.GetComponentInChildren<ArcProjectileAttackCompo>(true) != null;
             text.AppendLine(hasCannon ? "단일 대상 · 포탄 공격" : "공격 대상 우선순위");
             if (rules == null || rules.Count == 0)
-                text.Append("전열 제한 없이 생존 적에게 화력을 분산합니다.");
+                text.Append(selector != null && selector.SelectionMode == TargetSelectionMode.HighestCurrentHealth
+                    ? "전열 제한 없이 생존 적을 선택합니다." : "전열 제한 없이 생존 적에게 화력을 분산합니다.");
             else
             {
                 for (int i = 0; i < rules.Count; i++)
@@ -54,6 +55,14 @@ namespace SB.Scripts.UI.Fleet
                     if (rules[i].Role != ShipRole.None) text.Append(" / " + RoleName(rules[i].Role));
                 }
                 text.Append("\n조건에 맞는 적이 없으면 다른 생존 적을 공격합니다.");
+            }
+            if (selector != null && selector.SelectionMode == TargetSelectionMode.HighestCurrentHealth)
+            {
+                string priorityLabel = primary != TargetLine.Any ? LineName(primary) + " · " : "";
+                if (rules != null && rules.Count > 0 && rules[0].Role == ShipRole.Tanker)
+                    priorityLabel += "방어함 · ";
+                targetSummaryText.text = priorityLabel + "고체력 우선";
+                text.Append("\n각 조건에서 현재 체력이 높은 함선을 선택합니다. 동률이면 가까운 함선을 공격합니다.");
             }
             attackInfoText.text = text.ToString();
         }

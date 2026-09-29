@@ -10,6 +10,12 @@ namespace SB.Scripts.AttackCompo
         private const float PercentMultiplier = 0.01f;
         private const float MinAttackSpeed = 0.01f;
 
+        [Header("Luck")]
+        [SerializeField, Min(0f), Tooltip("함선 고유 운. 아군에는 함대 운 강화가 더해집니다. 적은 이 값만 사용합니다.")]
+        private float baseLuck;
+        public float FinalLuck => Mathf.Max(0f, baseLuck +
+            (UsesPlayerFleetUpgrade && playerFleetUpgradeProvider != null ? playerFleetUpgradeProvider.Luck : 0f));
+
         private Ship ownerShip;
         private ShipStatCompo shipStatCompo;
         private PlayerFleetUpgradeProvider playerFleetUpgradeProvider;

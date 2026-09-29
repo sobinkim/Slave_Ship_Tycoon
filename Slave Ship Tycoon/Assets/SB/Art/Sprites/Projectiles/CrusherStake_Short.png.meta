@@ -1,0 +1,546 @@
+fileFormatVersion: 2
+guid: 867a0ffd9e6b0d7468265c61e58014fb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2766609699187400257
+    second: CrusherStake_Short_0
+  - first:
+      213: -8996343404345720042
+    second: CrusherStake_Short_1
+  - first:
+      213: 8873496806011278077
+    second: CrusherStake_Short_2
+  - first:
+      213: -4893506552685936762
+    second: CrusherStake_Short_3
+  - first:
+      213: -2355868034421180514
+    second: CrusherStake_Short_4
+  - first:
+      213: 6114221876520731199
+    second: CrusherStake_Short_5
+  - first:
+      213: -5399626533041332494
+    second: CrusherStake_Short_6
+  - first:
+      213: 4209816511805701190
+    second: CrusherStake_Short_7
+  - first:
+      213: 6915058071347321928
+    second: CrusherStake_Short_8
+  - first:
+      213: 2169980033774526488
+    second: CrusherStake_Short_9
+  - first:
+      213: -8235973375078949536
+    second: CrusherStake_Short_10
+  - first:
+      213: 8633837339119960114
+    second: CrusherStake_Short_11
+  - first:
+      213: 7169894569999957116
+    second: CrusherStake_Short_12
+  - first:
+      213: -163560682858761394
+    second: CrusherStake_Short_13
+  - first:
+      213: -5985194302377124920
+    second: CrusherStake_Short_14
+  - first:
+      213: 3229894827706676250
+    second: CrusherStake_Short_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 3500
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: CrusherStake_Short_0
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 737
+        width: 81
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14e17300dd8f46620800000000000000
+      internalID: 2766609699187400257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_1
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 817
+        width: 41
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6138b82a651962380800000000000000
+      internalID: -8996343404345720042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_2
+      rect:
+        serializedVersion: 2
+        x: 650
+        y: 730
+        width: 247
+        height: 274
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df29dddc45ef42b70800000000000000
+      internalID: 8873496806011278077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_3
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 745
+        width: 21
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68fbb1d97b5c61cb0800000000000000
+      internalID: -4893506552685936762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_4
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 749
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e97b0ae21864e4fd0800000000000000
+      internalID: -2355868034421180514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_5
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 735
+        width: 49
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f32c0f3f6641ad450800000000000000
+      internalID: 6114221876520731199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_6
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 751
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fe1c42d64ca015b0800000000000000
+      internalID: -5399626533041332494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_7
+      rect:
+        serializedVersion: 2
+        x: 860
+        y: 725
+        width: 23
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64cb0cb10d54c6a30800000000000000
+      internalID: 4209816511805701190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_8
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 737
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84cdad7ada837ff50800000000000000
+      internalID: 6915058071347321928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_9
+      rect:
+        serializedVersion: 2
+        x: 990
+        y: 741
+        width: 21
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81022daf7515d1e10800000000000000
+      internalID: 2169980033774526488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_10
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 55
+        width: 1257
+        height: 679
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06d18d6f9d1f3bd80800000000000000
+      internalID: -8235973375078949536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_11
+      rect:
+        serializedVersion: 2
+        x: 1272
+        y: 399
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 230cfbed05d81d770800000000000000
+      internalID: 8633837339119960114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_12
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 293
+        width: 39
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7c79d9af15908360800000000000000
+      internalID: 7169894569999957116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_13
+      rect:
+        serializedVersion: 2
+        x: 694
+        y: 239
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e43bbfeec6aeabdf0800000000000000
+      internalID: -163560682858761394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_14
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 223
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cb9e1f2e7150fca0800000000000000
+      internalID: -5985194302377124920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrusherStake_Short_15
+      rect:
+        serializedVersion: 2
+        x: 967
+        y: 231
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a14f35bab34e2dc20800000000000000
+      internalID: 3229894827706676250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      CrusherStake_Short_0: 2766609699187400257
+      CrusherStake_Short_1: -8996343404345720042
+      CrusherStake_Short_10: -8235973375078949536
+      CrusherStake_Short_11: 8633837339119960114
+      CrusherStake_Short_12: 7169894569999957116
+      CrusherStake_Short_13: -163560682858761394
+      CrusherStake_Short_14: -5985194302377124920
+      CrusherStake_Short_15: 3229894827706676250
+      CrusherStake_Short_2: 8873496806011278077
+      CrusherStake_Short_3: -4893506552685936762
+      CrusherStake_Short_4: -2355868034421180514
+      CrusherStake_Short_5: 6114221876520731199
+      CrusherStake_Short_6: -5399626533041332494
+      CrusherStake_Short_7: 4209816511805701190
+      CrusherStake_Short_8: 6915058071347321928
+      CrusherStake_Short_9: 2169980033774526488
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

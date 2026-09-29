@@ -137,6 +137,12 @@ namespace SB.Core
             maxHealth = ResolveMaxHealth();
         }
 
+        // Shared by damage application and incoming-fire previews; modifiers must be side-effect free.
+        public float EstimateIncomingDamage(float damage)
+        {
+            return Owner != null && Owner.IsInvincible ? 0f : ApplyIncomingDamageModifiers(damage);
+        }
+
         private float ApplyIncomingDamageModifiers(float damage)
         {
             foreach (IIncomingDamageModifier modifier in incomingDamageModifiers)

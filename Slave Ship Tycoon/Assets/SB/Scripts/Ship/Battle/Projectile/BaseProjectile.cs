@@ -5,6 +5,9 @@ namespace SB.Scripts.Projectiles
 {
     public abstract class BaseProjectile : MonoBehaviour, IPoolable
     {
+        private const float ArcPeakMultiplier = 4f;
+        private const float ArcTangentSampleDistance = 0.01f;
+
         [Header("Flight")]
         [SerializeField] private bool rotateAlongPath = true;
         [SerializeField] private float rotationOffset;
@@ -24,8 +27,16 @@ namespace SB.Scripts.Projectiles
         private float lifeElapsed;
         private bool isFlying;
         private bool isMissPath;
+        private bool isLuckMiss;
         private TrailRenderer[] trailRenderers;
         private Renderer projectileRenderer;
+        private ShipIncomingFireDisplay incomingFireDisplay;
+
+        public float RemainingFlightSeconds => Mathf.Max(0f, flightDuration - flightElapsed);
+        public bool IsLuckMiss => isLuckMiss;
+        internal bool IsFlying => isFlying;
+        internal Vector3 FlightStartPosition => pathStartPosition;
+        internal float FlightProgress => flightDuration > 0f ? Mathf.Clamp01(flightElapsed / flightDuration) : 0f;
 
         private void Awake()
         {
@@ -39,11 +50,13 @@ namespace SB.Scripts.Projectiles
 
         private void OnDisable()
         {
+            UnregisterIncomingFire();
             Bus<StageBattleEndedEvent>.OnEvent -= HandleStageBattleEnded;
         }
 
         public void Launch(ProjectileLaunchData data)
         {
+            UnregisterIncomingFire();
             launchData = data;
             flightData = data.FlightData.GetValidated();
             transform.position = data.StartPosition;
@@ -54,8 +67,25 @@ namespace SB.Scripts.Projectiles
             isFlying = true;
             isMissPath = false;
 
-            ApplySortingOrder(data.StartPosition, data.TargetImpactPosition);
-            BuildFlightPath(data.StartPosition, data.TargetImpactPosition);
+            isLuckMiss = false;
+            Vector3 destination = data.TargetImpactPosition;
+            if (IsOriginalTargetAlive())
+            {
+                var evasion = data.Target.GetComponent<ShipProjectileEvasion>();
+                if (evasion != null && evasion.TryResolveMiss(data.StartPosition, Random.value, out Vector3 waterPosition))
+                {
+                    isLuckMiss = true;
+                    destination = waterPosition;
+                }
+            }
+            // A lucky miss uses an ordinary continuous arc to water, never a last-second turn.
+            ApplySortingOrder(data.StartPosition, destination);
+            BuildFlightPath(data.StartPosition, destination);
+            if (IsOriginalTargetAlive())
+            {
+                incomingFireDisplay = data.Target.GetComponent<ShipIncomingFireDisplay>();
+                incomingFireDisplay?.Register(this, data.Damage, data.TargetSpawnGeneration);
+            }
         }
 
         private void Update()
@@ -71,7 +101,12 @@ namespace SB.Scripts.Projectiles
             }
 
             if (isMissPath == false && IsOriginalTargetAlive() == false)
-                SwitchToMissPath();
+            {
+                if (isLuckMiss)
+                    UnregisterIncomingFire(); // Preserve the committed water arc after target loss.
+                else
+                    SwitchToMissPath();
+            }
 
             flightElapsed += Time.deltaTime;
             float rawProgress = Mathf.Clamp01(flightElapsed / flightDuration);
@@ -94,6 +129,7 @@ namespace SB.Scripts.Projectiles
 
         private void SwitchToMissPath()
         {
+            UnregisterIncomingFire();
             float currentProgress = Mathf.Clamp01(flightElapsed / flightDuration);
             Vector3 currentPosition = transform.position;
             Vector3 currentDirection = EvaluateArcTangent(currentProgress).normalized;
@@ -114,10 +150,15 @@ namespace SB.Scripts.Projectiles
 
         private void ResolveImpact()
         {
-            if (isMissPath == false && IsOriginalTargetAlive())
+            UnregisterIncomingFire();
+            if (isMissPath == false && !isLuckMiss && IsOriginalTargetAlive())
                 OnTargetImpact(launchData.Target, launchData.Damage, pathEndPosition);
             else
+            {
+                if (isLuckMiss && IsOriginalTargetAlive())
+                    launchData.Target.GetComponent<ShipMissFeedback>()?.Play();
                 OnWaterImpact(pathEndPosition);
+            }
 
             ReleaseToPool();
         }
@@ -143,13 +184,13 @@ namespace SB.Scripts.Projectiles
             transform.rotation = Quaternion.Euler(0f, 0f, angle + rotationOffset);
         }
 
-        private Vector3 EvaluateArcPosition(float rawProgress)
+        internal Vector3 EvaluateArcPosition(float rawProgress)
         {
             if (isMissPath)
                 return EvaluateMissPosition(rawProgress);
 
             Vector3 basePosition = Vector3.Lerp(pathStartPosition, pathEndPosition, rawProgress);
-            float arcOffset = 4f * flightData.ArcHeight * rawProgress * (1f - rawProgress);
+            float arcOffset = ArcPeakMultiplier * flightData.ArcHeight * rawProgress * (1f - rawProgress);
             return basePosition + Vector3.up * arcOffset;
         }
 
@@ -163,10 +204,8 @@ namespace SB.Scripts.Projectiles
 
         private Vector3 EvaluateArcTangent(float rawProgress)
         {
-            const float sampleDistance = 0.01f;
-
-            float previousRawProgress = Mathf.Clamp01(rawProgress - sampleDistance);
-            float nextRawProgress = Mathf.Clamp01(rawProgress + sampleDistance);
+            float previousRawProgress = Mathf.Clamp01(rawProgress - ArcTangentSampleDistance);
+            float nextRawProgress = Mathf.Clamp01(rawProgress + ArcTangentSampleDistance);
             Vector3 previousPosition = EvaluateArcPosition(previousRawProgress);
             Vector3 nextPosition = EvaluateArcPosition(nextRawProgress);
             return nextPosition - previousPosition;
@@ -185,6 +224,7 @@ namespace SB.Scripts.Projectiles
 
         private void ReleaseToPool()
         {
+            UnregisterIncomingFire();
             if (isFlying == false)
                 return;
 
@@ -208,8 +248,10 @@ namespace SB.Scripts.Projectiles
 
         public void OnSpawnedFromPool()
         {
+            UnregisterIncomingFire();
             isFlying = false;
             isMissPath = false;
+            isLuckMiss = false;
             flightElapsed = 0f;
             lifeElapsed = 0f;
             ClearTrails();
@@ -217,7 +259,15 @@ namespace SB.Scripts.Projectiles
 
         public void OnDespawnedToPool()
         {
+            UnregisterIncomingFire();
             isFlying = false;
+        }
+
+        private void UnregisterIncomingFire()
+        {
+            if (incomingFireDisplay != null)
+                incomingFireDisplay.Unregister(this);
+            incomingFireDisplay = null;
         }
 
         private void ClearTrails()

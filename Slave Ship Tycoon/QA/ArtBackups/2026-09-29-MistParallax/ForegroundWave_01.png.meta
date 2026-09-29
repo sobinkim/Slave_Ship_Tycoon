@@ -1,0 +1,884 @@
+fileFormatVersion: 2
+guid: e4c14808c36eb79439cbd89dd1b77947
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7114384316136914191
+    second: ForegroundWave_01_0
+  - first:
+      213: -1684020065723705918
+    second: ForegroundWave_01_1
+  - first:
+      213: -846823926905181574
+    second: ForegroundWave_01_2
+  - first:
+      213: 1670686915241269490
+    second: ForegroundWave_01_3
+  - first:
+      213: 3753258230745194791
+    second: ForegroundWave_01_4
+  - first:
+      213: -3777016270776384324
+    second: ForegroundWave_01_5
+  - first:
+      213: 1821488284257605005
+    second: ForegroundWave_01_6
+  - first:
+      213: 6178865523655217668
+    second: ForegroundWave_01_7
+  - first:
+      213: -2151125550771177135
+    second: ForegroundWave_01_8
+  - first:
+      213: -2351145351465508090
+    second: ForegroundWave_01_9
+  - first:
+      213: -1630219915392419297
+    second: ForegroundWave_01_10
+  - first:
+      213: 8586355454831522351
+    second: ForegroundWave_01_11
+  - first:
+      213: -9062029415887274148
+    second: ForegroundWave_01_12
+  - first:
+      213: -9141623897261322165
+    second: ForegroundWave_01_13
+  - first:
+      213: 8533798999971061188
+    second: ForegroundWave_01_14
+  - first:
+      213: 4369792982137580375
+    second: ForegroundWave_01_15
+  - first:
+      213: -8767863839489279269
+    second: ForegroundWave_01_16
+  - first:
+      213: 2781932978378956726
+    second: ForegroundWave_01_17
+  - first:
+      213: -6847340540097462944
+    second: ForegroundWave_01_18
+  - first:
+      213: -8912589166552282114
+    second: ForegroundWave_01_19
+  - first:
+      213: 1610404686956510798
+    second: ForegroundWave_01_20
+  - first:
+      213: 3606416491976360935
+    second: ForegroundWave_01_21
+  - first:
+      213: 1330633577371162905
+    second: ForegroundWave_01_22
+  - first:
+      213: -3839342454132530617
+    second: ForegroundWave_01_23
+  - first:
+      213: -8218510506829634272
+    second: ForegroundWave_01_24
+  - first:
+      213: 2772124410223792808
+    second: ForegroundWave_01_25
+  - first:
+      213: 8951960612776766110
+    second: ForegroundWave_01_26
+  - first:
+      213: 8257943716862402618
+    second: ForegroundWave_01_27
+  - first:
+      213: 2298807528970368160
+    second: ForegroundWave_01_28
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ForegroundWave_01_0
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 174
+        width: 119
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0d73f687de5bb260800000000000000
+      internalID: 7114384316136914191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_1
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 193
+        width: 28
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c598eb2ca821a8e0800000000000000
+      internalID: -1684020065723705918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_2
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 195
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7ae389002a7f34f0800000000000000
+      internalID: -846823926905181574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_3
+      rect:
+        serializedVersion: 2
+        x: 1210
+        y: 192
+        width: 112
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f859d1d5e87f2710800000000000000
+      internalID: 1670686915241269490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_4
+      rect:
+        serializedVersion: 2
+        x: 1322
+        y: 194
+        width: 25
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 721e0e9a970461430800000000000000
+      internalID: 3753258230745194791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_5
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 167
+        width: 89
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb4c08596b7559bc0800000000000000
+      internalID: -3777016270776384324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_6
+      rect:
+        serializedVersion: 2
+        x: 783
+        y: 165
+        width: 29
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d85d5b1a1f9374910800000000000000
+      internalID: 1821488284257605005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_7
+      rect:
+        serializedVersion: 2
+        x: 1031
+        y: 174
+        width: 75
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 402906ce47dbfb550800000000000000
+      internalID: 6178865523655217668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_8
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 149
+        width: 174
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 159740f65baa522e0800000000000000
+      internalID: -2151125550771177135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_9
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 153
+        width: 71
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 603669e72cd0f5fd0800000000000000
+      internalID: -2351145351465508090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_10
+      rect:
+        serializedVersion: 2
+        x: 854
+        y: 155
+        width: 69
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1a744dcf9b4069e0800000000000000
+      internalID: -1630219915392419297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_11
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 142
+        width: 168
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2278703bccd82770800000000000000
+      internalID: 8586355454831522351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_12
+      rect:
+        serializedVersion: 2
+        x: 1210
+        y: 124
+        width: 303
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5ff5e942443d3280800000000000000
+      internalID: -9062029415887274148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_13
+      rect:
+        serializedVersion: 2
+        x: 1526
+        y: 158
+        width: 93
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b405485ff7d622180800000000000000
+      internalID: -9141623897261322165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_14
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 129
+        width: 27
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cddbd9f9f42e6670800000000000000
+      internalID: 8533798999971061188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_15
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 121
+        width: 312
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75b2e4aa09f94ac30800000000000000
+      internalID: 4369792982137580375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_16
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 123
+        width: 230
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdabf38ca4a425680800000000000000
+      internalID: -8767863839489279269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_17
+      rect:
+        serializedVersion: 2
+        x: 766
+        y: 138
+        width: 86
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6bfd835fd496b9620800000000000000
+      internalID: 2781932978378956726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_18
+      rect:
+        serializedVersion: 2
+        x: 933
+        y: 125
+        width: 97
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06dfb5bbe0c59f0a0800000000000000
+      internalID: -6847340540097462944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_19
+      rect:
+        serializedVersion: 2
+        x: 1076
+        y: 132
+        width: 41
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efb08aabf5f105480800000000000000
+      internalID: -8912589166552282114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_20
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 136
+        width: 44
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4ebaaec78e495610800000000000000
+      internalID: 1610404686956510798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_21
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 120
+        width: 40
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e38c5c11b09c0230800000000000000
+      internalID: 3606416491976360935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_22
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 114
+        width: 81
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9195a69403c577210800000000000000
+      internalID: 1330633577371162905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_23
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 115
+        width: 45
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 742aa52316ae7bac0800000000000000
+      internalID: -3839342454132530617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_24
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 112
+        width: 48
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 025aa91dc3cf1fd80800000000000000
+      internalID: -8218510506829634272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_25
+      rect:
+        serializedVersion: 2
+        x: 827
+        y: 110
+        width: 101
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a21498b670987620800000000000000
+      internalID: 2772124410223792808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_26
+      rect:
+        serializedVersion: 2
+        x: 1369
+        y: 113
+        width: 84
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9ae8df6fb0cb3c70800000000000000
+      internalID: 8951960612776766110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_27
+      rect:
+        serializedVersion: 2
+        x: 1578
+        y: 123
+        width: 62
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a30a0cade0c1a9270800000000000000
+      internalID: 8257943716862402618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForegroundWave_01_28
+      rect:
+        serializedVersion: 2
+        x: 1191
+        y: 109
+        width: 52
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a4b54b944107ef10800000000000000
+      internalID: 2298807528970368160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ForegroundWave_01_0: 7114384316136914191
+      ForegroundWave_01_1: -1684020065723705918
+      ForegroundWave_01_10: -1630219915392419297
+      ForegroundWave_01_11: 8586355454831522351
+      ForegroundWave_01_12: -9062029415887274148
+      ForegroundWave_01_13: -9141623897261322165
+      ForegroundWave_01_14: 8533798999971061188
+      ForegroundWave_01_15: 4369792982137580375
+      ForegroundWave_01_16: -8767863839489279269
+      ForegroundWave_01_17: 2781932978378956726
+      ForegroundWave_01_18: -6847340540097462944
+      ForegroundWave_01_19: -8912589166552282114
+      ForegroundWave_01_2: -846823926905181574
+      ForegroundWave_01_20: 1610404686956510798
+      ForegroundWave_01_21: 3606416491976360935
+      ForegroundWave_01_22: 1330633577371162905
+      ForegroundWave_01_23: -3839342454132530617
+      ForegroundWave_01_24: -8218510506829634272
+      ForegroundWave_01_25: 2772124410223792808
+      ForegroundWave_01_26: 8951960612776766110
+      ForegroundWave_01_27: 8257943716862402618
+      ForegroundWave_01_28: 2298807528970368160
+      ForegroundWave_01_3: 1670686915241269490
+      ForegroundWave_01_4: 3753258230745194791
+      ForegroundWave_01_5: -3777016270776384324
+      ForegroundWave_01_6: 1821488284257605005
+      ForegroundWave_01_7: 6178865523655217668
+      ForegroundWave_01_8: -2151125550771177135
+      ForegroundWave_01_9: -2351145351465508090
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

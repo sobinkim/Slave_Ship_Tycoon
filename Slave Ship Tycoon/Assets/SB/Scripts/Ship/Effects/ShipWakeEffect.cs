@@ -21,14 +21,28 @@ namespace SB.Scripts
         [SerializeField, Range(0f, 0.2f)] private float rippleScaleAmount = 0.035f;
         [SerializeField, Range(0f, 1f)] private float rippleOpacityAmount = 0.12f;
 
+        [Header("Trailing foam")]
+        [SerializeField, Tooltip("명시적으로 연결한 포말 조각. 배열 순서대로 위상을 나눠 뒤로 흘립니다.")]
+        private SpriteRenderer[] trailingFoam = new SpriteRenderer[0];
+        [SerializeField, Min(0.05f)] private float foamCycleSeconds = 0.7f;
+        [SerializeField, Tooltip("물살 오브젝트 기준 포말 시작 위치")]
+        private Vector2 foamStartLocalPosition = new Vector2(-0.12f, -0.03f);
+        [SerializeField, Tooltip("한 주기 동안 이동할 로컬 거리. 오른쪽 진행 함선은 X를 음수로 설정합니다.")]
+        private Vector2 foamTravelLocalOffset = new Vector2(-0.65f, -0.02f);
+        [SerializeField] private Vector2 foamStartLocalScale = new Vector2(0.55f, 0.35f);
+        [SerializeField] private Vector2 foamEndLocalScale = new Vector2(0.85f, 0.2f);
+        [SerializeField, Range(0f, 1f)] private float trailingFoamOpacity = 0.6f;
+
         private int moveHash;
         private float visibility;
         private float rippleTime;
         private Vector3 baseScale;
+        private bool isInitialized;
 
         private void Awake()
         {
             baseScale = transform.localScale;
+            isInitialized = true;
             moveHash = Animator.StringToHash(moveParameter);
             if (owner == null || shipAnimator == null || wakeRenderer == null)
             {
@@ -51,6 +65,7 @@ namespace SB.Scripts
             visibility = 0f;
             rippleTime = 0f;
             if (wakeRenderer != null) wakeRenderer.enabled = false;
+            HideTrailingFoam();
         }
 
         private void LateUpdate()
@@ -67,13 +82,40 @@ namespace SB.Scripts
             tint.a *= visibility * (1f - rippleOpacityAmount * (ripple * 0.5f + 0.5f));
             wakeRenderer.color = tint;
             wakeRenderer.enabled = visibility > 0f;
+            UpdateTrailingFoam();
+        }
+
+        private void UpdateTrailingFoam()
+        {
+            for (int i = 0; i < trailingFoam.Length; i++)
+            {
+                SpriteRenderer foam = trailingFoam[i];
+                if (foam == null) continue;
+                float phase = Mathf.Repeat(Time.time / foamCycleSeconds + (float)i / trailingFoam.Length, 1f);
+                Vector2 localPosition = foamStartLocalPosition + foamTravelLocalOffset * phase;
+                Vector2 localScale = Vector2.Lerp(foamStartLocalScale, foamEndLocalScale, phase);
+                foam.transform.localPosition = new Vector3(localPosition.x, localPosition.y, 0f);
+                foam.transform.localScale = new Vector3(localScale.x, localScale.y, 1f);
+                Color tint = foamColor;
+                // 양 끝을 투명하게 만들어 위치가 되돌아오는 순간을 숨깁니다.
+                tint.a *= visibility * trailingFoamOpacity * Mathf.Sin(phase * Mathf.PI);
+                foam.color = tint;
+                foam.enabled = visibility > 0f;
+            }
+        }
+
+        private void HideTrailingFoam()
+        {
+            foreach (SpriteRenderer foam in trailingFoam)
+                if (foam != null) foam.enabled = false;
         }
 
         private void OnDisable()
         {
             visibility = 0f;
             if (wakeRenderer != null) wakeRenderer.enabled = false;
-            transform.localScale = baseScale;
+            HideTrailingFoam();
+            if (isInitialized) transform.localScale = baseScale;
         }
     }
 }

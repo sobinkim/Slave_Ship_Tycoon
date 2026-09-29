@@ -13,6 +13,12 @@ namespace SB.Scripts
         Back = 2
     }
 
+    public enum TargetSelectionMode
+    {
+        FormationDistribution,
+        HighestCurrentHealth
+    }
+
     [System.Serializable]
     public struct TargetRule
     {
@@ -23,6 +29,9 @@ namespace SB.Scripts
     public class TargetSelector : MonoBehaviour, IEntityComponent
     {
         [SerializeField] private TargetRule[] targetRules;
+        [SerializeField, Tooltip("각 우선순위 규칙 안에서의 선택 방식. 고체력은 현재 체력 기준이며 동률이면 가까운 함선을 선택합니다.")]
+        private TargetSelectionMode selectionMode;
+        public TargetSelectionMode SelectionMode => selectionMode;
         public IReadOnlyList<TargetRule> TargetRules => targetRules;
         private Ship myship;
         private BattleSpawnData currentStageBattleSpawnData;
@@ -196,8 +205,34 @@ namespace SB.Scripts
             if (targetList == null || targetList.Count == 0)
                 return null;
 
+            if (selectionMode == TargetSelectionMode.HighestCurrentHealth)
+                return SelectHighestCurrentHealth(targetList);
+
             int selectionIndex = GetFormationSelectionIndex() % targetList.Count;
             return targetList[selectionIndex];
+        }
+
+        private Ship SelectHighestCurrentHealth(List<Ship> targetList)
+        {
+            Ship selectedTarget = null;
+            float highestHealth = float.NegativeInfinity;
+            float nearestDistanceSquared = float.PositiveInfinity;
+
+            foreach (Ship candidate in targetList)
+            {
+                EntityHealth health = candidate.GetCompo<EntityHealth>();
+                float currentHealth = health != null ? health.CurrentHealth : 0f;
+                float distanceSquared = (candidate.transform.position - myship.transform.position).sqrMagnitude;
+                if (selectedTarget == null || currentHealth > highestHealth ||
+                    (currentHealth == highestHealth && distanceSquared < nearestDistanceSquared))
+                {
+                    selectedTarget = candidate;
+                    highestHealth = currentHealth;
+                    nearestDistanceSquared = distanceSquared;
+                }
+            }
+
+            return selectedTarget;
         }
 
         private int GetFormationSelectionIndex()
