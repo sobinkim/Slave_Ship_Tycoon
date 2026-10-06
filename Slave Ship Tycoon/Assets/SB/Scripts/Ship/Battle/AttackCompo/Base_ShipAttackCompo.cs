@@ -75,8 +75,28 @@ namespace SB.Scripts.AttackCompo
             animatorTrigger.OnAttackEndTrigger -= HandleAttackEndTrigger;
         }
 
+        public void SuspendCombat()
+        {
+            _isBattleRunning = false;
+            ResetAttackState();
+            ownerShip?.ChangeState(ShipStateType.Idle);
+        }
+
+        public void PlayFinalSalvoAnimation(string stateName)
+        {
+            Animator runtimeAnimator = animator != null ? animator.RuntimeAnimator : null;
+            if (runtimeAnimator == null)
+                return;
+
+            animator.SetParam("ATTACK", true);
+            int stateHash = UnityEngine.Animator.StringToHash(stateName);
+            if (runtimeAnimator.HasState(0, stateHash))
+                runtimeAnimator.Play(stateHash, 0, 0f);
+        }
+
         public void ResetAttackState()
         {
+            animator?.SetParam("ATTACK", false);
             SetTarget(null);
             _currentTargetSpawnGeneration = 0;
             currentCooldown = 0f;

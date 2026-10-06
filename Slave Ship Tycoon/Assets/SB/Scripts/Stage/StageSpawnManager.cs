@@ -16,6 +16,8 @@ namespace SB.Scripts
         [SerializeField] private PlayerFleetManager playerFleetManager;
         [SerializeField] private PlayerFleetUpgradeProvider playerFleetUpgradeProvider;
         [SerializeField] private Transform mainShipSpawnPoint;
+        [SerializeField, Tooltip("주 함선의 궤짝 표시와 연결할 장면 화물 관리자.")]
+        private CargoManager cargoManager;
         [SerializeField] private Transform[] escortShipSpawnPoints = Array.Empty<Transform>();
         [SerializeField] private StageEncounterDirector stageEncounterDirector;
 
@@ -170,6 +172,14 @@ namespace SB.Scripts
 
                 if (mainShip == null)
                     return false;
+
+                ShipCargoVisualizer cargoVisualizer = mainShip.CargoVisualizer;
+                if (cargoVisualizer != null)
+                {
+                    if (cargoManager == null)
+                        Debug.LogError("StageSpawnManager needs a CargoManager for the transport ship.", this);
+                    cargoVisualizer.BindCargo(cargoManager);
+                }
 
                 mainShip.SetSpawnSlot(new Vector2Int(-1, -1));
                 SetPlayerFleetUpgradeProvider(mainShip);

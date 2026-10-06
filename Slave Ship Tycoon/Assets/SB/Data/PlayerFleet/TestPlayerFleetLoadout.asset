@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f4742862da949f4990c8782598b01bf, type: 3}
   m_Name: TestPlayerFleetLoadout
   m_EditorClassIdentifier: 
-  mainShipPrefab: {fileID: 1689721241314480839, guid: c2e9e56a60fc4cb2a75f87d5ab16af12, type: 3}
+  mainShipPrefab: {fileID: 5945312968777696837, guid: 416f8dc41d39de142872061c433386d9, type: 3}
   escortShipPrefabs:
   - {fileID: 1689721241314480839, guid: 11b5e32f268640cb879e8d3c31a5de97, type: 3}
   - {fileID: 1689721241314480839, guid: ab245fc6a873463093a9c2ad468eec8a, type: 3}

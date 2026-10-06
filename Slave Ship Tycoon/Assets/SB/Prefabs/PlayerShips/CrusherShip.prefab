@@ -2473,6 +2473,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1140000000000000000, guid: 4401b8bc22f639548bfb22ddd38e0726, type: 3}
     - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: travelMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: initialStraightSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: straightAcceleration
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
       propertyPath: 'firePoints.Array.data[0]'
       value: 
       objectReference: {fileID: 4531388729973953266}

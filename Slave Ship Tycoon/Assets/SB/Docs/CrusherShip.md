@@ -95,3 +95,10 @@ Edit the provided exact projectile sprite. Remove checkerboard background to rea
 ## 코팅 방향 변경 / 2026-09-29
 - CrusherStakeAura.shader의 진행 마스크를 반전하여 뾰족한 앞부분(+X)부터 뒤쪽 고리(-X)까지 채운다. 발사 지연/지속 시간은 기존 값을 유지한다.
 - 셰이더 재임포트 후 ShaderUtil 검사: 오류 없음, 컴파일 메시지 없음. 기존 QA/CrusherStakeCoatingProgress.png는 변경 전 방향의 기록이다.
+
+## 명중 화면 흔들림 / 2026-09-30
+
+- CrusherStake.prefab의 CrusherStakeImpactShake가 NormalProjectile의 실제 표적 명중 신호를 받아 화면 흔들림을 요청한다. 물에 떨어진 탄은 요청하지 않는다.
+- SampleScene의 Main Camera에 CameraImpactShake를 연결했다. 프리팹이 씬 카메라를 직접 참조할 수 없어 기존 EventBus로 두 컴포넌트를 연결했다.
+- 말뚝 프리팹 Inspector의 Shake Distance Units(월드 거리, 기본 0.045), Shake Duration Seconds(기본 0.16초)에서 강도와 시간을 조절한다. 두 값 중 하나를 0으로 하면 흔들림이 꺼진다.
+- Main Camera의 CameraImpactShake는 흔들리는 중 들어온 요청을 무시하고, 종료 후 Cooldown Seconds(기본 0.12초) 동안 재발동을 막는다. 여러 말뚝의 동시 명중이 강도나 지속 시간을 누적하지 않는다.

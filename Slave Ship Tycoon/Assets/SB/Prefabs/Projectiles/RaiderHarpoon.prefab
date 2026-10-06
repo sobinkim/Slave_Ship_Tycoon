@@ -252,6 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotateAlongPath: 1
   rotationOffset: 0
+  impactVisualHoldDurationSeconds: 0.18
   projectileBaseSortingOrder: 3000
   sortingOrderPerUnit: 100
   trailSortingOrderOffset: -1

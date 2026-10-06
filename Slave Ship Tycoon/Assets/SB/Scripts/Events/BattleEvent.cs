@@ -61,3 +61,12 @@ namespace SB.Core.EventBus
     {
     }
 }
+
+namespace SB.Core.EventBus
+{
+    public readonly struct MainShipFinalSalvoStartedEvent : IEvent
+    {
+        public readonly MainShip MainShip;
+        public MainShipFinalSalvoStartedEvent(MainShip mainShip) => MainShip = mainShip;
+    }
+}

@@ -70,7 +70,7 @@ namespace SB.Scripts
                 bossHintText.text = isBossBattle ? "봉쇄 함대를 격파하세요" : "승리 시 운송 항로 개방";
         }
 
-        public void AddCargoItems(CargoData[] cargoDatas)
+        public void AddCargoItems(IReadOnlyList<CargoData> cargoDatas)
         {
             if (cargoDatas == null)
                 return;

@@ -12,9 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 028726fa33cb48ad9428aaac3d069ef9, type: 3}
   m_Name: GoldBox
   m_EditorClassIdentifier: 
-  Icon: {fileID: 21300000, guid: 57d4aebd17aa8cc449eec81f9929b884, type: 3}
+  displayName: "\uAE08\uAD34 \uD654\uBB3C"
+  accentColor: {r: 0.82, g: 0.2, b: 0.92, a: 1}
+  Icon: {fileID: 21300000, guid: 21e946e8c6873bc48af7973a7ae1835e, type: 2}
   Type: 0
   Rewards:
   - CurrencyType: 0
-    CurrencyAmount: 1000000
-  BaseWeight: 20
+    CurrencyAmount: 20480200
+  - CurrencyType: 1
+    CurrencyAmount: 1120
+  - CurrencyType: 2
+    CurrencyAmount: 90
+  BaseWeight: 5

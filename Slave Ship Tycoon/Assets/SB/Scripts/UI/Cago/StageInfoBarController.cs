@@ -71,7 +71,7 @@ namespace SB.Scripts
                 return;
 
             view.ClearCargoItems();
-            view.AddCargoItems(cargoManager.CargoData);
+            view.AddCargoItems(cargoManager.TransportCargoData);
         }
 
         private void HandleObtainChapterStarted(ObtainChapterStartedEvent evt)

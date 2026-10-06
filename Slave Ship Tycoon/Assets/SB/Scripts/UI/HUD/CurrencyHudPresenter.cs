@@ -28,6 +28,7 @@ namespace SB.Scripts.UI.HUD
         private void OnEnable()
         {
             Bus<CurrencyChangedEvent>.OnEvent += HandleCurrencyChanged;
+            RefreshAll();
         }
 
         private void Start()

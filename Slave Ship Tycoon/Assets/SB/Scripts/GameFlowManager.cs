@@ -12,13 +12,27 @@ namespace SB.Scripts
 
     public class GameFlowManager : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] private ChapterDatabase chapterDatabase;
+        [SerializeField, Tooltip("보스 처치 후 운송 해역으로 진입할 때 저장된 적재 설정을 실제 운송 화물로 복사합니다.")]
+        private CargoManager cargoManager;
         private int currentChapter = 1;
         private int currentStage = 1;
         private StageRoomType currentStageType;
         private ChapterRouteType currentRouteType;
         private bool currentBattleIsBoss;
         private Coroutine _stageRestartRoutine;
+
+        public bool CanStartBossBattle => !currentBattleIsBoss && chapterDatabase != null &&
+            chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer chapter) &&
+            chapter.RouteType == ChapterRouteType.Obtain &&
+            chapterDatabase.TryGetBoss(currentChapter, out StageEnemyLayout _);
+
+        private void Awake()
+        {
+            if (chapterDatabase == null || cargoManager == null)
+                Debug.LogError("GameFlowManager requires a chapter database and cargo manager.", this);
+        }
 
         private void OnEnable()
         {
@@ -85,6 +99,9 @@ namespace SB.Scripts
 
         public void StartBossBattle()
         {
+            if (currentBattleIsBoss)
+                return;
+
             if (chapterDatabase == null ||
                 chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer chapter) == false)
             {
@@ -102,6 +119,18 @@ namespace SB.Scripts
             {
                 Debug.LogError($"Boss layout was not assigned for Chapter {currentChapter}.", this);
                 return;
+            }
+
+            if (cargoManager == null || !cargoManager.HasValidLoadout)
+            {
+                Debug.LogWarning("Choose a valid cargo loadout within capacity before challenging the boss.", this);
+                return;
+            }
+
+            if (_stageRestartRoutine != null)
+            {
+                StopCoroutine(_stageRestartRoutine);
+                _stageRestartRoutine = null;
             }
 
             currentRouteType = chapter.RouteType;
@@ -209,6 +238,9 @@ namespace SB.Scripts
             currentChapter++;
             currentStage = 1;
 
+            if (chapterDatabase == null)
+                return;
+
             if (chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer chapter) &&
                 chapter.RouteType == ChapterRouteType.Obtain)
             {
@@ -217,6 +249,13 @@ namespace SB.Scripts
             }
             else if (chapter != null && chapter.RouteType == ChapterRouteType.Sell)
             {
+                // The manifest must exist before market prices and settlement snapshot subscribers run.
+                if (cargoManager == null || !cargoManager.PrepareTransportCargo())
+                {
+                    Debug.LogError("Transport chapter could not prepare its cargo manifest.", this);
+                    return;
+                }
+
                 Bus<SellChapterStartedEvent>.Raise(
                     new SellChapterStartedEvent(currentChapter));
             }

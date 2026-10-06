@@ -110,16 +110,26 @@ namespace SB.Scripts.TransportEquipment
         /// </summary>
         public void ApplySnapshotModifiers(Dictionary<CurrencyType, long> settlementRewards)
         {
+            ApplyModifiers(_sellSnapshot, settlementRewards);
+        }
+
+        public void ApplyPreviewModifiers(Dictionary<CurrencyType, long> previewRewards)
+        {
+            ApplyModifiers(TransportEquipmentSnapshot.Create(-1, _equippedItem), previewRewards);
+        }
+
+        private static void ApplyModifiers(TransportEquipmentSnapshot snapshot, Dictionary<CurrencyType, long> settlementRewards)
+        {
             if (settlementRewards == null)
                 throw new ArgumentNullException(nameof(settlementRewards));
 
             ValidateSettlementRewards(settlementRewards);
 
-            if (_sellSnapshot.HasEquipment == false)
+            if (snapshot.HasEquipment == false)
                 return;
 
-            ApplyMultipliers(settlementRewards);
-            ApplyFlatRewards(settlementRewards);
+            ApplyMultipliers(snapshot, settlementRewards);
+            ApplyFlatRewards(snapshot, settlementRewards);
         }
 
         private void OnSellChapterStarted(SellChapterStartedEvent evt)
@@ -131,10 +141,10 @@ namespace SB.Scripts.TransportEquipment
                 new TransportEquipmentSnapshotChangedEvent(previousSnapshot, _sellSnapshot));
         }
 
-        private void ApplyMultipliers(Dictionary<CurrencyType, long> settlementRewards)
+        private static void ApplyMultipliers(TransportEquipmentSnapshot snapshot, Dictionary<CurrencyType, long> settlementRewards)
         {
             IReadOnlyList<TransportSettlementModifierValue> modifiers =
-                _sellSnapshot.SettlementModifiers;
+                snapshot.SettlementModifiers;
 
             for (int i = 0; i < modifiers.Count; i++)
             {
@@ -152,10 +162,10 @@ namespace SB.Scripts.TransportEquipment
             }
         }
 
-        private void ApplyFlatRewards(Dictionary<CurrencyType, long> settlementRewards)
+        private static void ApplyFlatRewards(TransportEquipmentSnapshot snapshot, Dictionary<CurrencyType, long> settlementRewards)
         {
             IReadOnlyList<TransportSettlementModifierValue> modifiers =
-                _sellSnapshot.SettlementModifiers;
+                snapshot.SettlementModifiers;
 
             for (int i = 0; i < modifiers.Count; i++)
             {

@@ -1,3 +1,4 @@
+using System;
 using SB.Core;
 using UnityEngine;
 
@@ -14,8 +15,11 @@ namespace SB.Scripts.Projectiles
         [SerializeField, Tooltip("화면 깊이에 따른 물기둥 정렬 보정")]
         private float waterSplashSortingOrderPerUnit = 100f;
 
+        public event Action TargetImpacted;
+
         protected override void OnTargetImpact(Ship target, float damage, Vector3 impactPosition)
         {
+            TargetImpacted?.Invoke();
             EntityHealth health = target.GetCompo<EntityHealth>();
             float previousHealth = health != null ? health.CurrentHealth : 0f;
             health?.ApplyDamage(damage, impactPosition);
