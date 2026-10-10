@@ -541,6 +541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetRules: []
+  selectionMode: 0
 --- !u!1 &2171686501910539465
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,6 +652,7 @@ MonoBehaviour:
   barWidth: 0.68
   barHeight: 0.045
   alwaysShowHealth: 1
+  showHealthBar: 1
 --- !u!114 &5139461613612932153
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1270,6 +1270,8 @@ MonoBehaviour:
   _myShipType: 0
   _shipRole: 0
   canTargetProtectedShips: 0
+  cargoVisualizer: {fileID: 0}
+  destruction: {fileID: 0}
 --- !u!114 &452535624579856759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1295,6 +1297,7 @@ MonoBehaviour:
   barWidth: 1
   barHeight: 0.045
   alwaysShowHealth: 1
+  showHealthBar: 1
 --- !u!114 &1575100708487800207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1789,6 +1792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetRules: []
+  selectionMode: 0
 --- !u!1 &8118607225556244332
 GameObject:
   m_ObjectHideFlags: 0

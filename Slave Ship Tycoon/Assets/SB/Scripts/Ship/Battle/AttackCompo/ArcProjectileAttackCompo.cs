@@ -40,6 +40,11 @@ namespace SB.Scripts.AttackCompo
 
         private int currentFirePointIndex;
 
+        protected virtual float ProjectileAmount => FinalAttackDamage;
+        protected virtual ProjectileHitMode HitMode => ProjectileHitMode.Normal;
+
+        protected virtual bool PrepareProjectile(BaseProjectile projectile) { return true; }
+
         protected override void Fire()
         {
             if (projectilePrefab == null)
@@ -82,13 +87,19 @@ namespace SB.Scripts.AttackCompo
             if (projectile == null)
                 return;
 
+            if (!PrepareProjectile(projectile))
+            {
+                PoolingManager.Instance.Release(projectile);
+                return;
+            }
             ProjectileLaunchData launchData = new ProjectileLaunchData(
                 CurrentTarget,
                 startPosition,
                 targetImpactPosition,
                 waterImpactPosition,
                 flightData,
-                FinalAttackDamage);
+                ProjectileAmount,
+                HitMode);
 
             bool isStraightMode = travelMode == ProjectileTravelMode.AcceleratingStraight;
             float launchSpeed = isStraightMode ? initialStraightSpeed : initialArcSpeed;
@@ -139,3 +150,5 @@ namespace SB.Scripts.AttackCompo
         }
     }
 }
+
+

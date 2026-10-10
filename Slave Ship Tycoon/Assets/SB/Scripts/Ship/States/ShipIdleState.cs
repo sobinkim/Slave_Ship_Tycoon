@@ -24,10 +24,11 @@ namespace SB.Scripts.States
                 return;
             }
 
-            if (_owner.EnsureAttackTarget() == false)
+            bool hasTarget = _owner.EnsureAttackTarget();
+            if (hasTarget || _owner.TicksAttackCooldownWithoutTarget)
+                _owner.TickAttackCooldown(Time.deltaTime);
+            if (!hasTarget)
                 return;
-
-            _owner.TickAttackCooldown(Time.deltaTime);
 
             if (_owner.CanAttack)
                 _owner.ChangeState(ShipStateType.Attack);
@@ -38,3 +39,5 @@ namespace SB.Scripts.States
         }
     }
 }
+
+

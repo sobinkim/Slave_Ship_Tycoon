@@ -18,7 +18,7 @@ namespace SB.Scripts
         [SerializeField] private Transform mainShipSpawnPoint;
         [SerializeField, Tooltip("주 함선의 궤짝 표시와 연결할 장면 화물 관리자.")]
         private CargoManager cargoManager;
-        [SerializeField] private Transform[] escortShipSpawnPoints = Array.Empty<Transform>();
+        [SerializeField, Tooltip("1~6: 기존 중열/전열 3행. 7: 메인 함선 위 후열. 8: 메인 함선 아래 후열.")] private Transform[] escortShipSpawnPoints = Array.Empty<Transform>();
         [SerializeField] private StageEncounterDirector stageEncounterDirector;
 
         [Header("Enemies")]
@@ -181,7 +181,7 @@ namespace SB.Scripts
                     cargoVisualizer.BindCargo(cargoManager);
                 }
 
-                mainShip.SetSpawnSlot(new Vector2Int(-1, -1));
+                mainShip.SetSpawnSlot(PlayerFleetLoadout.MainShipSlot);
                 SetPlayerFleetUpgradeProvider(mainShip);
                 participantTracker.RegisterMainShip(mainShip, isMainShipPooled);
             }
@@ -219,9 +219,7 @@ namespace SB.Scripts
                 if (escortShip == null)
                     continue;
 
-                escortShip.SetSpawnSlot(new Vector2Int(
-                    i % PlayerFleetLoadout.ColumnCount,
-                    i / PlayerFleetLoadout.ColumnCount));
+                escortShip.SetSpawnSlot(PlayerFleetLoadout.GetEscortSlotCoordinates(i));
 
                 SetPlayerFleetUpgradeProvider(escortShip);
                 participantTracker.RegisterEscortShip(escortShip, isEscortShipPooled);

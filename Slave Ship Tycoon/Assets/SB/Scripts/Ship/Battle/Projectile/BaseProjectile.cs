@@ -58,6 +58,7 @@ namespace SB.Scripts.Projectiles
         private ShipIncomingFireDisplay incomingFireDisplay;
 
         public event System.Action<BaseProjectile, ProjectileResolution> Resolved;
+        protected virtual bool RegistersIncomingDamage => true;
 
         public float RemainingFlightSeconds => Mathf.Max(0f, flightDuration - flightElapsed);
         public bool IsLuckMiss => isLuckMiss;
@@ -127,7 +128,7 @@ namespace SB.Scripts.Projectiles
             ApplySortingOrder(data.StartPosition, destination);
             travelDirection = (destination - data.StartPosition).normalized;
             BuildFlightPath(data.StartPosition, destination);
-            if (IsOriginalTargetAlive())
+            if (RegistersIncomingDamage && IsOriginalTargetAlive())
             {
                 incomingFireDisplay = data.Target.GetComponent<ShipIncomingFireDisplay>();
                 incomingFireDisplay?.Register(this, data.Damage, data.TargetSpawnGeneration);
@@ -546,3 +547,5 @@ namespace SB.Scripts.Projectiles
         }
     }
 }
+
+

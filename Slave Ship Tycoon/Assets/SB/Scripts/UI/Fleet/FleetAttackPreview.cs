@@ -3,7 +3,6 @@ using SB.Scripts.AttackCompo;
 using SB.Scripts.Fleet;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SB.Scripts.UI.Fleet
 {
@@ -13,7 +12,7 @@ namespace SB.Scripts.UI.Fleet
         [SerializeField] private TMP_Text attackInfoText;
         [SerializeField] private TMP_Text targetSummaryText;
         [SerializeField, Tooltip("전열, 중열, 후열 순서")]
-        private Image[] enemyColumns = new Image[3];
+        private UnityEngine.UI.Image[] enemyColumns = new UnityEngine.UI.Image[3];
         [SerializeField] private Color idleColor = new Color(.13f, .17f, .21f);
         [SerializeField] private Color priorityColor = new Color(.60f, .29f, .12f);
 
@@ -31,8 +30,17 @@ namespace SB.Scripts.UI.Fleet
                 return;
             }
             string position = slotIndex >= 0
-                ? $" · {slotIndex / PlayerFleetLoadout.ColumnCount + 1}행 {(slotIndex % PlayerFleetLoadout.ColumnCount == 1 ? "전열" : "후열")}" : "";
+                ? " · " + PlayerFleetLoadout.GetFormationPositionLabel(slotIndex) : "";
             shipNameText.text = shipData.DisplayName + position;
+            var healingAttack = shipData.ShipPrefab.GetComponentInChildren<HealingProjectileAttackCompo>(true);
+            if (healingAttack != null)
+            {
+                targetSummaryText.text = "아군 전열 → 중열 → 후열";
+                attackInfoText.text = $"회복 캡슐 · 적중 시 HP {healingAttack.HealAmount:0.#} 회복\n" +
+                                      "손상된 아군 중 무작위 선택 · 회복선 제외\n" +
+                                      $"기본 함선 대비 발사 간격 {healingAttack.AttackIntervalMultiplier:0.#}배";
+                return;
+            }
             var selector = shipData.ShipPrefab.GetComponentInChildren<TargetSelector>(true);
             var rules = selector != null ? selector.TargetRules : null;
             TargetLine primary = rules != null && rules.Count > 0 ? rules[0].Line : TargetLine.Any;

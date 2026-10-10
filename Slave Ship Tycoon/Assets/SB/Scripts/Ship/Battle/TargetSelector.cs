@@ -16,7 +16,15 @@ namespace SB.Scripts
     public enum TargetSelectionMode
     {
         FormationDistribution,
-        HighestCurrentHealth
+        HighestCurrentHealth,
+        LowestCurrentHealth,
+        RandomInRule
+    }
+
+    public enum TargetTeam
+    {
+        Opponent,
+        SameTeam
     }
 
     [System.Serializable]
@@ -29,8 +37,17 @@ namespace SB.Scripts
     public class TargetSelector : MonoBehaviour, IEntityComponent
     {
         [SerializeField] private TargetRule[] targetRules;
-        [SerializeField, Tooltip("각 우선순위 규칙 안에서의 선택 방식. 고체력은 현재 체력 기준이며 동률이면 가까운 함선을 선택합니다.")]
+        [SerializeField, Tooltip("규칙은 배열 순서대로 적용합니다. RandomInRule은 해당 규칙의 유효 후보 안에서 균등 무작위로 선택합니다.")]
         private TargetSelectionMode selectionMode;
+        [SerializeField, Tooltip("적 공격 또는 같은 팀 지원 대상을 선택합니다.")]
+        private TargetTeam targetTeam;
+        [SerializeField, Tooltip("활성화하면 최대 체력보다 현재 체력이 낮은 함선만 선택합니다.")]
+        private bool requiresDamagedTarget;
+        [SerializeField, Tooltip("같은 팀의 HealingProjectileAttackCompo 함선을 회복 대상에서 제외합니다.")]
+        private bool excludesHealingSupportShips;
+        [SerializeField, Tooltip("규칙에 맞는 대상이 없을 때 전체 후보에서 선택합니다. 전열 전용 지원함은 끕니다.")]
+        private bool allowsRuleFallback = true;
+        public TargetTeam Team => targetTeam;
         public TargetSelectionMode SelectionMode => selectionMode;
         public IReadOnlyList<TargetRule> TargetRules => targetRules;
         private Ship myship;
@@ -77,7 +94,7 @@ namespace SB.Scripts
             if (targetList.Count == 0)
                 return null;
 
-            if (_commanderTargetColumn >= 0)
+            if (targetTeam == TargetTeam.Opponent && _commanderTargetColumn >= 0)
                 return SelectCommanderTarget(targetList);
 
             return SelectTargetByRules(targetList);
@@ -124,6 +141,24 @@ namespace SB.Scripts
         {
             List<Ship> targetList = new List<Ship>();
 
+            if (targetTeam == TargetTeam.SameTeam)
+            {
+                if (myship.myShipData.ShipType == ShipType.Enemy)
+                {
+                    foreach (Enemy ally in currentStageBattleSpawnData.EnemySpawnData.Enemies)
+                        if (IsValidTarget(ally)) targetList.Add(ally);
+                }
+                else
+                {
+                    foreach (Ship ally in currentStageBattleSpawnData.EscortShips)
+                        if (IsValidTarget(ally)) targetList.Add(ally);
+                    if (IsValidTarget(currentStageBattleSpawnData.MainShip))
+                        targetList.Add(currentStageBattleSpawnData.MainShip);
+                }
+
+                return targetList;
+            }
+
             if (myship.myShipData.ShipType == ShipType.EscortShip ||
                 myship.myShipData.ShipType == ShipType.MainShip)
             {
@@ -131,7 +166,7 @@ namespace SB.Scripts
 
                 for (int i = 0; i < enemies.Count; i++)
                 {
-                    if (CanTarget(enemies[i]))
+                    if (IsValidTarget(enemies[i]))
                         targetList.Add(enemies[i]);
                 }
 
@@ -144,7 +179,7 @@ namespace SB.Scripts
 
                 for (int i = 0; i < escortShips.Count; i++)
                 {
-                    if (CanTarget(escortShips[i]))
+                    if (IsValidTarget(escortShips[i]))
                         targetList.Add(escortShips[i]);
                 }
 
@@ -152,7 +187,7 @@ namespace SB.Scripts
                     currentStageBattleSpawnData.MainShip != null &&
                     currentStageBattleSpawnData.MainShip.isActiveAndEnabled &&
                     currentStageBattleSpawnData.MainShip.IsDead == false &&
-                    CanTarget(currentStageBattleSpawnData.MainShip))
+                    IsValidTarget(currentStageBattleSpawnData.MainShip))
                 {
                     targetList.Add(currentStageBattleSpawnData.MainShip);
                 }
@@ -163,10 +198,30 @@ namespace SB.Scripts
             return targetList;
         }
 
-        private bool CanTarget(Ship target)
+        public bool IsValidTarget(Ship target)
         {
-            return target != null && target.isActiveAndEnabled && target.IsDead == false &&
-                   (target.IsDirectTargetProtected == false || myship.CanTargetProtectedShips);
+            if (myship == null || target == null || !target.isActiveAndEnabled || target.IsDead)
+                return false;
+
+            bool isOwnerEnemy = myship is Enemy || myship.myShipData.ShipType == ShipType.Enemy;
+            bool isTargetEnemy = target is Enemy || target.myShipData.ShipType == ShipType.Enemy;
+            bool isSameTeam = isOwnerEnemy == isTargetEnemy;
+            if ((targetTeam == TargetTeam.SameTeam) != isSameTeam)
+                return false;
+            if (targetTeam == TargetTeam.SameTeam && target == myship)
+                return false;
+            if (targetTeam == TargetTeam.SameTeam && excludesHealingSupportShips &&
+                target.GetCompo<SB.Scripts.AttackCompo.HealingProjectileAttackCompo>() != null)
+                return false;
+            if (targetTeam == TargetTeam.Opponent && target.IsDirectTargetProtected &&
+                !myship.CanTargetProtectedShips)
+                return false;
+
+            if (!requiresDamagedTarget)
+                return true;
+
+            EntityHealth health = target.GetCompo<EntityHealth>();
+            return health != null && health.IsAlive && health.CurrentHealth < health.MaxHealth;
         }
 
         private Ship SelectTargetByRules(List<Ship> targetList)
@@ -182,7 +237,7 @@ namespace SB.Scripts
                     return target;
             }
 
-            return SelectDistributedTarget(targetList);
+            return allowsRuleFallback ? SelectDistributedTarget(targetList) : null;
         }
 
         private Ship SelectDistributedTargetByRule(List<Ship> targetList, TargetRule rule)
@@ -205,8 +260,13 @@ namespace SB.Scripts
             if (targetList == null || targetList.Count == 0)
                 return null;
 
+            if (selectionMode == TargetSelectionMode.RandomInRule)
+                return targetList[Random.Range(0, targetList.Count)];
+
             if (selectionMode == TargetSelectionMode.HighestCurrentHealth)
                 return SelectHighestCurrentHealth(targetList);
+            if (selectionMode == TargetSelectionMode.LowestCurrentHealth)
+                return SelectLowestCurrentHealth(targetList);
 
             int selectionIndex = GetFormationSelectionIndex() % targetList.Count;
             return targetList[selectionIndex];
@@ -228,6 +288,30 @@ namespace SB.Scripts
                 {
                     selectedTarget = candidate;
                     highestHealth = currentHealth;
+                    nearestDistanceSquared = distanceSquared;
+                }
+            }
+
+            return selectedTarget;
+        }
+
+        private Ship SelectLowestCurrentHealth(List<Ship> targetList)
+        {
+            Ship selectedTarget = null;
+            float lowestHealth = float.PositiveInfinity;
+            float nearestDistanceSquared = float.PositiveInfinity;
+
+            foreach (Ship candidate in targetList)
+            {
+                EntityHealth health = candidate.GetCompo<EntityHealth>();
+                if (health == null) continue;
+                float currentHealth = health.CurrentHealth;
+                float distanceSquared = (candidate.transform.position - myship.transform.position).sqrMagnitude;
+                if (selectedTarget == null || currentHealth < lowestHealth ||
+                    (currentHealth == lowestHealth && distanceSquared < nearestDistanceSquared))
+                {
+                    selectedTarget = candidate;
+                    lowestHealth = currentHealth;
                     nearestDistanceSquared = distanceSquared;
                 }
             }
@@ -262,6 +346,10 @@ namespace SB.Scripts
             if (line == TargetLine.Any)
                 return true;
 
+            // The player main ship has no escort slot and is the last support line.
+            if (targetTeam == TargetTeam.SameTeam && target.myShipData.ShipType == ShipType.MainShip)
+                return line == TargetLine.Back;
+
             if (target.myShipData.ShipType == ShipType.Enemy)
             {
                 return line switch
@@ -276,6 +364,7 @@ namespace SB.Scripts
             return line switch
             {
                 TargetLine.Front => target.myShipData.SpawnSlot.x == PlayerFleetLoadout.ColumnCount - 1,
+                TargetLine.Middle => target.myShipData.SpawnSlot.x == 1,
                 TargetLine.Back => target.myShipData.SpawnSlot.x == 0,
                 _ => false
             };
@@ -287,4 +376,6 @@ namespace SB.Scripts
         }
     }
 }
+
+
 

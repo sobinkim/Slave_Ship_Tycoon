@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using SB.Core;
 using SB.Scripts.AttackCompo;
 using UnityEngine;
@@ -63,6 +63,8 @@ namespace SB.Scripts
         public MyShipData myShipData;
         public ShipStatCompo ShipStatCompo => _shipStatCompo;
         public int SpawnGeneration { get; private set; }
+        public bool FinishesAttackAnimationWithoutTarget => _attackCompo != null && _attackCompo.FinishesAnimationWithoutTarget;
+        public bool TicksAttackCooldownWithoutTarget => _attackCompo != null && _attackCompo.TicksCooldownWithoutTarget;
         public bool CanAttack => _attackCompo != null && _attackCompo.CanAttack;
         public bool CanTargetProtectedShips => canTargetProtectedShips;
         
@@ -206,3 +208,5 @@ namespace SB.Scripts
         
     }
 }
+
+

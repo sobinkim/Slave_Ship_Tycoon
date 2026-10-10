@@ -134,6 +134,7 @@ MonoBehaviour:
   targetRules:
   - Line: 2
     Role: 1
+  selectionMode: 0
 --- !u!1 &687576525234086765
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,7 +160,7 @@ Transform:
   m_GameObject: {fileID: 687576525234086765}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.04, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: -0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -536,6 +537,7 @@ MonoBehaviour:
   barWidth: 0.68
   barHeight: 0.045
   alwaysShowHealth: 1
+  showHealthBar: 1
 --- !u!114 &4687548955774004004
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -506,6 +506,7 @@ MonoBehaviour:
     Role: 0
   - Line: 2
     Role: 0
+  selectionMode: 0
 --- !u!1 &470321411243344476
 GameObject:
   m_ObjectHideFlags: 0
@@ -973,6 +974,7 @@ MonoBehaviour:
   barWidth: 0.68
   barHeight: 0.045
   alwaysShowHealth: 1
+  showHealthBar: 1
 --- !u!114 &6455504426605194295
 MonoBehaviour:
   m_ObjectHideFlags: 0

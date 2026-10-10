@@ -27,11 +27,12 @@ namespace SB.Scripts.AttackCompo
         public event System.Action<Ship> TargetChanged;
         protected float FinalAttackDamage => combatStatCompo != null ? combatStatCompo.FinalAttackDamage : 0f;
         protected float FinalAttackSpeed => combatStatCompo != null ? combatStatCompo.FinalAttackSpeed : 1f;
-        protected float FinalAttackCooldown => attackCooldown / FinalAttackSpeed;
+        protected virtual float FinalAttackCooldown => attackCooldown / FinalAttackSpeed;
+        public virtual bool TicksCooldownWithoutTarget => false;
+        public virtual bool FinishesAnimationWithoutTarget => false;
         public bool HasAliveTarget => CurrentTarget != null && CurrentTarget.isActiveAndEnabled &&
                                       CurrentTarget.IsDead == false &&
-                                      (CurrentTarget.IsDirectTargetProtected == false ||
-                                       (ownerShip != null && ownerShip.CanTargetProtectedShips)) &&
+                                      (targetSelector == null || targetSelector.IsValidTarget(CurrentTarget)) &&
                                       CurrentTarget.SpawnGeneration == _currentTargetSpawnGeneration;
         public bool CanAttack => _isBattleRunning && currentCooldown <= 0f;
 
@@ -66,7 +67,7 @@ namespace SB.Scripts.AttackCompo
             }
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             if (animatorTrigger == null)
                 return;
@@ -235,3 +236,5 @@ namespace SB.Scripts.AttackCompo
         }
     }
 }
+
+
