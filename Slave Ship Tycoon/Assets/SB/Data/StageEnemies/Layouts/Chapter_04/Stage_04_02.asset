@@ -16,11 +16,14 @@ MonoBehaviour:
   stage: 2
   enemySlots:
   - {fileID: 0}
-  - {fileID: 1689721241314480839, guid: 7497113a48356294f9ea4c97d1472d78, type: 3}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 7526993113934916792, guid: 2ca352d100fdf3c47905fba161e257ac, type: 3}
+  - {fileID: 1260669491459143875, guid: 292cb7623b53e84479407745827a76ac, type: 3}
+  - {fileID: 7117596764004494651, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+  - {fileID: 3259515473819612312, guid: 1c3a4fc18b9960843ab57d31cb210bb2, type: 3}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 1845999461184479991, guid: e98ddc3ed0b7c264481673123ca0d983, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}

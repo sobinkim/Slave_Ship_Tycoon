@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 028726fa33cb48ad9428aaac3d069ef9, type: 3}
+  m_Name: DiamondBox
+  m_EditorClassIdentifier: 
+  displayName: "\uB2E4\uC774\uC544 \uD654\uBB3C"
+  accentColor: {r: 1, g: 0.64, b: 0.04, a: 1}
+  Icon: {fileID: 21300000, guid: 59e2dc19e1c997144b82a502277e22e2, type: 2}
+  Type: 2
+  Rewards:
+  - CurrencyType: 0
+    CurrencyAmount: 28320500
+  - CurrencyType: 1
+    CurrencyAmount: 1840
+  - CurrencyType: 2
+    CurrencyAmount: 120
+  BaseWeight: 6

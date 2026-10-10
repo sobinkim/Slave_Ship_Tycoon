@@ -23,4 +23,16 @@ namespace SB.Core.EventBus
             MarketPrices = marketPrices;
         }
     }
+
+    public readonly struct TransportCargoChangedEvent : IEvent
+    {
+        public readonly CargoManager CargoManager;
+        public readonly IReadOnlyList<CargoData> CargoData;
+
+        public TransportCargoChangedEvent(CargoManager cargoManager, IReadOnlyList<CargoData> cargoData)
+        {
+            CargoManager = cargoManager;
+            CargoData = cargoData;
+        }
+    }
 }

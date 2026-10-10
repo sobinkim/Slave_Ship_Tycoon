@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "checks": [
+    "HealingSupportShip: random selection",
+    "HealingSupportShip: front-middle-back order",
+    "HealingSupportShip: ballistic arc configured",
+    "HealingSupportShip: triple firing interval preserved",
+    "HealingSupportShip: explicit mortar fire point",
+    "HealingSupportShip: support status references",
+    "HealingSupportShip: cross particle healing effect",
+    "EnemyHealingSupportShip: random selection",
+    "EnemyHealingSupportShip: front-middle-back order",
+    "EnemyHealingSupportShip: ballistic arc configured",
+    "EnemyHealingSupportShip: triple firing interval preserved",
+    "EnemyHealingSupportShip: explicit mortar fire point",
+    "EnemyHealingSupportShip: support status references",
+    "EnemyHealingSupportShip: cross particle healing effect",
+    "Both front ships selected despite different health: 56/72",
+    "Full front line falls through to damaged middle",
+    "Unavailable middle falls through to back",
+    "Full-health allies and self are excluded",
+    "Capsule heals allied column 1",
+    "Capsule heals allied column 2",
+    "Capsule cannot heal opposing team",
+    "Player front line takes priority",
+    "Main ship remains a valid rear support recipient",
+    "Mortar trajectory rises, reaches apex, and lands on target",
+    "Recruitment catalog still includes healing support ship"
+  ]
+}

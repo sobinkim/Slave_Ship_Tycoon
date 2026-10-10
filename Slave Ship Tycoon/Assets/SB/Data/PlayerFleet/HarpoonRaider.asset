@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 688406d05a0d46f0b2f00223e1705989, type: 3}
+  m_Name: HarpoonRaider
+  m_EditorClassIdentifier: 
+  _stableId: harpoon_raider
+  _displayName: "\uC791\uC0B4 \uC2B5\uACA9\uD568"
+  _icon: {fileID: 21300000, guid: 8ea451ead4bae924f872092df25ebe92, type: 3}
+  _grade: 1
+  _shipPrefab: {fileID: 1689721241314480839, guid: 7cfa6f410d762254f833ae52b8499c09, type: 3}

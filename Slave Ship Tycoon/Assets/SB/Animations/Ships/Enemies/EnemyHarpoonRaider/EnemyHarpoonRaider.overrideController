@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: EnemyHarpoonRaider
+  m_Controller: {fileID: 9100000, guid: 15f157ed78e722c4d99c7bd2ea0c3377, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: a85e89ff766f4f04a85d5de0e62ecdc5, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: c5581687f885ead4c83b8e73bec3ebc9, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 23d423260d2f6f34daa54d65af981024, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f4207ba846331f042bc4273c660a26ff, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: bf4282234318e8e4aa886ef3a79361df, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: fadecb95a5c29784b97d6813f01ea547, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 3a271e1688803944ebdd79283700f130, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1e19b90552134d847886ec30f804bc6a, type: 2}

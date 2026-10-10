@@ -2,6 +2,12 @@ using UnityEngine;
 
 namespace SB.Scripts.Projectiles
 {
+    public enum ProjectileHitMode
+    {
+        Normal,
+        Guaranteed
+    }
+
     public readonly struct ProjectileLaunchData
     {
         public readonly Ship Target;
@@ -11,6 +17,7 @@ namespace SB.Scripts.Projectiles
         public readonly Vector3 WaterImpactPosition;
         public readonly ProjectileFlightData FlightData;
         public readonly float Damage;
+        public readonly ProjectileHitMode HitMode;
 
         public ProjectileLaunchData(
             Ship target,
@@ -18,7 +25,8 @@ namespace SB.Scripts.Projectiles
             Vector3 targetImpactPosition,
             Vector3 waterImpactPosition,
             ProjectileFlightData flightData,
-            float damage)
+            float damage,
+            ProjectileHitMode hitMode = ProjectileHitMode.Normal)
         {
             Target = target;
             TargetSpawnGeneration = target != null ? target.SpawnGeneration : 0;
@@ -27,6 +35,7 @@ namespace SB.Scripts.Projectiles
             WaterImpactPosition = waterImpactPosition;
             FlightData = flightData;
             Damage = damage;
+            HitMode = hitMode;
         }
     }
 }

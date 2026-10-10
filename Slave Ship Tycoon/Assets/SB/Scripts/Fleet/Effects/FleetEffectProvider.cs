@@ -5,11 +5,22 @@ using UnityEngine;
 
 namespace SB.Scripts.Fleet.Effects
 {
+    public enum FleetEffectTargetingMode
+    {
+        Formation,
+        ExplicitTarget
+    }
+
     public sealed class FleetEffectProvider : MonoBehaviour
     {
         [SerializeField] private Ship owner;
         [SerializeField] private FleetEffectReceiver sourceReceiver;
         [SerializeField] private FleetEffectDefinition[] effects = Array.Empty<FleetEffectDefinition>();
+        [SerializeField, Tooltip("진형 효과는 전투 시작에 적용하고, 명시적 대상 효과는 지원 컴포넌트가 대상을 지정합니다.")]
+        private FleetEffectTargetingMode targetingMode;
+        private Ship explicitTarget;
+        private FleetEffectDefinition explicitEffect;
+        private int explicitTargetSpawnGeneration;
         private struct Grant { public FleetEffectReceiver Receiver; public FleetEffectDefinition Effect; }
         private readonly List<Grant> grants = new List<Grant>();
         private readonly List<Ship> allies = new List<Ship>();
@@ -51,6 +62,7 @@ namespace SB.Scripts.Fleet.Effects
             }
             if (!allies.Contains(owner)) return;
             isBound = true;
+            if (targetingMode == FleetEffectTargetingMode.ExplicitTarget) return;
             foreach (FleetEffectDefinition effect in effects)
             {
                 if (effect == null) continue;
@@ -70,12 +82,44 @@ namespace SB.Scripts.Fleet.Effects
                 grants.Add(new Grant { Receiver = sourceReceiver, Effect = effect });
             }
         }
+        public void SetExplicitTarget(Ship target, FleetEffectDefinition effect)
+        {
+            if (targetingMode != FleetEffectTargetingMode.ExplicitTarget) return;
+            if (!IsSupplying || target == null || target.IsDead || !target.isActiveAndEnabled ||
+                effect == null || !allies.Contains(target))
+            {
+                RemoveGrants(false);
+                return;
+            }
+
+            if (explicitTarget == target && explicitEffect == effect &&
+                explicitTargetSpawnGeneration == target.SpawnGeneration) return;
+            RemoveGrants(false);
+            FleetEffectReceiver receiver = target.GetCompo<FleetEffectReceiver>();
+            if (receiver == null) return;
+            explicitTarget = target;
+            explicitTargetSpawnGeneration = target.SpawnGeneration;
+            explicitEffect = effect;
+            receiver.Add(this, effect, false);
+            grants.Add(new Grant { Receiver = receiver, Effect = effect });
+        }
+
         public void ReleaseEffects(bool shouldBreak)
         {
             isBound = false; // Gameplay protection ends before any visual animation starts.
+            RemoveGrants(shouldBreak);
+        }
+
+        private void RemoveGrants(bool shouldBreak)
+        {
             foreach (Grant grant in grants)
                 if (grant.Receiver != null) grant.Receiver.Remove(this, grant.Effect, shouldBreak);
             grants.Clear();
+            explicitTarget = null;
+            explicitTargetSpawnGeneration = 0;
+            explicitEffect = null;
         }
     }
 }
+
+

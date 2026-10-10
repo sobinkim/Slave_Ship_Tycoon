@@ -15,7 +15,10 @@ MonoBehaviour:
   chapter: 1
   stage: 5
   enemySlots:
-  - {fileID: 1845999461184479991, guid: aaec881a6df705f409294adb73329da2, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 7219382170170316925, guid: d1698f30c1eff2243891395630b796f4, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

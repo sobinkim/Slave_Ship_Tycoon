@@ -33,7 +33,7 @@ namespace SB.Scripts.States
                 return;
             }
 
-            if (_owner.EnsureAttackTarget() == false)
+            if (_owner.EnsureAttackTarget() == false && !_owner.FinishesAttackAnimationWithoutTarget)
                 _owner.ChangeState(ShipStateType.Idle);
         }
 
@@ -44,3 +44,5 @@ namespace SB.Scripts.States
         }
     }
 }
+
+

@@ -1,0 +1,18 @@
+[
+  {
+    "spritePath": "Assets/SB/Art/Sprites/Ships/HealingSupportShip.png",
+    "width": 1453,
+    "height": 1082,
+    "muzzle": "(0.1552, 0.0711, 0.0000)",
+    "mode": "BallisticArc",
+    "selection": "RandomInRule"
+  },
+  {
+    "spritePath": "Assets/SB/Art/Sprites/Ships/Enemies/EnemyHealingSupportShip.png",
+    "width": 1538,
+    "height": 1114,
+    "muzzle": "(0.1543, 0.0718, 0.0000)",
+    "mode": "BallisticArc",
+    "selection": "RandomInRule"
+  }
+]

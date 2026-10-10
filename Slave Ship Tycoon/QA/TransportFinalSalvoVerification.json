@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "No health bar, no attacks, ordinary damage does not defeat the transport.",
+    "Escort defeat stops ordinary attacks and cancels previous projectiles.",
+    "8 shots launched together, target the transport, ignore luck, and share the 0.7 second arrival time.",
+    "Stage reinitialization cancels pending shots without triggering defeat.",
+    "8 shots launched together, target the transport, ignore luck, and share the 0.7 second arrival time.",
+    "A battle starting with no escorts triggers one fresh final salvo.",
+    "All guaranteed shots hit before explosion; HP stays unchanged; defeat follows the presentation hold."
+  ],
+  "failureEvents": 1,
+  "allHitsBeforeExplosion": true,
+  "mainShipDead": true,
+  "pendingCallbacks": 0,
+  "phaseAfterDefeat": "WaitingForBattle"
+}

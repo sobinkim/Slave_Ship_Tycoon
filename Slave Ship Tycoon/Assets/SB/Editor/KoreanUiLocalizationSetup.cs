@@ -54,7 +54,6 @@ namespace SB.Editor
             { "Emerald", "에메랄드" }
         };
 
-        [MenuItem("Tools/SB/Apply Korean UI")]
         public static void Apply()
         {
             if (EditorApplication.isPlaying)

@@ -2,7 +2,6 @@ using SB.Core.EventBus;
 using System.Collections.Generic;
 using UnityEngine;
 using SB.Scripts.Currency;
-using System.Text;
 
 namespace SB.Scripts
 {
@@ -11,6 +10,13 @@ namespace SB.Scripts
         [SerializeField] private StageInfoBarView view;
         [SerializeField] private CargoManager cargoManager;
         [SerializeField] private ChapterDatabase chapterDatabase;
+        [Header("Route Card Text")]
+        [SerializeField] private string pirateTitle = "해적 해역";
+        [SerializeField] private string transportTitle = "운송 해역";
+        [SerializeField] private string bossTitle = "봉쇄 함대";
+        [SerializeField] private string pirateDescription = "자동 약탈 중 · 화물을 모아 출항을 준비하세요";
+        [SerializeField] private string transportDescription = "목적지까지 화물을 안전하게 운송하세요";
+        [SerializeField] private string bossDescription = "보스를 격파하고 다음 항로를 여세요";
         private StageStartedEvent currentStage;
         private bool hasStage;
         private bool isDirty;
@@ -21,9 +27,9 @@ namespace SB.Scripts
             isDirty = false;
             bool isTransport = currentStage.RouteType == ChapterRouteType.Sell;
             int total = chapterDatabase != null && chapterDatabase.TryGetChapter(currentStage.Chapter, out var chapter) ? chapter.MaxStage : currentStage.Stage;
-            string title = isTransport ? $"운송 항로 {currentStage.Chapter}" :
-                currentStage.IsBossBattle ? $"항로 {currentStage.Chapter} · 봉쇄 함대 돌파" : $"항로 {currentStage.Chapter} · 해적 해역";
-            string detail = isTransport ? "목적지로 항해 중 · 화물을 지켜 정산하세요" : "자동 약탈 중 · 화물 준비 후 보스 도전";
+            string title = isTransport ? transportTitle : currentStage.IsBossBattle ? bossTitle : pirateTitle;
+            string detail = isTransport ? transportDescription : currentStage.IsBossBattle ? bossDescription : pirateDescription;
+            view.SetRouteNumber(currentStage.Chapter);
             view.SetRoute(title, detail);
             view.SetProgress(currentStage.Stage,total,isTransport);
         }
@@ -56,7 +62,7 @@ namespace SB.Scripts
                 ? StageInfoBarMode.Odd
                 : StageInfoBarMode.Even;
 
-            view.SetStageInfoBarMode(mode);
+            view.SetStageInfoBarMode(mode, evt.IsBossBattle);
         }
 
         private void HandleSellChapterStarted(SellChapterStartedEvent evt)
@@ -65,7 +71,7 @@ namespace SB.Scripts
                 return;
 
             view.ClearCargoItems();
-            view.AddCargoItems(cargoManager.CargoData);
+            view.AddCargoItems(cargoManager.TransportCargoData);
         }
 
         private void HandleObtainChapterStarted(ObtainChapterStartedEvent evt)

@@ -8,18 +8,26 @@ namespace SB.Scripts
 {
     public class MainShip : Ship
     {
+        [Header("Cargo presentation")]
+        [SerializeField] private ShipCargoVisualizer cargoVisualizer;
+        public ShipCargoVisualizer CargoVisualizer => cargoVisualizer;
+        [SerializeField] private MainShipDestruction destruction;
+        public MainShipDestruction Destruction => destruction;
+
     
         protected override void OnEnable()
         {
             base.OnEnable();
             OnDeathEvent.AddListener(Death);
             Bus<UpgradeEvent>.OnEvent += StatUpdate;
+            Bus<BattleStartEvent>.OnEvent += HandleBattleStarted;
         }
 
         private void OnDisable()
         {
             OnDeathEvent.RemoveListener(Death);
             Bus<UpgradeEvent>.OnEvent -= StatUpdate;
+            Bus<BattleStartEvent>.OnEvent -= HandleBattleStarted;
         }
 
         private void Start()
@@ -31,6 +39,15 @@ namespace SB.Scripts
         {
             base.OnSpawnedFromPool();
             RefreshMainShipStats();
+        }
+
+        private void HandleBattleStarted(BattleStartEvent evt)
+        {
+            if (evt.BattleSpawnData.MainShip != this || IsDead)
+                return;
+
+            // 공격 컴포넌트가 없는 운송선도 조우 이동을 끝내야 물살이 사라집니다.
+            ChangeState(ShipStateType.Idle);
         }
 
         private void Death()

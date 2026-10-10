@@ -21,3 +21,9 @@ MonoBehaviour:
     _weight: 5
   - _shipData: {fileID: 11400000, guid: f9b883b2ca63c72488e823462df6af4e, type: 2}
     _weight: 35
+  - _shipData: {fileID: 11400000, guid: c0e89d0f58dae13479063c168a7066c2, type: 2}
+    _weight: 100
+  - _shipData: {fileID: 11400000, guid: cb9be5390449b0348a5f1d799277bcc1, type: 2}
+    _weight: 25
+  - _shipData: {fileID: 11400000, guid: 9118758f64a3d824683e5bb28e1a79e2, type: 2}
+    _weight: 25

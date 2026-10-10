@@ -12,7 +12,7 @@ namespace SB.Scripts
     {
         [SerializeField] private TransportEquipmentManager _transportEquipmentManager;
 
-        private CargoData[] _currentCargoData = Array.Empty<CargoData>();
+        private IReadOnlyList<CargoData> _currentCargoData = Array.Empty<CargoData>();
         private CargoData[] _sellCargoData = Array.Empty<CargoData>();
         private IReadOnlyDictionary<ETransportItemType, TransportMarketPriceEntry> _marketPriceEntries;
         private int _sellChapter;
@@ -20,7 +20,7 @@ namespace SB.Scripts
 
         private void OnEnable()
         {
-            Bus<ChangedCurrentCargoCapacityEvent>.OnEvent += OnCargoChanged;
+            Bus<TransportCargoChangedEvent>.OnEvent += OnCargoChanged;
             Bus<GetMarketPriceEvent>.OnEvent += OnMarketPricesChanged;
             Bus<SellChapterStartedEvent>.OnEvent += OnSellChapterStarted;
             Bus<SellChapterCompletedEvent>.OnEvent += OnSellChapterCompleted;
@@ -28,13 +28,13 @@ namespace SB.Scripts
 
         private void OnDisable()
         {
-            Bus<ChangedCurrentCargoCapacityEvent>.OnEvent -= OnCargoChanged;
+            Bus<TransportCargoChangedEvent>.OnEvent -= OnCargoChanged;
             Bus<GetMarketPriceEvent>.OnEvent -= OnMarketPricesChanged;
             Bus<SellChapterStartedEvent>.OnEvent -= OnSellChapterStarted;
             Bus<SellChapterCompletedEvent>.OnEvent -= OnSellChapterCompleted;
         }
 
-        private void OnCargoChanged(ChangedCurrentCargoCapacityEvent evt)
+        private void OnCargoChanged(TransportCargoChangedEvent evt)
         {
             _currentCargoData = evt.CargoData ?? Array.Empty<CargoData>();
         }
@@ -151,14 +151,14 @@ namespace SB.Scripts
             return true;
         }
 
-        private static CargoData[] CopyCargoData(CargoData[] source)
+        private static CargoData[] CopyCargoData(IReadOnlyList<CargoData> source)
         {
-            if (source == null || source.Length == 0)
+            if (source == null || source.Count == 0)
                 return Array.Empty<CargoData>();
 
-            CargoData[] copy = new CargoData[source.Length];
+            CargoData[] copy = new CargoData[source.Count];
 
-            for (int i = 0; i < source.Length; i++)
+            for (int i = 0; i < source.Count; i++)
             {
                 CargoData cargoData = source[i];
 

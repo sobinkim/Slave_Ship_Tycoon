@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: EnemyCrusherShip
+  m_Controller: {fileID: 9100000, guid: a19d09b706038844d803eea4cdf6ac3e, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 2c2da64badc8f9d448fed494c994ccd9, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 45249ef6eab619c4182f4f026e8fcd6a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 7ddec67b5733ab34f9ede8dc91fa2f4d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: c88caf31580bb794ebb37e61d8705871, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: dd44c44df63c6bc40bcd7c57aad632c8, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: ccaeaa58127736340bc8f83ab4b069fb, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 07b2132768f46df418495f5b74ee5310, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: bea28f944d32f1d4d92f5bbefbb4a0cb, type: 2}

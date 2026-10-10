@@ -1,0 +1,884 @@
+fileFormatVersion: 2
+guid: aa642b9ba7a4588419917fcb468c9279
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4055208603561323267
+    second: HealingCapsule_0
+  - first:
+      213: 6313088782060723002
+    second: HealingCapsule_1
+  - first:
+      213: -8451989688507690580
+    second: HealingCapsule_2
+  - first:
+      213: 1998897247218719047
+    second: HealingCapsule_3
+  - first:
+      213: -3868481523652129894
+    second: HealingCapsule_4
+  - first:
+      213: 2960781402709462535
+    second: HealingCapsule_5
+  - first:
+      213: 3130548214240330456
+    second: HealingCapsule_6
+  - first:
+      213: 1353016510247446051
+    second: HealingCapsule_7
+  - first:
+      213: 6654213390186802244
+    second: HealingCapsule_8
+  - first:
+      213: 5325719674537807896
+    second: HealingCapsule_9
+  - first:
+      213: -1965031555481801895
+    second: HealingCapsule_10
+  - first:
+      213: 3378402960264521861
+    second: HealingCapsule_11
+  - first:
+      213: 3846235213829573924
+    second: HealingCapsule_12
+  - first:
+      213: -6519313736409577304
+    second: HealingCapsule_13
+  - first:
+      213: -6583297106388850124
+    second: HealingCapsule_14
+  - first:
+      213: 5803466919868684579
+    second: HealingCapsule_15
+  - first:
+      213: 4768395928231144954
+    second: HealingCapsule_16
+  - first:
+      213: 7343622862843403655
+    second: HealingCapsule_17
+  - first:
+      213: 6677054347496557469
+    second: HealingCapsule_18
+  - first:
+      213: 4163871913716259474
+    second: HealingCapsule_19
+  - first:
+      213: 3416188711153733988
+    second: HealingCapsule_20
+  - first:
+      213: 1622438127205094736
+    second: HealingCapsule_21
+  - first:
+      213: 1665983237298092392
+    second: HealingCapsule_22
+  - first:
+      213: -7728275888795330611
+    second: HealingCapsule_23
+  - first:
+      213: 3640869254806086170
+    second: HealingCapsule_24
+  - first:
+      213: 3667095764395617314
+    second: HealingCapsule_25
+  - first:
+      213: 3080781665465542098
+    second: HealingCapsule_26
+  - first:
+      213: 4007688815154379703
+    second: HealingCapsule_27
+  - first:
+      213: 7883003194087434237
+    second: HealingCapsule_28
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 2438.0952
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: HealingCapsule_0
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 662
+        width: 45
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30b61615dbef64830800000000000000
+      internalID: 4055208603561323267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_1
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 660
+        width: 27
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3b9b329cc89c9750800000000000000
+      internalID: 6313088782060723002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_2
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 538
+        width: 156
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca11c3ba82084ba80800000000000000
+      internalID: -8451989688507690580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_3
+      rect:
+        serializedVersion: 2
+        x: 861
+        y: 634
+        width: 110
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7495afaa4728dbb10800000000000000
+      internalID: 1998897247218719047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_4
+      rect:
+        serializedVersion: 2
+        x: 1010
+        y: 604
+        width: 265
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9b8d82ec84605ac0800000000000000
+      internalID: -3868481523652129894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_5
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 168
+        width: 1105
+        height: 453
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70e8416bffec61920800000000000000
+      internalID: 2960781402709462535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_6
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 611
+        width: 24
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d24706b301f17b20800000000000000
+      internalID: 3130548214240330456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_7
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 563
+        width: 60
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 326a984f851e6c210800000000000000
+      internalID: 1353016510247446051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_8
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 577
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44c6bb5a2d3885c50800000000000000
+      internalID: 6654213390186802244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_9
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 579
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 810922eb3d1c8e940800000000000000
+      internalID: 5325719674537807896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_10
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 571
+        width: 19
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95be213263ecab4e0800000000000000
+      internalID: -1965031555481801895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_11
+      rect:
+        serializedVersion: 2
+        x: 667
+        y: 577
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 588e1b2c79f72ee20800000000000000
+      internalID: 3378402960264521861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_12
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 532
+        width: 49
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42d09ea7c82906530800000000000000
+      internalID: 3846235213829573924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_13
+      rect:
+        serializedVersion: 2
+        x: 1459
+        y: 378
+        width: 86
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a88bf192beb685a0800000000000000
+      internalID: -6519313736409577304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_14
+      rect:
+        serializedVersion: 2
+        x: 1492
+        y: 450
+        width: 19
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43ae5da592e63a4a0800000000000000
+      internalID: -6583297106388850124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_15
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 307
+        width: 25
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 329d0806a6e0a8050800000000000000
+      internalID: 5803466919868684579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_16
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 271
+        width: 17
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afde2aa25debc2240800000000000000
+      internalID: 4768395928231144954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_17
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 311
+        width: 14
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78dd738e51ac9e560800000000000000
+      internalID: 7343622862843403655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_18
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 283
+        width: 34
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9b82807d89a9ac50800000000000000
+      internalID: 6677054347496557469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_19
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 313
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29a9843c17b09c930800000000000000
+      internalID: 4163871913716259474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_20
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 288
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4619406788db86f20800000000000000
+      internalID: 3416188711153733988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_21
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 273
+        width: 25
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0551c1271ee048610800000000000000
+      internalID: 1622438127205094736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_22
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 273
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86978e47de2ce1710800000000000000
+      internalID: 1665983237298092392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_23
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 280
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc7532a7606afb490800000000000000
+      internalID: -7728275888795330611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_24
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 243
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a12ab5e0c47f68230800000000000000
+      internalID: 3640869254806086170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_25
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 243
+        width: 12
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22ce32a2b2424e230800000000000000
+      internalID: 3667095764395617314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_26
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 225
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d52c902a9221ca20800000000000000
+      internalID: 3080781665465542098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_27
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 224
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bb35956ebb2e9730800000000000000
+      internalID: 4007688815154379703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealingCapsule_28
+      rect:
+        serializedVersion: 2
+        x: 1312
+        y: 225
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df7e9da93ad066d60800000000000000
+      internalID: 7883003194087434237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      HealingCapsule_0: 4055208603561323267
+      HealingCapsule_1: 6313088782060723002
+      HealingCapsule_10: -1965031555481801895
+      HealingCapsule_11: 3378402960264521861
+      HealingCapsule_12: 3846235213829573924
+      HealingCapsule_13: -6519313736409577304
+      HealingCapsule_14: -6583297106388850124
+      HealingCapsule_15: 5803466919868684579
+      HealingCapsule_16: 4768395928231144954
+      HealingCapsule_17: 7343622862843403655
+      HealingCapsule_18: 6677054347496557469
+      HealingCapsule_19: 4163871913716259474
+      HealingCapsule_2: -8451989688507690580
+      HealingCapsule_20: 3416188711153733988
+      HealingCapsule_21: 1622438127205094736
+      HealingCapsule_22: 1665983237298092392
+      HealingCapsule_23: -7728275888795330611
+      HealingCapsule_24: 3640869254806086170
+      HealingCapsule_25: 3667095764395617314
+      HealingCapsule_26: 3080781665465542098
+      HealingCapsule_27: 4007688815154379703
+      HealingCapsule_28: 7883003194087434237
+      HealingCapsule_3: 1998897247218719047
+      HealingCapsule_4: -3868481523652129894
+      HealingCapsule_5: 2960781402709462535
+      HealingCapsule_6: 3130548214240330456
+      HealingCapsule_7: 1353016510247446051
+      HealingCapsule_8: 6654213390186802244
+      HealingCapsule_9: 5325719674537807896
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

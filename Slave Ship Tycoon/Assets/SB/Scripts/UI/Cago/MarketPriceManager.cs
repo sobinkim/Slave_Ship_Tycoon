@@ -36,7 +36,7 @@ namespace SB.Scripts
             new Dictionary<ETransportItemType, TransportMarketPriceEntry>();
         private readonly HashSet<int> _penalizedStages = new HashSet<int>();
 
-        private CargoData[] _currentCargoData = Array.Empty<CargoData>();
+        private IReadOnlyList<CargoData> _currentCargoData = Array.Empty<CargoData>();
         private MainShipUpgradeData _mainShipUpgradeData;
 
         public IReadOnlyDictionary<ETransportItemType, TransportMarketPriceEntry> CargoTypePriceRates =>
@@ -44,7 +44,7 @@ namespace SB.Scripts
 
         private void OnEnable()
         {
-            Bus<ChangedCurrentCargoCapacityEvent>.OnEvent += OnCurrentCargoCapacityChanged;
+            Bus<TransportCargoChangedEvent>.OnEvent += OnCurrentCargoCapacityChanged;
             Bus<UpgradeEvent>.OnEvent += OnUpgradeUpdated;
             Bus<SellChapterStartedEvent>.OnEvent += OnSellChapterStarted;
             Bus<EvenStageClearedEvent>.OnEvent += OnEvenStageCleared;
@@ -53,7 +53,7 @@ namespace SB.Scripts
 
         private void OnDisable()
         {
-            Bus<ChangedCurrentCargoCapacityEvent>.OnEvent -= OnCurrentCargoCapacityChanged;
+            Bus<TransportCargoChangedEvent>.OnEvent -= OnCurrentCargoCapacityChanged;
             Bus<UpgradeEvent>.OnEvent -= OnUpgradeUpdated;
             Bus<SellChapterStartedEvent>.OnEvent -= OnSellChapterStarted;
             Bus<EvenStageClearedEvent>.OnEvent -= OnEvenStageCleared;
@@ -67,7 +67,7 @@ namespace SB.Scripts
             return _cargoTypePriceRates.TryGetValue(cargoType, out marketPriceEntry);
         }
 
-        private void OnCurrentCargoCapacityChanged(ChangedCurrentCargoCapacityEvent evt)
+        private void OnCurrentCargoCapacityChanged(TransportCargoChangedEvent evt)
         {
             _currentCargoData = evt.CargoData ?? Array.Empty<CargoData>();
         }
@@ -103,7 +103,7 @@ namespace SB.Scripts
         {
             _cargoTypePriceRates.Clear();
 
-            for (int i = 0; i < _currentCargoData.Length; i++)
+            for (int i = 0; i < _currentCargoData.Count; i++)
             {
                 CargoData cargoData = _currentCargoData[i];
 

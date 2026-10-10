@@ -1,0 +1,806 @@
+fileFormatVersion: 2
+guid: d1f3bec4caaaa694b843fb790e8ff3cd
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5062698650865214413
+    second: EnemyHealingCapsule_0
+  - first:
+      213: 2682898697312740796
+    second: EnemyHealingCapsule_1
+  - first:
+      213: 8199857095118938417
+    second: EnemyHealingCapsule_2
+  - first:
+      213: 7975137945147264042
+    second: EnemyHealingCapsule_3
+  - first:
+      213: 5685860245636072762
+    second: EnemyHealingCapsule_4
+  - first:
+      213: 4782981554486775323
+    second: EnemyHealingCapsule_5
+  - first:
+      213: -8866524915736620297
+    second: EnemyHealingCapsule_6
+  - first:
+      213: -1930098847513971516
+    second: EnemyHealingCapsule_7
+  - first:
+      213: 4341817594240789461
+    second: EnemyHealingCapsule_8
+  - first:
+      213: -2307980986116966365
+    second: EnemyHealingCapsule_9
+  - first:
+      213: -8702358680628310694
+    second: EnemyHealingCapsule_10
+  - first:
+      213: 5891544029709790308
+    second: EnemyHealingCapsule_11
+  - first:
+      213: 7486293357967846033
+    second: EnemyHealingCapsule_12
+  - first:
+      213: 8344578953388578571
+    second: EnemyHealingCapsule_13
+  - first:
+      213: -7853739645069121390
+    second: EnemyHealingCapsule_14
+  - first:
+      213: -1680540083361814242
+    second: EnemyHealingCapsule_15
+  - first:
+      213: 1351152030010036910
+    second: EnemyHealingCapsule_16
+  - first:
+      213: 4172253601799031958
+    second: EnemyHealingCapsule_17
+  - first:
+      213: -470752292279256865
+    second: EnemyHealingCapsule_18
+  - first:
+      213: 3190532791655116374
+    second: EnemyHealingCapsule_19
+  - first:
+      213: 420863352085737909
+    second: EnemyHealingCapsule_20
+  - first:
+      213: -3582142774486681773
+    second: EnemyHealingCapsule_21
+  - first:
+      213: 4859985076347587594
+    second: EnemyHealingCapsule_22
+  - first:
+      213: 5573912560817750813
+    second: EnemyHealingCapsule_23
+  - first:
+      213: 6966115610344952479
+    second: EnemyHealingCapsule_24
+  - first:
+      213: -3258901172885817502
+    second: EnemyHealingCapsule_25
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 2438.0952
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_0
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 168
+        width: 1225
+        height: 489
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33c545e766eadb9b0800000000000000
+      internalID: -5062698650865214413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_1
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 571
+        width: 104
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb52fad86229b3520800000000000000
+      internalID: 2682898697312740796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_2
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 636
+        width: 118
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 131e783559ebbc170800000000000000
+      internalID: 8199857095118938417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_3
+      rect:
+        serializedVersion: 2
+        x: 1076
+        y: 604
+        width: 20
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2ccd3ff4b16dae60800000000000000
+      internalID: 7975137945147264042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_4
+      rect:
+        serializedVersion: 2
+        x: 1135
+        y: 612
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3547a7b4cb38ee40800000000000000
+      internalID: 5685860245636072762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_5
+      rect:
+        serializedVersion: 2
+        x: 1242
+        y: 620
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1e0e6ae160906240800000000000000
+      internalID: 4782981554486775323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_6
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 612
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f25e55e096c3f480800000000000000
+      internalID: -8866524915736620297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_7
+      rect:
+        serializedVersion: 2
+        x: 1151
+        y: 604
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c4f9840359e635e0800000000000000
+      internalID: -1930098847513971516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_8
+      rect:
+        serializedVersion: 2
+        x: 1191
+        y: 593
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5db6348191c314c30800000000000000
+      internalID: 4341817594240789461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_9
+      rect:
+        serializedVersion: 2
+        x: 685
+        y: 588
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3287426758768ffd0800000000000000
+      internalID: -2307980986116966365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_10
+      rect:
+        serializedVersion: 2
+        x: 1191
+        y: 582
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5dcc1513e20b3780800000000000000
+      internalID: -8702358680628310694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_11
+      rect:
+        serializedVersion: 2
+        x: 557
+        y: 574
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46cec6d8418f2c150800000000000000
+      internalID: 5891544029709790308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_12
+      rect:
+        serializedVersion: 2
+        x: 564
+        y: 574
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19a2a0e1528a4e760800000000000000
+      internalID: 7486293357967846033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_13
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 561
+        width: 12
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b075decb856edc370800000000000000
+      internalID: 8344578953388578571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_14
+      rect:
+        serializedVersion: 2
+        x: 685
+        y: 579
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 298a0495769e10390800000000000000
+      internalID: -7853739645069121390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_15
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 555
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e19e964b2b58da8e0800000000000000
+      internalID: -1680540083361814242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_16
+      rect:
+        serializedVersion: 2
+        x: 667
+        y: 321
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea2db42dc9140c210800000000000000
+      internalID: 1351152030010036910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_17
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 319
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69c43189b82d6e930800000000000000
+      internalID: 4172253601799031958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_18
+      rect:
+        serializedVersion: 2
+        x: 691
+        y: 321
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd87e79c84d8779f0800000000000000
+      internalID: -470752292279256865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_19
+      rect:
+        serializedVersion: 2
+        x: 554
+        y: 289
+        width: 22
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65ea6da7bac074c20800000000000000
+      internalID: 3190532791655116374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_20
+      rect:
+        serializedVersion: 2
+        x: 573
+        y: 293
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b1fc082df437d500800000000000000
+      internalID: 420863352085737909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_21
+      rect:
+        serializedVersion: 2
+        x: 587
+        y: 291
+        width: 13
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3573df7202ca94ec0800000000000000
+      internalID: -3582142774486681773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_22
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 297
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0cc5697da2227340800000000000000
+      internalID: 4859985076347587594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_23
+      rect:
+        serializedVersion: 2
+        x: 1107
+        y: 287
+        width: 17
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1341a431f38a5d40800000000000000
+      internalID: 5573912560817750813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_24
+      rect:
+        serializedVersion: 2
+        x: 1127
+        y: 289
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f921ae25d3d9ca060800000000000000
+      internalID: 6966115610344952479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyHealingCapsule_25
+      rect:
+        serializedVersion: 2
+        x: 1201
+        y: 257
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 267790056ae06c2d0800000000000000
+      internalID: -3258901172885817502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      EnemyHealingCapsule_0: -5062698650865214413
+      EnemyHealingCapsule_1: 2682898697312740796
+      EnemyHealingCapsule_10: -8702358680628310694
+      EnemyHealingCapsule_11: 5891544029709790308
+      EnemyHealingCapsule_12: 7486293357967846033
+      EnemyHealingCapsule_13: 8344578953388578571
+      EnemyHealingCapsule_14: -7853739645069121390
+      EnemyHealingCapsule_15: -1680540083361814242
+      EnemyHealingCapsule_16: 1351152030010036910
+      EnemyHealingCapsule_17: 4172253601799031958
+      EnemyHealingCapsule_18: -470752292279256865
+      EnemyHealingCapsule_19: 3190532791655116374
+      EnemyHealingCapsule_2: 8199857095118938417
+      EnemyHealingCapsule_20: 420863352085737909
+      EnemyHealingCapsule_21: -3582142774486681773
+      EnemyHealingCapsule_22: 4859985076347587594
+      EnemyHealingCapsule_23: 5573912560817750813
+      EnemyHealingCapsule_24: 6966115610344952479
+      EnemyHealingCapsule_25: -3258901172885817502
+      EnemyHealingCapsule_3: 7975137945147264042
+      EnemyHealingCapsule_4: 5685860245636072762
+      EnemyHealingCapsule_5: 4782981554486775323
+      EnemyHealingCapsule_6: -8866524915736620297
+      EnemyHealingCapsule_7: -1930098847513971516
+      EnemyHealingCapsule_8: 4341817594240789461
+      EnemyHealingCapsule_9: -2307980986116966365
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

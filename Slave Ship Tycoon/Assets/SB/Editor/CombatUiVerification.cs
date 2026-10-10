@@ -6,7 +6,6 @@ namespace SB.Editor
 {
     public static class CombatUiVerification
     {
-        [MenuItem("Tools/SB/Run Targeting Regression Tests")]
         public static void RunTests()
         {
             TestRunnerApi api = ScriptableObject.CreateInstance<TestRunnerApi>();

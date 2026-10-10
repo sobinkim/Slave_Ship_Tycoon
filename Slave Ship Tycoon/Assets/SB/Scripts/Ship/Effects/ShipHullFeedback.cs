@@ -25,6 +25,8 @@ namespace SB.Scripts
         [SerializeField, Min(.01f)] private float barHeight = .045f;
         [SerializeField, Tooltip("전투 상태와 관계없이 체력바를 계속 표시합니다.")]
         private bool alwaysShowHealth = true;
+        [SerializeField, Tooltip("체력바를 표시합니다. 연출 전용 운송선은 해제합니다.")]
+        private bool showHealthBar = true;
         private Color hullColor;
         private Vector3 healthFillBaseLocalPosition;
         private float displayedHealthRatio;
@@ -97,7 +99,7 @@ namespace SB.Scripts
             float targetRatio = maximum > 0f ? Mathf.Clamp01(current / maximum) : 0f;
 
             if (healthBar != null)
-                healthBar.SetActive(current > 0f && (isBattleActive || alwaysShowHealth || targetRatio < 1f));
+                healthBar.SetActive(showHealthBar && current > 0f && (isBattleActive || alwaysShowHealth || targetRatio < 1f));
 
             if (healthBarRoutine != null)
             {

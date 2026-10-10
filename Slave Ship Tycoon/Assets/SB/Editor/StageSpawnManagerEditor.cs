@@ -56,7 +56,7 @@ namespace SB.Editor
                 escortShipSpawnPointsProperty.arraySize = PlayerFleetLoadout.SlotCount;
 
             EditorGUILayout.LabelField(
-                "Escort Spawn Points (Slots 1-6)",
+                "Escort Spawn Points (8 slots: Back / Middle / Front)",
                 EditorStyles.boldLabel);
 
             for (int row = 0; row < PlayerFleetLoadout.RowCount; row++)
@@ -65,7 +65,15 @@ namespace SB.Editor
 
                 for (int column = 0; column < PlayerFleetLoadout.ColumnCount; column++)
                 {
-                    int slotIndex = row * PlayerFleetLoadout.ColumnCount + column;
+                    int slotIndex = PlayerFleetLoadout.GetEscortSlotIndex(column, row);
+                    if (slotIndex < 0)
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.ExpandWidth(true));
+                        EditorGUILayout.LabelField("Main ship (fixed)", EditorStyles.miniBoldLabel);
+                        EditorGUILayout.LabelField("Use Main Ship Spawn Point above", EditorStyles.miniLabel);
+                        EditorGUILayout.EndVertical();
+                        continue;
+                    }
                     SerializedProperty pointProperty =
                         escortShipSpawnPointsProperty.GetArrayElementAtIndex(slotIndex);
 

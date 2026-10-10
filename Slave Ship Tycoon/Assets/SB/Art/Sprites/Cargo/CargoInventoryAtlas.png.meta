@@ -1,0 +1,1144 @@
+fileFormatVersion: 2
+guid: 33b13ba096b834f4483537bb933ef0a9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 943968831653884815
+    second: CargoInventoryAtlas_0
+  - first:
+      213: 5037169616794666205
+    second: CargoInventoryAtlas_1
+  - first:
+      213: 1042821498479944681
+    second: CargoInventoryAtlas_2
+  - first:
+      213: 2680086345183044222
+    second: CargoInventoryAtlas_3
+  - first:
+      213: -6614110043927170737
+    second: CargoInventoryAtlas_4
+  - first:
+      213: -2032575646897807287
+    second: CargoInventoryAtlas_5
+  - first:
+      213: -6405843024706621767
+    second: CargoInventoryAtlas_6
+  - first:
+      213: -2934339642756247608
+    second: CargoInventoryAtlas_7
+  - first:
+      213: -2589317467441887314
+    second: CargoInventoryAtlas_8
+  - first:
+      213: 2322199645509216090
+    second: CargoInventoryAtlas_9
+  - first:
+      213: -8594743656053541406
+    second: CargoInventoryAtlas_10
+  - first:
+      213: 3313497374685068413
+    second: CargoInventoryAtlas_11
+  - first:
+      213: 5431437547622503694
+    second: CargoInventoryAtlas_12
+  - first:
+      213: 1517696272987004645
+    second: CargoInventoryAtlas_13
+  - first:
+      213: -5681442759948888327
+    second: CargoInventoryAtlas_14
+  - first:
+      213: 1543482864594387600
+    second: CargoInventoryAtlas_15
+  - first:
+      213: -4575512067290804748
+    second: CargoInventoryAtlas_16
+  - first:
+      213: -4391530777437246224
+    second: CargoInventoryAtlas_17
+  - first:
+      213: -2451377351681056688
+    second: CargoInventoryAtlas_18
+  - first:
+      213: -1147129250369333619
+    second: CargoInventoryAtlas_19
+  - first:
+      213: -7420267695757585869
+    second: CargoInventoryAtlas_20
+  - first:
+      213: -499950275278429683
+    second: CargoInventoryAtlas_21
+  - first:
+      213: 154900341633449042
+    second: CargoInventoryAtlas_22
+  - first:
+      213: -1615112766154488991
+    second: CargoInventoryAtlas_23
+  - first:
+      213: 35469898649086182
+    second: CargoInventoryAtlas_24
+  - first:
+      213: -3502493134717870938
+    second: CargoInventoryAtlas_25
+  - first:
+      213: 1606325858326982095
+    second: CargoInventoryAtlas_26
+  - first:
+      213: 8961379083534726177
+    second: CargoInventoryAtlas_27
+  - first:
+      213: -7336282155127189478
+    second: CargoInventoryAtlas_28
+  - first:
+      213: -564373465929245726
+    second: CargoInventoryAtlas_29
+  - first:
+      213: 1961791400131133710
+    second: CargoInventoryAtlas_30
+  - first:
+      213: -8181816656719361734
+    second: CargoInventoryAtlas_31
+  - first:
+      213: -7074608385248518869
+    second: CargoInventoryAtlas_32
+  - first:
+      213: -6701624629733679189
+    second: CargoInventoryAtlas_33
+  - first:
+      213: -4618108606705466527
+    second: CargoInventoryAtlas_34
+  - first:
+      213: 8417115847948222398
+    second: CargoInventoryAtlas_35
+  - first:
+      213: -2200148698833572824
+    second: CargoInventoryAtlas_36
+  - first:
+      213: -3745909654037434963
+    second: CargoInventoryAtlas_37
+  - first:
+      213: 545277001346922471
+    second: CargoInventoryAtlas_38
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 449
+        width: 501
+        height: 544
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8335c9a6a6a91d00800000000000000
+      internalID: 943968831653884815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_1
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 965
+        width: 59
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd4cf62141f97e540800000000000000
+      internalID: 5037169616794666205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_2
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 453
+        width: 455
+        height: 553
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e3a905b0a8d87e00800000000000000
+      internalID: 1042821498479944681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_3
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 23
+        width: 523
+        height: 971
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e72a20cc454913520800000000000000
+      internalID: 2680086345183044222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_4
+      rect:
+        serializedVersion: 2
+        x: 1328
+        y: 981
+        width: 21
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f41b06645f5f534a0800000000000000
+      internalID: -6614110043927170737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_5
+      rect:
+        serializedVersion: 2
+        x: 1360
+        y: 983
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 940eb8bd737dac3e0800000000000000
+      internalID: -2032575646897807287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_6
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 949
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bea27965bfd917a0800000000000000
+      internalID: -6405843024706621767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_7
+      rect:
+        serializedVersion: 2
+        x: 1424
+        y: 533
+        width: 23
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cfca2744a12747d0800000000000000
+      internalID: -2934339642756247608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_8
+      rect:
+        serializedVersion: 2
+        x: 1478
+        y: 555
+        width: 21
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea7896e6b75e01cd0800000000000000
+      internalID: -2589317467441887314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_9
+      rect:
+        serializedVersion: 2
+        x: 1488
+        y: 543
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a576d18264c1a3020800000000000000
+      internalID: 2322199645509216090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_10
+      rect:
+        serializedVersion: 2
+        x: 1496
+        y: 561
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e5f2658e2659b880800000000000000
+      internalID: -8594743656053541406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_11
+      rect:
+        serializedVersion: 2
+        x: 1458
+        y: 535
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7cfa4e7e48ebfd20800000000000000
+      internalID: 3313497374685068413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_12
+      rect:
+        serializedVersion: 2
+        x: 1464
+        y: 535
+        width: 7
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0512cd2ca7506b40800000000000000
+      internalID: 5431437547622503694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_13
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 509
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ee135c18b0ff0510800000000000000
+      internalID: 1517696272987004645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_14
+      rect:
+        serializedVersion: 2
+        x: 1126
+        y: 479
+        width: 25
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f6188159e57721b0800000000000000
+      internalID: -5681442759948888327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_15
+      rect:
+        serializedVersion: 2
+        x: 1358
+        y: 497
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0920d05dc7d8b6510800000000000000
+      internalID: 1543482864594387600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_16
+      rect:
+        serializedVersion: 2
+        x: 1376
+        y: 503
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fd4e9354048080c0800000000000000
+      internalID: -4575512067290804748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_17
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 509
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fc68a676062e03c0800000000000000
+      internalID: -4391530777437246224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_18
+      rect:
+        serializedVersion: 2
+        x: 1406
+        y: 495
+        width: 23
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 050ec9e5945fafdd0800000000000000
+      internalID: -2451377351681056688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_19
+      rect:
+        serializedVersion: 2
+        x: 1432
+        y: 501
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d86964846049410f0800000000000000
+      internalID: -1147129250369333619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_20
+      rect:
+        serializedVersion: 2
+        x: 1352
+        y: 495
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 332101058d9e50990800000000000000
+      internalID: -7420267695757585869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_21
+      rect:
+        serializedVersion: 2
+        x: 1390
+        y: 479
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d02abac9fd1df09f0800000000000000
+      internalID: -499950275278429683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_22
+      rect:
+        serializedVersion: 2
+        x: 1110
+        y: 465
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25cf5ae3a01562200800000000000000
+      internalID: 154900341633449042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_23
+      rect:
+        serializedVersion: 2
+        x: 1154
+        y: 454
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 163c9251f77f599e0800000000000000
+      internalID: -1615112766154488991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_24
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 439
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e8a2355fa30e7000800000000000000
+      internalID: 35469898649086182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_25
+      rect:
+        serializedVersion: 2
+        x: 1326
+        y: 461
+        width: 17
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ac95ec0d05a46fc0800000000000000
+      internalID: -3502493134717870938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_26
+      rect:
+        serializedVersion: 2
+        x: 1160
+        y: 451
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcdaa138bd0da4610800000000000000
+      internalID: 1606325858326982095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_27
+      rect:
+        serializedVersion: 2
+        x: 1334
+        y: 445
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 124f3bb0cc63d5c70800000000000000
+      internalID: 8961379083534726177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_28
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 39
+        width: 485
+        height: 411
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a105b9bcf3a403a90800000000000000
+      internalID: -7336282155127189478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_29
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 13
+        width: 465
+        height: 437
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2eb91aaa251fa28f0800000000000000
+      internalID: -564373465929245726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_30
+      rect:
+        serializedVersion: 2
+        x: 1118
+        y: 430
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e018b3862eea93b10800000000000000
+      internalID: 1961791400131133710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_31
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 415
+        width: 15
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a394ede8919547e80800000000000000
+      internalID: -8181816656719361734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_32
+      rect:
+        serializedVersion: 2
+        x: 1072
+        y: 303
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2d13401821f1dd90800000000000000
+      internalID: -7074608385248518869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_33
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 171
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: baf17bee7eb0ff2a0800000000000000
+      internalID: -6701624629733679189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_34
+      rect:
+        serializedVersion: 2
+        x: 568
+        y: 65
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1638523a0be29efb0800000000000000
+      internalID: -4618108606705466527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_35
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 0
+        width: 35
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebfb346944a9fc470800000000000000
+      internalID: 8417115847948222398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_36
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 31
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82cacf05a608771e0800000000000000
+      internalID: -2200148698833572824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_37
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 15
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dad646e240bd30cc0800000000000000
+      internalID: -3745909654037434963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CargoInventoryAtlas_38
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 15
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e739713b86319700800000000000000
+      internalID: 545277001346922471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      CargoInventoryAtlas_0: 943968831653884815
+      CargoInventoryAtlas_1: 5037169616794666205
+      CargoInventoryAtlas_10: -8594743656053541406
+      CargoInventoryAtlas_11: 3313497374685068413
+      CargoInventoryAtlas_12: 5431437547622503694
+      CargoInventoryAtlas_13: 1517696272987004645
+      CargoInventoryAtlas_14: -5681442759948888327
+      CargoInventoryAtlas_15: 1543482864594387600
+      CargoInventoryAtlas_16: -4575512067290804748
+      CargoInventoryAtlas_17: -4391530777437246224
+      CargoInventoryAtlas_18: -2451377351681056688
+      CargoInventoryAtlas_19: -1147129250369333619
+      CargoInventoryAtlas_2: 1042821498479944681
+      CargoInventoryAtlas_20: -7420267695757585869
+      CargoInventoryAtlas_21: -499950275278429683
+      CargoInventoryAtlas_22: 154900341633449042
+      CargoInventoryAtlas_23: -1615112766154488991
+      CargoInventoryAtlas_24: 35469898649086182
+      CargoInventoryAtlas_25: -3502493134717870938
+      CargoInventoryAtlas_26: 1606325858326982095
+      CargoInventoryAtlas_27: 8961379083534726177
+      CargoInventoryAtlas_28: -7336282155127189478
+      CargoInventoryAtlas_29: -564373465929245726
+      CargoInventoryAtlas_3: 2680086345183044222
+      CargoInventoryAtlas_30: 1961791400131133710
+      CargoInventoryAtlas_31: -8181816656719361734
+      CargoInventoryAtlas_32: -7074608385248518869
+      CargoInventoryAtlas_33: -6701624629733679189
+      CargoInventoryAtlas_34: -4618108606705466527
+      CargoInventoryAtlas_35: 8417115847948222398
+      CargoInventoryAtlas_36: -2200148698833572824
+      CargoInventoryAtlas_37: -3745909654037434963
+      CargoInventoryAtlas_38: 545277001346922471
+      CargoInventoryAtlas_4: -6614110043927170737
+      CargoInventoryAtlas_5: -2032575646897807287
+      CargoInventoryAtlas_6: -6405843024706621767
+      CargoInventoryAtlas_7: -2934339642756247608
+      CargoInventoryAtlas_8: -2589317467441887314
+      CargoInventoryAtlas_9: 2322199645509216090
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

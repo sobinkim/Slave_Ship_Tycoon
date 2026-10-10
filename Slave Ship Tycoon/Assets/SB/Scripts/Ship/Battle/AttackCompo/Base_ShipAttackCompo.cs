@@ -23,14 +23,16 @@ namespace SB.Scripts.AttackCompo
         protected ShipCombatStatCompo CombatStatCompo => combatStatCompo;
         protected EntityAnimator Animator => animator;
         protected EntityAnimatorTrigger AnimatorTrigger => animatorTrigger;
-        protected Ship CurrentTarget { get; private set; }
+        public Ship CurrentTarget { get; private set; }
+        public event System.Action<Ship> TargetChanged;
         protected float FinalAttackDamage => combatStatCompo != null ? combatStatCompo.FinalAttackDamage : 0f;
         protected float FinalAttackSpeed => combatStatCompo != null ? combatStatCompo.FinalAttackSpeed : 1f;
-        protected float FinalAttackCooldown => attackCooldown / FinalAttackSpeed;
+        protected virtual float FinalAttackCooldown => attackCooldown / FinalAttackSpeed;
+        public virtual bool TicksCooldownWithoutTarget => false;
+        public virtual bool FinishesAnimationWithoutTarget => false;
         public bool HasAliveTarget => CurrentTarget != null && CurrentTarget.isActiveAndEnabled &&
                                       CurrentTarget.IsDead == false &&
-                                      (CurrentTarget.IsDirectTargetProtected == false ||
-                                       (ownerShip != null && ownerShip.CanTargetProtectedShips)) &&
+                                      (targetSelector == null || targetSelector.IsValidTarget(CurrentTarget)) &&
                                       CurrentTarget.SpawnGeneration == _currentTargetSpawnGeneration;
         public bool CanAttack => _isBattleRunning && currentCooldown <= 0f;
 
@@ -45,7 +47,7 @@ namespace SB.Scripts.AttackCompo
             Bus<BattleStartEvent>.OnEvent -= RequestTarget;
             Bus<StageBattleEndedEvent>.OnEvent -= HandleBattleEnded;
             _isBattleRunning = false;
-            CurrentTarget = null;
+            SetTarget(null);
         }
 
         public override void Initialize(Entity entity)
@@ -65,7 +67,7 @@ namespace SB.Scripts.AttackCompo
             }
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             if (animatorTrigger == null)
                 return;
@@ -74,9 +76,29 @@ namespace SB.Scripts.AttackCompo
             animatorTrigger.OnAttackEndTrigger -= HandleAttackEndTrigger;
         }
 
+        public void SuspendCombat()
+        {
+            _isBattleRunning = false;
+            ResetAttackState();
+            ownerShip?.ChangeState(ShipStateType.Idle);
+        }
+
+        public void PlayFinalSalvoAnimation(string stateName)
+        {
+            Animator runtimeAnimator = animator != null ? animator.RuntimeAnimator : null;
+            if (runtimeAnimator == null)
+                return;
+
+            animator.SetParam("ATTACK", true);
+            int stateHash = UnityEngine.Animator.StringToHash(stateName);
+            if (runtimeAnimator.HasState(0, stateHash))
+                runtimeAnimator.Play(stateHash, 0, 0f);
+        }
+
         public void ResetAttackState()
         {
-            CurrentTarget = null;
+            animator?.SetParam("ATTACK", false);
+            SetTarget(null);
             _currentTargetSpawnGeneration = 0;
             currentCooldown = 0f;
             ResetAttackAnimationSpeed();
@@ -99,17 +121,26 @@ namespace SB.Scripts.AttackCompo
 
         public bool TryAcquireTarget()
         {
-            CurrentTarget = _isBattleRunning && ownerShip != null && ownerShip.isActiveAndEnabled &&
+            Ship selectedTarget = _isBattleRunning && ownerShip != null && ownerShip.isActiveAndEnabled &&
                             ownerShip.IsDead == false && targetSelector != null
                 ? targetSelector.GetTarget()
                 : null;
-            _currentTargetSpawnGeneration = CurrentTarget != null ? CurrentTarget.SpawnGeneration : 0;
+            SetTarget(selectedTarget);
             return HasAliveTarget;
+        }
+
+        private void SetTarget(Ship target)
+        {
+            int generation = target != null ? target.SpawnGeneration : 0;
+            if (CurrentTarget == target && _currentTargetSpawnGeneration == generation) return;
+            CurrentTarget = target;
+            _currentTargetSpawnGeneration = generation;
+            TargetChanged?.Invoke(target);
         }
 
         public void ForceRetarget()
         {
-            CurrentTarget = null;
+            SetTarget(null);
             TryAcquireTarget();
         }
 
@@ -118,7 +149,7 @@ namespace SB.Scripts.AttackCompo
             if (_isBattleRunning == false || ownerShip == null ||
                 ownerShip.isActiveAndEnabled == false || ownerShip.IsDead)
             {
-                CurrentTarget = null;
+                SetTarget(null);
                 return false;
             }
 
@@ -205,3 +236,5 @@ namespace SB.Scripts.AttackCompo
         }
     }
 }
+
+

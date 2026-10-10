@@ -1,0 +1,79 @@
+using SB.Core;
+using SB.Scripts.Fleet.Effects;
+using SB.Scripts.Projectiles;
+using UnityEngine;
+
+namespace SB.Scripts.AttackCompo
+{
+    public sealed class HealingProjectileAttackCompo : ArcProjectileAttackCompo
+    {
+        [Header("Healing")]
+        [SerializeField, Min(0f), Tooltip("회복 캡슐 한 발이 적중했을 때 회복할 체력")]
+        private float healAmount = 30f;
+        [SerializeField, Min(1f), Tooltip("기본 함선의 발사 주기 대비 배율. 3이면 같은 공격 속도에서 3배 간격으로 발사합니다.")]
+        private float attackIntervalMultiplier = 3f;
+        [SerializeField, Min(0f), Tooltip("공격 클립 시작부터 AttackEnd 이벤트까지의 원본 시간. 클립을 바꾸면 이벤트 시간에 맞춥니다.")]
+        private float baselineAttackAnimationDurationSeconds = 0.45833334f;
+
+        [Header("Support status")]
+        [SerializeField] private FleetEffectProvider supportEffectProvider;
+        [SerializeField] private FleetEffectDefinition supportEffect;
+
+        private Ship sourceShip;
+        public float HealAmount => healAmount;
+        public float AttackIntervalMultiplier => attackIntervalMultiplier;
+        public override bool TicksCooldownWithoutTarget => true;
+        public override bool FinishesAnimationWithoutTarget => true;
+        protected override float ProjectileAmount => healAmount;
+        protected override ProjectileHitMode HitMode => ProjectileHitMode.Guaranteed;
+        protected override float FinalAttackCooldown =>
+            base.FinalAttackCooldown * attackIntervalMultiplier +
+            baselineAttackAnimationDurationSeconds / FinalAttackSpeed * (attackIntervalMultiplier - 1f);
+
+        public override void Initialize(Entity entity)
+        {
+            base.Initialize(entity);
+            sourceShip = entity as Ship;
+            TargetChanged += HandleTargetChanged;
+            if (supportEffectProvider == null || supportEffect == null)
+                Debug.LogError("Healing support requires a status provider and effect reference.", this);
+        }
+
+        protected override void OnAttackEnter()
+        {
+            // Reconsider health priority for every shot instead of retaining the first living ally.
+            TryAcquireTarget();
+            HandleTargetChanged(CurrentTarget);
+        }
+
+        protected override void Fire()
+        {
+            TryAcquireTarget();
+            base.Fire();
+        }
+
+        protected override bool PrepareProjectile(BaseProjectile projectile)
+        {
+            if (projectile is HealingProjectile capsule)
+            {
+                capsule.ConfigureSource(sourceShip);
+                return true;
+            }
+            Debug.LogError("Healing support requires a HealingProjectile prefab.", this);
+            return false;
+        }
+
+        private void HandleTargetChanged(Ship target)
+        {
+            if (supportEffectProvider != null)
+                supportEffectProvider.SetExplicitTarget(target, supportEffect);
+        }
+
+        protected override void OnDestroy()
+        {
+            TargetChanged -= HandleTargetChanged;
+            base.OnDestroy();
+        }
+    }
+}
+

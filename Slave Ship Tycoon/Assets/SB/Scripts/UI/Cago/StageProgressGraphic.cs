@@ -9,6 +9,8 @@ namespace SB.Scripts
         [SerializeField, Min(4f)] private float diameter = 34f;
         [SerializeField, Min(0f)] private float spacing = 14f;
         [SerializeField, Min(1f)] private float ringWidth = 5f;
+        [SerializeField, Range(0f, 1f), Tooltip("진행 표시의 가로 정렬: 0은 왼쪽, 0.5는 중앙, 1은 오른쪽")]
+        private float horizontalAlignment = 0.5f;
         [SerializeField] private Color ringColor = new Color(.94f,.97f,.97f);
         [SerializeField] private Color progressColor = new Color(1f,.5f,.16f);
         private int currentStage;
@@ -29,9 +31,11 @@ namespace SB.Scripts
             float fit=Mathf.Min(1f,rect.width/(totalStages*diameter+(totalStages-1)*spacing));
             float outer=diameter*.5f*fit;
             float inner=Mathf.Max(0f,outer-ringWidth*fit);
+            float progressWidth=(totalStages*diameter+(totalStages-1)*spacing)*fit;
+            float startX=rect.xMin+(rect.width-progressWidth)*horizontalAlignment;
             for(int dot=0;dot<totalStages;dot++)
             {
-                Vector2 center=new Vector2(rect.xMin+outer+dot*(diameter+spacing)*fit,rect.center.y);
+                Vector2 center=new Vector2(startX+outer+dot*(diameter+spacing)*fit,rect.center.y);
                 for(int segment=0;segment<Segments;segment++)
                 {
                     float angle=2f*Mathf.PI*segment/Segments;

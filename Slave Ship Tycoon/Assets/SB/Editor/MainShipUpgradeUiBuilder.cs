@@ -13,7 +13,6 @@ namespace SB.Editor
         private const string ScenePath = "Assets/SB/Animations/Scenes/SampleScene.unity";
         private const string GeneratedRootName = "MainShipUpgradeButtons";
 
-        [MenuItem("Tools/SB/Build Main Ship Upgrade UI")]
         public static void Build()
         {
             EditorSceneManager.OpenScene(ScenePath);
