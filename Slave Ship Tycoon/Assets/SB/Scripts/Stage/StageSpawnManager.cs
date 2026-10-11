@@ -129,6 +129,7 @@ namespace SB.Scripts
 
         public void ClearSpawnedEnemies()
         {
+            stageEncounterDirector?.CancelEncounterSequence();
             participantTracker.ClearEnemies();
         }
 
@@ -495,3 +496,4 @@ namespace SB.Scripts
         }
     }
 }
+

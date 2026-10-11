@@ -9941,7 +9941,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyFleetRoot: {fileID: 233292875}
   enemyFleetRootDestination: {fileID: 1084722715}
-  moveSpeed: 1.7
+  moveSpeed: 1.2
+  scatterOffsetXRange: {x: 0.1, y: 1.05}
+  scatterOffsetY: 0.22
+  regroupStartDistance: 0.85
+  regroupDurationRange: {x: 0.9, y: 1.25}
+  maxRegroupDelay: 0.25
 --- !u!1 &275150363
 GameObject:
   m_ObjectHideFlags: 0
