@@ -1,0 +1,1057 @@
+{
+  "profiles": [
+    {
+      "key": "ApprenticeGunship",
+      "prefabs": [
+        "PlayerShips/Test/TestEscort_A",
+        "PlayerShips/Test/TestEscort_B",
+        "PlayerShips/Test/TestEscort_C"
+      ],
+      "folder": "ApprenticeGunship",
+      "mat": "ApprenticeGunshipHull",
+      "flag": [
+        0.11,
+        0.2,
+        0.32,
+        0.37
+      ],
+      "pole": [
+        0.31,
+        0.12
+      ],
+      "top": [
+        0.135,
+        0.415,
+        0.435,
+        0.445
+      ],
+      "bottom": [
+        0.14,
+        0.69,
+        0.41,
+        0.635
+      ],
+      "lift": 0.04,
+      "phase": 0
+    },
+    {
+      "key": "TransportMainShip",
+      "prefabs": [
+        "PlayerShips/TransportMainShip"
+      ],
+      "folder": "TransportMainShip",
+      "mat": "TransportClothHull",
+      "flag": [
+        0.203,
+        0.075,
+        0.385,
+        0.225
+      ],
+      "pole": [
+        0.212,
+        0.375
+      ],
+      "top": [
+        0.165,
+        0.252,
+        0.31,
+        0.28
+      ],
+      "bottom": [
+        0.218,
+        0.505,
+        0.397,
+        0.47
+      ],
+      "lift": 0.008,
+      "phase": 0.6
+    },
+    {
+      "key": "IroncladDefender",
+      "prefabs": [
+        "PlayerShips/IroncladDefender"
+      ],
+      "folder": "IroncladDefender",
+      "flag": [
+        0.2,
+        0.14,
+        0.44,
+        0.29
+      ],
+      "pole": [
+        0.435,
+        0.21
+      ],
+      "top": [
+        0.328,
+        0.337,
+        0.627,
+        0.361
+      ],
+      "bottom": [
+        0.336,
+        0.581,
+        0.657,
+        0.588
+      ],
+      "lift": 0.045,
+      "phase": 1.1
+    },
+    {
+      "key": "HarpoonRaider",
+      "prefabs": [
+        "PlayerShips/HarpoonRaider"
+      ],
+      "folder": "HarpoonRaider",
+      "flag": [
+        0.05,
+        0.07,
+        0.265,
+        0.26
+      ],
+      "pole": [
+        0.25,
+        0.06
+      ],
+      "top": [
+        0.152,
+        0.334,
+        0.452,
+        0.438
+      ],
+      "bottom": [
+        0.145,
+        0.724,
+        0.476,
+        0.633
+      ],
+      "lift": 0.065,
+      "phase": 1.7
+    },
+    {
+      "key": "CrusherShip",
+      "prefabs": [
+        "PlayerShips/CrusherShip"
+      ],
+      "folder": "CrusherShip",
+      "flag": [
+        0.08,
+        0.12,
+        0.25,
+        0.28
+      ],
+      "pole": [
+        0.25,
+        0.09
+      ],
+      "top": [
+        0.17,
+        0.34,
+        0.4,
+        0.36
+      ],
+      "bottom": [
+        0.185,
+        0.595,
+        0.45,
+        0.61
+      ],
+      "lift": 0.06,
+      "phase": 2.1
+    },
+    {
+      "key": "HealingSupportShip",
+      "prefabs": [
+        "PlayerShips/HealingSupportShip"
+      ],
+      "folder": "HealingSupportShip",
+      "flag": [
+        0.12,
+        0.07,
+        0.36,
+        0.255
+      ],
+      "pole": [
+        0.35,
+        0.13
+      ],
+      "top": [
+        0.168,
+        0.33,
+        0.537,
+        0.41
+      ],
+      "bottom": [
+        0.15,
+        0.657,
+        0.535,
+        0.694
+      ],
+      "lift": 0.075,
+      "phase": 2.5
+    },
+    {
+      "key": "EnemyGunship",
+      "prefabs": [
+        "EnemyShips/EnemyGunship"
+      ],
+      "folder": "Enemies/EnemyGunship",
+      "flag": [
+        0.4,
+        0.14,
+        0.665,
+        0.29
+      ],
+      "pole": [
+        0.41,
+        0.65
+      ],
+      "top": [
+        0.12,
+        0.31,
+        0.515,
+        0.372
+      ],
+      "bottom": [
+        0.037,
+        0.6,
+        0.5,
+        0.6
+      ],
+      "lift": 0.025,
+      "phase": 0.35
+    },
+    {
+      "key": "EnemyIroncladDefender",
+      "prefabs": [
+        "EnemyShips/EnemyIroncladDefender"
+      ],
+      "folder": "Enemies/EnemyIroncladDefender",
+      "flag": [
+        0.369,
+        0.077,
+        0.58,
+        0.245
+      ],
+      "pole": [
+        0.38,
+        0.57
+      ],
+      "top": [
+        0.17,
+        0.295,
+        0.5,
+        0.326
+      ],
+      "bottom": [
+        0.083,
+        0.615,
+        0.5,
+        0.62
+      ],
+      "lift": 0.045,
+      "phase": 1.45
+    },
+    {
+      "key": "EnemyHarpoonRaider",
+      "prefabs": [
+        "EnemyShips/EnemyHarpoonRaider"
+      ],
+      "folder": "Enemies/EnemyHarpoonRaider",
+      "flag": [
+        0.36,
+        0.065,
+        0.62,
+        0.25
+      ],
+      "pole": [
+        0.37,
+        0.61
+      ],
+      "top": [
+        0.104,
+        0.281,
+        0.516,
+        0.348
+      ],
+      "bottom": [
+        0.02,
+        0.65,
+        0.46,
+        0.66
+      ],
+      "lift": 0.085,
+      "phase": 2.05
+    },
+    {
+      "key": "EnemyCrusherShip",
+      "prefabs": [
+        "EnemyShips/EnemyCrusherShip"
+      ],
+      "folder": "Enemies/EnemyCrusherShip",
+      "flag": [
+        0.35,
+        0.025,
+        0.55,
+        0.195
+      ],
+      "pole": [
+        0.35,
+        0.54
+      ],
+      "top": [
+        0.162,
+        0.285,
+        0.55,
+        0.33
+      ],
+      "bottom": [
+        0.178,
+        0.615,
+        0.575,
+        0.596
+      ],
+      "lift": 0.065,
+      "phase": 2.45
+    },
+    {
+      "key": "EnemyHealingSupportShip",
+      "prefabs": [
+        "EnemyShips/EnemyHealingSupportShip"
+      ],
+      "folder": "Enemies/EnemyHealingSupportShip",
+      "flag": [
+        0.12,
+        0.065,
+        0.36,
+        0.25
+      ],
+      "pole": [
+        0.35,
+        0.13
+      ],
+      "top": [
+        0.174,
+        0.323,
+        0.541,
+        0.402
+      ],
+      "bottom": [
+        0.16,
+        0.65,
+        0.55,
+        0.675
+      ],
+      "lift": 0.075,
+      "phase": 2.85
+    }
+  ],
+  "changes": [
+    {
+      "key": "ApprenticeGunship",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/ApprenticeGunshipHull.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/ApprenticeGunship/ApprenticeGunship_Idle.anim",
+          "length": 0.6666667,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/ApprenticeGunship/ApprenticeGunship_Attack.anim",
+          "length": 0.5,
+          "events": [
+            {
+              "time": 0.166666672,
+              "functionName": "AttackStart"
+            },
+            {
+              "time": 0.458333343,
+              "functionName": "AttackEnd"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/ApprenticeGunship/ApprenticeGunship_Dead.anim",
+          "length": 0.75,
+          "events": [
+            {
+              "time": 0.6875,
+              "functionName": "Dead"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/ApprenticeGunship/ApprenticeGunship_Move.anim",
+          "length": 0.5,
+          "events": []
+        }
+      ],
+      "prefabsChanged": [
+        "Assets/SB/Prefabs/PlayerShips/Test/TestEscort_A.prefab",
+        "Assets/SB/Prefabs/PlayerShips/Test/TestEscort_B.prefab",
+        "Assets/SB/Prefabs/PlayerShips/Test/TestEscort_C.prefab"
+      ]
+    },
+    {
+      "key": "TransportMainShip",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/TransportClothHull.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/TransportMainShip/TransportMainShip_Idle.anim",
+          "length": 2.0333333,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/TransportMainShip/TransportMainShip_Move.anim",
+          "length": 1.2833333,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/TransportMainShip/TransportMainShip_Dead.anim",
+          "length": 0.683333337,
+          "events": []
+        }
+      ],
+      "prefabsChanged": [
+        "Assets/SB/Prefabs/PlayerShips/TransportMainShip.prefab"
+      ]
+    },
+    {
+      "key": "IroncladDefender",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/IroncladHull.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/IroncladDefender/IroncladDefender_Idle.anim",
+          "length": 1.24166667,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/IroncladDefender/IroncladDefender_Attack.anim",
+          "length": 0.5,
+          "events": [
+            {
+              "time": 0.166666672,
+              "functionName": "AttackStart"
+            },
+            {
+              "time": 0.458333343,
+              "functionName": "AttackEnd"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/IroncladDefender/IroncladDefender_Dead.anim",
+          "length": 0.75,
+          "events": [
+            {
+              "time": 0.6875,
+              "functionName": "Dead"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/IroncladDefender/IroncladDefender_Move.anim",
+          "length": 0.8416667,
+          "events": []
+        }
+      ],
+      "prefabsChanged": []
+    },
+    {
+      "key": "HarpoonRaider",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/HarpoonRaiderHull.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/HarpoonRaider/HarpoonRaider_Idle.anim",
+          "length": 1.24166667,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/HarpoonRaider/HarpoonRaider_Attack.anim",
+          "length": 0.5,
+          "events": [
+            {
+              "time": 0.166666672,
+              "functionName": "AttackStart"
+            },
+            {
+              "time": 0.458333343,
+              "functionName": "AttackEnd"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/HarpoonRaider/HarpoonRaider_Dead.anim",
+          "length": 0.75,
+          "events": [
+            {
+              "time": 0.6875,
+              "functionName": "Dead"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/HarpoonRaider/HarpoonRaider_Move.anim",
+          "length": 0.8416667,
+          "events": []
+        }
+      ],
+      "prefabsChanged": []
+    },
+    {
+      "key": "CrusherShip",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/CrusherHull.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/CrusherShip/CrusherShip_Idle.anim",
+          "length": 1.24166667,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/CrusherShip/CrusherShip_Attack.anim",
+          "length": 0.5,
+          "events": [
+            {
+              "time": 0.166666672,
+              "functionName": "AttackStart"
+            },
+            {
+              "time": 0.458333343,
+              "functionName": "AttackEnd"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/CrusherShip/CrusherShip_Dead.anim",
+          "length": 0.75,
+          "events": [
+            {
+              "time": 0.6875,
+              "functionName": "Dead"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/CrusherShip/CrusherShip_Move.anim",
+          "length": 0.8416667,
+          "events": []
+        }
+      ],
+      "prefabsChanged": []
+    },
+    {
+      "key": "HealingSupportShip",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/HealingSupportHull.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/HealingSupportShip/HealingSupportShip_Idle.anim",
+          "length": 1.24166667,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/HealingSupportShip/HealingSupportShip_Attack.anim",
+          "length": 0.5,
+          "events": [
+            {
+              "time": 0.166666672,
+              "functionName": "AttackStart"
+            },
+            {
+              "time": 0.458333343,
+              "functionName": "AttackEnd"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/HealingSupportShip/HealingSupportShip_Dead.anim",
+          "length": 0.75,
+          "events": [
+            {
+              "time": 0.6875,
+              "functionName": "Dead"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/HealingSupportShip/HealingSupportShip_Move.anim",
+          "length": 0.8416667,
+          "events": []
+        }
+      ],
+      "prefabsChanged": []
+    },
+    {
+      "key": "EnemyGunship",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/Enemies/EnemyGunshipHull.mat",
+        "Assets/SB/Art/Materials/Ships/Enemies/EnemyGunshipEmblem.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyGunship/EnemyGunship_Idle.anim",
+          "length": 1.24166667,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyGunship/EnemyGunship_Attack.anim",
+          "length": 0.5,
+          "events": [
+            {
+              "time": 0.166666672,
+              "functionName": "AttackStart"
+            },
+            {
+              "time": 0.458333343,
+              "functionName": "AttackEnd"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyGunship/EnemyGunship_Dead.anim",
+          "length": 0.75,
+          "events": [
+            {
+              "time": 0.6875,
+              "functionName": "Dead"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyGunship/EnemyGunship_Move.anim",
+          "length": 0.8416667,
+          "events": []
+        }
+      ],
+      "prefabsChanged": []
+    },
+    {
+      "key": "EnemyIroncladDefender",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/Enemies/EnemyIroncladDefenderHull.mat",
+        "Assets/SB/Art/Materials/Ships/Enemies/EnemyIroncladDefenderEmblem.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyIroncladDefender/EnemyIroncladDefender_Idle.anim",
+          "length": 1.24166667,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyIroncladDefender/EnemyIroncladDefender_Attack.anim",
+          "length": 0.5,
+          "events": [
+            {
+              "time": 0.166666672,
+              "functionName": "AttackStart"
+            },
+            {
+              "time": 0.458333343,
+              "functionName": "AttackEnd"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyIroncladDefender/EnemyIroncladDefender_Dead.anim",
+          "length": 0.75,
+          "events": [
+            {
+              "time": 0.6875,
+              "functionName": "Dead"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyIroncladDefender/EnemyIroncladDefender_Move.anim",
+          "length": 0.8416667,
+          "events": []
+        }
+      ],
+      "prefabsChanged": []
+    },
+    {
+      "key": "EnemyHarpoonRaider",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/Enemies/EnemyHarpoonRaiderHull.mat",
+        "Assets/SB/Art/Materials/Ships/Enemies/EnemyHarpoonRaiderEmblem.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyHarpoonRaider/EnemyHarpoonRaider_Idle.anim",
+          "length": 1.24166667,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyHarpoonRaider/EnemyHarpoonRaider_Attack.anim",
+          "length": 0.5,
+          "events": [
+            {
+              "time": 0.166666672,
+              "functionName": "AttackStart"
+            },
+            {
+              "time": 0.458333343,
+              "functionName": "AttackEnd"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyHarpoonRaider/EnemyHarpoonRaider_Dead.anim",
+          "length": 0.75,
+          "events": [
+            {
+              "time": 0.6875,
+              "functionName": "Dead"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyHarpoonRaider/EnemyHarpoonRaider_Move.anim",
+          "length": 0.8416667,
+          "events": []
+        }
+      ],
+      "prefabsChanged": []
+    },
+    {
+      "key": "EnemyCrusherShip",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/Enemies/EnemyCrusherShipHull.mat",
+        "Assets/SB/Art/Materials/Ships/Enemies/EnemyCrusherShipEmblem.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyCrusherShip/EnemyCrusherShip_Idle.anim",
+          "length": 1.24166667,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyCrusherShip/EnemyCrusherShip_Attack.anim",
+          "length": 0.5,
+          "events": [
+            {
+              "time": 0.166666672,
+              "functionName": "AttackStart"
+            },
+            {
+              "time": 0.458333343,
+              "functionName": "AttackEnd"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyCrusherShip/EnemyCrusherShip_Dead.anim",
+          "length": 0.75,
+          "events": [
+            {
+              "time": 0.6875,
+              "functionName": "Dead"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyCrusherShip/EnemyCrusherShip_Move.anim",
+          "length": 0.8416667,
+          "events": []
+        }
+      ],
+      "prefabsChanged": []
+    },
+    {
+      "key": "EnemyHealingSupportShip",
+      "materials": [
+        "Assets/SB/Art/Materials/Ships/Enemies/EnemyHealingSupportHull.mat"
+      ],
+      "clips": [
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyHealingSupportShip/EnemyHealingSupportShip_Idle.anim",
+          "length": 1.24166667,
+          "events": []
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyHealingSupportShip/EnemyHealingSupportShip_Attack.anim",
+          "length": 0.5,
+          "events": [
+            {
+              "time": 0.166666672,
+              "functionName": "AttackStart"
+            },
+            {
+              "time": 0.458333343,
+              "functionName": "AttackEnd"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyHealingSupportShip/EnemyHealingSupportShip_Dead.anim",
+          "length": 0.75,
+          "events": [
+            {
+              "time": 0.6875,
+              "functionName": "Dead"
+            }
+          ]
+        },
+        {
+          "path": "Assets/SB/Animations/Ships/Enemies/EnemyHealingSupportShip/EnemyHealingSupportShip_Move.anim",
+          "length": 0.8416667,
+          "events": []
+        }
+      ],
+      "prefabsChanged": []
+    }
+  ],
+  "textureMetadataBefore": [
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Animations/ApprenticeGunship/ApprenticeGunship_Idle_Sheet.png",
+      "mesh": "Tight",
+      "sprites": [
+        {
+          "name": "ApprenticeGunship_Idle_00",
+          "rect": "(x:0.00, y:640.00, width:640.00, height:640.00)",
+          "pivot": "(320.00, 320.00)",
+          "ppu": 800
+        },
+        {
+          "name": "ApprenticeGunship_Idle_01",
+          "rect": "(x:640.00, y:640.00, width:640.00, height:640.00)",
+          "pivot": "(320.00, 320.00)",
+          "ppu": 800
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Animations/ApprenticeGunship/ApprenticeGunship_Attack_Sheet.png",
+      "mesh": "Tight",
+      "sprites": [
+        {
+          "name": "ApprenticeGunship_Attack_00",
+          "rect": "(x:0.00, y:640.00, width:640.00, height:640.00)",
+          "pivot": "(320.00, 320.00)",
+          "ppu": 800
+        },
+        {
+          "name": "ApprenticeGunship_Attack_01",
+          "rect": "(x:640.00, y:640.00, width:640.00, height:640.00)",
+          "pivot": "(320.00, 320.00)",
+          "ppu": 800
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Animations/ApprenticeGunship/ApprenticeGunship_Dead_Sheet.png",
+      "mesh": "Tight",
+      "sprites": [
+        {
+          "name": "ApprenticeGunship_Dead_00",
+          "rect": "(x:0.00, y:640.00, width:640.00, height:640.00)",
+          "pivot": "(320.00, 320.00)",
+          "ppu": 800
+        },
+        {
+          "name": "ApprenticeGunship_Dead_01",
+          "rect": "(x:640.00, y:640.00, width:640.00, height:640.00)",
+          "pivot": "(320.00, 320.00)",
+          "ppu": 800
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Animations/ApprenticeGunship/ApprenticeGunship_Move_Sheet.png",
+      "mesh": "Tight",
+      "sprites": [
+        {
+          "name": "ApprenticeGunship_Move_00",
+          "rect": "(x:0.00, y:640.00, width:640.00, height:640.00)",
+          "pivot": "(320.00, 320.00)",
+          "ppu": 800
+        },
+        {
+          "name": "ApprenticeGunship_Move_01",
+          "rect": "(x:640.00, y:640.00, width:640.00, height:640.00)",
+          "pivot": "(320.00, 320.00)",
+          "ppu": 800
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/TransportShip.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "TransportShip",
+          "rect": "(x:0.00, y:0.00, width:1591.00, height:988.00)",
+          "pivot": "(795.50, 642.20)",
+          "ppu": 1920
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/IroncladDefender.png",
+      "mesh": "Tight",
+      "sprites": [
+        {
+          "name": "IroncladDefender",
+          "rect": "(x:0.00, y:0.00, width:1254.00, height:1254.00)",
+          "pivot": "(637.78, 562.80)",
+          "ppu": 1596.8
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/HarpoonRaider_Unloaded.png",
+      "mesh": "Tight",
+      "sprites": [
+        {
+          "name": "HarpoonRaider_Unloaded",
+          "rect": "(x:0.00, y:0.00, width:1454.00, height:1082.00)",
+          "pivot": "(694.50, 567.65)",
+          "ppu": 1290
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/CrusherShip_Unloaded.png",
+      "mesh": "Tight",
+      "sprites": [
+        {
+          "name": "CrusherShip_Unloaded",
+          "rect": "(x:0.00, y:0.00, width:1536.00, height:1024.00)",
+          "pivot": "(768.00, 512.00)",
+          "ppu": 1600
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/HealingSupportShip.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "HealingSupportShip",
+          "rect": "(x:0.00, y:0.00, width:1453.00, height:1082.00)",
+          "pivot": "(726.50, 541.00)",
+          "ppu": 1605.814
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Enemies/EnemyGunship.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "EnemyGunship",
+          "rect": "(x:0.00, y:0.00, width:1254.00, height:1254.00)",
+          "pivot": "(627.00, 627.00)",
+          "ppu": 1254
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Enemies/RoleEmblems/PlayerGunshipPatch.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "PlayerGunshipPatch",
+          "rect": "(x:0.00, y:0.00, width:80.00, height:90.00)",
+          "pivot": "(40.00, 45.00)",
+          "ppu": 800
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Enemies/EnemyIroncladDefender.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "EnemyIroncladDefender",
+          "rect": "(x:0.00, y:0.00, width:1470.00, height:1070.00)",
+          "pivot": "(735.00, 535.00)",
+          "ppu": 1700
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Enemies/RoleEmblems/PlayerDefenderShield.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "PlayerDefenderShield",
+          "rect": "(x:0.00, y:0.00, width:215.00, height:265.00)",
+          "pivot": "(107.50, 132.50)",
+          "ppu": 800
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Enemies/EnemyHarpoonRaider.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "EnemyHarpoonRaider",
+          "rect": "(x:0.00, y:0.00, width:1454.00, height:1082.00)",
+          "pivot": "(727.00, 541.00)",
+          "ppu": 1400
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Enemies/RoleEmblems/PlayerHarpoonHook.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "PlayerHarpoonHook",
+          "rect": "(x:0.00, y:0.00, width:252.00, height:225.00)",
+          "pivot": "(126.00, 112.50)",
+          "ppu": 800
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Enemies/EnemyCrusherShip.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "EnemyCrusherShip",
+          "rect": "(x:0.00, y:0.00, width:1536.00, height:1024.00)",
+          "pivot": "(768.00, 512.00)",
+          "ppu": 1600
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Enemies/RoleEmblems/PlayerBrokenShield.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "PlayerBrokenShield",
+          "rect": "(x:0.00, y:0.00, width:165.00, height:190.00)",
+          "pivot": "(82.50, 95.00)",
+          "ppu": 800
+        }
+      ]
+    },
+    {
+      "path": "Assets/SB/Art/Sprites/Ships/Enemies/EnemyHealingSupportShip.png",
+      "mesh": "FullRect",
+      "sprites": [
+        {
+          "name": "EnemyHealingSupportShip",
+          "rect": "(x:0.00, y:0.00, width:1538.00, height:1114.00)",
+          "pivot": "(769.00, 557.00)",
+          "ppu": 1694.186
+        }
+      ]
+    }
+  ]
+}

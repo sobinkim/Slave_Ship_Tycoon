@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: EnemyIroncladDefenderEmblem
-  m_Shader: {fileID: 4800000, guid: 79434052fff3f134e982efc049efbe56, type: 3}
+  m_Shader: {fileID: 4800000, guid: 52237093641d83d42a5570e55d54dd99, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,10 +29,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _FlagAmplitude: 0.012
+    - _FlutterPhase: 1.45
+    - _FlutterSpeed: 1.2
+    - _FlutterStrength: 0.8
+    - _SailAmplitude: 0.008
+    - _SailFootLift: 0.045
     - _SinkDistance: 1.875
     - _SinkProgress: 0
     - _Waterline: -0.6482844
     m_Colors:
+    - _ClothCanvas: {r: 0.86470586, g: 0.62941176, b: 0.5, a: 0.5}
+    - _ClothTransform: {r: 0.48, g: 0.48, b: -0.16470589, a: 0.04117647}
+    - _ClothUvScale: {r: 6.7031465, g: 3.9585645, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _FlagBounds: {r: 0.369, g: 0.077, b: 0.58, a: 0.245}
+    - _FlagPoleTip: {r: 0.38, g: 0.57, b: 0, a: 0}
+    - _SailBottom: {r: 0.083, g: 0.615, b: 0.5, a: 0.62}
+    - _SailTop: {r: 0.17, g: 0.295, b: 0.5, a: 0.326}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

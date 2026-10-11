@@ -1,0 +1,60 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Shared/Styles/HarborTheme.uss" />
+    <ui:Style src="RecruitmentScreen.uss" />
+    <ui:VisualElement class="harbor-root recruitment-root" picking-mode="Ignore">
+        <ui:VisualElement name="shopPanel" class="recruitment-panel">
+            <ui:VisualElement class="screen-header">
+                <ui:Label text="선착장 · 함선 모집" class="screen-title" />
+                <ui:Button name="closeButton" text="닫기" class="harbor-button close-button" />
+            </ui:VisualElement>
+            <ui:VisualElement class="recruitment-toolbar">
+                <ui:Label text="호위선 모집" class="recruitment-category" />
+                <ui:Label name="balanceLabel" class="recruitment-balance" />
+            </ui:VisualElement>
+            <ui:ScrollView class="harbor-scroll recruitment-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden">
+                <ui:VisualElement class="recruitment-content">
+                    <ui:VisualElement class="recruitment-guide">
+                        <ui:Label text="입항 안내" class="guide-name" />
+                        <ui:VisualElement name="guideIcon" class="guide-icon" />
+                        <ui:Label text="새 호위선을 모집해 함대를 꾸리세요." class="guide-text" />
+                        <ui:Label text="같은 등급 3척을 합성하면 상위 등급 함선을 얻습니다." class="guide-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="recruitment-cards">
+                        <ui:VisualElement class="recruitment-card">
+                            <ui:Label text="호위선 모집" class="recruitment-card-title" />
+                            <ui:Label text="새 함선은 미편성 상태로 입항합니다." class="recruitment-card-description" />
+                            <ui:VisualElement name="recruitmentIcon" class="recruitment-card-icon" />
+                            <ui:VisualElement class="action-row recruitment-actions">
+                                <ui:Button name="singleButton" class="harbor-button recruitment-button">
+                                    <ui:Label text="1회 모집" picking-mode="Ignore" />
+                                    <ui:Label name="singleCost" class="recruitment-cost" picking-mode="Ignore" />
+                                </ui:Button>
+                                <ui:Button name="multiButton" class="harbor-button primary-button recruitment-button">
+                                    <ui:Label name="multiTitle" picking-mode="Ignore" />
+                                    <ui:Label name="multiCost" class="recruitment-cost" picking-mode="Ignore" />
+                                </ui:Button>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:Label name="statusLabel" class="status" />
+                        <ui:Button name="formationButton" text="함대 편성으로 이동" class="harbor-button" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:ScrollView>
+        </ui:VisualElement>
+        <ui:VisualElement name="resultPanel" class="modal hidden">
+            <ui:Label text="새 호위선 입항" class="modal-title" />
+            <ui:Label name="resultSummary" class="modal-summary" />
+            <ui:Label name="revealStatus" class="recruitment-reveal-status" picking-mode="Ignore" />
+            <ui:ScrollView name="resultScroll" class="harbor-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden">
+                <ui:VisualElement name="resultGrid" class="card-grid recruitment-result-grid" />
+            </ui:ScrollView>
+            <ui:VisualElement class="action-row">
+                <ui:Button name="skipButton" text="연출 건너뛰기" class="harbor-button" />
+                <ui:Button name="confirmButton" text="확인" class="harbor-button" />
+                <ui:Button name="repeatButton" class="harbor-button primary-button" />
+                <ui:Button name="resultFormationButton" text="함대 편성" class="harbor-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="resultFlash" class="recruitment-screen-flash" picking-mode="Ignore" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

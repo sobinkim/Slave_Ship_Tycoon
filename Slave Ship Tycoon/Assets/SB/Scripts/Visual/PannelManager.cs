@@ -8,7 +8,8 @@ namespace SB.Scripts.Visual
         Upgrade,
         Cago,
         Fleet,
-        TransportEquipment
+        TransportEquipment,
+        CommanderSkills
     }
     [Serializable]
     struct PanelInfo
@@ -22,6 +23,9 @@ namespace SB.Scripts.Visual
         [SerializeField] private PanelInfo[] _panelInfo;
         private PanelType currentPanel = PanelType.Upgrade;
         private PanelType panelBeforeFleet = PanelType.Upgrade;
+
+        public event Action<PanelType> PanelChanged;
+        public PanelType CurrentPanel => currentPanel;
 
         public void CloseFleet()
         {
@@ -55,6 +59,7 @@ namespace SB.Scripts.Visual
                     panelInfo.panel.PanelActive(false);
                 }
             }
+            PanelChanged?.Invoke(type);
         }
     }
 }

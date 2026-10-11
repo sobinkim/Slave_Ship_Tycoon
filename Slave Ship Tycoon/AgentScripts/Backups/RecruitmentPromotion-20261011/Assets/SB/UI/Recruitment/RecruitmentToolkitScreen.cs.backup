@@ -1,0 +1,230 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using SB.Core.EventBus;
+using SB.Scripts.Currency;
+using SB.Scripts.Fleet;
+using SB.Scripts.Visual;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace SB.UI.Recruitment
+{
+    [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
+    public sealed class RecruitmentToolkitScreen : MonoBehaviour
+    {
+        [Header("References")]
+        [SerializeField] private UIDocument document;
+        [SerializeField] private EscortGachaManager gachaManager;
+        [SerializeField] private CurrencyManager currencyManager;
+        [SerializeField] private PannelManager panelManager;
+        [SerializeField] private VisualTreeAsset cardTemplate;
+        [SerializeField] private Sprite recruitmentIcon;
+        [Header("Recruitment")]
+        [SerializeField, Min(1), Tooltip("기존 모집 화면에서 사용하던 묶음 모집 횟수")]
+        private int multiCount = 11;
+        [Header("Reveal timing (unscaled seconds)")]
+        [SerializeField, Min(0.01f)] private float revealSeconds = 0.38f;
+        [SerializeField, Min(0f)] private float cardDelaySeconds = 0.06f;
+        [SerializeField, Range(0.1f, 1f)] private float initialScale = 0.65f;
+
+        private readonly List<EscortShipData> rewards = new List<EscortShipData>();
+        private readonly List<Button> rewardCards = new List<Button>();
+        private VisualElement root;
+        private VisualElement resultPanel;
+        private VisualElement resultGrid;
+        private Label statusLabel;
+        private Coroutine revealRoutine;
+        private bool isBusy;
+
+        public event Action<bool> OpenStateChanged;
+
+        private void OnEnable()
+        {
+            if (document == null || gachaManager == null || currencyManager == null || panelManager == null || cardTemplate == null)
+            {
+                Debug.LogError("RecruitmentToolkitScreen의 Document, Manager, Card Template을 연결하세요.", this);
+                return;
+            }
+            root = document.rootVisualElement;
+            root.AddToClassList("harbor-document");
+            root.pickingMode = PickingMode.Ignore;
+            resultPanel = root.Q("resultPanel");
+            resultGrid = root.Q("resultGrid");
+            statusLabel = root.Q<Label>("statusLabel");
+            resultPanel.AddToClassList("hidden");
+            root.Q<Button>("closeButton").clicked += Close;
+            root.Q<Button>("singleButton").clicked += SummonSingle;
+            root.Q<Button>("multiButton").clicked += SummonMulti;
+            root.Q<Button>("repeatButton").clicked += SummonMulti;
+            root.Q<Button>("skipButton").clicked += SkipReveal;
+            root.Q<Button>("confirmButton").clicked += Confirm;
+            root.Q<Button>("formationButton").clicked += OpenFormation;
+            root.Q<Button>("resultFormationButton").clicked += OpenFormation;
+            ShipCardPresentation.SetIcon(root.Q("guideIcon"), recruitmentIcon);
+            ShipCardPresentation.SetIcon(root.Q("recruitmentIcon"), recruitmentIcon);
+            root.Q<Label>("multiTitle").text = $"{multiCount}회 모집";
+            Bus<CurrencyChangedEvent>.OnEvent += OnCurrencyChanged;
+            panelManager.PanelChanged += OnPanelChanged;
+            statusLabel.text = "새 함선은 함대에 배치하면 다음 전투부터 합류합니다.";
+            Refresh();
+            OpenStateChanged?.Invoke(true);
+        }
+
+        private void OnDisable()
+        {
+            Bus<CurrencyChangedEvent>.OnEvent -= OnCurrencyChanged;
+            if (panelManager != null) panelManager.PanelChanged -= OnPanelChanged;
+            if (revealRoutine != null) StopCoroutine(revealRoutine);
+            revealRoutine = null;
+            isBusy = false;
+            OpenStateChanged?.Invoke(false);
+            if (root == null) return;
+            if (root.Q<Button>("closeButton") is Button closeButtonBinding) closeButtonBinding.clicked -= Close;
+            if (root.Q<Button>("singleButton") is Button singleButtonBinding) singleButtonBinding.clicked -= SummonSingle;
+            if (root.Q<Button>("multiButton") is Button multiButtonBinding) multiButtonBinding.clicked -= SummonMulti;
+            if (root.Q<Button>("repeatButton") is Button repeatButtonBinding) repeatButtonBinding.clicked -= SummonMulti;
+            if (root.Q<Button>("skipButton") is Button skipButtonBinding) skipButtonBinding.clicked -= SkipReveal;
+            if (root.Q<Button>("confirmButton") is Button confirmButtonBinding) confirmButtonBinding.clicked -= Confirm;
+            if (root.Q<Button>("formationButton") is Button formationButtonBinding) formationButtonBinding.clicked -= OpenFormation;
+            if (root.Q<Button>("resultFormationButton") is Button resultFormationButtonBinding) resultFormationButtonBinding.clicked -= OpenFormation;
+        }
+
+        public void Open()
+        {
+            if (panelManager != null && panelManager.CurrentPanel == PanelType.Fleet)
+                panelManager.CloseFleet();
+            gameObject.SetActive(true);
+        }
+        public void Close() => gameObject.SetActive(false);
+        private void OpenFormation()
+        {
+            Close();
+            panelManager.ClickPanelButton(PanelType.Fleet);
+        }
+        private void OnPanelChanged(PanelType type) => Close();
+        private void OnCurrencyChanged(CurrencyChangedEvent evt)
+        {
+            if (evt.CurrencyType == gachaManager.CurrencyType) Refresh();
+        }
+
+        private void Refresh()
+        {
+            if (root == null) return;
+            long balance = currencyManager.GetCurrency(gachaManager.CurrencyType);
+            string unit = CurrencyTextFormatter.FormatName(gachaManager.CurrencyType);
+            long multiCost = (long)gachaManager.SummonCost * multiCount;
+            root.Q<Label>("balanceLabel").text = $"보유 {unit}  {CurrencyTextFormatter.Format(balance)}";
+            root.Q<Label>("singleCost").text = $"{gachaManager.SummonCost:N0} {unit}";
+            root.Q<Label>("multiCost").text = $"{multiCost:N0} {unit}";
+            bool canSummon = gachaManager.CanSummon(out EscortGachaFailureReason failure);
+            root.Q<Button>("singleButton").SetEnabled(!isBusy && canSummon);
+            root.Q<Button>("multiButton").SetEnabled(!isBusy && canSummon && balance >= multiCost);
+            root.Q<Button>("repeatButton").SetEnabled(!isBusy && canSummon && balance >= multiCost);
+            root.Q<Button>("repeatButton").text = $"{multiCount}회 다시 모집\n{multiCost:N0} {unit}";
+            if (!canSummon && !isBusy)
+                statusLabel.text = failure == EscortGachaFailureReason.InsufficientCurrency
+                    ? "모집 재화가 부족해요. 운송 정산으로 모아보세요." : "모집 설정을 확인해주세요.";
+        }
+
+        private void SummonSingle() => Recruit(1);
+        private void SummonMulti() => Recruit(multiCount);
+
+        private void Recruit(int count)
+        {
+            if (isBusy || resultPanel == null) return;
+            if (!gachaManager.CanSummon(out EscortGachaFailureReason failure) ||
+                currencyManager.GetCurrency(gachaManager.CurrencyType) < (long)gachaManager.SummonCost * count)
+            {
+                statusLabel.text = failure == EscortGachaFailureReason.InsufficientCurrency || failure == EscortGachaFailureReason.None
+                    ? "모집에 필요한 재화가 부족해요." : "모집 설정을 확인해주세요.";
+                Refresh();
+                return;
+            }
+            isBusy = true;
+            rewards.Clear();
+            for (int i = 0; i < count; i++)
+            {
+                if (!gachaManager.TrySummon(out EscortGachaResult result)) break;
+                rewards.Add(result.Reward);
+            }
+            if (rewards.Count == 0) { isBusy = false; Refresh(); return; }
+            rewardCards.Clear();
+            resultGrid.Clear();
+            resultGrid.EnableInClassList("single-reward", rewards.Count == 1);
+            root.Q<Label>("resultSummary").text = $"호위선 {rewards.Count}척 입항 · 미편성 상태입니다.\n함대에 배치하면 다음 전투부터 합류합니다.";
+            foreach (EscortShipData reward in rewards)
+            {
+                Button card = ShipCardPresentation.Create(cardTemplate, resultGrid);
+                ShipCardPresentation.Bind(card, reward, "새 함선");
+                card.pickingMode = PickingMode.Ignore;
+                card.focusable = false;
+                card.style.opacity = 0f;
+                card.style.scale = new Scale(Vector3.one * initialScale);
+                rewardCards.Add(card);
+            }
+            resultPanel.RemoveFromClassList("hidden");
+            SetResultActions(false);
+            Refresh();
+            revealRoutine = StartCoroutine(Reveal());
+        }
+
+        private IEnumerator Reveal()
+        {
+            foreach (Button card in rewardCards)
+            {
+                float elapsed = 0f;
+                while (elapsed < revealSeconds)
+                {
+                    elapsed += Time.unscaledDeltaTime;
+                    float progress = Mathf.Clamp01(elapsed / revealSeconds);
+                    float eased = 1f - Mathf.Pow(1f - progress, 3f);
+                    card.style.opacity = eased;
+                    card.style.scale = new Scale(Vector3.one * Mathf.Lerp(initialScale, 1f, eased));
+                    yield return null;
+                }
+                card.style.opacity = 1f;
+                card.style.scale = new Scale(Vector3.one);
+                if (cardDelaySeconds > 0f) yield return new WaitForSecondsRealtime(cardDelaySeconds);
+            }
+            revealRoutine = null;
+            FinishReveal();
+        }
+
+        private void SkipReveal()
+        {
+            if (revealRoutine != null) StopCoroutine(revealRoutine);
+            revealRoutine = null;
+            FinishReveal();
+        }
+
+        private void FinishReveal()
+        {
+            foreach (Button card in rewardCards)
+            {
+                card.style.opacity = 1f;
+                card.style.scale = new Scale(Vector3.one);
+            }
+            isBusy = false;
+            SetResultActions(true);
+            Refresh();
+        }
+
+        private void SetResultActions(bool complete)
+        {
+            root.Q<Button>("skipButton").EnableInClassList("hidden", complete);
+            root.Q<Button>("confirmButton").EnableInClassList("hidden", !complete);
+            root.Q<Button>("repeatButton").EnableInClassList("hidden", !complete);
+            root.Q<Button>("resultFormationButton").EnableInClassList("hidden", !complete);
+        }
+
+        private void Confirm()
+        {
+            SkipReveal();
+            resultPanel.AddToClassList("hidden");
+            statusLabel.text = "입항 완료 · 함대에 배치해 전투에 합류시키세요.";
+            Refresh();
+        }
+    }
+}
+

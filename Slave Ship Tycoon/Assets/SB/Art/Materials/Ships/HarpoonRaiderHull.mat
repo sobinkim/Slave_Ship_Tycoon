@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: HarpoonRaiderHull
-  m_Shader: {fileID: 4800000, guid: 79434052fff3f134e982efc049efbe56, type: 3}
+  m_Shader: {fileID: 4800000, guid: 52237093641d83d42a5570e55d54dd99, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,10 +29,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _FlagAmplitude: 0.012
+    - _FlutterPhase: 1.7
+    - _FlutterSpeed: 1.2
+    - _FlutterStrength: 0.8
+    - _SailAmplitude: 0.008
+    - _SailFootLift: 0.065
     - _SinkDistance: 0.9
     - _SinkProgress: 0
     - _Waterline: -0.37
     m_Colors:
+    - _ClothCanvas: {r: 1.1271318, g: 0.83875966, b: 0.47764996, a: 0.52463}
+    - _ClothTransform: {r: 1, g: 1, b: 0, a: 0}
+    - _ClothUvScale: {r: 1, g: 0.99999994, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _FlagBounds: {r: 0.05, g: 0.07, b: 0.265, a: 0.26}
+    - _FlagPoleTip: {r: 0.25, g: 0.06, b: 0, a: 0}
+    - _SailBottom: {r: 0.145, g: 0.724, b: 0.476, a: 0.633}
+    - _SailTop: {r: 0.152, g: 0.334, b: 0.452, a: 0.438}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: IroncladHull
-  m_Shader: {fileID: 4800000, guid: 79434052fff3f134e982efc049efbe56, type: 3}
+  m_Shader: {fileID: 4800000, guid: 52237093641d83d42a5570e55d54dd99, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,10 +29,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _FlagAmplitude: 0.012
+    - _FlutterPhase: 1.1
+    - _FlutterSpeed: 1.2
+    - _FlutterStrength: 0.8
+    - _SailAmplitude: 0.008
+    - _SailFootLift: 0.045
     - _SinkDistance: 0.9
     - _SinkProgress: 0
     - _Waterline: -0.27
     m_Colors:
+    - _ClothCanvas: {r: 0.78532064, g: 0.78532064, b: 0.5086, a: 0.44880003}
+    - _ClothTransform: {r: 1, g: 1, b: 0, a: 0}
+    - _ClothUvScale: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _FlagBounds: {r: 0.2, g: 0.14, b: 0.44, a: 0.29}
+    - _FlagPoleTip: {r: 0.435, g: 0.21, b: 0, a: 0}
+    - _SailBottom: {r: 0.336, g: 0.581, b: 0.657, a: 0.588}
+    - _SailTop: {r: 0.328, g: 0.337, b: 0.627, a: 0.361}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

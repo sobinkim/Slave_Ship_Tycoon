@@ -1,0 +1,268 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using SB.Core.EventBus;
+using SB.Scripts;
+using SB.Scripts.Currency;
+using SB.Scripts.Visual;
+using SB.UI.Cargo;
+using SB.UI.Recruitment;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace SB.UI.InGame
+{
+    [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
+    public sealed class InGameToolkitScreen : MonoBehaviour
+    {
+        private const long CompactBalanceThreshold = 1000000;
+
+        [Serializable] public sealed class CurrencySlot
+        {
+            public CurrencyType currencyType;
+            public Sprite icon;
+            public Color iconColor = Color.white;
+            public string hint;
+        }
+        [Header("References")]
+        [SerializeField] private UIDocument document;
+        [SerializeField] private CurrencyManager currencyManager;
+        [SerializeField] private CargoManager cargoManager;
+        [SerializeField] private GameFlowManager gameFlowManager;
+        [SerializeField] private ChapterDatabase chapterDatabase;
+        [SerializeField] private PannelManager panelManager;
+        [SerializeField] private RecruitmentToolkitScreen recruitmentScreen;
+        [SerializeField] private CargoToolkitScreen cargoScreen;
+        [SerializeField] private UpgradeToolkitPanel upgradePanel;
+        [SerializeField] private CurrencySlot[] currencySlots;
+        [Header("Route copy")]
+        [SerializeField] private string pirateTitle = "해적 해역";
+        [SerializeField] private string transportTitle = "운송 해역";
+        [SerializeField] private string bossTitle = "봉쇄 함대";
+        [SerializeField] private string pirateDescription = "자동 약탈 중 · 화물을 모아 출항을 준비하세요";
+        [SerializeField] private string transportDescription = "목적지까지 화물을 안전하게 운송하세요";
+        [SerializeField] private string bossDescription = "보스를 격파하고 다음 항로를 여세요";
+        [Header("Gain logs (unscaled seconds)")]
+        [SerializeField, Min(1)] private int maximumVisibleLogs = 5;
+        [SerializeField, Min(0)] private float logVisibleSeconds = 1f;
+        [SerializeField, Min(0.01f)] private float logFadeSeconds = 0.2f;
+        [SerializeField, Min(0.01f)] private float logOverflowFadeSeconds = 0.1f;
+        [SerializeField, Min(0)] private float logSpawnIntervalSeconds = 0.1f;
+
+        private sealed class GainLog { public VisualElement row; public float expiresAt; public float fadeSeconds; }
+        private readonly Dictionary<CurrencyType, Label> amounts = new Dictionary<CurrencyType, Label>();
+        private readonly Dictionary<ETransportItemType, Label> cargoMultipliers = new Dictionary<ETransportItemType, Label>();
+        private readonly Dictionary<ETransportItemType, int> cargoQuantities = new Dictionary<ETransportItemType, int>();
+        private readonly Queue<CurrencyAddedEvent> pendingLogs = new Queue<CurrencyAddedEvent>();
+        private readonly List<GainLog> logs = new List<GainLog>();
+        private VisualElement root;
+        private Coroutine spawnRoutine;
+        private StageStartedEvent currentStage;
+        private bool hasStage;
+        private bool isRouteDirty;
+
+        private void OnEnable()
+        {
+            if (document == null || currencyManager == null || cargoManager == null || gameFlowManager == null ||
+                chapterDatabase == null || panelManager == null || recruitmentScreen == null || cargoScreen == null || upgradePanel == null)
+            { Debug.LogError("InGameToolkitScreen의 명시적 참조를 연결하세요.", this); return; }
+            root = document.rootVisualElement;
+            root.AddToClassList("harbor-document");
+            root.pickingMode = PickingMode.Ignore;
+            root.Q("hud").pickingMode = PickingMode.Ignore;
+            BuildCurrencies();
+            root.Q<Button>("bossButton").clicked += OpenCargo;
+            root.Q<Button>("upgradeNav").clicked += OpenUpgrade;
+            root.Q<Button>("fleetNav").clicked += OpenFleet;
+            root.Q<Button>("recruitNav").clicked += OpenRecruitment;
+            panelManager.PanelChanged += OnPanelChanged;
+            recruitmentScreen.OpenStateChanged += OnRecruitmentChanged;
+            Bus<CurrencyChangedEvent>.OnEvent += OnCurrencyChanged;
+            Bus<CurrencyAddedEvent>.OnEvent += OnCurrencyAdded;
+            Bus<StageStartedEvent>.OnEvent += OnStageStarted;
+            Bus<SellChapterStartedEvent>.OnEvent += OnSellStarted;
+            Bus<ObtainChapterStartedEvent>.OnEvent += OnObtainStarted;
+            Bus<GetMarketPriceEvent>.OnEvent += OnMarketPrice;
+            RefreshCurrencies();
+            OnPanelChanged(panelManager.CurrentPanel);
+        }
+
+        private void Start() => RefreshCurrencies();
+
+        private void OnDisable()
+        {
+            Bus<CurrencyChangedEvent>.OnEvent -= OnCurrencyChanged;
+            Bus<CurrencyAddedEvent>.OnEvent -= OnCurrencyAdded;
+            Bus<StageStartedEvent>.OnEvent -= OnStageStarted;
+            Bus<SellChapterStartedEvent>.OnEvent -= OnSellStarted;
+            Bus<ObtainChapterStartedEvent>.OnEvent -= OnObtainStarted;
+            Bus<GetMarketPriceEvent>.OnEvent -= OnMarketPrice;
+            if (panelManager != null) panelManager.PanelChanged -= OnPanelChanged;
+            if (recruitmentScreen != null) recruitmentScreen.OpenStateChanged -= OnRecruitmentChanged;
+            if (spawnRoutine != null) StopCoroutine(spawnRoutine);
+            spawnRoutine = null;
+            pendingLogs.Clear();
+            logs.Clear();
+            if (root == null) return;
+            root.Q("gainLogs")?.Clear();
+            if (root.Q<Button>("bossButton") is Button bossButtonBinding) bossButtonBinding.clicked -= OpenCargo;
+            if (root.Q<Button>("upgradeNav") is Button upgradeNavBinding) upgradeNavBinding.clicked -= OpenUpgrade;
+            if (root.Q<Button>("fleetNav") is Button fleetNavBinding) fleetNavBinding.clicked -= OpenFleet;
+            if (root.Q<Button>("recruitNav") is Button recruitNavBinding) recruitNavBinding.clicked -= OpenRecruitment;
+        }
+
+        private void Update()
+        {
+            for (int i = logs.Count - 1; i >= 0; i--)
+            {
+                GainLog log = logs[i];
+                float remaining = log.expiresAt - Time.unscaledTime;
+                if (remaining <= 0f) { log.row.RemoveFromHierarchy(); logs.RemoveAt(i); }
+                else log.row.style.opacity = Mathf.Clamp01(remaining / log.fadeSeconds);
+            }
+        }
+        private void LateUpdate()
+        {
+            if (!isRouteDirty || !hasStage || root == null) return;
+            isRouteDirty = false;
+            bool isTransport = currentStage.RouteType == ChapterRouteType.Sell;
+            root.Q<Label>("routeNumber").text = $"항로 {currentStage.Chapter:00}";
+            root.Q<Label>("routeTitle").text = isTransport ? transportTitle : currentStage.IsBossBattle ? bossTitle : pirateTitle;
+            root.Q<Label>("routeDetail").text = isTransport ? transportDescription : currentStage.IsBossBattle ? bossDescription : pirateDescription;
+            int total = chapterDatabase.TryGetChapter(currentStage.Chapter, out ChapterContainer chapter) ? chapter.MaxStage : currentStage.Stage;
+            root.Q<Label>("stageProgress").text = $"{currentStage.Stage} / {total} 구간";
+            root.Q("stageProgress").EnableInClassList("hidden", !isTransport);
+            root.Q("transportCargo").EnableInClassList("hidden", !isTransport);
+            root.Q("stageTrack").EnableInClassList("hidden", !isTransport);
+            root.Q("stageFill").style.width = Length.Percent(total > 0 ? Mathf.Clamp01((float)currentStage.Stage / total) * 100f : 0);
+            root.Q("bossEntry").EnableInClassList("hidden", isTransport);
+            root.Q<Button>("bossButton").text = currentStage.IsBossBattle ? "전투 중" : "보스 도전";
+            root.Q<Button>("bossButton").SetEnabled(gameFlowManager.CanStartBossBattle);
+            root.Q<Label>("bossHint").text = currentStage.IsBossBattle ? "봉쇄 함대를 격파하세요" : "승리 시 운송 항로 개방";
+        }
+
+        private void BuildCurrencies()
+        {
+            VisualElement bar = root.Q("currencyBar");
+            bar.Clear();
+            amounts.Clear();
+            foreach (CurrencySlot slot in currencySlots)
+            {
+                var cell = new VisualElement { tooltip = slot.hint };
+                cell.AddToClassList("currency-slot");
+                cell.AddToClassList("currency-" + slot.currencyType.ToString().ToLowerInvariant());
+                var icon = new VisualElement { pickingMode = PickingMode.Ignore };
+                icon.AddToClassList("currency-icon");
+                SetCurrencyIcon(icon, slot); cell.Add(icon);
+                var copy = new VisualElement(); copy.AddToClassList("currency-copy");
+                var name = new Label(CurrencyTextFormatter.FormatName(slot.currencyType));
+                name.AddToClassList("currency-name"); copy.Add(name);
+                var amount = new Label(); amount.AddToClassList("currency-amount"); copy.Add(amount);
+                cell.Add(copy); amounts.Add(slot.currencyType, amount); bar.Add(cell);
+            }
+        }
+        private static void SetCurrencyIcon(VisualElement icon, CurrencySlot slot)
+        {
+            ShipCardPresentation.SetIcon(icon, slot.icon);
+            bool isGem = slot.icon == null && slot.currencyType != CurrencyType.Gold;
+            bool isCoin = slot.icon == null && slot.currencyType == CurrencyType.Gold;
+            icon.EnableInClassList("is-coin", isCoin);
+            icon.EnableInClassList("is-gem", isGem);
+            icon.EnableInClassList("is-diamond", isGem && slot.currencyType == CurrencyType.Diamond);
+            icon.EnableInClassList("is-emerald", isGem && slot.currencyType == CurrencyType.Emerald);
+            if (slot.icon != null) icon.style.unityBackgroundImageTintColor = slot.iconColor;
+            if (isGem || isCoin)
+            {
+                var facet = new VisualElement { pickingMode = PickingMode.Ignore };
+                facet.AddToClassList(isGem ? "currency-facet" : "currency-coin-stamp"); icon.Add(facet);
+            }
+        }
+        private void RefreshCurrencies()
+        {
+            if (currencyManager == null) return;
+            foreach (var pair in amounts) SetBalance(pair.Key, currencyManager.GetCurrency(pair.Key));
+        }
+        private void SetBalance(CurrencyType type, long amount)
+        {
+            if (!amounts.TryGetValue(type, out Label label)) return;
+            string exactAmount = amount.ToString("N0", System.Globalization.CultureInfo.InvariantCulture);
+            label.text = amount < CompactBalanceThreshold ? exactAmount : CurrencyTextFormatter.Format(amount);
+            label.tooltip = CurrencyTextFormatter.FormatName(type) + " " + exactAmount;
+        }
+        private void OnCurrencyChanged(CurrencyChangedEvent evt) => SetBalance(evt.CurrencyType, evt.CurrentAmount);
+        private void OnCurrencyAdded(CurrencyAddedEvent evt)
+        {
+            if (evt.AddedAmount <= 0) return;
+            pendingLogs.Enqueue(evt);
+            if (spawnRoutine == null) spawnRoutine = StartCoroutine(SpawnLogs());
+        }
+        private IEnumerator SpawnLogs()
+        {
+            // Yield once so an empty queue cannot leave a completed Coroutine stored as the active routine.
+            yield return null;
+            while (pendingLogs.Count > 0)
+            {
+                CurrencyAddedEvent evt = pendingLogs.Dequeue();
+                var row = new VisualElement { pickingMode = PickingMode.Ignore }; row.AddToClassList("gain-log");
+                var icon = new VisualElement { pickingMode = PickingMode.Ignore }; icon.AddToClassList("currency-icon");
+                foreach (CurrencySlot slot in currencySlots) if (slot.currencyType == evt.CurrencyType) { SetCurrencyIcon(icon, slot); break; }
+                row.Add(icon);
+                row.Add(new Label("+" + CurrencyTextFormatter.Format(evt.AddedAmount)) { pickingMode = PickingMode.Ignore });
+                root.Q("gainLogs").Add(row);
+                logs.Add(new GainLog { row = row, expiresAt = Time.unscaledTime + logVisibleSeconds + logFadeSeconds, fadeSeconds = logFadeSeconds });
+                int visibleCount = 0;
+                for (int i = logs.Count - 1; i >= 0; i--)
+                {
+                    visibleCount++;
+                    if (visibleCount <= maximumVisibleLogs) continue;
+                    logs[i].expiresAt = Mathf.Min(logs[i].expiresAt, Time.unscaledTime + logOverflowFadeSeconds);
+                    logs[i].fadeSeconds = logOverflowFadeSeconds;
+                }
+                if (logSpawnIntervalSeconds > 0) yield return new WaitForSecondsRealtime(logSpawnIntervalSeconds);
+            }
+            spawnRoutine = null;
+        }
+
+        private void OnStageStarted(StageStartedEvent evt) { currentStage = evt; hasStage = true; isRouteDirty = true; }
+        private void OnObtainStarted(ObtainChapterStartedEvent evt) { root.Q("transportCargo").Clear(); cargoMultipliers.Clear(); cargoQuantities.Clear(); }
+        private void OnSellStarted(SellChapterStartedEvent evt)
+        {
+            VisualElement cargoRoot = root.Q("transportCargo");
+            cargoRoot.Clear(); cargoMultipliers.Clear(); cargoQuantities.Clear();
+            foreach (CargoData cargo in cargoManager.TransportCargoData)
+            {
+                if (cargo == null || cargo.Item == null || cargo.Amount <= 0) continue;
+                var cell = new VisualElement(); cell.AddToClassList("transport-item");
+                var icon = new VisualElement(); icon.AddToClassList("currency-icon"); ShipCardPresentation.SetIcon(icon, cargo.Item.Icon); cell.Add(icon);
+                var label = new Label($"{cargo.Amount:N0} · x1"); label.AddToClassList("small-text"); cell.Add(label);
+                cargoQuantities[cargo.Item.Type] = cargo.Amount;
+                cargoMultipliers[cargo.Item.Type] = label; cargoRoot.Add(cell);
+            }
+        }
+        private void OnMarketPrice(GetMarketPriceEvent evt)
+        {
+            if (evt.MarketPrices == null) return;
+            foreach (var price in evt.MarketPrices)
+                if (cargoMultipliers.TryGetValue(price.Key, out Label label))
+                    label.text = $"{cargoQuantities[price.Key]:N0} · x{price.Value.GetAppliedMultiplier()}";
+        }
+
+        private void OpenCargo() => cargoScreen.Open();
+        private void OpenUpgrade() { recruitmentScreen.Close(); panelManager.ClickPanelButton(PanelType.Upgrade); }
+        private void OpenFleet() => panelManager.ClickPanelButton(PanelType.Fleet);
+        private void OpenRecruitment() => recruitmentScreen.Open();
+        private void OnPanelChanged(PanelType type)
+        {
+            upgradePanel.SetVisible(type == PanelType.Upgrade);
+            RefreshNavigation();
+        }
+        private void OnRecruitmentChanged(bool isOpen) => RefreshNavigation();
+        private void RefreshNavigation()
+        {
+            bool isRecruitOpen = recruitmentScreen.gameObject.activeInHierarchy;
+            root.Q<Button>("upgradeNav").EnableInClassList("primary-button", panelManager.CurrentPanel == PanelType.Upgrade && !isRecruitOpen);
+            root.Q<Button>("fleetNav").EnableInClassList("primary-button", panelManager.CurrentPanel == PanelType.Fleet && !isRecruitOpen);
+            root.Q<Button>("recruitNav").EnableInClassList("primary-button", isRecruitOpen);
+        }
+    }
+}

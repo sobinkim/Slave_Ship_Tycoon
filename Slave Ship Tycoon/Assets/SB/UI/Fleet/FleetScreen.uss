@@ -1,0 +1,31 @@
+.formation-comparison { flex-direction: row; height: 650px; flex-shrink: 0; }
+.formation-side { flex-grow: 1; flex-basis: 0; min-width: 0; }
+.side-title { font-size: 27px; margin-bottom: 12px; -unity-text-align: middle-center; }
+.formation-columns { flex-direction: row; flex-grow: 1; min-height: 0; }
+.formation-column { flex-grow: 1; flex-basis: 0; min-width: 0; margin: 3px; }
+.column-title { -unity-text-align: middle-center; font-size: 24px; height: 38px; flex-shrink: 0; }
+.formation-cells { flex-grow: 1; }
+.formation-slot {
+    flex-grow: 1; flex-basis: 0; min-height: 0; margin: 4px 0;
+    padding: 6px; border-radius: 5px; border-width: 2px;
+    border-color: var(--color-border); background-color: var(--color-surface-raised);
+    color: var(--color-text-primary);
+}
+.formation-slot .ship-icon { min-height: 20px; }
+.formation-slot .ship-name { font-size: 22px; }
+.formation-slot .ship-count { font-size: 20px; }
+.formation-slot.is-selected { border-color: var(--color-accent); background-color: var(--color-target); }
+.main-ship-slot { border-color: var(--color-accent); }
+.main-ship-slot .ship-name { color: var(--color-accent); }
+.comparison-arrow { width: 38px; flex-shrink: 0; -unity-text-align: middle-center; color: var(--color-accent); font-size: 38px; }
+.enemy-column { background-color: var(--color-surface-raised); border-width: 2px; border-color: var(--color-border); padding: 8px; }
+.enemy-column.is-target { background-color: var(--color-target); border-color: var(--color-accent); }
+.enemy-marker { flex-grow: 1; flex-basis: 0; -unity-text-align: middle-center; color: var(--color-accent); font-size: 32px; }
+.attack-details { background-color: var(--color-surface-inset); padding: 16px; margin-top: 16px; flex-shrink: 0; }
+.attack-name { font-size: 27px; color: var(--color-accent); }
+.attack-description { font-size: 23px; white-space: normal; margin-top: 8px; }
+.fleet-controls { flex-direction: row; flex-shrink: 0; align-items: center; }
+.fleet-controls > .subtitle { flex-grow: 1; margin-bottom: 0; }
+.fleet-controls > .harbor-button { min-height: 60px; font-size: 23px; }
+
+.fleet-controls > .subtitle { min-width: 0; -unity-text-align: middle-left; }

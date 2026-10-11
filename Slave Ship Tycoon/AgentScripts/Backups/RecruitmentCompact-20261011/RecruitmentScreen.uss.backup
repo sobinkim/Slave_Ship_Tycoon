@@ -1,0 +1,23 @@
+.recruitment-root { flex-grow: 1; }
+.recruitment-panel {
+    position: absolute; left: 0; right: 0; top: 44%; bottom: 132px;
+    background-color: var(--color-surface-primary); padding: 24px;
+    border-top-width: 3px; border-top-color: var(--color-accent);
+}
+.recruitment-tabs { flex-direction: row; height: 64px; flex-shrink: 0; margin-bottom: 16px; }
+.recruitment-tab { flex-grow: 1; flex-basis: 0; -unity-text-align: middle-center; font-size: 28px; color: var(--color-accent); border-bottom-width: 3px; border-bottom-color: var(--color-accent); }
+.recruitment-content { flex-direction: row; flex-grow: 1; min-height: 0; }
+.recruitment-guide { flex-basis: 27%; margin-right: 18px; padding: 16px; background-color: var(--color-surface-inset); border-radius: 8px; }
+.guide-icon { height: 150px; margin-top: 18px; margin-bottom: 18px; -unity-background-scale-mode: scale-to-fit; }
+.guide-name { color: var(--color-accent); font-size: 28px; -unity-font-style: bold; }
+.guide-text { white-space: normal; font-size: 25px; margin-top: 18px; color: var(--color-text-secondary); }
+.recruitment-cards { flex-grow: 1; flex-basis: 0; min-width: 0; }
+.recruitment-card { background-color: var(--color-surface-raised); border-width: 2px; border-color: var(--color-border); border-radius: 10px; padding: 22px; }
+.recruitment-card-title { font-size: 32px; -unity-font-style: bold; margin-bottom: 14px; }
+.recruitment-card-description { white-space: normal; font-size: 25px; color: var(--color-text-secondary); margin-bottom: 12px; }
+.recruitment-card-icon { height: 165px; -unity-background-scale-mode: scale-to-fit; margin-bottom: 20px; }
+.recruitment-cost { -unity-text-align: middle-center; font-size: 26px; color: var(--color-accent); }
+.recruitment-balance { -unity-text-align: middle-right; font-size: 25px; color: var(--color-accent); margin-bottom: 18px; }
+.recruitment-result-grid .ship-card { width: 23.8%; height: 280px; }
+.recruitment-result-grid.single-reward { justify-content: center; }
+.recruitment-result-grid.single-reward .ship-card { width: 46%; height: 500px; }

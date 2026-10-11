@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Button name="shipCard" class="ship-card">
+        <ui:VisualElement name="shipIcon" class="ship-icon" picking-mode="Ignore" />
+        <ui:Label name="shipName" class="ship-name" picking-mode="Ignore" />
+        <ui:Label name="shipGrade" class="ship-grade" picking-mode="Ignore" />
+        <ui:Label name="shipCount" class="ship-count" picking-mode="Ignore" />
+    </ui:Button>
+</ui:UXML>

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: EnemyHarpoonRaiderEmblem
-  m_Shader: {fileID: 4800000, guid: 79434052fff3f134e982efc049efbe56, type: 3}
+  m_Shader: {fileID: 4800000, guid: 52237093641d83d42a5570e55d54dd99, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,10 +29,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _FlagAmplitude: 0.012
+    - _FlutterPhase: 2.05
+    - _FlutterSpeed: 1.2
+    - _FlutterStrength: 0.8
+    - _SailAmplitude: 0.008
+    - _SailFootLift: 0.085
     - _SinkDistance: 1.2499999
     - _SinkProgress: 0
     - _Waterline: -0.5843254
     m_Colors:
+    - _ClothCanvas: {r: 1.0385715, g: 0.7728571, b: 0.5, a: 0.5}
+    - _ClothTransform: {r: 0.72, g: 0.72, b: -0.21214285, a: 0.050714284}
+    - _ClothUvScale: {r: 4.5792394, g: 3.8165781, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _FlagBounds: {r: 0.36, g: 0.065, b: 0.62, a: 0.25}
+    - _FlagPoleTip: {r: 0.37, g: 0.61, b: 0, a: 0}
+    - _SailBottom: {r: 0.02, g: 0.65, b: 0.46, a: 0.66}
+    - _SailTop: {r: 0.104, g: 0.281, b: 0.516, a: 0.348}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -61,9 +61,14 @@ namespace SB.Scripts.Fleet
         public readonly bool IsSuccess;
         public readonly EscortGachaFailureReason FailureReason;
         public readonly EscortShipData Reward;
+        public readonly EscortShipData InitialReward;
+        public readonly EscortShipData FirstPromotionReward;
+        public readonly int PromotionAttemptCount;
         public readonly CurrencyType CurrencyType;
         public readonly int Cost;
         public readonly int RewardOwnedCount;
+
+        public int PromotionCount => FirstPromotionReward == null ? 0 : Reward == FirstPromotionReward ? 1 : 2;
 
         public EscortGachaResult(
             bool isSuccess,
@@ -71,11 +76,17 @@ namespace SB.Scripts.Fleet
             EscortShipData reward,
             CurrencyType currencyType,
             int cost,
-            int rewardOwnedCount)
+            int rewardOwnedCount,
+            EscortShipData initialReward = null,
+            EscortShipData firstPromotionReward = null,
+            int promotionAttemptCount = 0)
         {
             IsSuccess = isSuccess;
             FailureReason = failureReason;
             Reward = reward;
+            InitialReward = initialReward ?? reward;
+            FirstPromotionReward = firstPromotionReward;
+            PromotionAttemptCount = promotionAttemptCount;
             CurrencyType = currencyType;
             Cost = cost;
             RewardOwnedCount = rewardOwnedCount;

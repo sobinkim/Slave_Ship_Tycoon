@@ -1,0 +1,46 @@
+.recruitment-root { flex-grow: 1; }
+.recruitment-panel {
+    position: absolute; left: 0; right: 0; top: 51%; bottom: 132px;
+    background-color: var(--color-surface-primary); padding: 20px 24px;
+    border-top-width: 3px; border-top-color: var(--color-accent);
+    overflow: hidden;
+}
+.recruitment-panel > .screen-header { height: 64px; margin-bottom: 8px; }
+.recruitment-panel .screen-title { min-width: 0; white-space: normal; font-size: 34px; }
+.recruitment-panel .close-button { flex-shrink: 0; margin: 0 0 0 16px; }
+.recruitment-toolbar { flex-direction: row; align-items: center; height: 48px; flex-shrink: 0; margin-bottom: 16px; border-bottom-width: 2px; border-bottom-color: var(--color-accent); }
+.recruitment-category { flex-grow: 1; flex-basis: 0; min-width: 0; font-size: 26px; color: var(--color-accent); margin: 0; padding: 0; }
+.recruitment-balance { flex-shrink: 0; -unity-text-align: middle-right; font-size: 24px; color: var(--color-accent); margin: 0 0 0 16px; padding: 0; }
+.recruitment-scroll { flex-basis: 0; }
+.recruitment-scroll > .unity-scroll-view__vertical-scroller { width: 12px; margin-left: 8px; }
+.recruitment-content { flex-direction: row; align-items: stretch; }
+.recruitment-guide { flex-grow: 0; flex-shrink: 0; flex-basis: 27%; min-width: 0; margin-right: 18px; padding: 16px; background-color: var(--color-surface-inset); border-radius: 8px; }
+.guide-icon { height: 120px; flex-shrink: 0; margin-top: 12px; margin-bottom: 12px; -unity-background-scale-mode: scale-to-fit; }
+.guide-name { color: var(--color-accent); font-size: 28px; -unity-font-style: bold; margin: 0; padding: 0; }
+.guide-text { min-width: 0; white-space: normal; font-size: 24px; margin: 12px 0 0 0; padding: 0; color: var(--color-text-secondary); }
+.recruitment-cards { flex-grow: 1; flex-basis: 0; min-width: 0; }
+.recruitment-card { background-color: var(--color-surface-raised); border-width: 2px; border-color: var(--color-border); border-radius: 10px; padding: 18px; }
+.recruitment-card-title { min-width: 0; white-space: normal; font-size: 30px; -unity-font-style: bold; margin: 0 0 8px 0; padding: 0; }
+.recruitment-card-description { min-width: 0; white-space: normal; font-size: 24px; color: var(--color-text-secondary); margin: 0 0 8px 0; padding: 0; }
+.recruitment-card-icon { height: 120px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; margin-bottom: 12px; }
+.recruitment-actions { margin-top: 8px; }
+.recruitment-actions > .recruitment-button { height: 104px; min-height: 104px; min-width: 0; padding: 10px 8px; justify-content: center; align-items: stretch; }
+.recruitment-button > Label { min-width: 0; margin: 0; padding: 0; font-size: 26px; -unity-text-align: middle-center; white-space: normal; }
+.recruitment-button > .recruitment-cost { color: var(--color-accent); margin-top: 4px; }
+.recruitment-cards > .status { min-height: 64px; min-width: 0; font-size: 23px; margin: 12px 0 8px 0; padding: 0; white-space: normal; }
+.recruitment-cards > .harbor-button { height: 72px; min-height: 72px; margin: 0; }
+.recruitment-result-grid .ship-card { width: 23.8%; height: 280px; }
+.recruitment-result-grid.single-reward { justify-content: center; }
+.recruitment-result-grid.single-reward .ship-card { width: 46%; height: 500px; }
+.recruitment-reveal-status { min-height: 48px; flex-shrink: 0; font-size: 28px; -unity-font-style: bold; -unity-text-align: middle-center; white-space: normal; color: var(--color-accent); margin: 0 0 16px 0; }
+.recruitment-reward-card.recruitment-card-muted { opacity: 0.4; }
+.recruitment-reward-card.recruitment-card-charging { border-width: 4px; }
+.recruitment-card-flash, .recruitment-card-ring { position: absolute; left: 0; right: 0; top: 0; bottom: 0; border-radius: 8px; opacity: 0; }
+.recruitment-card-flash { background-color: var(--color-text-primary); }
+.recruitment-card-ring { border-width: 4px; border-color: var(--color-accent); }
+.recruitment-reward-card.grade-uncommon > .recruitment-card-ring { border-color: var(--color-grade-uncommon); }
+.recruitment-reward-card.grade-rare > .recruitment-card-ring { border-color: var(--color-grade-rare); }
+.recruitment-reward-card.grade-epic > .recruitment-card-ring { border-color: var(--color-grade-epic); }
+.recruitment-reward-card.grade-legendary > .recruitment-card-ring { border-color: var(--color-grade-legendary); }
+.recruitment-promotion-label { position: absolute; left: 4px; right: 4px; bottom: 8px; margin: 0; padding: 4px; border-radius: 4px; background-color: var(--color-surface-primary); color: var(--color-accent); font-size: 24px; -unity-font-style: bold; -unity-text-align: middle-center; white-space: normal; }
+.recruitment-screen-flash { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: var(--color-text-primary); opacity: 0; }

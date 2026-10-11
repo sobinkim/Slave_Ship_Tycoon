@@ -1,0 +1,40 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Shared/Styles/HarborTheme.uss" />
+    <ui:Style src="FleetMergeScreen.uss" />
+    <ui:VisualElement class="harbor-root screen">
+        <ui:VisualElement class="screen-header">
+            <ui:Label text="함선 합성" class="screen-title" />
+            <ui:Button name="closeButton" text="돌아가기" class="harbor-button close-button" />
+        </ui:VisualElement>
+        <ui:Label text="같은 등급의 미편성 함선 3척을 직접 선택하세요." class="subtitle" />
+        <ui:VisualElement class="merge-preview">
+            <ui:VisualElement class="merge-preview-side">
+                <ui:VisualElement name="sourceIcon" class="ship-icon" />
+                <ui:Label name="sourceLabel" class="ship-name" text="재료 선택" />
+            </ui:VisualElement>
+            <ui:Label text="›" class="merge-arrow" />
+            <ui:VisualElement class="merge-preview-side">
+                <ui:VisualElement name="targetIcon" class="ship-icon" />
+                <ui:Label name="targetLabel" class="ship-name" text="상위 등급" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="materialSlots" class="material-slots" />
+        <ui:Label name="statusLabel" class="status" />
+        <ui:Label text="보유 함선 · 편성 중인 함선은 재료에서 제외됩니다." class="section-title" />
+        <ui:ScrollView class="harbor-scroll" mode="Vertical">
+            <ui:VisualElement name="inventoryGrid" class="card-grid" />
+        </ui:ScrollView>
+        <ui:VisualElement class="action-row">
+            <ui:Button name="confirmButton" text="선택한 함선 합성" class="harbor-button primary-button" />
+            <ui:Button name="mergeAllButton" text="일괄 합성" class="harbor-button" />
+        </ui:VisualElement>
+        <ui:VisualElement name="resultPanel" class="modal hidden">
+            <ui:Label text="합성 완료" class="modal-title" />
+            <ui:Label name="resultSummary" class="modal-summary" />
+            <ui:ScrollView class="harbor-scroll" mode="Vertical">
+                <ui:VisualElement name="resultGrid" class="card-grid" />
+            </ui:ScrollView>
+            <ui:Button name="resultCloseButton" text="확인" class="harbor-button primary-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Shared/Styles/HarborTheme.uss" />
+    <ui:Style src="InGameFeedback.uss" />
+    <ui:VisualElement class="harbor-root feedback-root" picking-mode="Ignore">
+        <ui:VisualElement name="stagePopup" class="stage-popup hidden" picking-mode="Ignore">
+            <ui:Label name="stageNumber" class="popup-stage" picking-mode="Ignore" />
+            <ui:Label name="stageResult" class="popup-result" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement name="settlement" class="modal hidden">
+            <ui:VisualElement name="settlementCard" class="settlement-card">
+                <ui:Label text="항구 정산" class="settlement-eyebrow" />
+                <ui:Label name="settlementTitle" class="modal-title" />
+                <ui:Label name="cargoSummary" class="modal-summary" />
+                <ui:VisualElement name="settlementRewards" />
+                <ui:Button name="settlementClose" text="확인" class="harbor-button primary-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="stageFade" class="stage-fade hidden" />
+    </ui:VisualElement>
+</ui:UXML>

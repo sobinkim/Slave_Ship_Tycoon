@@ -65,3 +65,10 @@
 - 플레이어·적 지원함 프리팹의 Visual을 20% 줄이고, 적의 좌우 반전 방향을 유지했다.
 - 두 지원함의 직선 가속 모드·시작/최대 속도·비행 설정을 파쇄선에서 가져왔다. 회복탄의 기존 재질은 유지하고 코팅 컴포넌트를 추가하지 않았다.
 - 스크립트 컴파일과 격리된 Editor 프리뷰에서 Idle·Attack·Dead 크기, 십자가 파티클 표시, 프리팹 연결을 확인했다. 씬 파일은 변경하지 않았다.
+
+## 2026-10-11 명중 이펙트 참조 복구
+
+- 저장된 HealingCapsule.prefab의 healingImpactEffectPrefab GUID/fileID는 정상이었지만, Editor가 로드한 아군 회복탄과 기존 풀 인스턴스에서는 null이었다. 적 회복탄의 연결은 정상이었다.
+- HealingImpact → HealingCapsule → HealingSupportShip 순서로 의존 에셋을 재임포트해 연결을 복구했다. 실행 중 풀의 원본 프리팹 매핑으로 아군 회복탄 2개를 확인하고 해당 인스턴스의 null 참조도 복구했다.
+- 저장된 프리팹 내용과 회복량·파티클 설정은 변경하지 않았다. 런타임 자동 탐색이나 자동 참조 보정 코드는 추가하지 않았다.
+- 진행 중인 실제 전투에서 명중을 강제하지 않고 HealingImpact(Clone)이 생성되고 활성 파티클 3개가 재생되는 것을 확인했다. 재임포트 중 HealingCapsule/HealingSupportShip에 PrefabImporter inconsistent result 경고가 관측됐으며, 재임포트 후 참조는 HealingImpact로 유지됐다. 스크립트 컴파일 오류는 없었다.

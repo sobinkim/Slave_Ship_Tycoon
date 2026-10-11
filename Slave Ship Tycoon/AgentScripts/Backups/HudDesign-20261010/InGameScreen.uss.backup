@@ -1,0 +1,71 @@
+.hud { position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+.currency-bar { position: absolute; top: 0; left: 0; right: 0; height: 60px; flex-direction: row; background-color: var(--color-surface-primary); }
+.currency-slot { flex-grow: 1; flex-basis: 0; padding: 3px 24px; }
+.currency-hint { font-size: 18px; color: var(--color-text-secondary); }
+.currency-value-row { flex-direction: row; align-items: center; }
+.currency-icon { width: 30px; height: 30px; margin-right: 8px; -unity-background-scale-mode: scale-to-fit; }
+.currency-amount { font-size: 27px; -unity-font-style: bold; }
+.route-card { position: absolute; top: 100px; left: 28px; right: 28px; min-height: 136px; padding: 14px 22px; flex-direction: row; background-color: var(--color-surface-overlay); border-radius: 8px; }
+.route-copy { flex-grow: 1; flex-basis: 0; justify-content: center; }
+.route-heading { flex-direction: row; align-items: center; }
+.route-number { background-color: var(--color-surface-raised); color: var(--color-action-hover); font-size: 23px; padding: 4px 18px; margin-right: 16px; }
+.route-title { font-size: 38px; -unity-font-style: bold; }
+.route-detail { font-size: 26px; color: var(--color-text-secondary); white-space: normal; margin-top: 6px; }
+.boss-entry { width: 270px; }
+.boss-entry > .harbor-button { height: 76px; margin-top: 0; }
+.small-text { font-size: 22px; color: var(--color-text-secondary); white-space: normal; }
+.boss-entry > .small-text { -unity-text-align: middle-center; }
+.transport-cargo { flex-direction: row; flex-wrap: wrap; }
+.transport-item { flex-direction: row; align-items: center; margin-right: 16px; }
+.gain-logs { position: absolute; left: 28px; bottom: 51%; align-items: flex-start; flex-direction: column; }
+.gain-log { flex-direction: row; padding: 8px 14px; margin-top: 6px; background-color: var(--color-surface-log); }
+.gain-log > Label { font-size: 30px; color: var(--color-accent); }
+.lower-panel-background { position: absolute; top: 51%; left: 0; right: 0; bottom: 0; background-color: var(--color-surface-primary); }
+.command-area { position: absolute; top: 51%; left: 0; right: 0; height: 186px; }
+.command-heading { height: 50px; padding: 0 12px; flex-direction: row; justify-content: space-between; }
+.auto-button, .settings-button { min-height: 46px; height: 46px; font-size: 21px; padding: 4px 18px; margin: 0; }
+.command-strip { flex-grow: 1; background-color: var(--color-surface-command); padding: 8px 12px; }
+.gauge-row { flex-direction: row; height: 25px; align-items: center; }
+.gauge-track { flex-grow: 1; height: 7px; background-color: var(--color-border); margin: 0 16px; }
+.gauge-fill { width: 0%; height: 100%; background-color: var(--color-grade-uncommon); }
+.skill-bar { flex-direction: row; flex-grow: 1; align-items: stretch; }
+.command-skill { width: 132px; height: 98px; margin: 4px 8px 0 0; padding: 4px; min-height: 0; align-items: stretch; }
+.command-skill:disabled { opacity: 0.8; }
+.command-skill.is-ready { border-color: var(--color-grade-uncommon); }
+.command-skill.is-active { border-color: var(--color-accent); }
+.skill-icon { height: 40px; -unity-background-scale-mode: scale-to-fit; }
+.skill-name { font-size: 20px; -unity-text-align: middle-center; }
+.skill-state { font-size: 18px; color: var(--color-accent); -unity-text-align: middle-center; }
+.skill-charge-track { height: 4px; background-color: var(--color-border); }
+.skill-charge-fill { height: 100%; background-color: var(--color-grade-uncommon); }
+.upgrade-panel { position: absolute; top: 61%; bottom: 138px; left: 0; right: 0; background-color: var(--color-surface-primary); padding: 8px; }
+.upgrade-tabs { height: 58px; flex-direction: row; flex-shrink: 0; }
+.upgrade-tabs > .harbor-button { flex-grow: 1; flex-basis: 0; height: 54px; min-height: 0; padding: 4px; margin: 0 4px; font-size: 25px; }
+.upgrade-hint { color: var(--color-text-secondary); font-size: 19px; -unity-text-align: middle-right; height: 30px; }
+.upgrade-row { flex-shrink: 0; margin: 4px 0; padding: 10px 20px; height: 138px; min-height: 138px; border-left-width: 3px; border-left-color: var(--color-accent); border-radius: 0; flex-direction: row; align-items: center; }
+.upgrade-copy { flex-grow: 1; }
+.upgrade-name { font-size: 30px; -unity-text-align: middle-left; }
+.upgrade-effect { font-size: 26px; color: var(--color-action-hover); -unity-text-align: middle-left; }
+.upgrade-level { font-size: 20px; color: var(--color-text-secondary); -unity-text-align: middle-left; }
+.upgrade-cost { font-size: 28px; color: var(--color-accent); }
+.upgrade-row.is-success { background-color: var(--color-action-primary); }
+.upgrade-row.is-failure { border-color: var(--color-status-danger); }
+.commander-settings { flex-grow: 1; min-height: 0; }
+.commander-slots { flex-direction: row; flex-shrink: 0; margin-bottom: 10px; }
+.commander-slot { flex-grow: 1; flex-basis: 0; }
+.commander-slot > .harbor-button { height: 62px; min-height: 58px; font-size: 22px; margin: 3px; padding: 4px; }
+.is-selected { border-color: var(--color-accent); }
+.commander-row { padding: 14px; margin: 6px 0; background-color: var(--color-surface-inset); }
+.commander-description { white-space: normal; font-size: 25px; }
+.commander-row > .harbor-button { height: 62px; min-height: 58px; font-size: 22px; }
+.bottom-nav { position: absolute; left: 0; right: 0; bottom: 0; height: 138px; flex-direction: row; background-color: var(--color-surface-primary); padding: 12px; }
+.bottom-nav > .harbor-button { flex-grow: 1; flex-basis: 0; height: 108px; font-size: 30px; }
+
+.commander-settings { flex-basis: 0; overflow: hidden; }
+.commander-settings > .harbor-scroll { flex-basis: 0; }
+.commander-settings > .small-text { height: 30px; font-size: 18px; padding-top: 4px; background-color: var(--color-surface-primary); }
+
+.stage-track { height: 6px; margin-top: 8px; background-color: var(--color-border); }
+.stage-fill { height: 100%; background-color: var(--color-action-hover); }
+
+.upgrade-row:hover .upgrade-effect, .upgrade-row.is-success .upgrade-effect { color: var(--color-text-primary); }

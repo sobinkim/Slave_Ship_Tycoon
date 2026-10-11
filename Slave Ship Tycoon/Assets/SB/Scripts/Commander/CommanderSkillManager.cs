@@ -35,6 +35,9 @@ namespace SB.Scripts.Commander
         public bool IsAutoUseEnabled => _isAutoUseEnabled;
         public bool IsBattleRunning => _isBattleRunning;
         public int EquippedSlotCount => _equippedSkills.Length;
+        public IReadOnlyList<CommanderSkillData> AvailableSkills => _skillDatabase != null
+            ? _skillDatabase.Skills
+            : Array.Empty<CommanderSkillData>();
 
         private void Awake()
         {

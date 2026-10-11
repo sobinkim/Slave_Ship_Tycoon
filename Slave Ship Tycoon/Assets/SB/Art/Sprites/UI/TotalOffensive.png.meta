@@ -1,0 +1,702 @@
+fileFormatVersion: 2
+guid: 4c1eecc507f3aab49a028a0dd26b9a8e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2680602284390362145
+    second: TotalOffensive_0
+  - first:
+      213: -1688146663585941698
+    second: TotalOffensive_1
+  - first:
+      213: 6093405023580266373
+    second: TotalOffensive_2
+  - first:
+      213: -3438499116327241937
+    second: TotalOffensive_3
+  - first:
+      213: -4284626316607375163
+    second: TotalOffensive_4
+  - first:
+      213: -6873842166627390830
+    second: TotalOffensive_5
+  - first:
+      213: 4452627644530296784
+    second: TotalOffensive_6
+  - first:
+      213: -8255505873990791371
+    second: TotalOffensive_7
+  - first:
+      213: 2546092783314922492
+    second: TotalOffensive_8
+  - first:
+      213: -3600256112341805788
+    second: TotalOffensive_9
+  - first:
+      213: 2015393805721504169
+    second: TotalOffensive_10
+  - first:
+      213: 8382779859749413681
+    second: TotalOffensive_11
+  - first:
+      213: 1272541783631626660
+    second: TotalOffensive_12
+  - first:
+      213: 7602372297236130264
+    second: TotalOffensive_13
+  - first:
+      213: 3106776358180043779
+    second: TotalOffensive_14
+  - first:
+      213: -6156182518585845634
+    second: TotalOffensive_15
+  - first:
+      213: -8990680419427507671
+    second: TotalOffensive_16
+  - first:
+      213: -5285533776503650880
+    second: TotalOffensive_17
+  - first:
+      213: 8010705624443224163
+    second: TotalOffensive_18
+  - first:
+      213: 8232785915577267080
+    second: TotalOffensive_19
+  - first:
+      213: -7023620719555598149
+    second: TotalOffensive_20
+  - first:
+      213: 8386290572026884771
+    second: TotalOffensive_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 256
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TotalOffensive_0
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 0
+        width: 1191
+        height: 1246
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12c20314399633520800000000000000
+      internalID: 2680602284390362145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_1
+      rect:
+        serializedVersion: 2
+        x: 534
+        y: 1173
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e37f23cbd8f7298e0800000000000000
+      internalID: -1688146663585941698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_2
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 644
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58f151fa59f109450800000000000000
+      internalID: 6093405023580266373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_3
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 644
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f27f1da854ff740d0800000000000000
+      internalID: -3438499116327241937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_4
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 602
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c8b353e013f984c0800000000000000
+      internalID: -4284626316607375163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_5
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 529
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29aa218f7f43b90a0800000000000000
+      internalID: -6873842166627390830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_6
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 531
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d7005d6049eacd30800000000000000
+      internalID: 4452627644530296784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_7
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 441
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53fc0aba52d8e6d80800000000000000
+      internalID: -8255505873990791371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_8
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 133
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfbebaa85e9855320800000000000000
+      internalID: 2546092783314922492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_9
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 128
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 425107b0422590ec0800000000000000
+      internalID: -3600256112341805788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_10
+      rect:
+        serializedVersion: 2
+        x: 525
+        y: 140
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a98d800dfd18fb10800000000000000
+      internalID: 2015393805721504169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_11
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 95
+        width: 62
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 133a9aa5edd955470800000000000000
+      internalID: 8382779859749413681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_12
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 109
+        width: 23
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a1843f820af8a110800000000000000
+      internalID: 1272541783631626660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_13
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 81
+        width: 32
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d9a703435d018960800000000000000
+      internalID: 7602372297236130264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_14
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 115
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30c37e923ac7d1b20800000000000000
+      internalID: 3106776358180043779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_15
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 95
+        width: 17
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e78983fbd98d09aa0800000000000000
+      internalID: -6156182518585845634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_16
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 95
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 922a6fe0bcfaa3380800000000000000
+      internalID: -8990680419427507671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_17
+      rect:
+        serializedVersion: 2
+        x: 747
+        y: 95
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c5cb23c80306a6b0800000000000000
+      internalID: -5285533776503650880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_18
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 93
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3608929a25ebb2f60800000000000000
+      internalID: 8010705624443224163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_19
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 83
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88372d9cb2bb04270800000000000000
+      internalID: 8232785915577267080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_20
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 81
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb8a0d51b26178e90800000000000000
+      internalID: -7023620719555598149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TotalOffensive_21
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 49
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a2bed0c7d6126470800000000000000
+      internalID: 8386290572026884771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      TotalOffensive_0: 2680602284390362145
+      TotalOffensive_1: -1688146663585941698
+      TotalOffensive_10: 2015393805721504169
+      TotalOffensive_11: 8382779859749413681
+      TotalOffensive_12: 1272541783631626660
+      TotalOffensive_13: 7602372297236130264
+      TotalOffensive_14: 3106776358180043779
+      TotalOffensive_15: -6156182518585845634
+      TotalOffensive_16: -8990680419427507671
+      TotalOffensive_17: -5285533776503650880
+      TotalOffensive_18: 8010705624443224163
+      TotalOffensive_19: 8232785915577267080
+      TotalOffensive_2: 6093405023580266373
+      TotalOffensive_20: -7023620719555598149
+      TotalOffensive_21: 8386290572026884771
+      TotalOffensive_3: -3438499116327241937
+      TotalOffensive_4: -4284626316607375163
+      TotalOffensive_5: -6873842166627390830
+      TotalOffensive_6: 4452627644530296784
+      TotalOffensive_7: -8255505873990791371
+      TotalOffensive_8: 2546092783314922492
+      TotalOffensive_9: -3600256112341805788
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

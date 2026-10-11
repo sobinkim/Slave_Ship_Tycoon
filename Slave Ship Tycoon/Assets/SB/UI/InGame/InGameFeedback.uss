@@ -1,0 +1,10 @@
+.feedback-root { position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+.stage-popup { position: absolute; left: 100px; right: 100px; top: 30%; background-color: var(--color-surface-overlay); padding: 28px; border-top-width: 3px; border-bottom-width: 3px; border-color: var(--color-accent); }
+.popup-stage { font-size: 28px; color: var(--color-accent); -unity-text-align: middle-center; }
+.popup-result { font-size: 42px; -unity-font-style: bold; -unity-text-align: middle-center; }
+.settlement-card { padding: 36px; background-color: var(--color-surface-raised); border-width: 2px; border-color: var(--color-accent); border-radius: 12px; }
+.settlement-eyebrow { font-size: 26px; color: var(--color-accent); -unity-text-align: middle-center; margin-bottom: 20px; }
+.settlement-reward { flex-direction: row; justify-content: space-between; background-color: var(--color-surface-inset); padding: 28px; margin-bottom: 16px; }
+.settlement-reward > Label { font-size: 32px; }
+.reward-amount { color: var(--color-accent); -unity-font-style: bold; }
+.stage-fade { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: var(--color-surface-primary); }

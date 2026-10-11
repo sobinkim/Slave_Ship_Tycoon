@@ -1,0 +1,66 @@
+# 모집 보너스 승급과 결과 연출
+
+2026-10-11 사용자 선택: 연출 중 승급은 실제 획득 보상에도 적용합니다.
+
+## 보상 판정
+
+`EscortGachaManager.TrySummon`이 기존 가챠 테이블에서 기본 함선을 뽑고, 추가 판정을 최대 두 번 수행합니다.
+
+| 판정 | 현재 설정 | 조건 |
+| --- | --- | --- |
+| 1차 승급 | 8% | 지급 가능한 다음 등급 함선이 존재할 때 |
+| 2차 승급 | 1% | 1차 승급 성공 후, 다음 등급 함선이 다시 존재할 때 |
+
+두 번 모두 가능한 함선의 2연속 승급 확률은 모집 1회당 `8% × 1% = 0.08%`입니다. 이 값들은 이번 구현의 초기 조절값입니다. 최상위 등급이나 지급 불가능한 다음 등급은 승급을 멈추고 현재 결과를 유지합니다.
+
+승급 대상은 기존 `EscortShipCatalog.TryGetMergeResult`를 사용합니다. **카탈로그 순서상 첫 번째 다음 등급 함선**이며, 원래 함선과 역할·외형이 다를 수 있습니다. 카탈로그 순서, 기존 가챠 테이블 Weight, 함선 데이터는 변경하지 않았습니다. 표시 이름에 들어간 ‘전설’ 같은 단어가 아니라 데이터의 `Grade`가 기준입니다.
+
+기존 모집 비용을 한 번 차감하고 **최종 함선 한 척만** 지급합니다. 기본 함선·중간 승급 함선을 따로 지급하거나 합성 재료를 소모하지 않습니다. 지급 실패 시 기존 환불 흐름을 유지합니다. 보상은 결과 연출 전에 확정되므로 건너뛰기·창 닫기로 승급이 취소되거나 다시 판정되지 않습니다.
+
+`EscortGachaResult`의 기존 `Reward`는 최종 보상입니다. `InitialReward`, `FirstPromotionReward`, `PromotionCount`, `PromotionAttemptCount`는 결과 연출에 사용할 판정 기록입니다. UI는 보상을 다시 판정하지 않습니다. 실패 전조를 보여줄지에만 별도의 `System.Random`을 사용해 실제 가챠의 Unity Random 상태와 분리합니다. 기존 이벤트 소비자와 생성자 호출도 유지합니다.
+
+## 연출 흐름
+
+1. 기본 함선 카드를 하나씩 빠르게 페이드 공개합니다. 카드당 0.12초, 카드 사이 0.025초이며 전조가 없는 11척은 프레임 시간에 따라 대략 1.6~1.9초입니다. 카드 등장과 승급 과정의 확대는 제거했습니다.
+2. 방금 공개한 카드가 전조 대상이면 다음 카드 공개를 멈추고, 0.18초 뒤 해당 카드에 집중합니다. 이미 공개한 다른 카드는 어두워지고 이후 카드는 보이지 않는 상태를 유지합니다. 대상 카드의 떨림과 빛이 서서히 강해집니다. 실제 승급 성공 카드는 모두 표시하며, 실패 카드 중 일부도 같은 전조를 보여줍니다.
+3. 1차 예고는 1.2초, 2차 예고는 1.65초입니다. 성공하면 떨림을 끊지 않고 0.5초 동안 더 강하게 흔들며 빛·등급색 테두리와 함께 함선 아이콘·이름·등급을 바꿉니다. 카드나 테두리를 확대하지 않습니다.
+4. **실패는 예고 시간의 60% 지점에서 떨림을 즉시 멈춥니다.** 빛과 테두리는 0.35초 동안 사라지고, 0.25초 정적을 둡니다. 실제 2차 실패라면 1차 승급 보상은 유지합니다.
+5. 1차 성공 뒤 2차 전조를 표시할 때는 0.35초 간격을 둡니다. 해당 카드의 성공·실패 및 2차 연출까지 모두 끝나면 어두워짐을 해제하고 다음 카드부터 다시 하나씩 공개합니다. 실제 2차 성공은 항상 표시합니다. 실패 전조는 1차 실패 카드 중 12%, 2차 실패 카드 중 15%에 표시합니다. 이는 **실패 연출 표시 비율**이며 실제 승급 확률 8%/1%와 별개입니다. 승급 불가능한 등급, 확률 0으로 비활성화된 판정에는 실패 전조를 표시하지 않습니다.
+6. 성공·실패·등급 상승·몇 단계 승급했는지 알리는 별도 문구와 ‘잠깐…’ 같은 전조 문구는 사용자 요청으로 제거했습니다. 결과는 빛·떨림과 실제 카드의 함선 이름·등급 변화로 표현합니다. 카드 하단은 모두 기존 `새 함선`으로 표시합니다. 건너뛰기는 즉시 최종 보상을 표시하고 흔들림·어두워짐·빛을 정리합니다. 화면 비활성화도 코루틴과 임시 효과를 정리합니다.
+
+승인된 하단 모집 구매 화면과 전체 화면 결과창 범위는 유지합니다. 신규 이미지·오디오·패키지·런타임 매니저는 추가하지 않았습니다.
+
+## Inspector 조절
+
+`SampleScene`의 기존 `EscortGachaManager`:
+
+- **First Promotion Chance**: `0.08` = 8%.
+- **Second Promotion Chance**: `0.01` = 1차 승급 성공 후 1%.
+
+`FleetToolkitUI/RecruitmentScreen`의 `RecruitmentToolkitScreen`:
+
+- **Reveal Seconds / Card Delay Seconds**: 기본 카드 공개 속도.
+- **Promotion Lead In Seconds**: 전조 대상 카드가 공개된 뒤 해당 카드의 떨림 시작까지 간격.
+- **First / Second Anticipation Seconds**: 단계별 예고 시간.
+- **Second Promotion Pause Seconds**: 1차와 2차 승급 사이 간격.
+- **Promotion Burst / Hold Seconds**: 승급 효과와 여운 시간.
+- **Promotion Shake Pixels / Frequency**: 카드 흔들림 강도와 초당 진동 수. 현재 기준 해상도 좌표 5px, 24Hz이며 2차는 더 강합니다.
+- **First / Second Failure Reveal Chance**: 실제 실패한 카드에 전조를 표시할 비율. 현재 0.12/0.15이며 실제 승급 확률과는 별개입니다.
+- **Failed Promotion Stop Progress**: 실패 시 예고 도중 떨림을 멈출 지점. 현재 0.6.
+- **Promotion Failure Fade / Hold Seconds**: 실패 후 빛이 사라지는 시간과 정적.
+
+등급색·테두리·문구 스타일은 `RecruitmentScreen.uss`의 `recruitment-*` 클래스와 공용 `HarborTheme.uss` 색상 토큰을 사용합니다. 추가 Inspector 참조 연결은 필요하지 않습니다.
+
+## 변경 파일과 확인 범위
+
+- `Assets/SB/Scripts/Fleet/EscortGachaManager.cs`: 실제 보너스 승급·최종 지급.
+- `Assets/SB/Scripts/Events/PlayerFleetEvents.cs`: 기본·중간 보상과 실제 승급 판정 횟수 기록.
+- `Assets/SB/UI/Recruitment/RecruitmentToolkitScreen.cs`: 빠른 공개·승급 효과·건너뛰기 정리.
+- `Assets/SB/UI/Recruitment/RecruitmentScreen.uxml`, `.uss`: 결과 상태 문구와 효과 스타일.
+- `Assets/SB/Animations/Scenes/SampleScene.unity`: 기존 두 컴포넌트의 속도·확률 설정을 Editor 경로로 저장.
+- 변경 전 백업: `AgentScripts/Backups/RecruitmentPromotion-20261011/`.
+- 긴 떨림·실패 연출 수정 전 백업: `AgentScripts/Backups/RecruitmentTremble-20261011/`.
+- 성공·실패 문구 제거 전 백업: `AgentScripts/Backups/RecruitmentNoOutcomeText-20261011/`. 문구 제거는 모집 C#/UXML/USS만 바꾸며 실제 보상·확률·시간 설정은 유지합니다.
+- 개별 공개 중 승급 연출로 변경하기 전 백업: `AgentScripts/Backups/RecruitmentSequential-20261011/`. 이번 변경은 `RecruitmentToolkitScreen.Reveal`의 실행 순서와 스크롤 위치만 수정하며 Inspector 연결·설정 변경은 없습니다.
+
+씬 설정 저장, 스크립트 컴파일, UXML/USS 임포트 완료를 확인했습니다. 문구 제거 후 컴파일 오류는 없습니다. 실행 중 재컴파일 과정에서 기존 함선 해제 경로의 `Animator is not playing an AnimatorController` 경고가 발생했으며, 이후 Console에는 기존 `MerchantLedger needs an icon.` 오류가 남아 있습니다. 두 로그는 모집 문구 제거 코드와 별개입니다. 실제 모집·재화 차감·지급이나 자동 테스트는 실행하지 않았습니다. 실제 게임에서 1차/2차 효과의 체감 속도와 터치 동작은 별도 확인 항목입니다.

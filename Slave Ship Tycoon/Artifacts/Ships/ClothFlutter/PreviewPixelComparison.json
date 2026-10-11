@@ -1,0 +1,112 @@
+[
+  {
+    "index": 0,
+    "motion_pixel_bounds": [
+      93,
+      105,
+      178,
+      256
+    ],
+    "lower_hull_changed": false
+  },
+  {
+    "index": 1,
+    "motion_pixel_bounds": [
+      79,
+      64,
+      160,
+      194
+    ],
+    "lower_hull_changed": false
+  },
+  {
+    "index": 2,
+    "motion_pixel_bounds": [
+      128,
+      87,
+      232,
+      225
+    ],
+    "lower_hull_changed": false
+  },
+  {
+    "index": 3,
+    "motion_pixel_bounds": [
+      40,
+      82,
+      189,
+      261
+    ],
+    "lower_hull_changed": false
+  },
+  {
+    "index": 4,
+    "motion_pixel_bounds": [
+      48,
+      82,
+      179,
+      232
+    ],
+    "lower_hull_changed": false
+  },
+  {
+    "index": 5,
+    "motion_pixel_bounds": [
+      73,
+      64,
+      209,
+      259
+    ],
+    "lower_hull_changed": false
+  },
+  {
+    "index": 6,
+    "motion_pixel_bounds": [
+      150,
+      84,
+      310,
+      232
+    ],
+    "lower_hull_changed": false
+  },
+  {
+    "index": 7,
+    "motion_pixel_bounds": [
+      168,
+      65,
+      333,
+      237
+    ],
+    "lower_hull_changed": false
+  },
+  {
+    "index": 8,
+    "motion_pixel_bounds": [
+      154,
+      81,
+      357,
+      240
+    ],
+    "lower_hull_changed": false
+  },
+  {
+    "index": 9,
+    "motion_pixel_bounds": [
+      160,
+      56,
+      311,
+      233
+    ],
+    "lower_hull_changed": false
+  },
+  {
+    "index": 10,
+    "motion_pixel_bounds": [
+      170,
+      61,
+      315,
+      253
+    ],
+    "lower_hull_changed": false
+  }
+]

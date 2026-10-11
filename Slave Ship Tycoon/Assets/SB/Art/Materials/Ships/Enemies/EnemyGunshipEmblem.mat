@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: EnemyGunshipEmblem
-  m_Shader: {fileID: 4800000, guid: 79434052fff3f134e982efc049efbe56, type: 3}
+  m_Shader: {fileID: 4800000, guid: 52237093641d83d42a5570e55d54dd99, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,10 +29,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _FlagAmplitude: 0.012
+    - _FlutterPhase: 0.35
+    - _FlutterSpeed: 1.2
+    - _FlutterStrength: 0.8
+    - _SailAmplitude: 0.008
+    - _SailFootLift: 0.025
     - _SinkDistance: 0.64285713
     - _SinkProgress: 0
     - _Waterline: -0.30814537
     m_Colors:
+    - _ClothCanvas: {r: 1, g: 1, b: 0.5, a: 0.5}
+    - _ClothTransform: {r: 1.4, g: 1.4, b: -0.20494418, a: 0.06140351}
+    - _ClothUvScale: {r: 7.142857, g: 6.3492064, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _FlagBounds: {r: 0.4, g: 0.14, b: 0.665, a: 0.29}
+    - _FlagPoleTip: {r: 0.41, g: 0.65, b: 0, a: 0}
+    - _SailBottom: {r: 0.037, g: 0.6, b: 0.5, a: 0.6}
+    - _SailTop: {r: 0.12, g: 0.31, b: 0.515, a: 0.372}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

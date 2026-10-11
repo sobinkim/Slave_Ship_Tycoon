@@ -13,6 +13,12 @@ namespace SB.Scripts.Fleet
         [SerializeField] private CurrencyType _currencyType = CurrencyType.Diamond;
         [SerializeField, Min(1)] private int _summonCost = 1;
 
+        [Header("Bonus grade promotions")]
+        [SerializeField, Range(0f, 1f), Tooltip("기본 뽑기 후 한 등급 승급할 확률. 0.08 = 8%")]
+        private float firstPromotionChance = 0.08f;
+        [SerializeField, Range(0f, 1f), Tooltip("1차 승급 성공 후 한 번 더 승급할 조건부 확률. 0.01 = 1%")]
+        private float secondPromotionChance = 0.01f;
+
         public CurrencyType CurrencyType => _currencyType;
         public int SummonCost => _summonCost;
 
@@ -92,6 +98,21 @@ namespace SB.Scripts.Fleet
                 return false;
             }
 
+            EscortShipData initialReward = reward;
+            EscortShipData firstPromotionReward = null;
+            int promotionAttempts = 0;
+            bool firstPromoted = TryRollPromotion(reward, firstPromotionChance, out EscortShipData promotedReward, out bool firstAttempted);
+            if (firstAttempted) promotionAttempts++;
+            if (firstPromoted)
+            {
+                reward = promotedReward;
+                firstPromotionReward = reward;
+                bool secondPromoted = TryRollPromotion(reward, secondPromotionChance, out promotedReward, out bool secondAttempted);
+                if (secondAttempted) promotionAttempts++;
+                if (secondPromoted)
+                    reward = promotedReward;
+            }
+
             if (_currencyManager.TrySpendCurrency(_currencyType, _summonCost) == false)
             {
                 result = CreateFailedResult(EscortGachaFailureReason.InsufficientCurrency, reward);
@@ -113,8 +134,30 @@ namespace SB.Scripts.Fleet
                 reward,
                 _currencyType,
                 _summonCost,
-                _playerFleetManager.GetOwnedCount(reward));
+                _playerFleetManager.GetOwnedCount(reward),
+                initialReward,
+                firstPromotionReward,
+                promotionAttempts);
             RaiseResult(result);
+            return true;
+        }
+
+        private bool TryRollPromotion(EscortShipData source, float chance, out EscortShipData promotedReward, out bool attempted)
+        {
+            promotedReward = null;
+            attempted = false;
+            chance = Mathf.Clamp01(chance);
+            EscortShipCatalog catalog = _playerFleetManager.Catalog;
+            if (chance <= 0f || catalog == null ||
+                !catalog.TryGetMergeResult(source, out EscortShipData candidate) ||
+                !_playerFleetManager.CanGrantEscort(candidate))
+                return false;
+
+            attempted = true;
+            if (chance < 1f && Random.value >= chance)
+                return false;
+
+            promotedReward = candidate;
             return true;
         }
 

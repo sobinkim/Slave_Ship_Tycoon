@@ -4,6 +4,10 @@ UI 화면을 만들거나 수정하거나 기존 화면을 이관할 때만 읽�
 
 기존 uGUI 화면을 교체하는 작업이면 [UI_Migration_Preparation.md](UI_Migration_Preparation.md)의 현황·연결 주의사항·교체 단위를 추가로 읽습니다. 새 독립 화면 제작에는 이관 현황 문서를 로드할 필요가 없습니다.
 
+함대·모집·합성 화면을 작업할 때만 [UI_Fleet_Recruitment.md](UI_Fleet_Recruitment.md)의 확정 디자인·현행 Toolkit 연결·조절 항목을 추가로 읽습니다.
+
+인게임 HUD·강화·지휘·적재·정산·스테이지 팝업/페이드를 작업할 때만 [UI_InGame_Cargo.md](UI_InGame_Cargo.md)의 현행 연결과 조절 항목을 추가로 읽습니다.
+
 ## 시작 전 확인
 
 1. Unity MCP로 대상 씬의 `UIDocument`, `PanelSettings`, 기존 Canvas/UI 오브젝트와 연결 컴포넌트를 확인합니다.

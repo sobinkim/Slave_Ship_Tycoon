@@ -1,0 +1,101 @@
+:root {
+    --color-surface-primary: #09131B;
+    --color-surface-raised: #091C24;
+    --color-surface-overlay: rgba(9, 19, 27, 0.92);
+    --color-surface-command: rgba(9, 28, 36, 0.96);
+    --color-surface-log: rgba(9, 19, 27, 0.78);
+    --color-surface-inset: #131F2E;
+    --color-border: #29414C;
+    --color-text-primary: #E8F2F5;
+    --color-text-secondary: #AABEC5;
+    --color-action-primary: #068085;
+    --color-action-hover: #20A3A8;
+    --color-accent: #E6B45F;
+    --color-target: #633D27;
+    --color-status-danger: #E88378;
+    --color-grade-common: #8CA6B8;
+    --color-grade-uncommon: #38C792;
+    --color-grade-rare: #409EF2;
+    --color-grade-epic: #B366F2;
+    --color-grade-legendary: #FFBA4D;
+}
+.harbor-root {
+    -unity-font-definition: url("project://database/Assets/SB/UI/Shared/Settings/HarborKorean.asset");
+    flex-grow: 1;
+    color: var(--color-text-primary);
+    font-size: 26px;
+}
+.screen {
+    flex-grow: 1;
+    background-color: var(--color-surface-primary);
+    padding: 28px;
+}
+.screen-header { flex-direction: row; align-items: center; height: 86px; flex-shrink: 0; }
+.screen-title { flex-grow: 1; font-size: 38px; -unity-font-style: bold; }
+.subtitle { color: var(--color-text-secondary); white-space: normal; margin-bottom: 16px; }
+.section-title { font-size: 28px; -unity-font-style: bold; margin-top: 16px; margin-bottom: 12px; }
+.harbor-button {
+    background-color: var(--color-surface-raised);
+    color: var(--color-text-primary);
+    border-width: 2px;
+    border-color: var(--color-border);
+    border-radius: 8px;
+    margin: 4px;
+    padding: 12px;
+    min-height: 72px;
+    height: 80px;
+    font-size: 26px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+.harbor-button:hover { background-color: var(--color-action-hover); }
+.harbor-button:active { background-color: var(--color-action-primary); }
+.harbor-button:disabled { opacity: 0.4; }
+.primary-button { background-color: var(--color-action-primary); }
+.close-button { width: 150px; min-height: 60px; height: 64px; font-size: 24px; }
+.action-row { flex-direction: row; flex-shrink: 0; margin-top: 12px; }
+.action-row > .harbor-button { flex-grow: 1; flex-basis: 0; }
+.status { color: var(--color-accent); white-space: normal; min-height: 70px; margin-top: 12px; font-size: 24px; }
+.card-grid { flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
+.ship-card {
+    width: 18.8%;
+    height: 242px;
+    margin: 0.6%;
+    padding: 10px 6px;
+    background-color: var(--color-surface-raised);
+    border-width: 2px;
+    border-color: var(--color-border);
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    flex-shrink: 0;
+    align-items: stretch;
+}
+.ship-card:hover { background-color: var(--color-surface-inset); }
+.ship-card:disabled { opacity: 0.4; }
+.ship-card.is-selected { border-width: 4px; border-color: var(--color-accent); background-color: var(--color-target); }
+.ship-icon { flex-grow: 1; min-height: 70px; -unity-background-scale-mode: scale-to-fit; }
+.ship-name { white-space: normal; -unity-text-align: middle-center; font-size: 23px; margin-top: 5px; }
+.ship-grade { -unity-text-align: middle-center; font-size: 22px; margin-top: 4px; }
+.ship-count { -unity-text-align: middle-center; font-size: 21px; color: var(--color-text-secondary); margin-top: 4px; }
+.grade-common { border-color: var(--color-grade-common); }
+.grade-uncommon { border-color: var(--color-grade-uncommon); }
+.grade-rare { border-color: var(--color-grade-rare); }
+.grade-epic { border-color: var(--color-grade-epic); }
+.grade-legendary { border-color: var(--color-grade-legendary); }
+.grade-common > .ship-grade { color: var(--color-grade-common); }
+.grade-uncommon > .ship-grade { color: var(--color-grade-uncommon); }
+.grade-rare > .ship-grade { color: var(--color-grade-rare); }
+.grade-epic > .ship-grade { color: var(--color-grade-epic); }
+.grade-legendary > .ship-grade { color: var(--color-grade-legendary); }
+.hidden { display: none; }
+.modal {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    background-color: rgba(4, 10, 16, 0.97);
+    padding: 36px;
+    justify-content: center;
+}
+.modal-title { font-size: 42px; -unity-font-style: bold; -unity-text-align: middle-center; margin-bottom: 20px; }
+.modal-summary { font-size: 26px; white-space: normal; -unity-text-align: middle-center; margin-bottom: 26px; }
+.harbor-scroll { flex-grow: 1; min-height: 0; }
+.harbor-scroll > .unity-scroll-view__vertical-scroller { width: 20px; }
+
