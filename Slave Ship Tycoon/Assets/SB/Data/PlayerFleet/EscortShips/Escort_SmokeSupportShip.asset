@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 688406d05a0d46f0b2f00223e1705989, type: 3}
+  m_Name: Escort_SmokeSupportShip
+  m_EditorClassIdentifier: 
+  _stableId: escort_smoke_support_ship
+  _displayName: "\uC5F0\uB9C9 \uAD50\uB780\uD568"
+  _icon: {fileID: 21300000, guid: 98db0d6e84cc117449c8dcb68fca9049, type: 3}
+  _grade: 1
+  _shipPrefab: {fileID: 1930741244424682533, guid: 37574319640a0964ba193f079746202b, type: 3}

@@ -13,7 +13,7 @@ using UnityEngine.UIElements;
 namespace SB.UI.InGame
 {
     [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
-    public sealed class InGameToolkitScreen : MonoBehaviour
+    public sealed partial class InGameToolkitScreen : MonoBehaviour
     {
         private const long CompactBalanceThreshold = 1000000;
 
@@ -51,8 +51,6 @@ namespace SB.UI.InGame
 
         private sealed class GainLog { public VisualElement row; public float expiresAt; public float fadeSeconds; }
         private readonly Dictionary<CurrencyType, Label> amounts = new Dictionary<CurrencyType, Label>();
-        private readonly Dictionary<ETransportItemType, Label> cargoMultipliers = new Dictionary<ETransportItemType, Label>();
-        private readonly Dictionary<ETransportItemType, int> cargoQuantities = new Dictionary<ETransportItemType, int>();
         private readonly Queue<CurrencyAddedEvent> pendingLogs = new Queue<CurrencyAddedEvent>();
         private readonly List<GainLog> logs = new List<GainLog>();
         private VisualElement root;
@@ -60,17 +58,25 @@ namespace SB.UI.InGame
         private StageStartedEvent currentStage;
         private bool hasStage;
         private bool isRouteDirty;
+        private int completedTransportStages;
+        private readonly List<Label> transportStops = new List<Label>();
+        private Button transportReturnButton;
 
         private void OnEnable()
         {
             if (document == null || currencyManager == null || cargoManager == null || gameFlowManager == null ||
-                chapterDatabase == null || panelManager == null || recruitmentScreen == null || cargoScreen == null || upgradePanel == null)
+                chapterDatabase == null || panelManager == null || recruitmentScreen == null || cargoScreen == null || upgradePanel == null ||
+                marketPriceManager == null || transportEquipmentManager == null)
             { Debug.LogError("InGameToolkitScreen의 명시적 참조를 연결하세요.", this); return; }
             root = document.rootVisualElement;
             root.AddToClassList("harbor-document");
             root.pickingMode = PickingMode.Ignore;
             root.Q("hud").pickingMode = PickingMode.Ignore;
+            transportStops.Clear();
             BuildCurrencies();
+            BindTransportPresentation();
+            transportReturnButton = root.Q<Button>("transportReturn");
+            transportReturnButton.clicked += ReturnToFarming;
             root.Q<Button>("bossButton").clicked += OpenCargo;
             root.Q<Button>("upgradeNav").clicked += OpenUpgrade;
             root.Q<Button>("fleetNav").clicked += OpenFleet;
@@ -81,11 +87,13 @@ namespace SB.UI.InGame
             Bus<CurrencyChangedEvent>.OnEvent += OnCurrencyChanged;
             Bus<CurrencyAddedEvent>.OnEvent += OnCurrencyAdded;
             Bus<StageStartedEvent>.OnEvent += OnStageStarted;
+            Bus<EvenStageClearedEvent>.OnEvent += OnTransportStageCleared;
             Bus<SellChapterStartedEvent>.OnEvent += OnSellStarted;
             Bus<ObtainChapterStartedEvent>.OnEvent += OnObtainStarted;
             Bus<GetMarketPriceEvent>.OnEvent += OnMarketPrice;
             RefreshCurrencies();
             OnPanelChanged(panelManager.CurrentPanel);
+            isRouteDirty = hasStage;
         }
 
         private void Start() => RefreshCurrencies();
@@ -95,6 +103,7 @@ namespace SB.UI.InGame
             Bus<CurrencyChangedEvent>.OnEvent -= OnCurrencyChanged;
             Bus<CurrencyAddedEvent>.OnEvent -= OnCurrencyAdded;
             Bus<StageStartedEvent>.OnEvent -= OnStageStarted;
+            Bus<EvenStageClearedEvent>.OnEvent -= OnTransportStageCleared;
             Bus<SellChapterStartedEvent>.OnEvent -= OnSellStarted;
             Bus<ObtainChapterStartedEvent>.OnEvent -= OnObtainStarted;
             Bus<GetMarketPriceEvent>.OnEvent -= OnMarketPrice;
@@ -104,7 +113,10 @@ namespace SB.UI.InGame
             spawnRoutine = null;
             pendingLogs.Clear();
             logs.Clear();
+            ClearTransportPresentation();
             if (root == null) return;
+            if (transportReturnButton != null) transportReturnButton.clicked -= ReturnToFarming;
+            transportReturnButton = null;
             root.Q("gainLogs")?.Clear();
             if (root.Q<Button>("bossButton") is Button bossButtonBinding) bossButtonBinding.clicked -= OpenCargo;
             if (root.Q<Button>("upgradeNav") is Button upgradeNavBinding) upgradeNavBinding.clicked -= OpenUpgrade;
@@ -115,6 +127,7 @@ namespace SB.UI.InGame
 
         private void Update()
         {
+            if (transportReturnButton != null) transportReturnButton.SetEnabled(gameFlowManager.CanReturnToFarming);
             for (int i = logs.Count - 1; i >= 0; i--)
             {
                 GainLog log = logs[i];
@@ -128,19 +141,32 @@ namespace SB.UI.InGame
             if (!isRouteDirty || !hasStage || root == null) return;
             isRouteDirty = false;
             bool isTransport = currentStage.RouteType == ChapterRouteType.Sell;
+            bool hasChapter = chapterDatabase.TryGetChapter(currentStage.Chapter, out ChapterContainer chapter);
+            int total = hasChapter ? chapter.MaxStage : currentStage.Stage;
+            bool isBlockade = isTransport && hasChapter && chapter.IsFinalStage(currentStage.Stage);
+            root.Q("routeCard").EnableInClassList("is-transport", isTransport);
+            root.Q("routeCard").EnableInClassList("is-blockade", isBlockade);
             root.Q<Label>("routeNumber").text = $"항로 {currentStage.Chapter:00}";
-            root.Q<Label>("routeTitle").text = isTransport ? transportTitle : currentStage.IsBossBattle ? bossTitle : pirateTitle;
-            root.Q<Label>("routeDetail").text = isTransport ? transportDescription : currentStage.IsBossBattle ? bossDescription : pirateDescription;
-            int total = chapterDatabase.TryGetChapter(currentStage.Chapter, out ChapterContainer chapter) ? chapter.MaxStage : currentStage.Stage;
+            root.Q<Label>("routeTitle").text = isBlockade ? "마지막 봉쇄선" : isTransport ? transportTitle : currentStage.IsBossBattle ? bossTitle : pirateTitle;
+            root.Q<Label>("routeDetail").text = isBlockade ? "봉쇄 함대를 돌파하면 항구에서 정산합니다" : isTransport ? transportDescription : currentStage.IsBossBattle ? bossDescription : pirateDescription;
             root.Q<Label>("stageProgress").text = $"{currentStage.Stage} / {total} 구간";
             root.Q("stageProgress").EnableInClassList("hidden", !isTransport);
-            root.Q("transportCargo").EnableInClassList("hidden", !isTransport);
+            root.Q("transportCargo").EnableInClassList("hidden", !isTransport || transportItems.Count == 0);
             root.Q("stageTrack").EnableInClassList("hidden", !isTransport);
-            root.Q("stageFill").style.width = Length.Percent(total > 0 ? Mathf.Clamp01((float)currentStage.Stage / total) * 100f : 0);
+            root.Q("stageFill").style.width = Length.Percent(total > 0 ? Mathf.Clamp01((float)completedTransportStages / total) * 100f : 0);
+            if (isTransport)
+            {
+                RefreshTransportStops(total);
+                root.Q<Label>("transportBeat").text = completedTransportStages >= total ? "항구 도착 · 화물 하역 준비" :
+                    isBlockade ? "봉쇄선을 돌파하면 정산" : $"항구까지 {Mathf.Max(0, total - completedTransportStages)}전 · 승리할 때마다 시세 상승";
+            }
             root.Q("bossEntry").EnableInClassList("hidden", isTransport);
-            root.Q<Button>("bossButton").text = currentStage.IsBossBattle ? "전투 중" : "보스 도전";
-            root.Q<Button>("bossButton").SetEnabled(gameFlowManager.CanStartBossBattle);
-            root.Q<Label>("bossHint").text = currentStage.IsBossBattle ? "봉쇄 함대를 격파하세요" : "승리 시 운송 항로 개방";
+            transportReturnButton.EnableInClassList("hidden", !isTransport);
+            bool canResume = !isTransport && gameFlowManager.HasSuspendedTransport;
+            root.Q<Button>("bossButton").text = canResume ? "운송 재개" : currentStage.IsBossBattle ? "전투 중" : "보스 도전";
+            root.Q<Button>("bossButton").SetEnabled(canResume ? gameFlowManager.CanResumeTransport : gameFlowManager.CanStartBossBattle);
+            root.Q<Label>("bossHint").text = canResume ? $"항로 {gameFlowManager.SuspendedTransportChapter} · {gameFlowManager.SuspendedTransportStage}구간부터 계속" :
+                currentStage.IsBossBattle ? "봉쇄 함대를 격파하세요" : "승리 시 운송 항로 개방";
         }
 
         private void BuildCurrencies()
@@ -214,31 +240,54 @@ namespace SB.UI.InGame
             spawnRoutine = null;
         }
 
-        private void OnStageStarted(StageStartedEvent evt) { currentStage = evt; hasStage = true; isRouteDirty = true; }
-        private void OnObtainStarted(ObtainChapterStartedEvent evt) { root.Q("transportCargo").Clear(); cargoMultipliers.Clear(); cargoQuantities.Clear(); }
-        private void OnSellStarted(SellChapterStartedEvent evt)
+        private void OnStageStarted(StageStartedEvent evt)
         {
-            VisualElement cargoRoot = root.Q("transportCargo");
-            cargoRoot.Clear(); cargoMultipliers.Clear(); cargoQuantities.Clear();
-            foreach (CargoData cargo in cargoManager.TransportCargoData)
-            {
-                if (cargo == null || cargo.Item == null || cargo.Amount <= 0) continue;
-                var cell = new VisualElement(); cell.AddToClassList("transport-item");
-                var icon = new VisualElement(); icon.AddToClassList("currency-icon"); ShipCardPresentation.SetIcon(icon, cargo.Item.Icon); cell.Add(icon);
-                var label = new Label($"{cargo.Amount:N0} · x1"); label.AddToClassList("small-text"); cell.Add(label);
-                cargoQuantities[cargo.Item.Type] = cargo.Amount;
-                cargoMultipliers[cargo.Item.Type] = label; cargoRoot.Add(cell);
-            }
-        }
-        private void OnMarketPrice(GetMarketPriceEvent evt)
-        {
-            if (evt.MarketPrices == null) return;
-            foreach (var price in evt.MarketPrices)
-                if (cargoMultipliers.TryGetValue(price.Key, out Label label))
-                    label.text = $"{cargoQuantities[price.Key]:N0} · x{price.Value.GetAppliedMultiplier()}";
+            currentStage = evt; hasStage = true; isRouteDirty = true;
+            completedTransportStages = evt.RouteType == ChapterRouteType.Sell ? Mathf.Max(0, evt.Stage - 1) : 0;
+            if (evt.RouteType == ChapterRouteType.Sell && !transportInitialized && transportInitializeRoutine == null)
+                PrepareTransportPresentation();
         }
 
-        private void OpenCargo() => cargoScreen.Open();
+        private void OnTransportStageCleared(EvenStageClearedEvent evt)
+        {
+            if (!hasStage || currentStage.RouteType != ChapterRouteType.Sell || evt.Chapter != currentStage.Chapter) return;
+            completedTransportStages = Mathf.Max(completedTransportStages, evt.Stage);
+            isRouteDirty = true;
+        }
+
+        private void RefreshTransportStops(int total)
+        {
+            if (transportStops.Count != total)
+            {
+                VisualElement stops = root.Q("transportStops");
+                stops.Clear(); transportStops.Clear();
+                for (int i = 0; i < total; i++)
+                {
+                    var stop = new Label(i == total - 1 ? "항구" : (i + 1).ToString()) { pickingMode = PickingMode.Ignore };
+                    stop.AddToClassList("transport-stop");
+                    stops.Add(stop); transportStops.Add(stop);
+                }
+            }
+            for (int i = 0; i < transportStops.Count; i++)
+            {
+                transportStops[i].EnableInClassList("is-complete", i < completedTransportStages);
+                transportStops[i].EnableInClassList("is-current", i == currentStage.Stage - 1 && i >= completedTransportStages);
+                transportStops[i].EnableInClassList("is-port", i == total - 1);
+            }
+        }
+
+        public void OpenGrowth(CurrencyType currency)
+        {
+            if (currency == CurrencyType.Diamond) OpenRecruitment();
+            else OpenUpgrade();
+        }
+
+        private void OpenCargo()
+        {
+            if (gameFlowManager.HasSuspendedTransport) gameFlowManager.ResumeTransport();
+            else cargoScreen.Open();
+        }
+        private void ReturnToFarming() => gameFlowManager.ReturnToFarming();
         private void OpenUpgrade() { recruitmentScreen.Close(); panelManager.ClickPanelButton(PanelType.Upgrade); }
         private void OpenSkills() { recruitmentScreen.Close(); panelManager.ClickPanelButton(PanelType.CommanderSkills); }
         private void OpenFleet() => panelManager.ClickPanelButton(PanelType.Fleet);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using SB.Core.EventBus;
 using UnityEngine;
 
@@ -11,10 +12,11 @@ namespace SB.Scripts.Visual
         public FloatingTextView viewPrefab;
         public string prefix;
         public string suffix;
+        public bool useThousandsSeparator;
 
         public string GetMessage(int value)
         {
-            return $"{prefix}{value}{suffix}";
+            return $"{prefix}{(useThousandsSeparator ? value.ToString("N0") : value.ToString())}{suffix}";
         }
     }
 
@@ -24,6 +26,10 @@ namespace SB.Scripts.Visual
         [SerializeField] private RectTransform textRoot;
         [SerializeField] private Camera worldCamera;
         [SerializeField] private FloatingTextViewData[] viewDatas = Array.Empty<FloatingTextViewData>();
+        [Header("Damage origin (canvas pixels)")]
+        [SerializeField] private Vector2 damagePositionOffset = new Vector2(0f, 20f);
+
+        private readonly List<FloatingTextView> activeDamageTexts = new List<FloatingTextView>();
 
         private RectTransform canvasRectTransform;
 
@@ -35,11 +41,23 @@ namespace SB.Scripts.Visual
         private void OnEnable()
         {
             Bus<FloatingTextRequestedEvent>.OnEvent += HandleFloatingTextRequested;
+            Bus<StageBattleEndedEvent>.OnEvent += HandleBattleEnded;
         }
 
         private void OnDisable()
         {
             Bus<FloatingTextRequestedEvent>.OnEvent -= HandleFloatingTextRequested;
+            Bus<StageBattleEndedEvent>.OnEvent -= HandleBattleEnded;
+            ClearDamageTexts();
+        }
+
+        private void HandleBattleEnded(StageBattleEndedEvent evt) => ClearDamageTexts();
+
+        private void ClearDamageTexts()
+        {
+            foreach (FloatingTextView view in activeDamageTexts)
+                if (view != null && view.IsPlaying) view.Release();
+            activeDamageTexts.Clear();
         }
 
         private void HandleFloatingTextRequested(FloatingTextRequestedEvent evt)
@@ -67,10 +85,13 @@ namespace SB.Scripts.Visual
             if (!TryWorldToAnchoredPosition(evt.WorldPosition, out Vector2 anchoredPosition))
                 return;
 
+            // Remove expired entries before GetView can reuse the same pooled view.
+            activeDamageTexts.RemoveAll(active => active == null || !active.IsPlaying);
             FloatingTextView view = GetView(viewData.viewPrefab);
-
-            if (view != null)
-                view.Play(viewData.GetMessage(evt.Value), anchoredPosition);
+            if (view == null) return;
+            bool isDamage = evt.TextType == FloatingTextType.Damage || evt.TextType == FloatingTextType.Critical;
+            view.Play(viewData.GetMessage(evt.Value), anchoredPosition + (isDamage ? damagePositionOffset : Vector2.zero));
+            if (isDamage) activeDamageTexts.Add(view);
         }
 
         private FloatingTextView GetView(FloatingTextView viewPrefab)

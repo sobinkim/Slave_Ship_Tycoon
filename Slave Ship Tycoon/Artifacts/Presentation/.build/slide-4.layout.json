@@ -1,0 +1,5 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/sg4jo8","index":3,"layout":{"id":"ly/6lgbil0z","name":"Blank"},"backgroundColor":"rgba(244,247,246,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/vmt4nuh4","kind":"textbox","name":"closing","position":{"left":72,"top":260,"width":1136,"height":120},"text":"감사합니다","style":{"fontSize":82,"typeface":"Malgun Gothic","color":"#0B222B","bold":true,"alignment":"center"},"geometry":"rect","lineWidth":0},
+{"id":"sh/wn2lgzyp","kind":"textbox","name":"closing-presenter","position":{"left":72,"top":404,"width":1136,"height":54},"text":"30102 김소빈","style":{"fontSize":27,"typeface":"Malgun Gothic","color":"#587078","alignment":"center"},"geometry":"rect","lineWidth":0}
+]}

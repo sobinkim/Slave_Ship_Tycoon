@@ -7,6 +7,10 @@ namespace SB.Scripts.Projectiles
     [RequireComponent(typeof(SpriteRenderer))]
     public class NormalProjectile : BaseProjectile
     {
+        [SerializeField, Tooltip("요격선이 이 포탄을 공중에서 파괴할 수 있습니다.")]
+        private bool interceptable = true;
+        protected override bool SupportsInterception => interceptable;
+
         [Header("Impact Effects")]
         [SerializeField] private GameObject hitEffectPrefab;
         [SerializeField] private GameObject waterSplashEffectPrefab;

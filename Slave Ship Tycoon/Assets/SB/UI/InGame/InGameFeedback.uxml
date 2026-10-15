@@ -8,11 +8,39 @@
         </ui:VisualElement>
         <ui:VisualElement name="settlement" class="modal hidden">
             <ui:VisualElement name="settlementCard" class="settlement-card">
-                <ui:Label text="항구 정산" class="settlement-eyebrow" />
-                <ui:Label name="settlementTitle" class="modal-title" />
-                <ui:Label name="cargoSummary" class="modal-summary" />
-                <ui:VisualElement name="settlementRewards" />
-                <ui:Button name="settlementClose" text="확인" class="harbor-button primary-button" />
+                <ui:ScrollView class="settlement-content" mode="Vertical" horizontal-scroller-visibility="Hidden">
+                    <ui:Label text="봉쇄선 돌파 · 항구 도착" class="settlement-eyebrow" />
+                    <ui:Label name="settlementTitle" class="modal-title" />
+                    <ui:Label name="cargoSummary" class="modal-summary" />
+                    <ui:VisualElement class="settlement-goal">
+                        <ui:Label name="settlementGoalTitle" class="settlement-goal-title" />
+                        <ui:Label name="settlementGoalAmount" class="settlement-goal-amount" />
+                        <ui:Label text="최종 지급" class="settlement-goal-caption" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="settlementBreakdown" class="settlement-breakdown hidden">
+                        <ui:VisualElement class="settlement-breakdown-row">
+                            <ui:Label text="기본 화물 가치" />
+                            <ui:Label name="settlementBaseValue" class="settlement-breakdown-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="settlement-breakdown-row">
+                            <ui:Label text="지켜낸 시세 보너스" />
+                            <ui:Label name="settlementMarketBonus" class="settlement-breakdown-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="settlement-breakdown-row">
+                            <ui:Label text="운송 장비 기여" />
+                            <ui:Label name="settlementEquipmentBonus" class="settlement-breakdown-value" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label text="이번 운송으로 지급된 재화" class="settlement-rewards-title" />
+                    <ui:VisualElement name="settlementRewards" />
+                    <ui:Label name="settlementStatus" class="settlement-status" />
+                </ui:ScrollView>
+                <ui:Label name="settlementGrowthHint" class="settlement-growth-hint" />
+                <ui:VisualElement name="settlementActions" class="action-row settlement-actions">
+                    <ui:Button name="settlementUpgrade" text="함대 강화" class="harbor-button primary-button" />
+                    <ui:Button name="settlementRecruit" text="호위선 모집" class="harbor-button" />
+                </ui:VisualElement>
+                <ui:Button name="settlementClose" text="다음 항로 준비" class="harbor-button settlement-close" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="stageFade" class="stage-fade hidden" />

@@ -1,0 +1,1 @@
+draws=1 interceptor=True ownedBefore=0 ownedAfter=1 placed=True formation0=요격 호위함

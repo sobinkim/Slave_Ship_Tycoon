@@ -22,6 +22,10 @@ namespace SB.Scripts
         [SerializeField] private StageEncounterDirector stageEncounterDirector;
 
         [Header("Enemies")]
+        [SerializeField, Tooltip("연속 크리쳐 전투처럼 외부 디렉터가 적 생성을 맡을 때 켭니다.")]
+        private bool externalEnemySpawning;
+        [SerializeField, Tooltip("해적 챕터의 일반 전투를 항해·크리쳐 웨이브로 진행합니다. 보스 전투는 기존 배치를 사용합니다.")]
+        private SeaCreatureSurvivalDirector pirateSeaCreatureDirector;
         [SerializeField] private ChapterDatabase chapterDatabase;
         [SerializeField] private Transform[] spawnPoints = new Transform[StageEnemyLayout.SlotCount];
 
@@ -68,6 +72,7 @@ namespace SB.Scripts
             Bus<StageStartedEvent>.OnEvent -= SpawnCurrentStageBattle;
             Bus<StageBattleEndedEvent>.OnEvent -= HandleBattleEnded;
             participantTracker.StopListening();
+            pirateSeaCreatureDirector?.StopEncounter();
             ClearSpawnedBattleParticipants();
         }
 
@@ -87,16 +92,19 @@ namespace SB.Scripts
 
         public void SpawnStageBattle(int chapter, int stage, bool isBossBattle)
         {
+            pirateSeaCreatureDirector?.StopEncounter();
             ClearSpawnedEnemies();
-
-            if (shouldResetPlayerFleetOnNextBattle)
-            {
-                ClearSpawnedPlayerFleet();
-                shouldResetPlayerFleetOnNextBattle = false;
-            }
 
             if (!TryPreparePlayerFleet(out MainShip mainShip, out List<Ship> escortShips))
                 return;
+
+            if (!isBossBattle && pirateSeaCreatureDirector != null &&
+                chapterDatabase != null && chapterDatabase.TryGetChapter(chapter, out ChapterContainer container) &&
+                container.RouteType == ChapterRouteType.Obtain && container.EnemyFaction == ChapterEnemyFaction.Pirate)
+            {
+                pirateSeaCreatureDirector.StartPreparedEncounter(mainShip, escortShips);
+                return;
+            }
 
             if (!TrySpawnEnemies(chapter, stage, isBossBattle, out List<Enemy> spawnedEnemies))
             {
@@ -135,6 +143,9 @@ namespace SB.Scripts
 
         private void SpawnCurrentStageBattle(StageStartedEvent evt)
         {
+            if (externalEnemySpawning)
+                return;
+
             SpawnStageBattle(evt.Chapter, evt.Stage, evt.IsBossBattle);
         }
 
@@ -234,10 +245,16 @@ namespace SB.Scripts
             return true;
         }
 
-        private bool TryPreparePlayerFleet(out MainShip mainShip, out List<Ship> escortShips)
+        public bool TryPreparePlayerFleet(out MainShip mainShip, out List<Ship> escortShips)
         {
             mainShip = null;
             escortShips = new List<Ship>();
+
+            if (shouldResetPlayerFleetOnNextBattle)
+            {
+                ClearSpawnedPlayerFleet();
+                shouldResetPlayerFleetOnNextBattle = false;
+            }
 
             if (runtimePlayerFleetLoadout == null)
             {
@@ -317,8 +334,8 @@ namespace SB.Scripts
             }
 
             ship.gameObject.SetActive(true);
-            // Cleared waves keep the same hull and current HP. PlayerFleetRecovery
-            // continues healing after the next encounter starts.
+            // Surviving hulls keep current HP; destroyed hulls recover in PrepareForNextBattle.
+            // PlayerFleetRecovery continues healing after the next encounter starts.
             ship.PrepareForNextBattle();
         }
 

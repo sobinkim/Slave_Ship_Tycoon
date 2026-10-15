@@ -1,23 +1,47 @@
+@import url("HarborMaterials.uss");
 :root {
-    --color-surface-primary: #09131B;
-    --color-surface-raised: #091C24;
-    --color-surface-overlay: rgba(9, 19, 27, 0.92);
-    --color-surface-command: rgba(9, 28, 36, 0.96);
-    --color-surface-log: rgba(9, 19, 27, 0.78);
-    --color-surface-inset: #131F2E;
-    --color-border: #29414C;
-    --color-text-primary: #E8F2F5;
-    --color-text-secondary: #AABEC5;
-    --color-action-primary: #068085;
-    --color-action-hover: #20A3A8;
-    --color-accent: #E6B45F;
-    --color-target: #633D27;
-    --color-status-danger: #E88378;
-    --color-grade-common: #8CA6B8;
-    --color-grade-uncommon: #38C792;
-    --color-grade-rare: #409EF2;
-    --color-grade-epic: #B366F2;
-    --color-grade-legendary: #FFBA4D;
+    --texture-frame-slice: 128;
+    --texture-frame-scale: 0.09px;
+    --border-control-width: 2px;
+    --border-selected-width: 4px;
+    --color-surface-primary: #28232F;
+    --color-surface-raised: #493128;
+    --color-surface-overlay: rgba(40, 35, 47, 0.96);
+    --color-surface-modal: rgba(29, 24, 34, 0.98);
+    --color-surface-command: rgba(51, 45, 61, 0.98);
+    --color-surface-log: rgba(40, 35, 47, 0.9);
+    --color-surface-inset: #35282B;
+    --color-texture-skill: #CBCDB1;
+    --color-texture-disabled: #80786C;
+    --color-texture-inset: #C4B9A7;
+    --color-texture-control: #E6DED0;
+    --color-texture-control-hover: #F5EFE4;
+    --color-texture-control-pressed: #C7BDAE;
+    --color-texture-panel: #FFFFFF;
+    --color-metal-edge-light: #C8C5BB;
+    --color-metal-edge-mid: #85847F;
+    --color-texture-fine-wood: #D7C8B5;
+    --texture-panel-wood-size: 512px 512px;
+    --color-metal-edge-dark: #403B36;
+    --color-gauge-surface: #493128;
+    --color-gauge-track: #2B1C20;
+    --color-border: #403B36;
+    --color-text-primary: #FFF0D0;
+    --color-text-secondary: #D8BFA0;
+    --color-action-primary: #F2B941;
+    --color-action-hover: #FFDB68;
+    --color-action-pressed: #D88C28;
+    --color-button-secondary: #603D2B;
+    --color-button-hover: #74503B;
+    --color-text-on-action: #FFF0D0;
+    --color-accent: #F8CD51;
+    --color-target: #66422D;
+    --color-status-danger: #E57763;
+    --color-grade-common: #AD9A81;
+    --color-grade-uncommon: #E58A36;
+    --color-grade-rare: #5C93AF;
+    --color-grade-epic: #AE7598;
+    --color-grade-legendary: #E7B252;
 }
 .harbor-root {
     -unity-font-definition: url("project://database/Assets/SB/UI/Shared/Settings/HarborKorean.asset");
@@ -35,11 +59,11 @@
 .subtitle { color: var(--color-text-secondary); white-space: normal; margin-bottom: 16px; }
 .section-title { font-size: 28px; -unity-font-style: bold; margin-top: 16px; margin-bottom: 12px; }
 .harbor-button {
-    background-color: var(--color-surface-raised);
+    background-color: var(--color-button-secondary);
     color: var(--color-text-primary);
-    border-width: 2px;
+    border-width: var(--border-control-width);
     border-color: var(--color-border);
-    border-radius: 8px;
+    border-radius: 6px;
     margin: 4px;
     padding: 12px;
     min-height: 72px;
@@ -48,10 +72,12 @@
     white-space: normal;
     -unity-text-align: middle-center;
 }
-.harbor-button:hover { background-color: var(--color-action-hover); }
-.harbor-button:active { background-color: var(--color-action-primary); }
+.harbor-button:hover { background-color: var(--color-button-hover); }
+.harbor-button:active { background-color: var(--color-surface-inset); }
 .harbor-button:disabled { opacity: 0.4; }
-.primary-button { background-color: var(--color-action-primary); }
+.primary-button { background-color: var(--color-action-primary); border-color: var(--color-border); color: var(--color-text-on-action); }
+.primary-button:hover { background-color: var(--color-action-hover); }
+.primary-button:active { background-color: var(--color-action-pressed); }
 .close-button { width: 150px; min-height: 60px; height: 64px; font-size: 24px; }
 .action-row { flex-direction: row; flex-shrink: 0; margin-top: 12px; }
 .action-row > .harbor-button { flex-grow: 1; flex-basis: 0; }
@@ -63,7 +89,7 @@
     margin: 0.6%;
     padding: 10px 6px;
     background-color: var(--color-surface-raised);
-    border-width: 2px;
+    border-width: var(--border-control-width);
     border-color: var(--color-border);
     border-radius: 8px;
     color: var(--color-text-primary);
@@ -72,7 +98,7 @@
 }
 .ship-card:hover { background-color: var(--color-surface-inset); }
 .ship-card:disabled { opacity: 0.4; }
-.ship-card.is-selected { border-width: 4px; border-color: var(--color-accent); background-color: var(--color-target); }
+.ship-card.is-selected { border-width: var(--border-selected-width); border-color: var(--color-accent); background-color: var(--color-target); }
 .ship-icon { flex-grow: 1; min-height: 70px; -unity-background-scale-mode: scale-to-fit; }
 .ship-name { white-space: normal; -unity-text-align: middle-center; font-size: 23px; margin-top: 5px; }
 .ship-grade { -unity-text-align: middle-center; font-size: 22px; margin-top: 4px; }
@@ -90,7 +116,7 @@
 .hidden { display: none; }
 .modal {
     position: absolute; left: 0; right: 0; top: 0; bottom: 0;
-    background-color: rgba(4, 10, 16, 0.97);
+    background-color: var(--color-surface-modal);
     padding: 36px;
     justify-content: center;
 }
@@ -98,4 +124,3 @@
 .modal-summary { font-size: 26px; white-space: normal; -unity-text-align: middle-center; margin-bottom: 26px; }
 .harbor-scroll { flex-grow: 1; min-height: 0; }
 .harbor-scroll > .unity-scroll-view__vertical-scroller { width: 20px; }
-

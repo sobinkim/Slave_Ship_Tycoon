@@ -1,0 +1,7 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/8tudap","index":0,"layout":{"id":"ly/6lgbil0z","name":"Blank"},"backgroundColor":"rgba(244,247,246,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/ip0r69cf","kind":"textbox","name":"game-name","position":{"left":72,"top":162,"width":550,"height":38},"text":"SLAVE SHIP TYCOON","style":{"fontSize":22,"typeface":"Malgun Gothic","color":"#087D83","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/5cba14v6","kind":"textbox","name":"cover-title","position":{"left":72,"top":222,"width":550,"height":176},"text":"게임프로그래밍\n발표","style":{"fontSize":62,"typeface":"Malgun Gothic","color":"#0B222B","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/4ri98zul","kind":"textbox","name":"presenter","position":{"left":72,"top":470,"width":500,"height":54},"text":"30102 김소빈","style":{"fontSize":28,"typeface":"Malgun Gothic","color":"#587078","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"im/up8nqlgn","kind":"image","position":{"left":640,"top":152,"width":568,"height":394.44},"fit":"contain","alt":"실제 게임의 자동 함대 전투 화면"}
+]}

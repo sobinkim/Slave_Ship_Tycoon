@@ -13,6 +13,8 @@ namespace SB.Scripts
         private float speedChangeSeconds;
         [SerializeField] private float spriteWidth = 20f;
         [SerializeField] private float leftResetX = -20f;
+        [SerializeField, Tooltip("이동 카메라를 쓰는 테스트 항해에서 재배치 경계의 기준이 되는 배경 루트입니다. 미지정 시 기존 월드 경계를 사용합니다.")]
+        private Transform scrollReference;
         [SerializeField, Tooltip("조우 이동이 끝난 뒤에도 대기 속도로 스크롤합니다.")]
         private bool dontCare = false;
         [SerializeField, Tooltip("같은 이미지의 좌우 반전 타일을 번갈아 연결합니다. 초기 타일도 정방향/반전 순으로 배치하세요.")]
@@ -72,9 +74,10 @@ namespace SB.Scripts
 
         private void RepositionOutOfBoundsSprites()
         {
+            float boundary = leftResetX + (scrollReference != null ? scrollReference.position.x : 0f);
             for (int i = 0; i < sprites.Length; i++)
             {
-                if (sprites[i] == null || sprites[i].position.x > leftResetX)
+                if (sprites[i] == null || sprites[i].position.x > boundary)
                     continue;
 
                 MoveSpriteToRightEnd(sprites[i]);

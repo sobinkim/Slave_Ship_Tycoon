@@ -18,6 +18,7 @@ namespace SB.Scripts.Projectiles
         public readonly ProjectileFlightData FlightData;
         public readonly float Damage;
         public readonly ProjectileHitMode HitMode;
+        public readonly float HitChanceMultiplier;
 
         public ProjectileLaunchData(
             Ship target,
@@ -26,7 +27,8 @@ namespace SB.Scripts.Projectiles
             Vector3 waterImpactPosition,
             ProjectileFlightData flightData,
             float damage,
-            ProjectileHitMode hitMode = ProjectileHitMode.Normal)
+            ProjectileHitMode hitMode = ProjectileHitMode.Normal,
+            float hitChanceMultiplier = 1f)
         {
             Target = target;
             TargetSpawnGeneration = target != null ? target.SpawnGeneration : 0;
@@ -36,6 +38,7 @@ namespace SB.Scripts.Projectiles
             FlightData = flightData;
             Damage = damage;
             HitMode = hitMode;
+            HitChanceMultiplier = Mathf.Clamp01(hitChanceMultiplier);
         }
     }
 }

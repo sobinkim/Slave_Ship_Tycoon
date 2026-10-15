@@ -52,6 +52,38 @@ PrefabInstance:
       propertyPath: rewardType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2677980428292050738, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -6280075083684697390, guid: cf0e45db7a99bb742a6f0b5bbb5a4f01, type: 2}
+    - target: {fileID: 3692536164922222765, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+      propertyPath: m_fontSize
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3692536164922222765, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: cf0e45db7a99bb742a6f0b5bbb5a4f01, type: 2}
+    - target: {fileID: 3692536164922222765, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3692536164922222765, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 3692536164922222765, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3692536164922222765, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -6280075083684697390, guid: cf0e45db7a99bb742a6f0b5bbb5a4f01, type: 2}
+    - target: {fileID: 3692536164922222765, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+      propertyPath: m_characterSpacing
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4040924395825055401, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
       propertyPath: statContainer.StatOverrides.Array.data[0].overrideBaseValue
       value: 300
@@ -63,6 +95,14 @@ PrefabInstance:
     - target: {fileID: 7117596764004494651, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
       propertyPath: entityName
       value: "\uC801 \uD30C\uC1C4 \uB300\uC7A5\uC120"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7375356478701788180, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+      propertyPath: riseLocalUnits
+      value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 7375356478701788180, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
+      propertyPath: visibleSeconds
+      value: 0.9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

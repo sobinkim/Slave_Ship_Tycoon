@@ -1,0 +1,15 @@
+INITIAL time=0.0 wave=1 alive=6 spawned=6 kills=0 gold=0 running=True
+TestEscort_B(Clone) hp=100/100 damage=10 weapon=Test_ShipAttackCompo
+TransportMainShip(Clone) hp=100/100 damage=10 weapon=
+TestEscort_C(Clone) hp=100/100 damage=10 weapon=Test_ShipAttackCompo
+TestEscort_A(Clone) hp=100/100 damage=10 weapon=Test_ShipAttackCompo
+TestEscort_C(Clone) hp=100/100 damage=10 weapon=Test_ShipAttackCompo
+TestEscort_C(Clone) hp=100/100 damage=10 weapon=Test_ShipAttackCompo
+SAMPLE time=2.0 wave=1 alive=7 spawned=8 kills=1 gold=1895 running=True
+SAMPLE time=7.4 wave=1 alive=6 spawned=12 kills=6 gold=8955 running=True
+SAMPLE time=12.1 wave=1 alive=9 spawned=18 kills=9 gold=14279 running=True
+RESULT starts=2 ends=1 highestWave=1 overlappingWave=False movement=5.78 contacts=53 charges=11 sameFleetGenerations=False
+FINAL time=14.2 wave=1 alive=9 spawned=20 kills=11 gold=17432 running=True
+PAUSE frozen=True scale=0
+BREACH_DEFEAT stopped=True
+RESTART time=0.3 wave=1 alive=6 spawned=6 kills=0 gold=0 running=True

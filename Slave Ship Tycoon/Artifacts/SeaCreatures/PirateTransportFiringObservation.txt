@@ -1,0 +1,2 @@
+Chapter=1 creatureVoyage=True creatureTargetShots=24 shipTargetShots=0 kills=6
+Chapter=2 creatureVoyage=False creatureTargetShots=0 shipTargetShots=20 kills=6

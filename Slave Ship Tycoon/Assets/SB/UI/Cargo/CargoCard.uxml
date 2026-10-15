@@ -10,9 +10,8 @@
         </ui:VisualElement>
         <ui:Label name="rewards" class="cargo-rewards" />
         <ui:VisualElement class="cargo-actions">
-            <ui:Button name="unloadButton" text="−1" class="harbor-button" />
+            <ui:Button name="unloadButton" text="비우기 −1" class="harbor-button" />
             <ui:Button name="loadButton" text="적재 +1" class="harbor-button primary-button" />
         </ui:VisualElement>
-        <ui:Button name="removeButton" text="이 화물 비우기" class="harbor-button cargo-remove" />
     </ui:VisualElement>
 </ui:UXML>

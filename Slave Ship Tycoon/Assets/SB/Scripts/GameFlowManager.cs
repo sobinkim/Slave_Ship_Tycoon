@@ -16,14 +16,37 @@ namespace SB.Scripts
         [SerializeField] private ChapterDatabase chapterDatabase;
         [SerializeField, Tooltip("보스 처치 후 운송 해역으로 진입할 때 저장된 적재 설정을 실제 운송 화물로 복사합니다.")]
         private CargoManager cargoManager;
+        [SerializeField, Tooltip("운송 화물의 시세 연출을 마친 뒤 다음 전투를 시작합니다.")]
+        private SB.UI.InGame.InGameToolkitScreen transportPresentation;
         private int currentChapter = 1;
         private int currentStage = 1;
         private StageRoomType currentStageType;
         private ChapterRouteType currentRouteType;
         private bool currentBattleIsBoss;
         private Coroutine _stageRestartRoutine;
+        private bool hasSuspendedTransport;
+        private int suspendedTransportChapter;
+        private int suspendedTransportStage;
+        private bool isChapterTransitionPending;
 
-        public bool CanStartBossBattle => !currentBattleIsBoss && chapterDatabase != null &&
+        public bool HasSuspendedTransport => hasSuspendedTransport;
+        public int SuspendedTransportChapter => suspendedTransportChapter;
+        public int SuspendedTransportStage => suspendedTransportStage;
+
+        public bool CanReturnToFarming => currentRouteType == ChapterRouteType.Sell &&
+            !hasSuspendedTransport && !isChapterTransitionPending &&
+            (transportPresentation == null || !transportPresentation.IsTransportBonusPlaying) &&
+            HasFarmingChapter(currentChapter - 1);
+
+        public bool CanResumeTransport => hasSuspendedTransport && !isChapterTransitionPending &&
+            currentRouteType == ChapterRouteType.Obtain && currentChapter == suspendedTransportChapter - 1 &&
+            chapterDatabase != null &&
+            chapterDatabase.TryGetChapter(suspendedTransportChapter, out ChapterContainer chapter) &&
+            chapter.RouteType == ChapterRouteType.Sell &&
+            chapterDatabase.TryGetStage(suspendedTransportChapter, suspendedTransportStage, out StageEnemyLayout _);
+
+        public bool CanStartBossBattle => !hasSuspendedTransport && !isChapterTransitionPending &&
+            !currentBattleIsBoss && chapterDatabase != null &&
             chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer chapter) &&
             chapter.RouteType == ChapterRouteType.Obtain &&
             chapterDatabase.TryGetBoss(currentChapter, out StageEnemyLayout _);
@@ -45,15 +68,12 @@ namespace SB.Scripts
             Bus<StageBattleEndedEvent>.OnEvent -= UpdateCurrentChapterData;
             Bus<AffterStageClearEvent>.OnEvent -= HandleAfterStageClear;
 
-            if (_stageRestartRoutine != null)
-            {
-                StopCoroutine(_stageRestartRoutine);
-                _stageRestartRoutine = null;
-            }
+            CancelQueuedStageRestart();
         }
         private void Update()
         {
-            if (Time.timeScale > 0f && Input.GetKeyDown(KeyCode.Space))
+            if (!isChapterTransitionPending && _stageRestartRoutine == null && Time.timeScale > 0f && Input.GetKeyDown(KeyCode.Space) &&
+                (transportPresentation == null || !transportPresentation.IsTransportBonusPlaying))
                 StartStage();
         }
 
@@ -99,7 +119,7 @@ namespace SB.Scripts
 
         public void StartBossBattle()
         {
-            if (currentBattleIsBoss)
+            if (currentBattleIsBoss || hasSuspendedTransport || isChapterTransitionPending)
                 return;
 
             if (chapterDatabase == null ||
@@ -127,11 +147,7 @@ namespace SB.Scripts
                 return;
             }
 
-            if (_stageRestartRoutine != null)
-            {
-                StopCoroutine(_stageRestartRoutine);
-                _stageRestartRoutine = null;
-            }
+            CancelQueuedStageRestart();
 
             currentRouteType = chapter.RouteType;
             currentBattleIsBoss = true;
@@ -140,6 +156,53 @@ namespace SB.Scripts
 
             Debug.Log($"Chapter {currentChapter} boss battle started.", this);
             RaiseStageStartedEvent();
+        }
+
+        public bool ReturnToFarming()
+        {
+            if (!CanReturnToFarming)
+                return false;
+
+            CancelQueuedStageRestart();
+            suspendedTransportChapter = currentChapter;
+            suspendedTransportStage = currentStage;
+            hasSuspendedTransport = true;
+            currentChapter = suspendedTransportChapter - 1;
+            currentStage = 1;
+
+            // Keep the manifest, market prices and departure equipment snapshot for resuming.
+            StartStage();
+            return true;
+        }
+
+        public bool ResumeTransport()
+        {
+            if (!CanResumeTransport)
+                return false;
+
+            CancelQueuedStageRestart();
+            currentChapter = suspendedTransportChapter;
+            currentStage = suspendedTransportStage;
+            hasSuspendedTransport = false;
+            suspendedTransportChapter = suspendedTransportStage = 0;
+
+            // This resumes the existing departure; SellChapterStartedEvent would reset its value.
+            StartStage();
+            return true;
+        }
+
+        private bool HasFarmingChapter(int chapterNumber)
+        {
+            if (chapterDatabase == null ||
+                !chapterDatabase.TryGetChapter(chapterNumber, out ChapterContainer chapter) ||
+                chapter.RouteType != ChapterRouteType.Obtain)
+                return false;
+
+            foreach (StageEnemyLayout wave in chapter.Stages)
+                if (wave != null)
+                    return true;
+
+            return false;
         }
 
         private void RaiseStageStartedEvent()
@@ -193,6 +256,7 @@ namespace SB.Scripts
 
         public void LoopClear()
         {
+            isChapterTransitionPending = true;
             Bus<PlayStageClearEffectEvent>.Raise(new PlayStageClearEffectEvent(currentChapter, currentStage, currentRouteType));
         }
 
@@ -229,6 +293,7 @@ namespace SB.Scripts
         
         private void HandleAfterStageClear(AffterStageClearEvent evt)
         {
+            isChapterTransitionPending = false;
             if (evt.ClearChapterType == ChapterRouteType.Sell)
             {
                 Bus<SellChapterCompletedEvent>.Raise(
@@ -265,16 +330,25 @@ namespace SB.Scripts
 
         private void QueueStartStage()
         {
-            if (_stageRestartRoutine != null)
-                StopCoroutine(_stageRestartRoutine);
-
+            CancelQueuedStageRestart();
             _stageRestartRoutine = StartCoroutine(StartStageNextFrame());
+        }
+
+        private void CancelQueuedStageRestart()
+        {
+            if (_stageRestartRoutine == null)
+                return;
+
+            StopCoroutine(_stageRestartRoutine);
+            _stageRestartRoutine = null;
         }
 
         private IEnumerator StartStageNextFrame()
         {
             yield return null;
-            while (Time.timeScale == 0f)
+            while (Time.timeScale == 0f ||
+                (currentRouteType == ChapterRouteType.Sell && transportPresentation != null &&
+                transportPresentation.isActiveAndEnabled && transportPresentation.IsTransportBonusPlaying))
                 yield return null;
             _stageRestartRoutine = null;
             StartStage();

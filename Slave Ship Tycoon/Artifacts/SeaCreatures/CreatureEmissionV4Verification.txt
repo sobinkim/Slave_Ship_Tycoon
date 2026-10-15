@@ -1,0 +1,4 @@
+Swarmer falseHit=False flash=0.862 shaderFlash=0.862 swimPhasePresent=5.417384
+Charger falseHit=False flash=0.962 shaderFlash=0.962 swimPhasePresent=4.044006
+faded=True lethalEmission=True poolReset=True
+normalRestart=True sprites=ReefGlider_V4,ReefbackLeviathan_V4

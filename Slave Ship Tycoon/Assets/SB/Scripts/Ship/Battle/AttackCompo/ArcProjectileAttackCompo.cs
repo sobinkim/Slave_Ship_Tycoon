@@ -59,7 +59,7 @@ namespace SB.Scripts.AttackCompo
                 return;
             }
 
-            if (HasAliveTarget == false)
+            if (HasAliveTarget == false || !HasClearFireLane())
                 return;
 
             ShipProjectileAnchorCompo targetAnchors =
@@ -99,7 +99,8 @@ namespace SB.Scripts.AttackCompo
                 waterImpactPosition,
                 flightData,
                 ProjectileAmount,
-                HitMode);
+                HitMode,
+                OwnerShip != null ? OwnerShip.OutgoingHitChanceMultiplier : 1f);
 
             bool isStraightMode = travelMode == ProjectileTravelMode.AcceleratingStraight;
             float launchSpeed = isStraightMode ? initialStraightSpeed : initialArcSpeed;

@@ -18,7 +18,6 @@ namespace SB.UI.Cargo
         [SerializeField] private CargoManager cargoManager;
         [SerializeField] private GameFlowManager gameFlowManager;
         [SerializeField] private TransportEquipmentManager transportEquipmentManager;
-        [SerializeField] private CurrencyManager currencyManager;
         [SerializeField] private VisualTreeAsset cardTemplate;
         [Header("Layout")]
         [SerializeField, Min(1)] private int minimumSelectedSlots = 12;
@@ -26,6 +25,10 @@ namespace SB.UI.Cargo
         [SerializeField, Min(0)] private float repeatStartDelaySeconds = 0.35f;
         [SerializeField, Min(0.01f)] private float repeatIntervalSeconds = 0.1f;
         [SerializeField, Min(0)] private float dragCancelDistance = 12f;
+        [Header("Expected revenue feedback (unscaled seconds)")]
+        [SerializeField, Min(0.01f)] private float rewardCountDurationSeconds = 0.5f;
+        [SerializeField, Min(0.01f)] private float rewardDeltaDurationSeconds = 0.85f;
+        [SerializeField, Min(0)] private float rewardDeltaRisePixels = 10f;
 
         private sealed class CargoCard
         {
@@ -40,6 +43,22 @@ namespace SB.UI.Cargo
             public Button button;
             public Label amount;
         }
+        private sealed class RewardPreview
+        {
+            public CurrencyType currency;
+            public VisualElement container;
+            public Label value;
+            public Label delta;
+            public long displayed;
+            public long from;
+            public long target;
+            public float countElapsed;
+            public float feedbackElapsed;
+            public bool isCounting;
+            public bool hasFeedback;
+        }
+        private readonly List<RewardPreview> rewardPreviews = new List<RewardPreview>();
+        private bool hasRewardPreview;
         private TransportItemSO detailItem;
         private readonly List<CargoSlot> selectedSlots = new List<CargoSlot>();
         private readonly List<CargoCard> cards = new List<CargoCard>();
@@ -55,7 +74,7 @@ namespace SB.UI.Cargo
         private void OnEnable()
         {
             if (document == null || cargoManager == null || gameFlowManager == null || transportEquipmentManager == null ||
-                currencyManager == null || cardTemplate == null)
+                cardTemplate == null)
             { Debug.LogError("CargoToolkitScreen의 Document, Manager, Card Template을 연결하세요.", this); return; }
             root = document.rootVisualElement; root.AddToClassList("harbor-document"); root.pickingMode = PickingMode.Ignore;
             previousTimeScale = Time.timeScale; Time.timeScale = 0; hasPaused = true;
@@ -63,17 +82,16 @@ namespace SB.UI.Cargo
             root.Q<Button>("pickerCloseButton").clicked += ClosePicker;
             root.Q<Button>("detailCloseButton").clicked += CloseDetail;
             root.Q<Button>("confirmButton").clicked += Confirm;
-            BuildCards();
+            BindRewardPreviews(); BuildCards();
             ClosePicker(); CloseDetail(); Refresh();
             Bus<ChangedCurrentCargoCapacityEvent>.OnEvent += OnCargoChanged;
-            Bus<CurrencyChangedEvent>.OnEvent += OnCurrencyChanged;
         }
         private void OnDisable()
         {
             Bus<ChangedCurrentCargoCapacityEvent>.OnEvent -= OnCargoChanged;
-            Bus<CurrencyChangedEvent>.OnEvent -= OnCurrencyChanged;
             foreach (var hold in holds) hold.Dispose();
             holds.Clear(); cards.Clear(); emptySlots.Clear(); selectedSlots.Clear(); detailItem = null; isRefreshPending = false;
+            rewardPreviews.Clear(); hasRewardPreview = false;
             if (root != null)
             {
                 if (root.Q<Button>("closeButton") is Button closeButtonBinding) closeButtonBinding.clicked -= Close;
@@ -84,7 +102,11 @@ namespace SB.UI.Cargo
             if (hasPaused) { Time.timeScale = previousTimeScale; hasPaused = false; }
             root = null;
         }
-        private void LateUpdate() { if (isRefreshPending) { isRefreshPending = false; Refresh(); } }
+        private void LateUpdate()
+        {
+            if (isRefreshPending) { isRefreshPending = false; Refresh(); }
+            AnimateRewardPreviews();
+        }
         public void Open()
         {
             if (IsOpen || gameFlowManager == null || !gameFlowManager.CanStartBossBattle) return;
@@ -111,7 +133,6 @@ namespace SB.UI.Cargo
             root.Q("cargoDetail").AddToClassList("hidden");
         }
         private void OnCargoChanged(ChangedCurrentCargoCapacityEvent evt) => isRefreshPending = true;
-        private void OnCurrencyChanged(CurrencyChangedEvent evt) => RefreshBalances();
 
         private void BuildCards()
         {
@@ -162,14 +183,18 @@ namespace SB.UI.Cargo
                 load.text = "선택 · 1개 적재";
             }
             else holds.Add(new ToolkitHoldRepeatInput(load, () => cargoManager.LoadCargo(item.Type), true, repeatStartDelaySeconds, repeatIntervalSeconds, dragCancelDistance));
-            card.Q<Button>("unloadButton").clicked += () => cargoManager.UnloadCargo(item.Type);
-            card.Q<Button>("removeButton").clicked += () => cargoManager.RemoveCargo(item.Type);
-            card.Q<Button>("unloadButton").EnableInClassList("hidden", !isDetail);
-            card.Q<Button>("removeButton").EnableInClassList("hidden", !isDetail);
+            Button unload = card.Q<Button>("unloadButton");
+            unload.tooltip = "1개 비우기 · 길게 누르면 연속으로 비우기";
+            if (isDetail)
+                holds.Add(new ToolkitHoldRepeatInput(unload, () => cargoManager.UnloadCargo(item.Type), true,
+                    repeatStartDelaySeconds, repeatIntervalSeconds, dragCancelDistance));
+            unload.EnableInClassList("hidden", !isDetail);
         }
         private void Refresh()
         {
             if (root == null) return;
+            if (detailItem != null && cargoManager.GetCargoAmount(detailItem.Type) <= 0)
+                CloseDetail();
             int selectedCount = 0;
             foreach (CargoSlot slot in selectedSlots)
             {
@@ -189,7 +214,6 @@ namespace SB.UI.Cargo
                 card.root.Q<Label>("rewards").text = DescribeRewards(card.item, card.isDetail ? amount : 1);
                 card.root.Q<Button>("loadButton").SetEnabled(cargoManager.CanLoadCargo(card.item.Type));
                 card.root.Q<Button>("unloadButton").SetEnabled(amount > 0);
-                card.root.Q<Button>("removeButton").SetEnabled(amount != 0);
             }
             for (int i = 0; i < emptySlots.Count; i++) emptySlots[i].EnableInClassList("hidden", i >= Mathf.Max(0, minimumSelectedSlots - selectedCount));
             float loaded = cargoManager.GetCurrentCargoCapacity();
@@ -200,12 +224,7 @@ namespace SB.UI.Cargo
             root.Q<Label>("catalogHint").text = $"최대 적재량 {capacity:0.#} t · 적재 버튼을 길게 누르면 연속 적재";
             root.Q<Label>("status").text = cargoManager.HasValidLoadout ? "" : "적재량 또는 화물 설정을 확인하세요. 화물을 줄이거나 적재함을 강화하세요.";
             root.Q<Button>("confirmButton").SetEnabled(cargoManager.HasValidLoadout && gameFlowManager.CanStartBossBattle);
-            RefreshBalances(); RefreshPreview();
-        }
-        private void RefreshBalances()
-        {
-            if (root == null) return;
-            root.Q<Label>("balances").text = $"골드 {CurrencyTextFormatter.Format(currencyManager.GetCurrency(CurrencyType.Gold))}    다이아 {CurrencyTextFormatter.Format(currencyManager.GetCurrency(CurrencyType.Diamond))}    에메랄드 {CurrencyTextFormatter.Format(currencyManager.GetCurrency(CurrencyType.Emerald))}";
+            RefreshPreview();
         }
         private static string DescribeRewards(TransportItemSO item, int units)
         {
@@ -237,7 +256,79 @@ namespace SB.UI.Cargo
                 }
             }
             if (hasCargo) transportEquipmentManager.ApplyPreviewModifiers(rewards);
-            root.Q<Label>("rewardPreview").text = $"골드 {rewards[CurrencyType.Gold]:N0}    다이아 {rewards[CurrencyType.Diamond]:N0}    에메랄드 {rewards[CurrencyType.Emerald]:N0}";
+            foreach (RewardPreview preview in rewardPreviews)
+            {
+                long next = rewards[preview.currency];
+                if (!hasRewardPreview)
+                {
+                    preview.displayed = preview.from = preview.target = next;
+                    preview.value.text = next.ToString("N0");
+                    continue;
+                }
+                if (next == preview.target) continue;
+                decimal change = (decimal)next - preview.target;
+                preview.from = preview.displayed;
+                preview.target = next;
+                preview.countElapsed = preview.feedbackElapsed = 0;
+                preview.isCounting = preview.hasFeedback = true;
+                preview.container.EnableInClassList("is-gaining", change > 0);
+                preview.container.EnableInClassList("is-decreasing", change < 0);
+                preview.delta.text = change > 0 ? $"+{change:N0}" : $"{change:N0}";
+                preview.delta.style.opacity = 1;
+                preview.delta.style.translate = new Translate(0, 0, 0);
+            }
+            hasRewardPreview = true;
+        }
+        private void BindRewardPreviews()
+        {
+            rewardPreviews.Clear(); hasRewardPreview = false;
+            BindRewardPreview(CurrencyType.Gold, "goldPreview");
+            BindRewardPreview(CurrencyType.Diamond, "diamondPreview");
+            BindRewardPreview(CurrencyType.Emerald, "emeraldPreview");
+        }
+        private void BindRewardPreview(CurrencyType currency, string elementName)
+        {
+            VisualElement container = root.Q(elementName);
+            Label delta = container.Q<Label>("delta");
+            container.RemoveFromClassList("is-gaining");
+            container.RemoveFromClassList("is-decreasing");
+            delta.text = "";
+            delta.style.opacity = 0;
+            delta.style.translate = new Translate(0, 0, 0);
+            rewardPreviews.Add(new RewardPreview
+            {
+                currency = currency, container = container,
+                value = container.Q<Label>("value"), delta = delta
+            });
+        }
+        private void AnimateRewardPreviews()
+        {
+            foreach (RewardPreview preview in rewardPreviews)
+            {
+                if (preview.isCounting)
+                {
+                    preview.countElapsed += Time.unscaledDeltaTime;
+                    float progress = Mathf.Clamp01(preview.countElapsed / Mathf.Max(0.01f, rewardCountDurationSeconds));
+                    float eased = 1 - Mathf.Pow(1 - progress, 3);
+                    long next = progress >= 1 ? preview.target :
+                        (long)((decimal)preview.from + ((decimal)preview.target - preview.from) * (decimal)eased);
+                    if (next != preview.displayed)
+                    {
+                        preview.displayed = next;
+                        preview.value.text = next.ToString("N0");
+                    }
+                    preview.isCounting = progress < 1;
+                }
+                if (!preview.hasFeedback) continue;
+                preview.feedbackElapsed += Time.unscaledDeltaTime;
+                float feedback = Mathf.Clamp01(preview.feedbackElapsed / Mathf.Max(0.01f, rewardDeltaDurationSeconds));
+                preview.delta.style.translate = new Translate(0, -rewardDeltaRisePixels * feedback, 0);
+                preview.delta.style.opacity = 1 - Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0.4f, 1, feedback));
+                if (feedback < 1) continue;
+                preview.hasFeedback = false;
+                preview.container.RemoveFromClassList("is-gaining");
+                preview.container.RemoveFromClassList("is-decreasing");
+            }
         }
     }
 }

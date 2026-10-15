@@ -1,0 +1,8 @@
+Saved=Assets/SB/Animations/Scenes/SampleScene.unity
+UI unchanged=True fingerprint=B8ADCA81C87FE3A5A1E6344D8E62275E227F76A994E49A7B75236C097DF1888B
+Director=PirateSeaCreatureCombat
+Camera rig=PirateVoyageCameraRig
+Parallax references=4
+Test HUD copied=False
+Stage auto-start=False; R shortcut=False
+Backup=AgentScripts/Backups/PirateCreatureIntegration-20261015

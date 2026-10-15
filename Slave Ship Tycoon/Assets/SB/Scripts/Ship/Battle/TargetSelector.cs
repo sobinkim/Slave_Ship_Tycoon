@@ -18,7 +18,8 @@ namespace SB.Scripts
         FormationDistribution,
         HighestCurrentHealth,
         LowestCurrentHealth,
-        RandomInRule
+        RandomInRule,
+        Nearest
     }
 
     public enum TargetTeam
@@ -47,8 +48,17 @@ namespace SB.Scripts
         private bool excludesHealingSupportShips;
         [SerializeField, Tooltip("규칙에 맞는 대상이 없을 때 전체 후보에서 선택합니다. 전열 전용 지원함은 끕니다.")]
         private bool allowsRuleFallback = true;
+        [SerializeField, Tooltip("연막함처럼 항상 전체 무작위 대상을 선택하는 함선은 켭니다.")]
+        private bool ignoresCommanderTargetCommand;
+        [SerializeField, Tooltip("적 연막함은 호위함이 살아 있어도 본선을 전체 무작위 후보에 포함합니다.")]
+        private bool includesMainShipWithEscorts;
+        [SerializeField, Tooltip("항해 테스트에서는 조우 전 크리쳐에 선제 포격하지 않습니다.")]
+        private bool requiresEngagedSeaCreatures;
         public TargetTeam Team => targetTeam;
         public TargetSelectionMode SelectionMode => selectionMode;
+        public bool RequiresEngagedSeaCreatures => requiresEngagedSeaCreatures;
+        public void SetSelectionMode(TargetSelectionMode mode) => selectionMode = mode;
+        public void SetRequiresEngagedSeaCreatures(bool required) => requiresEngagedSeaCreatures = required;
         public IReadOnlyList<TargetRule> TargetRules => targetRules;
         private Ship myship;
         private BattleSpawnData currentStageBattleSpawnData;
@@ -80,7 +90,9 @@ namespace SB.Scripts
             currentStageBattleSpawnData = battleSpawnData;
         }
 
-        public Ship GetTarget()
+        public Ship GetTarget() => GetTarget(null);
+
+        public Ship GetTarget(System.Predicate<Ship> candidateFilter)
         {
             if (myship == null)
             {
@@ -91,10 +103,14 @@ namespace SB.Scripts
             List<Ship> targetList = new List<Ship>();
             targetList = GetTargetList();
 
+            if (candidateFilter != null)
+                for (int i = targetList.Count - 1; i >= 0; i--)
+                    if (!candidateFilter(targetList[i])) targetList.RemoveAt(i);
+
             if (targetList.Count == 0)
                 return null;
 
-            if (targetTeam == TargetTeam.Opponent && _commanderTargetColumn >= 0)
+            if (!ignoresCommanderTargetCommand && targetTeam == TargetTeam.Opponent && _commanderTargetColumn >= 0)
                 return SelectCommanderTarget(targetList);
 
             return SelectTargetByRules(targetList);
@@ -183,7 +199,7 @@ namespace SB.Scripts
                         targetList.Add(escortShips[i]);
                 }
 
-                if (targetList.Count == 0 &&
+                if ((targetList.Count == 0 || includesMainShipWithEscorts) &&
                     currentStageBattleSpawnData.MainShip != null &&
                     currentStageBattleSpawnData.MainShip.isActiveAndEnabled &&
                     currentStageBattleSpawnData.MainShip.IsDead == false &&
@@ -201,6 +217,8 @@ namespace SB.Scripts
         public bool IsValidTarget(Ship target)
         {
             if (myship == null || target == null || !target.isActiveAndEnabled || target.IsDead)
+                return false;
+            if (requiresEngagedSeaCreatures && target is SeaCreatureEnemy creature && !creature.IsEngaged)
                 return false;
 
             bool isOwnerEnemy = myship is Enemy || myship.myShipData.ShipType == ShipType.Enemy;
@@ -226,6 +244,9 @@ namespace SB.Scripts
 
         private Ship SelectTargetByRules(List<Ship> targetList)
         {
+            if (selectionMode == TargetSelectionMode.Nearest)
+                return SelectNearestTarget(targetList);
+
             if (targetRules == null || targetRules.Length == 0)
                 return SelectDistributedTarget(targetList);
 
@@ -293,6 +314,21 @@ namespace SB.Scripts
             }
 
             return selectedTarget;
+        }
+
+        private Ship SelectNearestTarget(List<Ship> targetList)
+        {
+            Ship selected = null;
+            float nearestDistanceSquared = float.PositiveInfinity;
+            foreach (Ship candidate in targetList)
+            {
+                float distanceSquared = (candidate.transform.position - myship.transform.position).sqrMagnitude;
+                if (distanceSquared >= nearestDistanceSquared)
+                    continue;
+                nearestDistanceSquared = distanceSquared;
+                selected = candidate;
+            }
+            return selected;
         }
 
         private Ship SelectLowestCurrentHealth(List<Ship> targetList)

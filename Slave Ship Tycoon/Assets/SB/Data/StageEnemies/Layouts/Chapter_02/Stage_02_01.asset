@@ -21,9 +21,9 @@ MonoBehaviour:
   - {fileID: 1260669491459143875, guid: 292cb7623b53e84479407745827a76ac, type: 3}
   - {fileID: 6176999940171500051, guid: 07e2eef4806336a4d934e8d8ac48b815, type: 3}
   - {fileID: 3259515473819612312, guid: 1c3a4fc18b9960843ab57d31cb210bb2, type: 3}
-  - {fileID: 1260669491459143875, guid: 292cb7623b53e84479407745827a76ac, type: 3}
-  - {fileID: 7117596764004494651, guid: d5c6ecc96329c344eb0d6b078cb1c21b, type: 3}
-  - {fileID: 3259515473819612312, guid: 1c3a4fc18b9960843ab57d31cb210bb2, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

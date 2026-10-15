@@ -19,7 +19,7 @@
 .guide-name { color: var(--color-accent); font-size: 28px; -unity-font-style: bold; margin: 0; padding: 0; }
 .guide-text { min-width: 0; white-space: normal; font-size: 24px; margin: 12px 0 0 0; padding: 0; color: var(--color-text-secondary); }
 .recruitment-cards { flex-grow: 1; flex-basis: 0; min-width: 0; }
-.recruitment-card { background-color: var(--color-surface-raised); border-width: 2px; border-color: var(--color-border); border-radius: 10px; padding: 18px; }
+.recruitment-card { background-color: var(--color-surface-raised); border-width: var(--border-control-width); border-color: var(--color-border); border-radius: 10px; padding: 18px; }
 .recruitment-card-title { min-width: 0; white-space: normal; font-size: 30px; -unity-font-style: bold; margin: 0 0 8px 0; padding: 0; }
 .recruitment-card-description { min-width: 0; white-space: normal; font-size: 24px; color: var(--color-text-secondary); margin: 0 0 8px 0; padding: 0; }
 .recruitment-card-icon { height: 120px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; margin-bottom: 12px; }
@@ -27,6 +27,7 @@
 .recruitment-actions > .recruitment-button { height: 104px; min-height: 104px; min-width: 0; padding: 10px 8px; justify-content: center; align-items: stretch; }
 .recruitment-button > Label { min-width: 0; margin: 0; padding: 0; font-size: 26px; -unity-text-align: middle-center; white-space: normal; }
 .recruitment-button > .recruitment-cost { color: var(--color-accent); margin-top: 4px; }
+.recruitment-button.primary-button > .recruitment-cost { color: var(--color-text-on-action); }
 .recruitment-cards > .status { min-height: 64px; min-width: 0; font-size: 23px; margin: 12px 0 8px 0; padding: 0; white-space: normal; }
 .recruitment-cards > .harbor-button { height: 72px; min-height: 72px; margin: 0; }
 .recruitment-result-grid .ship-card { width: 23.8%; height: 280px; }

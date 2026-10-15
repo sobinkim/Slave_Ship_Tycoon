@@ -1,0 +1,1 @@
+wave=2 entrants=7 oldAlive=1 initiallyEntirelyOutside=True untargetableDuringEntry=True partialEntrySeen=True enteredAndEngaged=True deltaX=-1.54

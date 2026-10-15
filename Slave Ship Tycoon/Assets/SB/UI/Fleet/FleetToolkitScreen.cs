@@ -258,6 +258,12 @@ namespace SB.UI.Fleet
                 return;
             }
             nameLabel.text = ship.DisplayName + (selectedSlotIndex >= 0 ? " · " + PlayerFleetLoadout.GetFormationPositionLabel(selectedSlotIndex) : "");
+            var interceptor = ship.ShipPrefab.GetComponentInChildren<InterceptorAttackCompo>(true);
+            if (interceptor != null)
+            {
+                descriptionLabel.text = "같은 가로 라인의 아군과 본선 보호 · 먼저 도착할 적 포탄 우선\n빠른 직선탄으로 한 발씩 요격 · 연막탄·회복탄 제외";
+                return;
+            }
             var healing = ship.ShipPrefab.GetComponentInChildren<HealingProjectileAttackCompo>(true);
             if (healing != null)
             {

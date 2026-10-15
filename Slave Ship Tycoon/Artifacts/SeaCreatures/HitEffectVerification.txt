@@ -1,0 +1,1 @@
+zeroDamageAndHealNoEffect=True damageEffect=True lethalEffect=True capture=True

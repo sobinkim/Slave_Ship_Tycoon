@@ -47,7 +47,7 @@ namespace SB.Scripts
 
         [SerializeField] private ShipRole _shipRole;
         [Header("Targeting")]
-        [SerializeField, Tooltip("습격함만 사용합니다. 보호 중인 함선을 직접 타겟 후보에 포함합니다.")]
+        [SerializeField, Tooltip("습격함·연막함처럼 보호 중인 함선도 직접 겨냥할 수 있는 함선에 사용합니다.")]
         private bool canTargetProtectedShips;
 
         protected EntityAnimator _animator;
@@ -63,6 +63,9 @@ namespace SB.Scripts
         public MyShipData myShipData;
         public ShipStatCompo ShipStatCompo => _shipStatCompo;
         public int SpawnGeneration { get; private set; }
+        public Projectiles.SmokeCloudEffect SmokeCloud { get; internal set; }
+        public float OutgoingHitChanceMultiplier => SmokeCloud != null && SmokeCloud.IsAffecting(this)
+            ? SmokeCloud.HitChanceMultiplier : 1f;
         public bool FinishesAttackAnimationWithoutTarget => _attackCompo != null && _attackCompo.FinishesAnimationWithoutTarget;
         public bool TicksAttackCooldownWithoutTarget => _attackCompo != null && _attackCompo.TicksCooldownWithoutTarget;
         public bool CanAttack => _attackCompo != null && _attackCompo.CanAttack;
@@ -162,6 +165,7 @@ namespace SB.Scripts
 
         public virtual void OnSpawnedFromPool()
         {
+            SmokeCloud?.Release();
             unchecked
             {
                 SpawnGeneration++;
@@ -200,6 +204,7 @@ namespace SB.Scripts
 
         public virtual void OnDespawnedToPool()
         {
+            SmokeCloud?.Release();
             ClearCommanderTargetCommand();
             GetCompo<ShipCombatStatCompo>()?.ClearCommanderModifiers();
             _attackCompo?.ResetAttackState();

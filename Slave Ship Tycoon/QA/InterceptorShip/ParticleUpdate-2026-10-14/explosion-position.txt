@@ -1,0 +1,1 @@
+Explosion world=(1.94, 0.98, 0.00); muzzle=(-0.57, 0.18, 0.00); distance=2.630484

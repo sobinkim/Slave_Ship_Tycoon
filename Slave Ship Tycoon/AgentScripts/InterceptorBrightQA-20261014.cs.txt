@@ -1,0 +1,115 @@
+if (!UnityEditor.EditorApplication.isPlaying) throw new System.Exception("Play Mode required");
+var pool = SB.Scripts.PoolingManager.Instance;
+if (pool == null) throw new System.Exception("PoolingManager required");
+var originalRoots = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+foreach (var original in originalRoots) original.SetActive(false);
+var prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.GameObject>("Assets/SB/Prefabs/PlayerShips/InterceptorShip.prefab");
+var targetPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.GameObject>("Assets/SB/Prefabs/PlayerShips/IroncladDefender.prefab");
+var incomingPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<SB.Scripts.Projectiles.NormalProjectile>("Assets/SB/Prefabs/Projectiles/NormalProjectile.prefab");
+var first = pool.Get(prefab, new UnityEngine.Vector3(-1f,.2f,0f), UnityEngine.Quaternion.identity).GetComponent<SB.Scripts.Ship>();
+var second = pool.Get(prefab, new UnityEngine.Vector3(-1f,-.7f,0f), UnityEngine.Quaternion.identity).GetComponent<SB.Scripts.Ship>();
+var ally = pool.Get(targetPrefab,new UnityEngine.Vector3(-.65f,-1.5f,0f),UnityEngine.Quaternion.identity).GetComponent<SB.Scripts.Ship>();
+var firstAttack = first.GetCompo<SB.Scripts.AttackCompo.InterceptorAttackCompo>();
+var secondAttack = second.GetCompo<SB.Scripts.AttackCompo.InterceptorAttackCompo>();
+var health = ally.GetCompo<SB.Core.EntityHealth>();
+ally.GetCompo<SB.Scripts.AttackCompo.Base_ShipAttackCompo>().SuspendCombat();
+first.SetSpawnSlot(new UnityEngine.Vector2Int(0,1)); second.SetSpawnSlot(new UnityEngine.Vector2Int(1,1));
+var battleField = typeof(SB.Scripts.AttackCompo.Base_ShipAttackCompo).GetField("_isBattleRunning",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance);
+var camRoot = new UnityEngine.GameObject("Interceptor QA camera");
+var cam = camRoot.AddComponent<UnityEngine.Camera>();
+cam.orthographic=true; cam.orthographicSize=2.6f; cam.transform.position=new UnityEngine.Vector3(.4f,-.15f,-10f);
+cam.clearFlags=UnityEngine.CameraClearFlags.SolidColor; cam.backgroundColor=new UnityEngine.Color(.30f,.67f,.75f);
+cam.enabled=false;
+var directory = System.IO.Path.Combine(UnityEngine.Application.dataPath,"../QA/InterceptorShip/Bright-2026-10-14");
+System.IO.Directory.CreateDirectory(directory);
+var lines = new System.Collections.Generic.List<string>();
+lines.Add("case,fps,mode,shots,intercepted,targetHits,healthBefore,healthAfter,pass");
+int caseIndex=0; int lastFrame=-1; float started=-1f; int shotsBefore=0; float healthBefore=0f;
+int interceptions=0; int hits=0; int resolutions=0; int captureIndex=0; bool effectRecorded=false;
+var activeIncoming=new System.Collections.Generic.List<SB.Scripts.Projectiles.NormalProjectile>();
+int totalCases=15;
+UnityEditor.EditorApplication.CallbackFunction update = null;
+void Capture(int frame)
+{
+    var rt=new UnityEngine.RenderTexture(720,900,24);
+    var old=UnityEngine.RenderTexture.active;
+    var texture=new UnityEngine.Texture2D(720,900,UnityEngine.TextureFormat.RGBA32,false);
+    try { cam.targetTexture=rt;cam.Render();UnityEngine.RenderTexture.active=rt;texture.ReadPixels(new UnityEngine.Rect(0,0,720,900),0,0);texture.Apply();System.IO.File.WriteAllBytes(System.IO.Path.Combine(directory,"frame-"+frame.ToString("D3")+".png"),texture.EncodeToPNG()); }
+    finally { cam.targetTexture=null;UnityEngine.RenderTexture.active=old;UnityEngine.Object.Destroy(rt);UnityEngine.Object.Destroy(texture); }
+}
+void Finish()
+{
+    UnityEditor.EditorApplication.update-=update;
+    UnityEngine.Time.captureDeltaTime=0f;
+    foreach(var shot in activeIncoming)if(shot!=null)shot.CancelFlight();
+    System.IO.File.WriteAllLines(System.IO.Path.Combine(directory,"play-results.csv"),lines);
+    UnityEngine.Debug.Log("INTERCEPTOR_QA_COMPLETE: "+string.Join("\n",lines));
+}
+update=()=>
+{
+    if(!UnityEditor.EditorApplication.isPlaying) {UnityEditor.EditorApplication.update-=update; return;}
+    if(UnityEngine.Time.frameCount==lastFrame)return;lastFrame=UnityEngine.Time.frameCount;
+    try
+    {
+        if(started<0f)
+        {
+            int fps=caseIndex<12?new[]{60,15,5}[caseIndex/4]:60;
+            UnityEngine.Time.captureDeltaTime=1f/fps;
+            second.gameObject.SetActive(caseIndex<12 || caseIndex==13);
+            ally.myShipData.ShipType=caseIndex==13?SB.Scripts.ShipType.MainShip:SB.Scripts.ShipType.EscortShip;
+            ally.SetSpawnSlot(new UnityEngine.Vector2Int(2,caseIndex==12||caseIndex==13?2:1));
+            health.ResetHealth();healthBefore=health.CurrentHealth;
+            firstAttack.ResetAttackState();secondAttack.ResetAttackState();
+            battleField.SetValue(firstAttack,true);battleField.SetValue(secondAttack,true);
+            first.ChangeState(SB.Scripts.ShipStateType.Idle);second.ChangeState(SB.Scripts.ShipStateType.Idle);
+            shotsBefore=firstAttack.ShotsFired+secondAttack.ShotsFired;interceptions=0;hits=0;resolutions=0;
+            activeIncoming.Clear();
+            int count=caseIndex==14?2:1;
+            var mode=(SB.Scripts.AttackCompo.ProjectileTravelMode)(caseIndex<12?caseIndex%4:0);
+            for(int i=0;i<count;i++)
+            {
+                var origin=new UnityEngine.Vector3(2.5f,1f+i*.25f,0f);
+                var shot=pool.Get(incomingPrefab,origin,UnityEngine.Quaternion.identity);
+                var anchors=ally.GetCompo<SB.Scripts.Projectiles.ShipProjectileAnchorCompo>();
+                var data=new SB.Scripts.Projectiles.ProjectileLaunchData(ally,origin,anchors.HitPosition,anchors.WaterImpactPosition,
+                    new SB.Scripts.Projectiles.ProjectileFlightData{FlightSpeed=3f,ArcHeight=.8f,MinimumFlightDuration=.01f,LifeTime=4f},30f,SB.Scripts.Projectiles.ProjectileHitMode.Guaranteed);
+                System.Action<SB.Scripts.Projectiles.BaseProjectile,SB.Scripts.Projectiles.ProjectileResolution> resolved=null;
+                resolved=(projectile,resolution)=>{projectile.Resolved-=resolved;resolutions++;if(resolution==SB.Scripts.Projectiles.ProjectileResolution.Intercepted)interceptions++;if(resolution==SB.Scripts.Projectiles.ProjectileResolution.TargetHit)hits++;};
+                shot.Resolved+=resolved;activeIncoming.Add(shot);
+                shot.Launch(data,mode,2f,8f,1.2f,.4f,.7f);
+            }
+            started=UnityEngine.Time.time;
+            return;
+        }
+        if(caseIndex==0)
+        {
+            Capture(captureIndex++);
+            if(!effectRecorded)
+            {
+                foreach(var burst in UnityEngine.Object.FindObjectsByType<SB.Scripts.Projectiles.InterceptionBurst>(UnityEngine.FindObjectsSortMode.None))
+                {
+                    if(!burst.gameObject.activeInHierarchy)continue;
+                    var gun=first.transform.Find("Visual/ShootPos").position;
+                    System.IO.File.WriteAllText(System.IO.Path.Combine(directory,"explosion-position.txt"),
+                        "Explosion world="+burst.transform.position+"; muzzle="+gun+"; distance="+UnityEngine.Vector3.Distance(gun,burst.transform.position));
+                    effectRecorded=true;
+                    break;
+                }
+            }
+            if(UnityEngine.Time.time-started<.8f)return;
+        }
+        if(resolutions<activeIncoming.Count && UnityEngine.Time.time-started<2f)return;
+        int shots=firstAttack.ShotsFired+secondAttack.ShotsFired-shotsBefore;
+        int expectedHits=caseIndex==12||caseIndex==14?1:0;
+        int expectedInterceptions=caseIndex==12?0:1;
+        bool pass=shots==expectedInterceptions && hits==expectedHits && interceptions==expectedInterceptions &&
+            (expectedHits>0||UnityEngine.Mathf.Abs(health.CurrentHealth-healthBefore)<.01f);
+        lines.Add(caseIndex+","+ (caseIndex<12?new[]{60,15,5}[caseIndex/4]:60)+","+ (caseIndex<12?(SB.Scripts.AttackCompo.ProjectileTravelMode)(caseIndex%4):SB.Scripts.AttackCompo.ProjectileTravelMode.Arc)+","+shots+","+interceptions+","+hits+","+healthBefore+","+health.CurrentHealth+","+pass);
+        foreach(var shot in activeIncoming)if(shot!=null)shot.CancelFlight();
+        caseIndex++;started=-1f;
+        if(caseIndex>=totalCases)Finish();
+    }
+    catch(System.Exception ex){lines.Add("ERROR,"+ex);Finish();}
+};
+UnityEditor.EditorApplication.update+=update;
+return "Runtime QA started: four trajectories at 60/15/5 simulated FPS, other-row exclusion, main ship protection, and two-shot overload.";

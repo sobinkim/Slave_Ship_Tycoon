@@ -1,0 +1,9 @@
+AT_7_SECONDS alive=6 kills=6 gold=8955
+CONTINUITY_PASS=True t=17.0 wave=2 alive=10 spawned=22 kills=12 gold=16680
+extraBattleStarts=0 battleEnds=0 sameFleetGenerations=True maxMovement=5.73 contactHits=59 charges=7
+TestEscort_A(Clone) hp=100.0/100 dead=False
+TestEscort_C(Clone) hp=20.0/100 dead=False
+TransportMainShip(Clone) hp=100.0/100 dead=False
+TestEscort_C(Clone) hp=100.0/100 dead=False
+TestEscort_B(Clone) hp=26.0/100 dead=False
+TestEscort_C(Clone) hp=100.0/100 dead=False

@@ -1,0 +1,2 @@
+TestEscort_B(Clone) target=ReefbackLeviathan(Clone) blocker=TestEscort_A(Clone) clear alternatives=2
+TestEscort_C(Clone) target=ReefGlider(Clone) blocker=TestEscort_C(Clone) clear alternatives=2

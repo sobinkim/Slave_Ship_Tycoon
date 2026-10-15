@@ -1,0 +1,39 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Shared/Styles/HarborTheme.uss" />
+    <ui:Style src="SeaCreatureTest.uss" />
+    <ui:VisualElement name="survivalHud" class="harbor-root survival-hud" picking-mode="Ignore">
+        <ui:VisualElement class="survival-header" picking-mode="Ignore">
+            <ui:VisualElement class="survival-heading" picking-mode="Ignore">
+                <ui:Label text="해적 해역" class="survival-title" />
+                <ui:Label name="waveLabel" text="WAVE 01" class="survival-wave" />
+            </ui:VisualElement>
+            <ui:Label name="statusLabel" text="해양 크리쳐 습격 · 자동 포격 중" class="survival-status" />
+            <ui:VisualElement class="survival-stats" picking-mode="Ignore">
+                <ui:Label name="timeLabel" text="00:00" class="survival-stat" />
+                <ui:Label name="killsLabel" text="처치 0" class="survival-stat" />
+                <ui:Label name="goldLabel" text="획득 골드 0" class="survival-stat survival-gold" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="survival-footer">
+            <ui:Label name="resultLabel" text="항해 종료 · 다시 출항해 도전하세요" class="survival-result hidden" />
+            <ui:Label text="항해하고, 멈춰 싸우고, 다시 출항하세요" class="survival-tip" />
+            <ui:VisualElement class="survival-species">
+                <ui:VisualElement class="species-card">
+                    <ui:VisualElement class="species-image species-glider" picking-mode="Ignore" />
+                    <ui:Label text="암초 뱀장어" class="species-name" />
+                    <ui:Label text="전열을 물어뜯는 빠른 크리쳐" class="species-detail" />
+                </ui:VisualElement>
+                <ui:VisualElement class="species-card">
+                    <ui:VisualElement class="species-image species-leviathan" picking-mode="Ignore" />
+                    <ui:Label text="산호 갑각수" class="species-name" />
+                    <ui:Label text="붉은 경로를 예고한 뒤 돌진합니다" class="species-detail" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label text="무리 조우 → 정지 전투 → 전멸 후 항해 · R 키로 다시 출항" class="survival-help" />
+            <ui:VisualElement class="action-row">
+                <ui:Button name="pauseButton" text="일시 정지" class="harbor-button" />
+                <ui:Button name="restartButton" text="다시 출항" class="harbor-button primary-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -9,7 +9,8 @@ namespace SB.Scripts.Projectiles
         TargetHit,
         WaterHit,
         Expired,
-        Cancelled
+        Cancelled,
+        Intercepted
     }
 
     public abstract class BaseProjectile : MonoBehaviour, IPoolable
@@ -56,6 +57,20 @@ namespace SB.Scripts.Projectiles
         private TrailRenderer[] trailRenderers;
         private Renderer projectileRenderer;
         private ShipIncomingFireDisplay incomingFireDisplay;
+        private ShipProjectileAnchorCompo movingTargetAnchors;
+        private static readonly System.Collections.Generic.List<BaseProjectile> interceptableFlights = new();
+        private InterceptorProjectile interceptorReservation;
+        private int lastAdvanceFrame = -1;
+
+        public static System.Collections.Generic.IReadOnlyList<BaseProjectile> InterceptableFlights => interceptableFlights;
+        public int FlightGeneration { get; private set; }
+        public Ship IntendedTarget => launchData.Target;
+        public bool CanBeIntercepted => SupportsInterception && IsFlying && !isMissPath && !isLuckMiss &&
+                                        IsOriginalTargetAlive() && interceptorReservation == null;
+        protected virtual bool SupportsInterception => false;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetInterceptionRegistry() => interceptableFlights.Clear();
 
         public event System.Action<BaseProjectile, ProjectileResolution> Resolved;
         protected virtual bool RegistersIncomingDamage => true;
@@ -90,8 +105,13 @@ namespace SB.Scripts.Projectiles
             float ballisticDescentTimeMultiplier = 1f, float ballisticHitRadius = 0.35f,
             float ballisticTargetClearance = 0.15f)
         {
+            RemoveFromInterceptionRegistry();
             UnregisterIncomingFire();
             launchData = data;
+            var targetAnchors = data.Target != null ? data.Target.GetCompo<ShipProjectileAnchorCompo>() : null;
+            movingTargetAnchors = targetAnchors != null && targetAnchors.TrackMovementDuringFlight ? targetAnchors : null;
+            unchecked { FlightGeneration++; }
+            lastAdvanceFrame = Time.frameCount - 1;
             flightData = data.FlightData.GetValidated();
             this.travelMode = travelMode;
             travelStartSpeed = Mathf.Max(0f, initialStraightSpeed);
@@ -118,7 +138,12 @@ namespace SB.Scripts.Projectiles
             if (data.HitMode == ProjectileHitMode.Normal && IsOriginalTargetAlive())
             {
                 var evasion = data.Target.GetComponent<ShipProjectileEvasion>();
-                if (evasion != null && evasion.TryResolveMiss(data.StartPosition, Random.value, out Vector3 waterPosition))
+                float sample = Random.value;
+                Vector3 waterPosition = data.WaterImpactPosition;
+                bool missed = evasion != null && evasion.isActiveAndEnabled
+                    ? evasion.TryResolveMiss(data.StartPosition, sample, data.HitChanceMultiplier, out waterPosition)
+                    : sample < 1f - data.HitChanceMultiplier;
+                if (missed)
                 {
                     isLuckMiss = true;
                     destination = waterPosition;
@@ -128,6 +153,7 @@ namespace SB.Scripts.Projectiles
             ApplySortingOrder(data.StartPosition, destination);
             travelDirection = (destination - data.StartPosition).normalized;
             BuildFlightPath(data.StartPosition, destination);
+            if (SupportsInterception) interceptableFlights.Add(this);
             if (RegistersIncomingDamage && IsOriginalTargetAlive())
             {
                 incomingFireDisplay = data.Target.GetComponent<ShipIncomingFireDisplay>();
@@ -164,7 +190,14 @@ namespace SB.Scripts.Projectiles
                     SwitchToMissPath();
             }
 
+            if (!isMissPath && !isLuckMiss && movingTargetAnchors != null && IsOriginalTargetAlive())
+            {
+                pathEndPosition = movingTargetAnchors.HitPosition;
+                travelDirection = (pathEndPosition - pathStartPosition).normalized;
+            }
+
             flightElapsed += Time.deltaTime;
+            lastAdvanceFrame = Time.frameCount;
             float rawProgress;
             Vector3 previousPosition = transform.position;
             previousFramePosition = previousPosition;
@@ -198,8 +231,72 @@ namespace SB.Scripts.Projectiles
                 RotateToPath(rawProgress);
             }
 
+            // Resolve the relative swept segment before applying damage, even when a frame
+            // spans both the interception and the original impact.
+            if (interceptorReservation != null &&
+                interceptorReservation.TryInterceptStep(previousPosition, transform.position, true))
+                return;
+
             if (rawProgress >= 1f)
                 ResolveImpact();
+        }
+
+        internal float PredictionOffsetSeconds => lastAdvanceFrame == Time.frameCount ? 0f : Time.deltaTime;
+        public float RemainingPredictionSeconds => Mathf.Max(0f,
+            Mathf.Min(flightDuration - flightElapsed, flightData.LifeTime - lifeElapsed) - PredictionOffsetSeconds);
+
+        public bool TryPredictPosition(float secondsFromNow, out Vector3 position)
+        {
+            position = transform.position;
+            if (!IsFlying || secondsFromNow < 0f || secondsFromNow > RemainingPredictionSeconds) return false;
+            position = EvaluateFlightPosition((flightElapsed + PredictionOffsetSeconds + secondsFromNow) / flightDuration);
+            return true;
+        }
+
+        internal float LastStepImpactFraction => Time.deltaTime > 0f
+            ? Mathf.Clamp01((flightDuration - flightElapsed + Time.deltaTime) / Time.deltaTime) : 1f;
+
+        internal Vector3 EvaluateLastStepPosition(float fraction) =>
+            EvaluateFlightPosition((flightElapsed - Time.deltaTime + Time.deltaTime * fraction) / flightDuration);
+
+        private Vector3 EvaluateFlightPosition(float progress)
+        {
+            progress = Mathf.Clamp01(progress);
+            if (travelMode == ProjectileTravelMode.BallisticArc)
+                return EvaluateBallisticPosition(progress);
+            else if (IsAcceleratedTravel())
+            {
+                Vector3 position = Vector3.Lerp(pathStartPosition, pathEndPosition, EvaluateAcceleratedProgress(progress));
+                if (travelMode == ProjectileTravelMode.AcceleratingArc)
+                    position += Vector3.up * (ArcPeakMultiplier * flightData.ArcHeight * progress * (1f - progress));
+                return position;
+            }
+            return EvaluateArcPosition(progress);
+        }
+
+        internal bool TryReserveInterception(InterceptorProjectile interceptor)
+        {
+            if (interceptor == null || !CanBeIntercepted) return false;
+            interceptorReservation = interceptor;
+            return true;
+        }
+
+        internal void ReleaseInterceptionReservation(InterceptorProjectile interceptor)
+        {
+            if (interceptorReservation == interceptor) interceptorReservation = null;
+        }
+
+        internal bool TryIntercept(InterceptorProjectile interceptor, int generation)
+        {
+            if (!IsFlying || generation != FlightGeneration || interceptorReservation != interceptor) return false;
+            ReleaseToPool(ProjectileResolution.Intercepted);
+            return true;
+        }
+
+        private void RemoveFromInterceptionRegistry()
+        {
+            interceptableFlights.Remove(this);
+            interceptorReservation = null;
         }
 
         private void BuildFlightPath(Vector3 startPosition, Vector3 endPosition)
@@ -303,10 +400,12 @@ namespace SB.Scripts.Projectiles
 
         private void ResolveImpact()
         {
+            RemoveFromInterceptionRegistry();
             UnregisterIncomingFire();
             bool didHitTarget = isMissPath == false && !isLuckMiss && IsOriginalTargetAlive() &&
                                 (!IsBallisticTravel() ||
-                                 DidSegmentReachTarget(previousFramePosition, transform.position, launchData.TargetImpactPosition));
+                                 DidSegmentReachTarget(previousFramePosition, transform.position,
+                                     movingTargetAnchors != null ? pathEndPosition : launchData.TargetImpactPosition));
             if (didHitTarget)
                 OnTargetImpact(launchData.Target, launchData.Damage, pathEndPosition);
             else
@@ -428,6 +527,7 @@ namespace SB.Scripts.Projectiles
 
         private void ReleaseToPool(ProjectileResolution resolution = ProjectileResolution.Cancelled)
         {
+            RemoveFromInterceptionRegistry();
             UnregisterIncomingFire();
             if (isFlying == false)
                 return;
@@ -455,6 +555,8 @@ namespace SB.Scripts.Projectiles
 
         public void OnSpawnedFromPool()
         {
+            movingTargetAnchors = null;
+            RemoveFromInterceptionRegistry();
             UnregisterIncomingFire();
             isFlying = false;
             isImpactHolding = false;
@@ -470,12 +572,14 @@ namespace SB.Scripts.Projectiles
 
         public void OnDespawnedToPool()
         {
+            movingTargetAnchors = null;
             UnregisterIncomingFire();
             NotifyCancelledFlight();
         }
 
         private void NotifyCancelledFlight()
         {
+            RemoveFromInterceptionRegistry();
             if (!isFlying)
                 return;
 

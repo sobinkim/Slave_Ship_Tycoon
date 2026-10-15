@@ -8,6 +8,9 @@ namespace SB.Scripts.Projectiles
         [Header("Anchors")]
         [SerializeField] private Transform hitPoint;
         [SerializeField] private Transform waterImpactPoint;
+        [SerializeField, Tooltip("헤엄치는 크리쳐처럼 이동하는 대상을 향해 포탄의 도착 지점을 갱신합니다.")]
+        private bool trackMovementDuringFlight;
+        public bool TrackMovementDuringFlight => trackMovementDuringFlight;
 
         [Header("Fallback Local Offsets")]
         [SerializeField] private Vector3 hitOffset;

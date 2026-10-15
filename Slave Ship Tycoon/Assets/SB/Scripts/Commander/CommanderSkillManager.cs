@@ -93,7 +93,7 @@ namespace SB.Scripts.Commander
 
         public bool CanUseSkill(CommanderSkillType skillType)
         {
-            if (_isBattleRunning == false || IsEquipped(skillType) == false)
+            if (_isBattleRunning == false || IsEquipped(skillType) == false || !HasCombatSkillTargets())
                 return false;
 
             if (_runtimeStates.TryGetValue(skillType, out CommanderSkillRuntimeState runtimeState) == false ||
@@ -106,6 +106,23 @@ namespace SB.Scripts.Commander
                    runtimeState.RemainingCooldown <= 0f &&
                    _currentGauge >= runtimeState.SkillData.GaugeCost &&
                    skillEffect.CanActivate(_battleSpawnData);
+        }
+
+        private bool HasCombatSkillTargets()
+        {
+            bool hasCreatureRoster = false;
+            foreach (Enemy enemy in _battleSpawnData.EnemySpawnData.Enemies)
+            {
+                if (enemy is not SeaCreatureEnemy creature)
+                    continue;
+
+                hasCreatureRoster = true;
+                if (creature.isActiveAndEnabled && !creature.IsDead && creature.IsEngaged &&
+                    !creature.IsDirectTargetProtected)
+                    return true;
+            }
+
+            return !hasCreatureRoster;
         }
 
         public void SetAutoUseEnabled(bool isEnabled)

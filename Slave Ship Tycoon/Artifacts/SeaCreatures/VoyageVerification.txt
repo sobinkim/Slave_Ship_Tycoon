@@ -1,0 +1,5 @@
+Early cruising=6 distance=1.110836 firstDeltaX=-0.9627261
+Contact phase hits=10 charges=2
+Final running=True wave=2 distance=25.57099 spawned=22 kills=14 passed=0
+Visible voyage lines=36
+Pause distance unchanged=True

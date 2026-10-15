@@ -647,6 +647,8 @@ MonoBehaviour:
   requiresDamagedTarget: 0
   excludesHealingSupportShips: 0
   allowsRuleFallback: 1
+  ignoresCommanderTargetCommand: 0
+  includesMainShipWithEscorts: 0
 --- !u!1 &2388497642920587184
 GameObject:
   m_ObjectHideFlags: 0
@@ -1641,9 +1643,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   label: {fileID: 8242545717178140090}
-  visibleSeconds: 0.35
+  visibleSeconds: 0.9
   minimumIntervalSeconds: 0.4
-  riseLocalUnits: 0.08
+  riseLocalUnits: 0.07
+  driftLocalUnits: 0.04
+  fadeStartNormalized: 0.65
+  popSeconds: 0.08
+  settleSeconds: 0.12
+  entryScale: 0.8
+  peakScale: 1.08
 --- !u!114 &3381800001168109361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1861,7 +1869,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 38317b5b9879c374bad4df039f957f9f, type: 2}
+  - {fileID: -6280075083684697390, guid: cf0e45db7a99bb742a6f0b5bbb5a4f01, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1905,15 +1913,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: MISS
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 38317b5b9879c374bad4df039f957f9f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: cf0e45db7a99bb742a6f0b5bbb5a4f01, type: 2}
+  m_sharedMaterial: {fileID: -6280075083684697390, guid: cf0e45db7a99bb742a6f0b5bbb5a4f01, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 0.72, g: 0.96, b: 1, a: 1}
+  m_fontColor: {r: 0.72, g: 0.89, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1930,17 +1938,17 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 1.4
-  m_fontSizeBase: 1.4
+  m_fontSize: 1.5
+  m_fontSizeBase: 1.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: 2
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

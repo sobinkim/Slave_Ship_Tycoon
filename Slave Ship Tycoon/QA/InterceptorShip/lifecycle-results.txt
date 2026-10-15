@@ -1,0 +1,1 @@
+hp=120 killed=True sink=0 nextBattleRestored=True poolGenerationAdvanced=True pooledHealth=120

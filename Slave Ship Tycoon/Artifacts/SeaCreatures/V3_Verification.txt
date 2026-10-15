@@ -1,0 +1,17 @@
+SAILING worldCreatureDeltaX=0.000 fleetDeltaX=0.669 cameraDeltaX=0.669 targets=0 leftFacing=True
+PHASE Sailing → Combat at 1.0s distance=1.26
+WAVE 1 alive=5 kills=0
+WAVE 2 alive=7 kills=5
+WAVE 3 alive=9 kills=12
+PHASE Combat → Sailing at 39.1s distance=1.27
+RESUMED sailing after encounter kills=21
+PHASE Sailing → Combat at 44.0s distance=7.45
+WAVE 1 alive=5 kills=21
+RESULT stoppedDuringCombat=True resumed=True secondEncounter=True maximumBlockedShooters=3 extraBattleStarts=0 battleEnds=0 sameFleet=True kills=21 gold=32230
+TestEscort_B(Clone) hp=47.18345 dead=False
+TransportMainShip(Clone) hp=100 dead=False
+TestEscort_C(Clone) hp=100 dead=False
+TestEscort_C(Clone) hp=39.44374 dead=False
+TestEscort_A(Clone) hp=100 dead=False
+TestEscort_C(Clone) hp=100 dead=False
+PAUSE distanceStable=True

@@ -1,0 +1,16 @@
+case,fps,mode,shots,intercepted,targetHits,healthBefore,healthAfter,pass
+0,60,Arc,1,1,0,180,180,True
+1,60,AcceleratingStraight,1,1,0,180,180,True
+2,60,AcceleratingArc,1,1,0,180,180,True
+3,60,BallisticArc,1,1,0,180,180,True
+4,15,Arc,1,1,0,180,180,True
+5,15,AcceleratingStraight,1,1,0,180,180,True
+6,15,AcceleratingArc,1,1,0,180,180,True
+7,15,BallisticArc,1,1,0,180,180,True
+8,5,Arc,1,1,0,180,180,True
+9,5,AcceleratingStraight,1,1,0,180,180,True
+10,5,AcceleratingArc,1,1,0,180,180,True
+11,5,BallisticArc,1,1,0,180,180,True
+12,60,Arc,0,0,1,180,150,True
+13,60,Arc,1,1,0,180,180,True
+14,60,Arc,1,1,1,180,150,True

@@ -1,0 +1,4 @@
+WAVE 1 previousWaveAlive=0 active=5 spawned=5 planned=5 kills=0
+WAVE 2 previousWaveAlive=1 active=8 spawned=7 planned=7 kills=4
+WAVE 3 previousWaveAlive=2 active=11 spawned=9 planned=9 kills=10
+RESULT overlaps=1,2 allOverlap=True resumed=True combatStopped=True maxAlive=11 peakHitParticles=18 kills=21 gold=31197

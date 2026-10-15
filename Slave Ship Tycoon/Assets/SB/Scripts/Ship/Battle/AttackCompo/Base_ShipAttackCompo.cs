@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using SB.Core;
 using SB.Core.EventBus;
 using UnityEngine;
@@ -8,6 +10,12 @@ namespace SB.Scripts.AttackCompo
     {
         [SerializeField, Min(0.01f)] private float attackCooldown = 1f;
 
+        [Header("Allied fire lanes")]
+        [SerializeField, Tooltip("살아 있는 아군 함선이 포격 경로를 가리면 사격을 보류합니다. 항해 테스트 씬에서만 켭니다.")]
+        private bool blocksFireThroughAlliedShips;
+        [SerializeField, Min(0.01f), Tooltip("포격 경로를 막는 아군 함체의 반경(월드 단위). 회복과 요격에는 적용하지 않습니다.")]
+        private float alliedHullBlockingRadius = 0.38f;
+
         private Ship ownerShip;
         private TargetSelector targetSelector;
         private ShipCombatStatCompo combatStatCompo;
@@ -16,13 +24,19 @@ namespace SB.Scripts.AttackCompo
         private float currentCooldown;
         private bool _isBattleRunning;
         private int _currentTargetSpawnGeneration;
+        private IReadOnlyList<Ship> alliedEscorts = Array.Empty<Ship>();
+        private MainShip alliedMainShip;
+        private bool attackBlockedByAlly;
+        private Predicate<Ship> clearFireLaneFilter;
 
         private static readonly int AttackSpeedMultiplierHash = UnityEngine.Animator.StringToHash("AttackSpeedMultiplier");
 
         protected TargetSelector TargetSelector => targetSelector;
+        protected Ship OwnerShip => ownerShip;
         protected ShipCombatStatCompo CombatStatCompo => combatStatCompo;
         protected EntityAnimator Animator => animator;
         protected EntityAnimatorTrigger AnimatorTrigger => animatorTrigger;
+        protected bool IsBattleRunning => _isBattleRunning;
         public Ship CurrentTarget { get; private set; }
         public event System.Action<Ship> TargetChanged;
         protected float FinalAttackDamage => combatStatCompo != null ? combatStatCompo.FinalAttackDamage : 0f;
@@ -34,7 +48,11 @@ namespace SB.Scripts.AttackCompo
                                       CurrentTarget.IsDead == false &&
                                       (targetSelector == null || targetSelector.IsValidTarget(CurrentTarget)) &&
                                       CurrentTarget.SpawnGeneration == _currentTargetSpawnGeneration;
-        public bool CanAttack => _isBattleRunning && currentCooldown <= 0f;
+        public bool CanAttack => _isBattleRunning && currentCooldown <= 0f && !IsFireLaneBlocked;
+        public bool IsFireLaneBlocked => TryGetBlockingShip(CurrentTarget, out _);
+        public Ship CurrentBlockingShip => TryGetBlockingShip(CurrentTarget, out Ship blocker) ? blocker : null;
+        public bool BlocksFireThroughAlliedShips => blocksFireThroughAlliedShips;
+        public float AlliedHullBlockingRadius => alliedHullBlockingRadius;
 
         private void OnEnable()
         {
@@ -47,6 +65,7 @@ namespace SB.Scripts.AttackCompo
             Bus<BattleStartEvent>.OnEvent -= RequestTarget;
             Bus<StageBattleEndedEvent>.OnEvent -= HandleBattleEnded;
             _isBattleRunning = false;
+            ClearFireLaneRoster();
             SetTarget(null);
         }
 
@@ -56,6 +75,7 @@ namespace SB.Scripts.AttackCompo
 
             ownerShip = entity as Ship;
             targetSelector = GetCompo<TargetSelector>();
+            clearFireLaneFilter = HasClearFireLaneTo;
             combatStatCompo = GetCompo<ShipCombatStatCompo>();
             animator = GetCompo<EntityAnimator>();
             animatorTrigger = GetCompo<EntityAnimatorTrigger>();
@@ -95,18 +115,21 @@ namespace SB.Scripts.AttackCompo
                 runtimeAnimator.Play(stateHash, 0, 0f);
         }
 
-        public void ResetAttackState()
+        public virtual void ResetAttackState()
         {
             animator?.SetParam("ATTACK", false);
             SetTarget(null);
             _currentTargetSpawnGeneration = 0;
             currentCooldown = 0f;
+            attackBlockedByAlly = false;
             ResetAttackAnimationSpeed();
         }
 
         private void RequestTarget(BattleStartEvent evt)
         {
             targetSelector?.SetBattleSpawnData(evt.BattleSpawnData);
+            alliedEscorts = evt.BattleSpawnData.EscortShips;
+            alliedMainShip = evt.BattleSpawnData.MainShip;
             ResetAttackState();
             _isBattleRunning = true;
             TryAcquireTarget();
@@ -117,17 +140,25 @@ namespace SB.Scripts.AttackCompo
         {
             _isBattleRunning = false;
             ResetAttackState();
+            ClearFireLaneRoster();
         }
 
-        public bool TryAcquireTarget()
+        public virtual bool TryAcquireTarget()
         {
-            Ship selectedTarget = _isBattleRunning && ownerShip != null && ownerShip.isActiveAndEnabled &&
-                            ownerShip.IsDead == false && targetSelector != null
-                ? targetSelector.GetTarget()
-                : null;
+            Ship selectedTarget = null;
+            if (_isBattleRunning && ownerShip != null && ownerShip.isActiveAndEnabled &&
+                !ownerShip.IsDead && targetSelector != null)
+            {
+                bool needsClearLane = blocksFireThroughAlliedShips && targetSelector.Team == TargetTeam.Opponent;
+                selectedTarget = targetSelector.GetTarget(needsClearLane ? clearFireLaneFilter : null);
+                // Keep the blocked target visible for feedback when every valid lane is closed.
+                if (selectedTarget == null && needsClearLane) selectedTarget = targetSelector.GetTarget();
+            }
             SetTarget(selectedTarget);
-            return HasAliveTarget;
+            return HasAliveTarget && HasClearFireLane();
         }
+
+        private bool HasClearFireLaneTo(Ship target) => !TryGetBlockingShip(target, out _);
 
         private void SetTarget(Ship target)
         {
@@ -144,7 +175,7 @@ namespace SB.Scripts.AttackCompo
             TryAcquireTarget();
         }
 
-        public bool EnsureTarget()
+        public virtual bool EnsureTarget()
         {
             if (_isBattleRunning == false || ownerShip == null ||
                 ownerShip.isActiveAndEnabled == false || ownerShip.IsDead)
@@ -153,7 +184,7 @@ namespace SB.Scripts.AttackCompo
                 return false;
             }
 
-            if (HasAliveTarget)
+            if (HasAliveTarget && !IsFireLaneBlocked)
                 return true;
 
             return TryAcquireTarget();
@@ -182,6 +213,7 @@ namespace SB.Scripts.AttackCompo
 
         public bool EnterAttack()
         {
+            attackBlockedByAlly = false;
             if (EnsureTarget() == false)
                 return false;
 
@@ -216,8 +248,71 @@ namespace SB.Scripts.AttackCompo
         protected virtual void OnAttackExit()
         {
             ResetAttackAnimationSpeed();
-            ResetCooldown();
+            if (!attackBlockedByAlly)
+                ResetCooldown();
             ownerShip?.ChangeState(ShipStateType.Idle);
+        }
+
+        public void ConfigureFireOcclusion(bool enabled, float hullBlockingRadius)
+        {
+            blocksFireThroughAlliedShips = enabled;
+            alliedHullBlockingRadius = Mathf.Max(0.01f, hullBlockingRadius);
+        }
+
+        protected bool HasClearFireLane()
+        {
+            if (!IsFireLaneBlocked)
+                return true;
+
+            attackBlockedByAlly = true;
+            return false;
+        }
+
+        public bool TryGetBlockingShip(Ship target, out Ship blockingShip)
+        {
+            blockingShip = null;
+            if (!blocksFireThroughAlliedShips || ownerShip == null || target == null ||
+                ownerShip.myShipData.ShipType == ShipType.Enemy ||
+                (targetSelector != null && targetSelector.Team == TargetTeam.SameTeam))
+                return false;
+
+            Vector2 origin = ownerShip.transform.position;
+            Vector2 path = (Vector2)target.transform.position - origin;
+            float distanceSquared = path.sqrMagnitude;
+            if (distanceSquared <= Mathf.Epsilon)
+                return false;
+
+            float nearestProgress = float.PositiveInfinity;
+            for (int i = 0; i < alliedEscorts.Count; i++)
+                CheckFireLaneBlocker(alliedEscorts[i], origin, path, distanceSquared,
+                    ref blockingShip, ref nearestProgress);
+            CheckFireLaneBlocker(alliedMainShip, origin, path, distanceSquared,
+                ref blockingShip, ref nearestProgress);
+            return blockingShip != null;
+        }
+
+        private void CheckFireLaneBlocker(Ship candidate, Vector2 origin, Vector2 path,
+            float pathDistanceSquared, ref Ship blockingShip, ref float nearestProgress)
+        {
+            if (candidate == null || candidate == ownerShip || !candidate.isActiveAndEnabled || candidate.IsDead)
+                return;
+
+            Vector2 offset = (Vector2)candidate.transform.position - origin;
+            float progress = Vector2.Dot(offset, path) / pathDistanceSquared;
+            if (progress <= 0f || progress >= 1f || progress >= nearestProgress)
+                return;
+            Vector2 distanceFromLane = offset - path * progress;
+            if (distanceFromLane.sqrMagnitude > alliedHullBlockingRadius * alliedHullBlockingRadius)
+                return;
+
+            nearestProgress = progress;
+            blockingShip = candidate;
+        }
+
+        private void ClearFireLaneRoster()
+        {
+            alliedEscorts = Array.Empty<Ship>();
+            alliedMainShip = null;
         }
 
         public void ApplyAttackAnimationSpeed()

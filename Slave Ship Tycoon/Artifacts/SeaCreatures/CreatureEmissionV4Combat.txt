@@ -1,0 +1,1 @@
+Natural hit emission captured=True shaderFlash=0.8578025 phase=Combat wave=1

@@ -17,7 +17,14 @@ namespace SB.Scripts.Projectiles
         [SerializeField, Min(0f), Tooltip("동일 함선의 MISS 문구 재표시 최소 간격. 실제 탄 집계에는 영향 없음")]
         private float minimumIntervalSeconds = .4f;
         [SerializeField, Min(0f)] private float riseLocalUnits = .08f;
+        [SerializeField] private float driftLocalUnits = .04f;
+        [SerializeField, Range(0f, 1f)] private float fadeStartNormalized = .65f;
+        [SerializeField, Min(.01f)] private float popSeconds = .08f;
+        [SerializeField, Min(.01f)] private float settleSeconds = .12f;
+        [SerializeField, Min(.01f)] private float entryScale = .8f;
+        [SerializeField, Min(.01f)] private float peakScale = 1.08f;
         private Vector3 initialLocalPosition;
+        private Vector3 initialLocalScale;
         private float remainingSeconds;
         private float nextAllowedTime;
 
@@ -25,6 +32,7 @@ namespace SB.Scripts.Projectiles
         {
             if (label == null) { Debug.LogError("ShipMissFeedback requires a label.", this); enabled = false; return; }
             initialLocalPosition = label.transform.localPosition;
+            initialLocalScale = label.transform.localScale;
             label.text = "MISS";
             Hide();
         }
@@ -41,6 +49,7 @@ namespace SB.Scripts.Projectiles
             nextAllowedTime = Time.time + minimumIntervalSeconds;
             remainingSeconds = visibleSeconds;
             label.transform.localPosition = initialLocalPosition;
+            label.transform.localScale = initialLocalScale * entryScale;
             label.alpha = 1f;
             label.enabled = true;
         }
@@ -50,15 +59,29 @@ namespace SB.Scripts.Projectiles
             remainingSeconds = Mathf.Max(0f, remainingSeconds - Time.deltaTime);
             float progress = 1f - remainingSeconds /
                 Mathf.Max(MinimumVisibleSeconds, visibleSeconds);
-            label.transform.localPosition = initialLocalPosition + Vector3.up * (riseLocalUnits * progress);
-            label.alpha = 1f - progress;
+            float elapsed = visibleSeconds - remainingSeconds;
+            float pop = Mathf.Clamp01(elapsed / Mathf.Max(.01f, popSeconds));
+            float settle = Mathf.Clamp01((elapsed - popSeconds) / Mathf.Max(.01f, settleSeconds));
+            float scale = elapsed < popSeconds
+                ? Mathf.Lerp(entryScale, peakScale, 1f - Mathf.Pow(1f - pop, 3f))
+                : Mathf.Lerp(peakScale, 1f, Mathf.SmoothStep(0f, 1f, settle));
+            label.transform.localScale = initialLocalScale * scale;
+            label.transform.localPosition = initialLocalPosition +
+                new Vector3(driftLocalUnits * progress, riseLocalUnits * progress, 0f);
+            label.alpha = 1f - Mathf.SmoothStep(0f, 1f,
+                Mathf.InverseLerp(fadeStartNormalized, 1f, progress));
             if (remainingSeconds <= 0f) label.enabled = false;
         }
         private void Hide()
         {
             remainingSeconds = 0f;
             nextAllowedTime = 0f;
-            if (label != null) { label.enabled = false; label.transform.localPosition = initialLocalPosition; }
+            if (label != null)
+            {
+                label.enabled = false;
+                label.transform.localPosition = initialLocalPosition;
+                label.transform.localScale = initialLocalScale;
+            }
         }
     }
 }

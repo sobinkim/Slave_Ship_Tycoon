@@ -26,10 +26,13 @@ namespace SB.Scripts.Projectiles
 
         // The caller supplies one random sample per launch, so long flights do not roll more often.
         public bool TryResolveMiss(Vector3 shotOrigin, float randomSample01, out Vector3 waterPosition)
+            => TryResolveMiss(shotOrigin, randomSample01, 1f, out waterPosition);
+
+        public bool TryResolveMiss(Vector3 shotOrigin, float randomSample01, float hitChanceMultiplier, out Vector3 waterPosition)
         {
             waterPosition = default;
             if (!isActiveAndEnabled || leftWaterPoint == null || rightWaterPoint == null ||
-                randomSample01 >= MissChance) return false;
+                randomSample01 >= 1f - (1f - MissChance) * Mathf.Clamp01(hitChanceMultiplier)) return false;
             waterPosition = shotOrigin.x < transform.position.x ? leftWaterPoint.position : rightWaterPoint.position;
             return true;
         }

@@ -6,9 +6,30 @@
             <ui:Label text="화물 적재" class="screen-title" />
             <ui:Button name="closeButton" text="닫기" class="harbor-button close-button" />
         </ui:VisualElement>
-        <ui:Label text="보스 승리 후 운송할 화물을 준비하세요." class="subtitle" />
-        <ui:Label name="balances" class="cargo-balances" />
-        <ui:VisualElement class="cargo-section">
+        <ui:VisualElement class="reward-preview">
+            <ui:VisualElement class="reward-heading">
+                <ui:Label text="예상 기본 수익" class="reward-title" />
+                <ui:Label text="운송 장비 효과 포함" class="small-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="rewardPreview" class="reward-currencies" picking-mode="Ignore">
+                <ui:VisualElement name="goldPreview" class="reward-currency">
+                    <ui:Label text="골드" class="reward-name" />
+                    <ui:Label name="value" text="0" class="reward-value" />
+                    <ui:Label name="delta" class="reward-delta" />
+                </ui:VisualElement>
+                <ui:VisualElement name="diamondPreview" class="reward-currency">
+                    <ui:Label text="다이아" class="reward-name" />
+                    <ui:Label name="value" text="0" class="reward-value" />
+                    <ui:Label name="delta" class="reward-delta" />
+                </ui:VisualElement>
+                <ui:VisualElement name="emeraldPreview" class="reward-currency">
+                    <ui:Label text="에메랄드" class="reward-name" />
+                    <ui:Label name="value" text="0" class="reward-value" />
+                    <ui:Label name="delta" class="reward-delta" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="cargo-section selected-section">
             <ui:VisualElement class="cargo-heading">
                 <ui:Label text="적재함" class="section-title" />
                 <ui:Label name="capacityText" class="capacity-text" />
@@ -16,10 +37,6 @@
             <ui:Label text="적재한 칸을 누르면 수량 조절 · 화물 비우기" class="small-text cargo-slot-hint" />
             <ui:VisualElement class="capacity-track"><ui:VisualElement name="capacityFill" class="capacity-fill" /></ui:VisualElement>
             <ui:ScrollView name="selectedScroll" class="harbor-scroll" mode="Vertical"><ui:VisualElement name="selectedGrid" class="cargo-grid" /></ui:ScrollView>
-        </ui:VisualElement>
-        <ui:VisualElement class="reward-preview">
-            <ui:Label text="예상 기본 수익 · 운송 장비 효과 포함" class="small-text" />
-            <ui:Label name="rewardPreview" class="reward-values" />
         </ui:VisualElement>
         <ui:VisualElement class="cargo-section catalog-section">
             <ui:Label text="적재 가능한 화물" class="section-title" />

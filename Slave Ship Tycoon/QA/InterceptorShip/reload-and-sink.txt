@@ -1,0 +1,23 @@
+0.02 shots=1 atk=True dead=False state=1080829965 norm=0 sinkMat=0 sinkBlock=0
+0.26 shots=1 atk=True dead=False state=1080829965 norm=0.4896174 sinkMat=0 sinkBlock=0
+0.50 shots=1 atk=False dead=False state=2081823275 norm=0.1364852 sinkMat=0 sinkBlock=0
+0.75 shots=1 atk=False dead=False state=2081823275 norm=0.3384707 sinkMat=0 sinkBlock=0
+1.00 shots=1 atk=False dead=False state=2081823275 norm=0.5396725 sinkMat=0 sinkBlock=0
+1.26 shots=1 atk=False dead=False state=2081823275 norm=0.7428932 sinkMat=0 sinkBlock=0
+1.50 shots=1 atk=False dead=False state=2081823275 norm=0.9430403 sinkMat=0 sinkBlock=0
+1.76 shots=1 atk=False dead=False state=2081823275 norm=1.148071 sinkMat=0 sinkBlock=0
+2.00 shots=1 atk=False dead=False state=2081823275 norm=1.344081 sinkMat=0 sinkBlock=0
+2.26 shots=2 atk=True dead=False state=1080829965 norm=0.0851348 sinkMat=0 sinkBlock=0
+2.50 shots=2 atk=True dead=False state=1080829965 norm=0.5731114 sinkMat=0 sinkBlock=0
+2.76 shots=2 atk=False dead=False state=2081823275 norm=0.1880396 sinkMat=0 sinkBlock=0
+3.01 shots=2 atk=False dead=False state=2081823275 norm=0.3903726 sinkMat=0 sinkBlock=0
+3.26 shots=2 atk=False dead=False state=2081823275 norm=0.591906 sinkMat=0 sinkBlock=0
+3.51 shots=2 atk=False dead=False state=2081823275 norm=0.7934805 sinkMat=0 sinkBlock=0
+3.76 shots=2 atk=False dead=False state=2081823275 norm=0.9941069 sinkMat=0 sinkBlock=0
+4.01 shots=2 atk=False dead=False state=2081823275 norm=1.195524 sinkMat=0 sinkBlock=0
+4.26 shots=2 atk=False dead=True state=1293411866 norm=0.3187098 sinkMat=0 sinkBlock=0.2367761
+4.51 shots=2 atk=False dead=True state=1293411866 norm=0.6515787 sinkMat=0 sinkBlock=0.7047905
+4.76 shots=2 atk=False dead=True state=1293411866 norm=0.9853063 sinkMat=0 sinkBlock=1
+5.01 shots=2 atk=False dead=True state=1293411866 norm=1.318497 sinkMat=0 sinkBlock=1
+intercepted=2 dead=True sink=1
+restored=True

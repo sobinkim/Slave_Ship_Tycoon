@@ -1,0 +1,71 @@
+.screen, .command-area, .bottom-nav, .lower-panel-background {
+    background-image: none;
+}
+.harbor-button, .ship-card, .formation-slot, .enemy-column,
+.attack-details, .merge-preview, .recruitment-panel, .recruitment-card,
+.recruitment-guide, .cargo-section, .cargo-card, .cargo-detail-panel,
+.reward-preview, .settlement-card, .settlement-goal, .settlement-reward,
+.upgrade-panel, .commander-settings, .upgrade-row, .skill-detail,
+.currency-bar, .route-card, .command-status {
+    background-image: url("project://database/Assets/SB/UI/Shared/Textures/HarborNeutralIronRimWood.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    -unity-slice-left: var(--texture-frame-slice);
+    -unity-slice-right: var(--texture-frame-slice);
+    -unity-slice-top: var(--texture-frame-slice);
+    -unity-slice-bottom: var(--texture-frame-slice);
+    -unity-slice-scale: var(--texture-frame-scale);
+    -unity-background-image-tint-color: var(--color-texture-panel);
+}
+.attack-details, .merge-preview, .recruitment-guide, .cargo-card,
+.reward-preview, .settlement-goal, .settlement-reward {
+    -unity-slice-scale: var(--texture-frame-scale);
+    -unity-background-image-tint-color: var(--color-texture-inset);
+}
+.ship-card, .formation-slot, .enemy-column, .recruitment-card,
+.upgrade-row, .skill-detail, .currency-bar, .command-status {
+    -unity-slice-scale: var(--texture-frame-scale);
+}
+.route-card.is-transport { background-image: none; }
+.harbor-button {
+    -unity-slice-scale: var(--texture-frame-scale);
+    -unity-background-image-tint-color: var(--color-texture-control);
+}
+.harbor-button:hover { -unity-background-image-tint-color: var(--color-texture-control-hover); }
+.harbor-button:active { -unity-background-image-tint-color: var(--color-texture-control-pressed); }
+.primary-button {
+    background-image: url("project://database/Assets/SB/UI/Shared/Textures/HarborShipGoldRimWoodGrainV2.png");
+}
+.harbor-button.upgrade-action:disabled {
+    -unity-background-image-tint-color: var(--color-texture-disabled);
+}
+.ship-card:hover, .ship-card.is-selected,
+.formation-slot.is-selected, .enemy-column.is-target,
+.harbor-button.command-skill.is-ready {
+    -unity-background-image-tint-color: var(--color-texture-control);
+}
+
+.harbor-button.command-skill,
+.harbor-button.command-skill:hover,
+.harbor-button.command-skill:active,
+.harbor-button.command-skill.is-ready {
+    -unity-background-image-tint-color: var(--color-texture-skill);
+}
+
+.upgrade-panel, .commander-settings {
+    background-image: url("project://database/Assets/SB/UI/Shared/Textures/HarborFineWoodTile.png");
+    background-size: var(--texture-panel-wood-size);
+    background-repeat: repeat;
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+    -unity-slice-scale: 0px;
+    -unity-background-image-tint-color: var(--color-texture-fine-wood);
+    border-width: 7px;
+    border-top-color: var(--color-metal-edge-light);
+    border-left-color: var(--color-metal-edge-mid);
+    border-right-color: var(--color-metal-edge-mid);
+    border-bottom-color: var(--color-metal-edge-dark);
+    border-radius: 6px;
+}

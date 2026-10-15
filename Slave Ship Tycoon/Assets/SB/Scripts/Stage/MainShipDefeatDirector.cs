@@ -89,6 +89,13 @@ namespace SB.Scripts
             SalvoShotCount = 0;
             SalvoImpactCount = 0;
             SalvoLaunchFrame = -1;
+
+            // Creatures keep attacking the main ship directly after the escorts fall.
+            // Their encounter does not use the enemy fleet's cannon defeat sequence.
+            foreach (Enemy enemy in battle.EnemySpawnData.Enemies)
+                if (enemy is SeaCreatureEnemy)
+                    return;
+
             Phase = MainShipDefeatPhase.Combat;
         }
 
