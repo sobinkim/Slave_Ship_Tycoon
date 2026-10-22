@@ -16,6 +16,7 @@ namespace SB.UI.InGame
     public sealed partial class InGameToolkitScreen : MonoBehaviour
     {
         private const long CompactBalanceThreshold = 1000000;
+        private const float BossButtonStartupInputGuardSeconds = 0.35f;
 
         [Serializable] public sealed class CurrencySlot
         {
@@ -55,8 +56,10 @@ namespace SB.UI.InGame
         private readonly List<GainLog> logs = new List<GainLog>();
         private VisualElement root;
         private Coroutine spawnRoutine;
+        private float bossButtonInputAvailableAt;
         private StageStartedEvent currentStage;
         private bool hasStage;
+        private bool hasBossBattleEnded;
         private bool isRouteDirty;
         private int completedTransportStages;
         private readonly List<Label> transportStops = new List<Label>();
@@ -64,6 +67,7 @@ namespace SB.UI.InGame
 
         private void OnEnable()
         {
+            bossButtonInputAvailableAt = Time.unscaledTime + BossButtonStartupInputGuardSeconds;
             if (document == null || currencyManager == null || cargoManager == null || gameFlowManager == null ||
                 chapterDatabase == null || panelManager == null || recruitmentScreen == null || cargoScreen == null || upgradePanel == null ||
                 marketPriceManager == null || transportEquipmentManager == null)
@@ -75,6 +79,10 @@ namespace SB.UI.InGame
             transportStops.Clear();
             BuildCurrencies();
             BindTransportPresentation();
+            BindBossBattlePresentation();
+            RefreshBossBattlePresentation(hasStage && currentStage.IsBossBattle && !hasBossBattleEnded);
+            BindBossTransportPresentation();
+            RefreshBossTransportPresentation(hasStage && currentStage.RouteType == ChapterRouteType.Sell);
             transportReturnButton = root.Q<Button>("transportReturn");
             transportReturnButton.clicked += ReturnToFarming;
             root.Q<Button>("bossButton").clicked += OpenCargo;
@@ -87,6 +95,7 @@ namespace SB.UI.InGame
             Bus<CurrencyChangedEvent>.OnEvent += OnCurrencyChanged;
             Bus<CurrencyAddedEvent>.OnEvent += OnCurrencyAdded;
             Bus<StageStartedEvent>.OnEvent += OnStageStarted;
+            Bus<StageBattleEndedEvent>.OnEvent += OnBossBattleEnded;
             Bus<EvenStageClearedEvent>.OnEvent += OnTransportStageCleared;
             Bus<SellChapterStartedEvent>.OnEvent += OnSellStarted;
             Bus<ObtainChapterStartedEvent>.OnEvent += OnObtainStarted;
@@ -103,6 +112,7 @@ namespace SB.UI.InGame
             Bus<CurrencyChangedEvent>.OnEvent -= OnCurrencyChanged;
             Bus<CurrencyAddedEvent>.OnEvent -= OnCurrencyAdded;
             Bus<StageStartedEvent>.OnEvent -= OnStageStarted;
+            Bus<StageBattleEndedEvent>.OnEvent -= OnBossBattleEnded;
             Bus<EvenStageClearedEvent>.OnEvent -= OnTransportStageCleared;
             Bus<SellChapterStartedEvent>.OnEvent -= OnSellStarted;
             Bus<ObtainChapterStartedEvent>.OnEvent -= OnObtainStarted;
@@ -114,6 +124,9 @@ namespace SB.UI.InGame
             pendingLogs.Clear();
             logs.Clear();
             ClearTransportPresentation();
+            UnbindTransportRevenue();
+            ClearBossBattlePresentation();
+            ClearBossTransportPresentation();
             if (root == null) return;
             if (transportReturnButton != null) transportReturnButton.clicked -= ReturnToFarming;
             transportReturnButton = null;
@@ -127,6 +140,8 @@ namespace SB.UI.InGame
 
         private void Update()
         {
+            UpdateBossBattlePresentation();
+            UpdateBossTransportPresentation();
             if (transportReturnButton != null) transportReturnButton.SetEnabled(gameFlowManager.CanReturnToFarming);
             for (int i = logs.Count - 1; i >= 0; i--)
             {
@@ -141,6 +156,8 @@ namespace SB.UI.InGame
             if (!isRouteDirty || !hasStage || root == null) return;
             isRouteDirty = false;
             bool isTransport = currentStage.RouteType == ChapterRouteType.Sell;
+            RefreshBossBattlePresentation(!isTransport && currentStage.IsBossBattle && !hasBossBattleEnded);
+            RefreshBossTransportPresentation(isTransport);
             bool hasChapter = chapterDatabase.TryGetChapter(currentStage.Chapter, out ChapterContainer chapter);
             int total = hasChapter ? chapter.MaxStage : currentStage.Stage;
             bool isBlockade = isTransport && hasChapter && chapter.IsFinalStage(currentStage.Stage);
@@ -149,7 +166,7 @@ namespace SB.UI.InGame
             root.Q<Label>("routeNumber").text = $"항로 {currentStage.Chapter:00}";
             root.Q<Label>("routeTitle").text = isBlockade ? "마지막 봉쇄선" : isTransport ? transportTitle : currentStage.IsBossBattle ? bossTitle : pirateTitle;
             root.Q<Label>("routeDetail").text = isBlockade ? "봉쇄 함대를 돌파하면 항구에서 정산합니다" : isTransport ? transportDescription : currentStage.IsBossBattle ? bossDescription : pirateDescription;
-            root.Q<Label>("stageProgress").text = $"{currentStage.Stage} / {total} 구간";
+            root.Q<Label>("stageProgress").text = $"{currentStage.Stage} / {total}";
             root.Q("stageProgress").EnableInClassList("hidden", !isTransport);
             root.Q("transportCargo").EnableInClassList("hidden", !isTransport || transportItems.Count == 0);
             root.Q("stageTrack").EnableInClassList("hidden", !isTransport);
@@ -160,13 +177,14 @@ namespace SB.UI.InGame
                 root.Q<Label>("transportBeat").text = completedTransportStages >= total ? "항구 도착 · 화물 하역 준비" :
                     isBlockade ? "봉쇄선을 돌파하면 정산" : $"항구까지 {Mathf.Max(0, total - completedTransportStages)}전 · 승리할 때마다 시세 상승";
             }
-            root.Q("bossEntry").EnableInClassList("hidden", isTransport);
+            root.Q("bossEntry").RemoveFromClassList("hidden");
             transportReturnButton.EnableInClassList("hidden", !isTransport);
             bool canResume = !isTransport && gameFlowManager.HasSuspendedTransport;
-            root.Q<Button>("bossButton").text = canResume ? "운송 재개" : currentStage.IsBossBattle ? "전투 중" : "보스 도전";
-            root.Q<Button>("bossButton").SetEnabled(canResume ? gameFlowManager.CanResumeTransport : gameFlowManager.CanStartBossBattle);
-            root.Q<Label>("bossHint").text = canResume ? $"항로 {gameFlowManager.SuspendedTransportChapter} · {gameFlowManager.SuspendedTransportStage}구간부터 계속" :
+            root.Q<Label>("bossButtonLabel").text = isTransport ? "운송 중" : canResume ? "운송 재개" : currentStage.IsBossBattle ? "전투 중" : "보스도전";
+            root.Q<Button>("bossButton").SetEnabled(!isTransport && (canResume ? gameFlowManager.CanResumeTransport : gameFlowManager.CanStartBossBattle));
+            root.Q<Label>("bossHint").text = isTransport ? "운송 중에는 보스에 도전할 수 없습니다" : canResume ? $"항로 {gameFlowManager.SuspendedTransportChapter} · {gameFlowManager.SuspendedTransportStage}구간부터 계속" :
                 currentStage.IsBossBattle ? "봉쇄 함대를 격파하세요" : "승리 시 운송 항로 개방";
+            root.Q<Button>("bossButton").tooltip = root.Q<Label>("bossHint").text;
         }
 
         private void BuildCurrencies()
@@ -243,9 +261,17 @@ namespace SB.UI.InGame
         private void OnStageStarted(StageStartedEvent evt)
         {
             currentStage = evt; hasStage = true; isRouteDirty = true;
+            hasBossBattleEnded = false;
             completedTransportStages = evt.RouteType == ChapterRouteType.Sell ? Mathf.Max(0, evt.Stage - 1) : 0;
             if (evt.RouteType == ChapterRouteType.Sell && !transportInitialized && transportInitializeRoutine == null)
                 PrepareTransportPresentation();
+        }
+
+        private void OnBossBattleEnded(StageBattleEndedEvent evt)
+        {
+            if (!hasStage || !currentStage.IsBossBattle) return;
+            hasBossBattleEnded = true;
+            RefreshBossBattlePresentation(false);
         }
 
         private void OnTransportStageCleared(EvenStageClearedEvent evt)
@@ -284,6 +310,8 @@ namespace SB.UI.InGame
 
         private void OpenCargo()
         {
+            if (Time.unscaledTime < bossButtonInputAvailableAt) return;
+            if (hasStage && currentStage.RouteType == ChapterRouteType.Sell) return;
             if (gameFlowManager.HasSuspendedTransport) gameFlowManager.ResumeTransport();
             else cargoScreen.Open();
         }

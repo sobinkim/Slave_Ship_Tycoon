@@ -39,6 +39,7 @@ namespace SB.Scripts
         private readonly System.Random cosmeticRandom = new System.Random();
         private readonly List<RegroupingEnemy> regroupingEnemies = new List<RegroupingEnemy>();
         private Vector3 enemyFleetRootStartPosition;
+        private bool hasFleetRootStartPosition;
         private BattleSpawnData currentBattleSpawnData;
         private float regroupElapsed;
         private bool isRegrouping;
@@ -46,6 +47,7 @@ namespace SB.Scripts
 
         private void OnEnable()
         {
+            hasFleetRootStartPosition = enemyFleetRoot != null;
             if (enemyFleetRoot != null)
                 enemyFleetRootStartPosition = enemyFleetRoot.position;
 
@@ -56,6 +58,7 @@ namespace SB.Scripts
         {
             Bus<StageBattleEndedEvent>.OnEvent -= ResetEnemyFleetRootPosition;
             CancelEncounterSequence();
+            hasFleetRootStartPosition = false;
         }
 
         private void Update()
@@ -207,7 +210,7 @@ namespace SB.Scripts
                 }
             }
             ClearEncounterState();
-            if (enemyFleetRoot != null)
+            if (enemyFleetRoot != null && hasFleetRootStartPosition)
                 enemyFleetRoot.position = enemyFleetRootStartPosition;
             if (wasPlaying)
                 Bus<StopEncounterSequence>.Raise(new StopEncounterSequence());

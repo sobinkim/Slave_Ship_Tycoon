@@ -56,3 +56,21 @@
 - 마지막 웨이브와 이전 웨이브의 잔여 적·침수를 모두 정리한 뒤, 매번 기존 함대 준비 → 전투 참조 재연결 → 재항해 순서로 진행합니다. 70% 처치 증원 시점에는 복구하지 않습니다.
 - 파괴된 호위선의 체력·사망 애니메이션·함체 외형은 기존 복구 경로가 복원합니다. 생존 함선 체력과 항해 거리는 유지하며, 새 Inspector 항목이나 UI 변경은 없습니다.
 - 변경 파일: `SeaCreatureSurvivalDirector.cs`, `StageSpawnManager.cs`. 기존 복구 경로와 호출 시점을 코드로 확인하고 Unity C# 컴파일을 확인했습니다. 이번 수정에서 별도 실행 테스트는 수행하지 않았습니다.
+
+## 해적·운송 이동 물살 통일 (2026-10-19)
+
+- 두 해역 모두 함선 프리팹의 `ShipWakeEffect`와 기존 흰 물살·포말을 사용합니다. 해적 경로는 전투 초기화가 함선을 Idle로 바꾸므로, 초기화 직후와 다음 무리 재항해 시 Move로 전환합니다. 조우·항해 종료 시에는 Idle로 전환해 기존 페이드아웃을 사용합니다.
+- `SeaVoyagePresentation.cs`와 메타 파일, 전용 설치 스크립트 `AgentScripts/InstallSeaVoyage.cs`를 삭제했습니다. 실제 씬과 테스트 씬에서 각각 `VoyageMotion`과 자식 36개(선 렌더러 36개)를 Editor API로 제거했습니다. `SeaVoyageMotor`의 이동·카메라 참조는 유지했습니다.
+- 관련 설치·검사 스크립트의 삭제된 타입/필드 참조와 물살 안내 문서도 정리했습니다. 함선 프리팹과 물살 수치는 바꾸지 않았으며, 새 Inspector 연결은 없습니다. 조절은 기존 `Presentation/ShipWaterWake`의 Fade In/Out, Foam Color, Ripple, Trailing Foam 필드를 사용합니다.
+- 두 씬의 필수 참조와 Missing Script 0개를 확인했습니다. 삭제 대상과 그 부모 Transform·디렉터를 제외한 기존 컴포넌트 설정은 씬 정리 전후 동일합니다. C# 컴파일 오류 없음.
+- 실제 씬 Play 검증: 6척의 해적 항해 표시, 조우 후 페이드아웃, 동일 함선 인스턴스로 다음 무리 재항해, 운송 접근 표시, 운송 전투 페이드아웃, 운송→해적 전환, 항해 종료 페이드아웃이 모두 통과했습니다. 다음 무리 검증은 정상 체력/사망 이벤트로 3웨이브를 빠르게 처치해 진행했습니다.
+- 검증 코드: `AgentScripts/VerifyUnifiedShipWake.cs`. 결과와 원본 비율 캡처: `Artifacts/MovementEffects/Verification.txt`, `PirateSailing.png`, `PirateCombat.png`, `TransportSailing.png`.
+- 작업 전 존재하던 `MerchantLedger needs an icon.` 오류와 Play 종료 시 `SeaVoyageMotor`의 파괴된 Transform 참조 오류는 별도입니다. 이번 Play 검증 중 새 종류의 런타임 오류는 없었습니다.
+- 작업 전 상태 사본은 `AgentScripts/Backups/UnifiedShipWake-20261019/`에 보관했습니다. 기존 씬·UI·크리쳐 작업 변경은 보존했습니다.
+
+변경 파일:
+
+- 런타임: `Assets/SB/Scripts/Stage/SeaCreatureSurvivalDirector.cs`, `Assets/SB/Animations/Scenes/SampleScene.unity`, `Assets/SB/Animations/Scenes/SeaCreatureTestScene.unity`.
+- 삭제: `Assets/SB/Scripts/Visual/SeaVoyagePresentation.cs`와 `.meta`, `AgentScripts/InstallSeaVoyage.cs`.
+- 도구: `AgentScripts/InstallPirateCreatureCombat.cs`, `AgentScripts/InstallSeaCreatureV3.cs`, `AgentScripts/InspectPirateIntegration.cs`, 새 검증 코드 `AgentScripts/VerifyUnifiedShipWake.cs`.
+- 문서: 이 문서, `Docs/SeaCreatureSurvivalTest.md`, `Docs/UserGuide/17_배경_패럴랙스_물살.md`.

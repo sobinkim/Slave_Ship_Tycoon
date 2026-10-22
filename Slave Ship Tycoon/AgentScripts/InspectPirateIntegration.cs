@@ -13,7 +13,7 @@ public static class InspectPirateIntegration
         var root = scene.GetRootGameObjects().Single(g => g.name == "PirateSeaCreatureCombat");
         var director = root.GetComponent<SeaCreatureSurvivalDirector>();
         var so = new SerializedObject(director);
-        string[] required = { "fleetSpawner", "poolingManager", "currencyManager", "swarmerPrefab", "chargerPrefab", "creatureRoot", "voyagePresentation", "voyageMotor", "battleCamera" };
+        string[] required = { "fleetSpawner", "poolingManager", "currencyManager", "swarmerPrefab", "chargerPrefab", "creatureRoot", "voyageMotor", "battleCamera" };
         var b = new StringBuilder();
         foreach (string field in required)
         {

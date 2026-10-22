@@ -1080,6 +1080,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 5000541479486844656}
   waterImpactPoint: {fileID: 9026020258565857324}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &2584001609955169411
@@ -1107,7 +1108,7 @@ Transform:
   m_GameObject: {fileID: 2584001609955169411}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.29, y: 0.067, z: 0}
+  m_LocalPosition: {x: 0.29, y: -0.02, z: 0}
   m_LocalScale: {x: 1.2631578, y: 1.2173913, z: 1.2173913}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1217,6 +1218,7 @@ GameObject:
   - component: {fileID: 1786188405895975545}
   - component: {fileID: 5519110631891817249}
   - component: {fileID: 1927367816497425035}
+  - component: {fileID: 4595884149780705744}
   m_Layer: 0
   m_Name: TestMainShip
   m_TagString: Untagged
@@ -1237,7 +1239,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 452234635689181890}
+  - {fileID: 244371164218738570}
   - {fileID: 1533726282008456202}
   - {fileID: 7052983054855086514}
   - {fileID: 5648407895672082940}
@@ -1407,6 +1409,25 @@ MonoBehaviour:
   hookIcon: {fileID: 3742734343606940838}
   markerColor: {r: 1, g: 0.08, b: 0.08, a: 1}
   sortingOrderOffset: 20
+--- !u!114 &4595884149780705744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2953866507785636575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 1689721241314480839}
+  motionRoot: {fileID: 244371164218738570}
+  shipAnimator: {fileID: 6668740597459163566}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &4051634010169752841
 GameObject:
   m_ObjectHideFlags: 0
@@ -1614,6 +1635,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &6063129145523603419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 244371164218738570}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &244371164218738570
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6063129145523603419}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 452234635689181890}
+  m_Father: {fileID: 2972453133516258590}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6335518732213277754
 GameObject:
   m_ObjectHideFlags: 0
@@ -1649,7 +1702,7 @@ RectTransform:
   - {fileID: 873934202268809518}
   - {fileID: 5000541479486844656}
   - {fileID: 9026020258565857324}
-  m_Father: {fileID: 2972453133516258590}
+  m_Father: {fileID: 244371164218738570}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1805,6 +1858,7 @@ MonoBehaviour:
   allowsRuleFallback: 1
   ignoresCommanderTargetCommand: 0
   includesMainShipWithEscorts: 0
+  requiresEngagedSeaCreatures: 0
 --- !u!1 &8118607225556244332
 GameObject:
   m_ObjectHideFlags: 0
@@ -2185,6 +2239,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5812086166158358676}
     m_Modifications:
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: muzzleEffectPrefab
+      value: 
+      objectReference: {fileID: 7335811388565860814, guid: ad9018d13e1309e4f89217da593f724d, type: 3}
     - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
       propertyPath: 'firePoints.Array.data[0]'
       value: 

@@ -129,6 +129,30 @@ namespace SB.Scripts
             SpawnStageBattle(chapter, stage);
         }
 
+        public bool SpawnPursuitBattle(StageEnemyLayout layout, int targetSlot,
+            out Enemy target, out BattleSpawnData battle)
+        {
+            target = null;
+            battle = default;
+            if (layout == null || targetSlot < 0 || targetSlot >= StageEnemyLayout.SlotCount ||
+                layout.GetEnemyAt(targetSlot) == null || stageEncounterDirector == null || !ValidateLayout(layout))
+                return false;
+            pirateSeaCreatureDirector?.StopEncounter();
+            ClearSpawnedEnemies();
+            if (!TryPreparePlayerFleet(out MainShip mainShip, out List<Ship> escorts) ||
+                !TrySpawnLayout(layout, out List<Enemy> enemies)) return false;
+            foreach (Enemy enemy in enemies)
+                if (enemy.myShipData.SpawnSlot == new Vector2Int(targetSlot % StageEnemyLayout.ColumnCount,
+                    targetSlot / StageEnemyLayout.ColumnCount)) target = enemy;
+            if (target == null) return false;
+            mainShip?.GetCompo<SB.Core.EntityHealth>()?.ResetHealth();
+            foreach (Ship ship in escorts) ship.GetCompo<SB.Core.EntityHealth>()?.ResetHealth();
+            battle = new BattleSpawnData(mainShip, escorts, new StageEnemySpawnData(enemies));
+            Bus<StageBattleInitializedEvent>.Raise(new StageBattleInitializedEvent(battle));
+            stageEncounterDirector.PlayEncounterSequence(battle);
+            return true;
+        }
+
         public void ClearSpawnedBattleParticipants()
         {
             ClearSpawnedPlayerFleet();
@@ -356,6 +380,12 @@ namespace SB.Scripts
                 return false;
             }
 
+            return TrySpawnLayout(layout, out spawnedEnemies);
+        }
+
+        private bool TrySpawnLayout(StageEnemyLayout layout, out List<Enemy> spawnedEnemies)
+        {
+            spawnedEnemies = null;
             if (!ValidateLayout(layout))
                 return false;
 
@@ -384,7 +414,7 @@ namespace SB.Scripts
             if (spawnedEnemies.Count > 0)
                 return true;
 
-            Debug.LogError($"Chapter {chapter}, Stage {stage} did not spawn any enemies.", this);
+            Debug.LogError($"{layout.name} did not spawn any enemies.", this);
             return false;
         }
 

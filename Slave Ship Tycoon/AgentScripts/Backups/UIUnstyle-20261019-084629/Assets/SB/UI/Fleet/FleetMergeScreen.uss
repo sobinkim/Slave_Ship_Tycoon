@@ -1,0 +1,6 @@
+.merge-preview { flex-direction: row; height: 270px; flex-shrink: 0; padding: 24px; background-color: transparent; border-bottom-width: var(--border-control-width); border-bottom-color: var(--color-border); }
+.merge-preview-side { flex-grow: 1; flex-basis: 0; align-items: stretch; }
+.merge-arrow { width: 100px; -unity-text-align: middle-center; color: var(--color-accent); font-size: 60px; }
+.material-slots { flex-direction: row; height: 240px; flex-shrink: 0; margin-top: 20px; }
+.material-slots > .ship-card { flex-grow: 1; flex-basis: 0; height: auto; width: auto; margin: 8px; }
+#resultGrid > .ship-card { width: 31.8%; height: 330px; }

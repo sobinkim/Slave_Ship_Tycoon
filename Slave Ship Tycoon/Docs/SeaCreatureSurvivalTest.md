@@ -23,7 +23,7 @@
 - 실제 피해가 들어오면 착탄 지점에 크림색 타격광과 물방울 파편이 짧게 표시됩니다. 빗나감·무적·0 피해·회복에는 표시하지 않고, 마지막 치명 타격에도 표시합니다.
 - 이미지 생성은 built-in image_gen을 사용했습니다. 최종 이미지 경로와 사용 프롬프트는 [이미지 제작 기록](SeaCreatureV3Art.md)에 있습니다.
 - V4에서는 현재 견습 포격선과 운송선 그림을 직접 참고하여 머리와 몸체를 더 둥글게, 외곽선과 명암을 더 단순하게 정리했습니다. 현재 사용 이미지는 `ReefGlider_V4.png`, `ReefbackLeviathan_V4.png`이며 [V4 제작 기록·프롬프트](SeaCreatureV4Art.md)에 정리했습니다.
-- 피격 순간 어두운 외곽선을 포함한 스프라이트 전체가 따뜻한 아이보리색으로 짧게 발광합니다. 투명 영역과 수면 경계는 유지합니다.
+- 피격 순간 어두운 외곽선을 포함한 스프라이트 전체가 흰색으로 짧게 발광합니다. 투명 영역과 수면 경계는 유지합니다.
 
 ## Inspector
 
@@ -76,7 +76,7 @@
 
 ## 변경 파일과 범위
 
-- 전용 흐름/연출: `SeaCreatureSurvivalDirector.cs`, `SeaCreatureEnemy.cs`, `SeaVoyageMotor.cs`, `SeaVoyagePresentation.cs`, `SeaCreatureSurfacePresentation.cs`.
+- 전용 흐름/연출: `SeaCreatureSurvivalDirector.cs`, `SeaCreatureEnemy.cs`, `SeaVoyageMotor.cs`, `SeaCreatureSurfacePresentation.cs`. 함선 이동 물살은 운송 해역과 같은 프리팹의 `ShipWakeEffect`를 사용하며, 별도 선 기반 연출과 `VoyageMotion`은 제거했습니다.
 - 처치율 웨이브/피격 추가: `SeaCreatureSurvivalDirector.cs`, `SeaCreatureHitFeedback.cs`, `SeaCreatureHit.shader`, 크리쳐 프리팹 2개와 피격 머티리얼 2개, 테스트 씬의 처치율 값.
 - 공통 코드의 선택 옵션: `Base_ShipAttackCompo.cs`, `ArcProjectileAttackCompo.cs`, `TargetSelector.cs`, `ParallaxLayer.cs`. 앞 함선 차단과 미조우 표적 제외는 이 테스트에서 명시적으로 켭니다.
 - 테스트 씬, 크리쳐 프리팹 2개, V3 스프라이트 2개, 수면 셰이더 2개/전용 머티리얼, `UI/SeaCreatureTest/`.

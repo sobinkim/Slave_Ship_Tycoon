@@ -10,6 +10,11 @@ namespace SB.Scripts.AttackCompo
     {
         [SerializeField, Min(0.01f)] private float attackCooldown = 1f;
 
+        [Header("Muzzle")]
+        [SerializeField] private SB.Scripts.Projectiles.ShipMuzzleEffect muzzleEffectPrefab;
+        [SerializeField, Min(0.01f), Tooltip("포구 이펙트의 크기 배율")]
+        private float muzzleEffectScale = 1f;
+
         [Header("Allied fire lanes")]
         [SerializeField, Tooltip("살아 있는 아군 함선이 포격 경로를 가리면 사격을 보류합니다. 항해 테스트 씬에서만 켭니다.")]
         private bool blocksFireThroughAlliedShips;
@@ -244,6 +249,16 @@ namespace SB.Scripts.AttackCompo
         }
 
         protected abstract void Fire();
+
+        protected void PlayMuzzleEffect(Transform firePoint, Vector3 direction)
+        {
+            if (muzzleEffectPrefab == null || firePoint == null || PoolingManager.Instance == null)
+                return;
+
+            var effect = PoolingManager.Instance.Get(muzzleEffectPrefab, firePoint.position, Quaternion.identity);
+            if (effect != null)
+                effect.Play(firePoint, direction, muzzleEffectScale);
+        }
 
         protected virtual void OnAttackExit()
         {

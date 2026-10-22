@@ -6,9 +6,9 @@
 
 - 함대 배치에서 아군과 적군은 중앙 화살표를 제외한 공간을 **50:50**으로 사용합니다. 두 영역의 높이도 같습니다. 아군 `PlayerFleetLoadout`의 호위선 8칸·후열 중앙 메인 함선 고정 규칙을 유지합니다.
 - 개별 `편성 해제`와 `선택 취소` 버튼을 제거했습니다. `전체 편성 해제`는 호위선 전 슬롯을 `TryRemoveEscort`로 해제하고 선택 상태를 초기화합니다. 메인 함선은 고정이며, 같은 카드/슬롯을 다시 눌러 선택을 취소할 수 있습니다. 편성된 호위선이 없으면 전체 해제 버튼은 비활성화합니다.
-- 모집 화면은 상단 전투/HUD를 남기고 하단에 모집 카드·아이콘·1회/묶음 모집 버튼·가격을 배치합니다. 왼쪽은 입항 안내, 오른쪽은 현재 모집 종류의 카드입니다. 별도의 모집 종류나 광고·소환 레벨 시스템을 추가한 요구가 아닙니다.
+- 모집 화면은 상단 전투/HUD를 남기고 하단에 모집 카드·아이콘·1회/15회 모집 버튼·가격을 배치합니다. 결과창의 다시 모집 횟수는 직전 모집 횟수와 같습니다. 왼쪽 입항 안내는 제거된 상태입니다.
 - 뽑기 결과 연출은 기존 전체 화면 모달을 유지합니다. 하단 영역 제한은 모집 구매 화면에만 적용합니다. 사용자가 승인한 모집 구매 화면의 배치는 유지합니다.
-- 모집 가격/재화/결과는 기존 `EscortGachaManager`에서 가져옵니다. 현재 1회 5다이아, 묶음 11회 55다이아입니다. 이미지에 있는 다른 게임의 숫자를 게임 규칙으로 사용하지 않습니다.
+- 모집 가격/재화/결과는 기존 `EscortGachaManager`에서 가져옵니다. 현재 1회 5다이아, 15회 75다이아입니다. 이미지에 있는 다른 게임의 숫자를 게임 규칙으로 사용하지 않습니다.
 - 뽑기 카드는 빠르게 공개하고, 추가 확률로 실제 보상이 최대 두 단계 승급합니다. 승급 판정·연출을 수정할 때만 [RecruitmentPromotion.md](../RecruitmentPromotion.md)를 읽습니다. 초기값은 1차 8%, 1차 성공 후 2차 1%입니다.
 
 참고: [기존 함대 화면](References/FleetLayout.png), [모집 화면 구도](References/RecruitmentLayout.png).
@@ -18,7 +18,7 @@
 | 대상 | 씬/자산 | 담당 |
 | --- | --- | --- |
 | 함대 | `FleetToolkitUI/FleetScreen` | `FleetToolkitScreen` · 편성/선택/공격 우선순위/일시정지 |
-| 모집 | `FleetToolkitUI/RecruitmentScreen` | `RecruitmentToolkitScreen` · 1회/11회 모집/결과/반복/건너뛰기 |
+| 모집 | `FleetToolkitUI/RecruitmentScreen` | `RecruitmentToolkitScreen` · 1회/15회 모집/결과 횟수별 다시 모집/건너뛰기 |
 | 합성 | `FleetToolkitUI/FleetScreen/MergeScreen` | `FleetMergeToolkitScreen` · 직접 재료 선택/해제/일괄 합성/결과 |
 | 공용 설정 | `Assets/SB/UI/Shared/Settings/HarborPanelSettings.asset` | 1080×1920 기준, 너비 기준 스케일, 패널 정렬 150 |
 | 한글 | `HarborTextSettings.asset` → `HarborKorean.asset` | 기존 `MalgunGothic.ttf`에서 생성한 TextCore 동적 폰트 |
@@ -36,8 +36,8 @@
 
 - `FleetToolkitScreen`: Document, Fleet Manager, Panel Manager, Recruitment Screen, Merge Screen, Card Template, Main Ship Icon 참조. `Enemy Preview Rows`는 공격 대상 미리보기의 열당 마커 수이며 실제 적 배치를 바꾸지 않습니다.
 - 함대 USS `.formation-side`: 동일한 `flex-grow: 1`, `flex-basis: 0`, `min-width: 0`을 유지합니다. `.formation-comparison`의 높이로 양쪽 영역을 함께 조절합니다.
-- `RecruitmentToolkitScreen`: Recruitment Icon, Multi Count, Reveal Seconds, Card Delay Seconds, Promotion Reveal 및 Failed Promotion Reveal의 시간·떨림·실패 표시 비율. 현재 11회, 공개 0.12초/간격 0.025초입니다. 단가는 `EscortGachaManager.Summon Cost`, 실제 보너스 확률은 First/Second Promotion Chance에서 조절합니다. 카드 확대는 사용하지 않습니다.
-- 모집 USS `.recruitment-panel`: `top: 51%`, `bottom: 132px`로 인게임 하단 패널의 시작점과 메인 메뉴 위 경계를 공유합니다. 50:50 요구는 아군/적군 비교 영역에 적용되며 화면 상하 비율과는 별개입니다. 하단 132px은 현재 메인 메뉴 공간입니다. 결과창은 공용 `.modal`의 전체 화면 범위를 사용합니다.
+- `RecruitmentToolkitScreen`: Recruitment Icon, Multi Summon Count(기본 15회), Reveal Seconds, Card Delay Seconds, Promotion Reveal 및 Failed Promotion Reveal의 시간·떨림·실패 표시 비율. 공개 0.12초/간격 0.025초입니다. 단가는 `EscortGachaManager.Summon Cost`, 실제 보너스 확률은 First/Second Promotion Chance에서 조절합니다. 카드 확대는 사용하지 않습니다.
+- 모집 USS `.recruitment-panel`: `top: 60.6%`, `bottom: 132px`로 강화 패널과 같은 범위를 사용해 지휘/스킬 영역과 하단 메뉴를 덮지 않습니다. 60.6%는 하단 패널 시작 51%에 지휘/스킬 영역 184 UI px를 더한 1080×1920 기준입니다. 모집 콘텐츠는 이 높이에 맞춰 내부 여백과 버튼 크기를 조절합니다. 결과창은 공용 `.modal`의 전체 화면 범위를 사용합니다.
 - `FleetMergeToolkitScreen`: Fleet Screen 참조, Reveal Seconds, Entry Scale. 합성 재료 수와 지급 규칙은 기존 `PlayerFleetManager`에서 관리합니다.
 - 색상은 `HarborTheme.uss`의 `--color-surface-*`, `--color-action-*`, `--color-text-*`, `--color-grade-*` 토큰을 수정합니다. 현재 씬의 배경/슬롯/버튼 팔레트를 기준으로 옮겼습니다.
 
@@ -80,3 +80,30 @@
 - 1회/11회 모집의 차감·지급 및 결과 연출, 직접/일괄 합성의 소모·지급, 터치·키보드 입력, 다른 화면 비율과 Safe Area는 후속 동작 확인 대상입니다. 자동 테스트는 추가하거나 실행하지 않았습니다.
 
 완성 화면 캡처는 프로젝트 루트 `Artifacts/UI/`에 있습니다. 변경 전 씬 파일 백업은 `AgentScripts/Backups/SampleScene.before-fleet-toolkit.unity.backup`입니다. `AgentScripts/InstallFleetToolkit.cs`는 이번 전환에 사용한 일회성 Editor 작업 기록이며 이미 전환된 씬에 재실행하지 않습니다.
+
+## 함대 카드와 모집 화면 정리 (2026-10-22)
+
+- 공용 `ShipCard`의 전체 카드 바탕/테두리와 등급별 면색·막대는 제거한 상태를 유지합니다. 함대 보유 목록 아이콘에는 별도 정사각 프레임(128 UI px, 2px 등급색 테두리와 어두운 바탕)을 적용하며, 함선 이름 색·대기/보유 수량·선택 체크를 유지합니다. 편성 슬롯은 배치된 함선의 등급색을 테두리에 반영하고, 빈 슬롯과 본선 슬롯은 기본 테두리로 둡니다. 선택된 편성 슬롯도 배치 함선의 등급색이 유지됩니다.
+- 편성 슬롯 안의 배치된 호위선 이름과 칸 번호는 숨깁니다. 빈 슬롯의 `비어 있음`, 본선의 `메인 함선`·`고정` 표시는 유지합니다.
+- 구매 화면에는 1회와 15회 모집 버튼을 모두 둡니다. 결과 화면의 확인과 함대 편성 사이에는 직전 모집 수량에 맞춘 `1회 다시 모집` 또는 `15회 다시 모집` 버튼과 가격을 표시합니다. 재화 가격/차감/승급 로직은 기존 `EscortGachaManager`를 사용합니다. 결과 카드는 공용 4열 그리드의 첫 칸(좌상단)에 일반 카드 크기로 놓습니다.
+- 구매 화면 아래 기본 안내문은 제거하고 `함대 편성으로 이동` 버튼을 다시 액션으로 표시합니다. 패널 높이에 맞게 콘텐츠 간격과 버튼 높이를 조절해 스킬 영역과 하단 메뉴를 가리지 않습니다. 오류·상태 메시지는 필요할 때만 해당 영역에 표시합니다.
+- 모집 화면은 화면 제목과 중복되는 상단 종류 행을 없애고, 구매 콘텐츠의 함선 아이콘 왼쪽·`호위선 모집`과 안내 문구 오른쪽의 한 줄 영웅 영역으로 묶습니다. 구매 버튼과 상태, 함대 편성 이동 액션은 그 아래 같은 폭으로 정렬합니다.
+- 강화 화면은 3개 행을 한 화면에 온전히 보여주도록 행 높이를 152 UI px로 맞췄습니다. 지휘력 제목과 게이지 수치 주변에 안쪽 여백을 주고 게이지와 수치가 붙어 보이지 않게 했습니다.
+- 변경: `Assets/SB/UI/Shared/ShipCard.uxml`, `Assets/SB/UI/Shared/Styles/HarborTheme.uss`, `Assets/SB/UI/Recruitment/RecruitmentScreen.uxml`, `RecruitmentScreen.uss`, `RecruitmentToolkitScreen.cs`, `Assets/SB/UI/InGame/InGameScreen.uss`, `Assets/SB/UI/Fleet/FleetScreen.uss`, `FleetToolkitScreen.cs`.
+- 검증: Unity 컴파일 실패 없음, 540×960 Game 뷰에서 편성 슬롯의 이름·번호 제거를 확인했습니다. USS에는 아이콘 프레임 및 배치 함선 등급별 테두리 규칙을 연결했습니다. Play Mode에서 에셋을 새로고친 뒤 런타임 보유 함선이 0종으로 보여, 보유 카드 프레임을 채워진 상태로 재검증하지 못했습니다. 임의로 함선을 지급하거나 모집·재화를 차감하지 않았습니다. 기존 `MerchantLedger needs an icon.` 오류는 별개입니다.
+
+## 미배치 함선 정사각 타일 확정 (2026-10-22)
+
+- 사용자가 시안의 두 번째 `정사각 타일형`을 승인했습니다. 상단 아군/적군 배치와 기존 3×3 아군 슬롯 디자인은 유지합니다.
+- 함대 목록만 160 UI px 정사각 등급 프레임과 5열 카드로 조정했습니다. 카드 높이는 224px, 너비 19.2%, 바깥 여백 0.4%이며 수량은 아이콘 오른쪽 아래에 표시합니다. `대기`/`보유` 문구와 전체 종류·슬롯 개수는 표시하지 않습니다. 공용 카드와 다른 화면의 디자인은 변경하지 않았습니다.
+- `UnequippedCount`가 0인 함선은 목록에서 숨깁니다. 배치된 호위선을 더블 클릭하면 `TryRemoveEscort`로 해제하고 목록에 복귀합니다. 본선은 기존 고정 규칙을 유지합니다.
+- 변경 파일: `FleetScreen.uxml`, `FleetScreen.uss`, `FleetToolkitScreen.cs`. 새 Inspector 연결은 없습니다. `FleetScreen.uss`의 `.fleet-inventory-card`와 자식 `.ship-icon`에서 카드 간격·크기를 조절합니다.
+- Unity 컴파일 성공 및 540×960 Game 뷰를 확인했습니다. 미배치 0인 카드 숨김 → 더블 클릭 해제 후 표시 → 원래 슬롯 복원 후 다시 숨김을 확인하고 보유량·편성을 작업 전 상태로 복원했습니다. 임포트 중 이전 코드와 새 UXML이 겹쳐 발생한 NullReferenceException은 재컴파일 후 재발하지 않았습니다. 새 USS 파싱 오류는 없었습니다.
+- Play Mode 재컴파일로 비직렬화 런타임 재화가 초기화됐습니다. 작업 전 임시 백업이 있는 함선 보유량과 편성은 복원했으며, 재화는 추정값으로 지급하지 않았습니다. 화면은 `Assets/QA/FleetSquare/After.png`, 소스 변경 전 사본은 `QA/FleetSquare/Before/`에 있습니다.
+
+## 함대 여백·선택·공격 대상 표시 보완 (2026-10-22)
+
+- `FleetScreen.uxml`과 `FleetScreen.uss`만 수정했습니다. 화면 외곽은 40 UI px, 하단 두 버튼 간격은 16 UI px로 정렬했습니다. 전체 편성 해제는 아군 배치 제목 옆의 216×56 UI px 보조 버튼으로 옮겼으며, 적군 제목은 `적 함대`로 줄였습니다.
+- 선택된 보유 타일과 편성 슬롯은 기존 회색 계열의 밝은 배경으로 구분하며, 보유 타일의 체크는 숨깁니다. 설명은 별도 바탕·테두리·안쪽 여백을 가진 영역으로 묶었습니다.
+- 기존 `RefreshAttackPreview`의 `is-target` 클래스가 보이도록 대상 열의 배경·테두리·마커 강조를 복원했습니다. 공격 대상 계산과 실제 전투 로직은 변경하지 않았습니다.
+- 540×960 Game 뷰에서 선택 타일과 후열 우선 공격 강조·설명 영역·버튼 배치를 확인했습니다. 새 UXML/USS 경고 및 컴파일 오류는 없고, 기존 `MerchantLedger needs an icon.` 오류는 별개입니다. 스크립트 재컴파일 및 Inspector 변경은 없습니다. 결과는 `Assets/QA/FleetSquare/Polished.png`입니다.

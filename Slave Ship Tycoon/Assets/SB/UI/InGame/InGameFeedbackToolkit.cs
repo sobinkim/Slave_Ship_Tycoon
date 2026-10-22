@@ -14,6 +14,14 @@ namespace SB.UI.InGame
         [Header("References")]
         [SerializeField] private UIDocument document;
         [SerializeField] private InGameToolkitScreen inGameScreen;
+        [SerializeField] private SB.UI.Shared.ScreenEntryTransition entryTransition;
+        [Header("Entry transition presets")]
+        [SerializeField] private SB.UI.Shared.EntryTransitionPreset bossEntry = new SB.UI.Shared.EntryTransitionPreset(
+            "DANGER", "보스 도전", new Color(0.851f, 0.106f, 0.141f), 2f);
+        [SerializeField] private SB.UI.Shared.EntryTransitionPreset pirateEntry = new SB.UI.Shared.EntryTransitionPreset(
+            "WARNING", "해적 해역 진입", new Color(0.886f, 0.678f, 0.086f), 1.5f);
+        [SerializeField] private SB.UI.Shared.EntryTransitionPreset transportEntry = new SB.UI.Shared.EntryTransitionPreset(
+            "DEPARTURE", "운송 항로 진입", new Color(0.12f, 0.49f, 0.83f), 1.5f);
         [SerializeField] private CurrencyType[] settlementCurrencies = { CurrencyType.Gold, CurrencyType.Diamond, CurrencyType.Emerald };
         [Header("Settlement (unscaled seconds)")]
         [SerializeField, Min(0.01f)] private float settlementFadeInSeconds = 0.3f;
@@ -52,6 +60,10 @@ namespace SB.UI.InGame
         private Coroutine settlementRoutine;
         private Coroutine popupRoutine;
         private Coroutine stageFadeRoutine;
+        private Coroutine entryWaitRoutine;
+        private StageStartedEvent? pendingEntryStage;
+        private readonly HashSet<int> enteredPirateChapters = new HashSet<int>();
+        private readonly HashSet<int> enteredTransportChapters = new HashSet<int>();
 
         private void OnEnable()
         {
@@ -86,6 +98,9 @@ namespace SB.UI.InGame
             Bus<PlayStageClearEffectEvent>.OnEvent -= OnStageTransition;
             Bus<StageStartedEvent>.OnEvent -= OnStageStarted;
             StopAllCoroutines(); settlementRoutine = null; popupRoutine = null; stageFadeRoutine = null;
+            entryWaitRoutine = null;
+            pendingEntryStage = null;
+            if (entryTransition != null) entryTransition.Cancel();
             if (root != null)
             {
                 if (root.Q<Button>("settlementClose") is Button settlementCloseBinding) settlementCloseBinding.clicked -= CloseSettlement;
@@ -222,12 +237,72 @@ namespace SB.UI.InGame
                 if (reward.CurrencyType == currency) return reward.Amount;
             return 0;
         }
-        private void OnStageStarted(StageStartedEvent evt) => currentRouteType = evt.RouteType;
+        private void OnStageStarted(StageStartedEvent evt)
+        {
+            currentRouteType = evt.RouteType;
+            if (entryTransition == null || !entryTransition.isActiveAndEnabled) return;
+            bool firstPirateEntry = !evt.IsBossBattle && evt.RouteType == ChapterRouteType.Obtain &&
+                !enteredPirateChapters.Contains(evt.Chapter);
+            bool firstTransportEntry = !evt.IsBossBattle && evt.RouteType == ChapterRouteType.Sell &&
+                !enteredTransportChapters.Contains(evt.Chapter);
+            if (!evt.IsBossBattle && !firstPirateEntry && !firstTransportEntry)
+            {
+                CancelPendingEntry();
+                return;
+            }
+            if (IsEntryBlocked())
+            {
+                pendingEntryStage = evt;
+                if (entryWaitRoutine == null) entryWaitRoutine = StartCoroutine(WaitForEntry());
+                return;
+            }
+            CancelPendingEntry();
+            PlayEntry(evt);
+        }
+        private bool IsEntryBlocked() => settlementRoutine != null ||
+            (settlementPanel != null && !settlementPanel.ClassListContains("hidden")) ||
+            stageFadeRoutine != null || Time.timeScale <= 0f || entryTransition.IsPlaying;
+
+        private IEnumerator WaitForEntry()
+        {
+            while (IsEntryBlocked()) yield return null;
+            StageStartedEvent? stage = pendingEntryStage;
+            entryWaitRoutine = null;
+            pendingEntryStage = null;
+            if (stage.HasValue && entryTransition != null && entryTransition.isActiveAndEnabled)
+                PlayEntry(stage.Value);
+        }
+        private void CancelPendingEntry()
+        {
+            if (entryWaitRoutine != null) StopCoroutine(entryWaitRoutine);
+            entryWaitRoutine = null;
+            pendingEntryStage = null;
+        }
+        private void PlayEntry(StageStartedEvent evt)
+        {
+            SB.UI.Shared.EntryTransitionPreset preset = evt.IsBossBattle ? bossEntry :
+                evt.RouteType == ChapterRouteType.Sell ? transportEntry : pirateEntry;
+            if (entryTransition.Play(preset))
+            {
+                if (!evt.IsBossBattle)
+                {
+                    if (evt.RouteType == ChapterRouteType.Sell) enteredTransportChapters.Add(evt.Chapter);
+                    else enteredPirateChapters.Add(evt.Chapter);
+                }
+                if (popupRoutine != null) StopCoroutine(popupRoutine);
+                popupRoutine = null;
+                root.Q("stagePopup").AddToClassList("hidden");
+            }
+        }
         private void OnStageFail(StageFailedEvent evt) => ShowPopup(evt.Chapter, evt.Stage, currentRouteType == ChapterRouteType.Sell
             ? "운송 저지 · 같은 구간 재도전\n기본가치 유지 · 보너스 차감은 구간당 1회"
             : "스테이지 실패");
-        private void OnChapterEnter(AffterStageClearEvent evt) => ShowPopup(evt.Chapter + 1, 1,
-            evt.ClearChapterType == ChapterRouteType.Obtain ? "운송 항로 진입" : "해적 해역 진입");
+        private void OnChapterEnter(AffterStageClearEvent evt)
+        {
+            if (entryTransition != null && entryTransition.isActiveAndEnabled)
+                return;
+            ShowPopup(evt.Chapter + 1, 1, evt.ClearChapterType == ChapterRouteType.Obtain ? "운송 항로 진입" : "해적 해역 진입");
+        }
         private void ShowPopup(int chapter, int stage, string message)
         {
             if (popupRoutine != null) StopCoroutine(popupRoutine);

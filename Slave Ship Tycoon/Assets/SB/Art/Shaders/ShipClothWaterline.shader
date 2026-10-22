@@ -4,6 +4,8 @@ Shader "Fleet/Ship Cloth Waterline"
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
+        [PerRendererData] _EnvironmentTint ("Environment Lighting", Color) = (1,1,1,1)
+        _SpriteAlphaCutoff ("Sprite Edge Alpha Cutoff", Range(0,1)) = 0
         _SinkProgress ("Sink Progress", Range(0,1)) = 0
         _SinkDistance ("Sink Distance (Visual Local Units)", Float) = 0.9
         _Waterline ("Waterline (Visual Local Y)", Float) = -0.27
@@ -41,7 +43,9 @@ Shader "Fleet/Ship Cloth Waterline"
             struct v2f { float4 vertex : SV_POSITION; float2 uv : TEXCOORD0; fixed4 color : COLOR; float localY : TEXCOORD1; float2 cloth : TEXCOORD2; };
             sampler2D _MainTex;
             fixed4 _Color;
+            fixed4 _EnvironmentTint;
             float _SinkProgress, _SinkDistance, _Waterline;
+            float _SpriteAlphaCutoff;
             float _FlutterStrength, _FlutterSpeed, _FlutterPhase, _FlagAmplitude, _SailAmplitude, _SailFootLift;
             float4 _FlagBounds, _FlagPoleTip, _SailTop, _SailBottom, _ClothCanvas, _ClothTransform, _ClothUvScale;
             v2f vert(appdata v)
@@ -87,7 +91,11 @@ Shader "Fleet/Ship Cloth Waterline"
                 if (_SinkProgress > 0.0001) clip(i.localY - _Waterline);
                 float2 displacement = ClothDisplacement(i.cloth);
                 float2 uv = i.uv - float2(displacement.x, -displacement.y) * _ClothUvScale.xy;
-                return tex2D(_MainTex, uv) * i.color;
+                fixed4 sprite = tex2D(_MainTex, uv);
+                clip(sprite.a - _SpriteAlphaCutoff);
+                fixed4 result = sprite * i.color;
+                result.rgb *= _EnvironmentTint.rgb;
+                return result;
             }
             ENDCG
         }

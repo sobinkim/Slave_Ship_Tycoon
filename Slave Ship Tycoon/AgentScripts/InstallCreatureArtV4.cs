@@ -25,7 +25,7 @@ public static class InstallCreatureArtV4
     var body=root.transform.Find("Visual").GetComponent<SpriteRenderer>();body.sprite=sprite;
     var feedback=root.GetComponent<SeaCreatureHitFeedback>();
     var so=new SerializedObject(feedback);
-    so.FindProperty("emissionColor").colorValue=new Color(1f,0.86f,0.56f,1f);
+    so.FindProperty("emissionColor").colorValue=Color.white;
     so.FindProperty("emissionIntensity").floatValue=1.8f;
     so.FindProperty("emissionAttackSeconds").floatValue=0.02f;
     so.FindProperty("emissionReleaseSeconds").floatValue=0.14f;

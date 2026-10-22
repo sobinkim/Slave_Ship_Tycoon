@@ -1,0 +1,10 @@
+.screen, .command-area, .bottom-nav, .lower-panel-background,
+.harbor-button, .ship-card, .formation-slot, .enemy-column,
+.attack-details, .merge-preview, .recruitment-panel, .recruitment-card,
+.recruitment-guide, .cargo-section, .cargo-card, .cargo-detail-panel,
+.reward-preview, .settlement-card, .settlement-goal, .settlement-reward,
+.upgrade-panel, .commander-settings, .upgrade-row, .skill-detail,
+.currency-bar, .route-card, .command-status {
+    background-image: none;
+    border-radius: 0;
+}

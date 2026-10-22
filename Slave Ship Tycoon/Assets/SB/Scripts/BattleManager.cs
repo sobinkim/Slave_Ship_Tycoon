@@ -6,6 +6,17 @@ namespace SB.Scripts
     public class BattleManager : MonoBehaviour
     {
         private bool isBattleEnded;
+        private Enemy pursuitTarget;
+
+        public void SetPursuitTarget(Enemy target)
+        {
+            if (pursuitTarget != null) pursuitTarget.OnDeathEvent.RemoveListener(PursuitTargetDestroyed);
+            pursuitTarget = target;
+            if (pursuitTarget != null) pursuitTarget.OnDeathEvent.AddListener(PursuitTargetDestroyed);
+        }
+
+        private void PursuitTargetDestroyed() => EndBattle(true);
+        public void EndPursuit(bool success) => EndBattle(success);
 
         private void OnEnable()
         {
@@ -16,6 +27,7 @@ namespace SB.Scripts
 
         private void OnDisable()
         {
+            SetPursuitTarget(null);
             Bus<BattleStartEvent>.OnEvent -= StartBattle;
             Bus<StageEnemiesDefeatedEvent>.OnEvent -= StageEnemiesDefeated;
             Bus<MainShipDeadEvent>.OnEvent -= DeadMainShip;
@@ -33,6 +45,7 @@ namespace SB.Scripts
 
         private void StageEnemiesDefeated(StageEnemiesDefeatedEvent evt)
         {
+            if (pursuitTarget != null && !pursuitTarget.IsDead) return;
             EndBattle(true);
         }
 

@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &422232668354830595
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2134327616403361117}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2134327616403361117
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422232668354830595}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3138420159692969022}
+  m_Father: {fileID: 2109916362007687518}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &697529386536071577
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,6 +895,7 @@ MonoBehaviour:
   allowsRuleFallback: 1
   ignoresCommanderTargetCommand: 0
   includesMainShipWithEscorts: 0
+  requiresEngagedSeaCreatures: 0
 --- !u!1 &3374626843644224341
 GameObject:
   m_ObjectHideFlags: 0
@@ -1176,7 +1209,7 @@ RectTransform:
   - {fileID: 139931551596701355}
   - {fileID: 378856223236743585}
   - {fileID: 3041210194888593637}
-  m_Father: {fileID: 2109916362007687518}
+  m_Father: {fileID: 2134327616403361117}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1637,6 +1670,7 @@ GameObject:
   - component: {fileID: 7375356478701788180}
   - component: {fileID: 927156504947266202}
   - component: {fileID: 7117596764004494651}
+  - component: {fileID: 3687305019327649689}
   m_Layer: 0
   m_Name: EnemyCrusherShip
   m_TagString: Untagged
@@ -1657,7 +1691,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3138420159692969022}
+  - {fileID: 2134327616403361117}
   - {fileID: 1671719631455803470}
   - {fileID: 5411313541905029027}
   - {fileID: 1390028115790132380}
@@ -1826,6 +1860,25 @@ MonoBehaviour:
   _myShipType: 2
   _shipRole: 32
   canTargetProtectedShips: 0
+--- !u!114 &3687305019327649689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6581406406296566782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 7117596764004494651}
+  motionRoot: {fileID: 2134327616403361117}
+  shipAnimator: {fileID: 1168250348962483864}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &6828885880396415112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1851,7 +1904,7 @@ Transform:
   m_GameObject: {fileID: 6828885880396415112}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.291875, y: -0.04375, z: 0}
+  m_LocalPosition: {x: 0.3077, y: -0.0393, z: 0}
   m_LocalScale: {x: 2.181818, y: 2.1538463, z: 2.1538463}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2589,6 +2642,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 5695174486001551889}
   waterImpactPoint: {fileID: 3584724525477385938}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &8867326853652702565
@@ -2728,6 +2782,10 @@ PrefabInstance:
       propertyPath: projectilePrefab
       value: 
       objectReference: {fileID: 1140000000000000000, guid: 4401b8bc22f639548bfb22ddd38e0726, type: 3}
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: muzzleEffectPrefab
+      value: 
+      objectReference: {fileID: 7335811388565860814, guid: ad9018d13e1309e4f89217da593f724d, type: 3}
     - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
       propertyPath: initialStraightSpeed
       value: 2

@@ -1,0 +1,18 @@
+.entry-transition {
+    --entry-mask: #000000;
+    --entry-text: #FFFFFF;
+    --entry-text-ink: #292534;
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    color: var(--entry-text);
+    -unity-font-definition: url("project://database/Assets/SB/Fonts/Pixel/Galmuri11 UI Outlined.asset");
+}
+.entry-shutter { position: absolute; left: 0; right: 0; background-color: var(--entry-mask); }
+.entry-top-shutter { top: 0; height: 9%; }
+.entry-bottom-shutter { top: 52%; bottom: 0; }
+.entry-warning-band { position: absolute; left: 0; right: 0; bottom: 0; height: 48%; justify-content: center; }
+.entry-warning { margin: 0; padding: 0; font-size: 72px; letter-spacing: 14px; -unity-font-style: bold; -unity-text-align: middle-center; color: var(--entry-text); -unity-text-outline-width: 2px; -unity-text-outline-color: var(--entry-text-ink); }
+.entry-heading { position: absolute; right: 48px; top: 48px; flex-direction: row; align-items: center; }
+.entry-icon { width: 96px; height: 96px; flex-shrink: 0; margin-right: 16px; -unity-background-scale-mode: scale-to-fit; }
+.entry-caption { margin: 0; padding: 0; font-size: 72px; color: var(--entry-text); white-space: nowrap; }
+
+

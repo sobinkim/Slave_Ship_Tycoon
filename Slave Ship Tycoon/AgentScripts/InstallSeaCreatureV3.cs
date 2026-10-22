@@ -48,12 +48,6 @@ public static class InstallSeaCreatureV3
    if(layer.name=="SeaLayerRoot")Set(layer,"scrollSpeed",1.25f);
    if(layer.name=="WaveLayerRoot")Set(layer,"scrollSpeed",1.65f);
   }
-  var surface=root.transform.Find("VoyageMotion").GetComponent<SeaVoyagePresentation>();
-  Set(surface,"wakeLength",0.65f);Set(surface,"wakeSpread",0.1f);
-  // Lower the long initial speed-lines so that body contact foam is the main surface cue.
-  foreach(var line in surface.GetComponentsInChildren<LineRenderer>()) {
-   Color color=line.startColor;color.a=line.name.StartsWith("Wake")?0.28f:0.13f;line.startColor=color;EditorUtility.SetDirty(line);
-  }
   EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();Selection.activeGameObject=root;
   return "Saved world-advancing fleet/camera, fixed-world left-facing creatures, matching V3 art, water contact rig/materials, blocked allied fire and non-piercing creature melee.";
  }

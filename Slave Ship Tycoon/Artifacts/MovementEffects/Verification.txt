@@ -1,0 +1,8 @@
+Pirate sailing: PASS, ships=6, MOVE/wake/foam=True
+Pirate combat fade out: PASS, ships=6, MOVE/wake/foam=False
+Pirate next encounter, same fleet: PASS, ships=6, MOVE/wake/foam=True
+Transport approach: PASS, ships=6, MOVE/wake/foam=True
+Transport combat fade out: PASS, ships=6, MOVE/wake/foam=False
+Transport to pirate: PASS, ships=6, MOVE/wake/foam=True
+Voyage stop fade out: PASS, ships=6, MOVE/wake/foam=False
+RESULT: PASS

@@ -444,7 +444,7 @@ Transform:
   m_GameObject: {fileID: 2439592399419956418}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.378, y: -0.012, z: 0}
+  m_LocalPosition: {x: 0.3756, y: -0.0045, z: 0}
   m_LocalScale: {x: 2.181818, y: 2.1538463, z: 2.1538463}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -804,6 +804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 8124489561141851633}
   waterImpactPoint: {fileID: 8385047625673218596}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &3155119405248198806
@@ -1362,6 +1363,7 @@ GameObject:
   - component: {fileID: 6689220910457431679}
   - component: {fileID: 7597086234927165047}
   - component: {fileID: 247417217188893545}
+  - component: {fileID: 1518653011112891916}
   m_Layer: 0
   m_Name: InterceptorShip
   m_TagString: Untagged
@@ -1382,7 +1384,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5401742307382578542}
+  - {fileID: 3860374029725887346}
   - {fileID: 1562268579288997042}
   - {fileID: 4216561153023841327}
   - {fileID: 4454827274053463353}
@@ -1550,6 +1552,25 @@ MonoBehaviour:
   hookIcon: {fileID: 7509155799972942986}
   markerColor: {r: 1, g: 0.08, b: 0.08, a: 1}
   sortingOrderOffset: 20
+--- !u!114 &1518653011112891916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5277521324115816545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 6203074903258936985}
+  motionRoot: {fileID: 3860374029725887346}
+  shipAnimator: {fileID: 3262200261879388572}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &5640005524169840623
 GameObject:
   m_ObjectHideFlags: 0
@@ -2320,7 +2341,7 @@ RectTransform:
   - {fileID: 8124489561141851633}
   - {fileID: 8385047625673218596}
   - {fileID: 5898057834630156668}
-  m_Father: {fileID: 3084750865171502333}
+  m_Father: {fileID: 3860374029725887346}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2458,6 +2479,38 @@ Transform:
   - {fileID: 7994892862736590023}
   m_Father: {fileID: 3084750865171502333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8651554235377830293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3860374029725887346}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3860374029725887346
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8651554235377830293}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5401742307382578542}
+  m_Father: {fileID: 3084750865171502333}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4279943165307193223
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2546,6 +2599,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackCooldown: 1.4
+  muzzleEffectPrefab: {fileID: 7335811388565860814, guid: ad9018d13e1309e4f89217da593f724d, type: 3}
+  muzzleEffectScale: 0.75
+  blocksFireThroughAlliedShips: 0
+  alliedHullBlockingRadius: 0.38
   projectilePrefab: {fileID: 8611703537991007102, guid: 645cab34c8355ad4ab1c7f503ea90ede, type: 3}
   firePoint: {fileID: 8119332220017595264}
   projectileSpeed: 12

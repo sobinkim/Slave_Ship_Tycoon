@@ -1,0 +1,34 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+  <ui:Style src="../Shared/Styles/HarborTheme.uss" />
+  <ui:Style src="BountyPursuit.uss" />
+  <ui:VisualElement name="pursuitRoot" class="harbor-root pursuit-root pursuit-hidden" picking-mode="Ignore">
+    <ui:VisualElement name="pursuitHud" class="pursuit-hud">
+      <ui:VisualElement class="pursuit-heading">
+        <ui:Label name="pursuitTitle" text="현상금 추적" class="pursuit-title" />
+        <ui:Label name="escapeTime" text="도주까지 01:00" class="pursuit-time" />
+        <ui:Button name="pursuitRetreat" text="철수" class="harbor-button pursuit-retreat" />
+      </ui:VisualElement>
+      <ui:VisualElement class="pursuit-progress-row" picking-mode="Ignore">
+        <ui:VisualElement class="pursuit-track">
+          <ui:VisualElement name="escapeFill" class="pursuit-fill" />
+          <ui:VisualElement name="escapeShip" class="pursuit-ship" />
+        </ui:VisualElement>
+        <ui:Label text="목적지" class="pursuit-destination" />
+      </ui:VisualElement>
+      <ui:Label name="pursuitHint" text="메인 해적선을 목적지 도착 전에 격침하세요" class="pursuit-hint" picking-mode="Ignore" />
+      <ui:Button name="pursuitQuickRetry" text="이 편성으로 재도전" class="harbor-button pursuit-hidden" />
+    </ui:VisualElement>
+    <ui:VisualElement name="pursuitResult" class="pursuit-result pursuit-hidden">
+      <ui:VisualElement class="harbor-panel pursuit-result-card">
+        <ui:VisualElement name="mainPiratePortrait" class="pursuit-portrait" picking-mode="Ignore" />
+        <ui:Label name="pursuitResultTitle" text="현상금 획득" class="pursuit-result-title" />
+        <ui:Label name="pursuitResultDetail" class="pursuit-result-detail" />
+        <ui:Label name="pursuitReward" class="pursuit-reward" />
+        <ui:Button name="pursuitRetry" text="다시 추적" class="harbor-button primary-button" />
+        <ui:Button name="pursuitFormation" text="편성 변경" class="harbor-button" />
+        <ui:Button name="pursuitNext" text="다른 호위 편성 추적" class="harbor-button" />
+        <ui:Button name="pursuitReturn" text="파밍으로 복귀" class="harbor-button" />
+      </ui:VisualElement>
+    </ui:VisualElement>
+  </ui:VisualElement>
+</ui:UXML>

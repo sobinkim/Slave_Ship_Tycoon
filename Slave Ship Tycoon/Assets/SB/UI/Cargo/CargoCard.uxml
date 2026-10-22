@@ -1,17 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement class="cargo-card">
         <ui:VisualElement class="cargo-card-heading">
-            <ui:VisualElement name="icon" class="cargo-icon" />
-            <ui:VisualElement class="cargo-card-copy">
+            <ui:VisualElement name="icon" class="cargo-icon" picking-mode="Ignore" />
+            <ui:VisualElement class="cargo-card-copy" picking-mode="Ignore">
                 <ui:Label name="cargoName" class="cargo-name" />
-                <ui:Label name="amount" class="cargo-amount" />
-                <ui:Label name="weight" class="small-text" />
+                <ui:Label name="weight" class="cargo-unit-weight" />
+            </ui:VisualElement>
+            <ui:VisualElement class="cargo-actions">
+                <ui:Button name="unloadButton" text="−" class="harbor-button cargo-stepper" />
+                <ui:Label name="amount" text="0" class="cargo-amount" picking-mode="Ignore" />
+                <ui:Button name="loadButton" text="+" class="harbor-button cargo-stepper" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Label name="rewards" class="cargo-rewards" />
-        <ui:VisualElement class="cargo-actions">
-            <ui:Button name="unloadButton" text="비우기 −1" class="harbor-button" />
-            <ui:Button name="loadButton" text="적재 +1" class="harbor-button primary-button" />
-        </ui:VisualElement>
+        <ui:VisualElement name="rewards" class="cargo-rewards" tooltip="화물 1개당 기본 보상" />
     </ui:VisualElement>
 </ui:UXML>

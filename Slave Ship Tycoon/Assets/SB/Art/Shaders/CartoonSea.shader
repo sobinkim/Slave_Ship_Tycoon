@@ -142,12 +142,15 @@ Shader "Fleet/Cartoon Sea"
                 float2 world = i.worldXY;
                 world.y += sin(world.x * 1.3 - time * _SwaySpeed) * _SwayAmount * 0.34 * motionFade;
                 world.x += sin(world.y * 1.7 - time * _SwaySpeed * 0.73) * _SwayAmount * 0.2 * motionFade;
+                // Apply perspective around the camera so sailing distance cannot shear the wave field.
+                float cameraX = _WorldSpaceCameraPos.x;
+                world.x = (world.x - cameraX) / perspective + cameraX;
                 float2 largeP = float2(world.x + world.y * 0.28, world.y)
-                    / (float2(1.9 * perspective, 0.85) * max(_SwellScale, 0.01));
+                    / (float2(1.9, 0.85) * max(_SwellScale, 0.01));
                 largeP += float2(time * _RippleSpeed * 0.35, 0.0);
                 float4 largeWaves = WaveLayer(largeP, time, 1.6);
                 float2 smallP = float2(world.x + world.y * 0.18, world.y)
-                    / (float2(0.95 * perspective, 0.46) * max(_RippleScale, 0.01));
+                    / (float2(0.95, 0.46) * max(_RippleScale, 0.01));
                 smallP += float2(time * _RippleSpeed * 0.8 + 17.3, -time * _RippleSpeed * 0.06 + 23.7);
                 float4 smallWaves = WaveLayer(smallP, time * 1.13 + 3.7, 1.0);
                 float visibility = lerp(0.18, 1.0, motionFade);

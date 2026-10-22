@@ -4,11 +4,14 @@
 
 ## 주제별 안내
 
+- 새 세션의 게임 플레이 스타일·전투 흐름·배치 규칙·기획 시 주의점을 파악할 때: [Docs/AI/Game_Playstyle.md](Docs/AI/Game_Playstyle.md)
 - UI를 만들거나 수정하거나 기존 화면을 UI Toolkit으로 옮길 때: [Docs/AI/UI_Toolkit.md](Docs/AI/UI_Toolkit.md)
 - 플레이어 호위선을 새로 만들거나 함선 프리팹·데이터·모집 등록을 바꿀 때: [Docs/AI/Ship_Creation.md](Docs/AI/Ship_Creation.md)
 - 다른 주제 문서는 요청이 직접 해당할 때에만 엽니다. 예: UI 화면 연결은 `Docs/UserGuide/18_UI화면과_연결방법.md`, 함선 데이터 등록은 `Docs/UserGuide/02_아군함선_양산과_등록.md`.
 
 ## 세션 공통 기획 맥락
+
+새 세션에서 게임 플레이를 전제로 한 기획·밸런스·QA를 시작할 때는 [Docs/AI/Game_Playstyle.md](Docs/AI/Game_Playstyle.md)를 먼저 읽고, 실제 플레이 규칙을 가정하지 않습니다. 이 문서는 대화 중 합의된 의견과 현재 코드에서 확인한 사실을 구분합니다.
 
 매 세션 시작 시 Notion MCP의 활성 Skill을 조회합니다. 이 프로젝트에서는 `세션 공통 기획 맥락` Skill을 읽고 확정 기획, 권장 수치, 미정 항목을 구분합니다. 이미 현재 세션에서 읽었다면 다시 읽을 필요는 없습니다.
 

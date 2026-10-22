@@ -87,6 +87,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &404424566543516921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 270044055710324747}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &270044055710324747
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404424566543516921}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 661311138227643217}
+  m_Father: {fileID: 2972453133516258590}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &422251489995831680
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,6 +173,7 @@ MonoBehaviour:
   allowsRuleFallback: 1
   ignoresCommanderTargetCommand: 0
   includesMainShipWithEscorts: 0
+  requiresEngagedSeaCreatures: 0
 --- !u!1 &687576525234086765
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,7 +474,7 @@ Transform:
   m_GameObject: {fileID: 2520837506999136842}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.294, y: 0.07, z: 0}
+  m_LocalPosition: {x: 0.294, y: -0.02, z: 0}
   m_LocalScale: {x: 2.181818, y: 2.1538463, z: 2.1538463}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -465,6 +498,7 @@ GameObject:
   - component: {fileID: 7848058730420862271}
   - component: {fileID: 913181192020684366}
   - component: {fileID: 2748879035085010230}
+  - component: {fileID: 8906827081902792903}
   m_Layer: 0
   m_Name: TestEscort_A
   m_TagString: Untagged
@@ -485,7 +519,7 @@ Transform:
   m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 661311138227643217}
+  - {fileID: 270044055710324747}
   - {fileID: 6805188439422054301}
   - {fileID: 1712800197172361110}
   - {fileID: 5648407895672082940}
@@ -667,6 +701,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 1689721241314480839}
   attack: {fileID: 4225974186080956370}
+--- !u!114 &8906827081902792903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2953866507785636575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 1689721241314480839}
+  motionRoot: {fileID: 270044055710324747}
+  shipAnimator: {fileID: 730955407968221762}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &3442135432843588213
 GameObject:
   m_ObjectHideFlags: 0
@@ -1163,6 +1216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 7995637923820613818}
   waterImpactPoint: {fileID: 6662398159025602823}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &4664855140035603437
@@ -2100,7 +2154,7 @@ RectTransform:
   - {fileID: 4531388729973953266}
   - {fileID: 7995637923820613818}
   - {fileID: 6662398159025602823}
-  m_Father: {fileID: 2972453133516258590}
+  m_Father: {fileID: 270044055710324747}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2298,6 +2352,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 842924884877078959}
     m_Modifications:
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: travelMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: muzzleEffectPrefab
+      value: 
+      objectReference: {fileID: 7335811388565860814, guid: ad9018d13e1309e4f89217da593f724d, type: 3}
     - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
       propertyPath: 'firePoints.Array.data[0]'
       value: 

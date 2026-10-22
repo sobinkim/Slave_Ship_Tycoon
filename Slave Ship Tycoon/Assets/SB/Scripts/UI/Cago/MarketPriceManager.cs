@@ -31,6 +31,8 @@ namespace SB.Scripts
     public class MarketPriceManager : MonoBehaviour
     {
         [SerializeField, Range(0f, 100f)] private float _sellFailurePenaltyPercent = 15f;
+        [SerializeField, Range(0f, 1f), Tooltip("화물별 보너스 확률 = 운(%) × 이 계수. 0.1이면 운 50에서 화물당 5%입니다.")]
+        private float bonusChanceScale = 0.1f;
 
         private readonly Dictionary<ETransportItemType, TransportMarketPriceEntry> _cargoTypePriceRates =
             new Dictionary<ETransportItemType, TransportMarketPriceEntry>();
@@ -137,7 +139,7 @@ namespace SB.Scripts
                 int priceMultiplier = UnityEngine.Random.Range(1, 10);
                 bool hasBonusMultiplier = bonusChance > 0f && UnityEngine.Random.value < bonusChance;
                 int bonusPriceMultiplier = hasBonusMultiplier
-                    ? UnityEngine.Random.Range(1, 10)
+                    ? UnityEngine.Random.Range(0, 10)
                     : 0;
 
                 TransportMarketPriceEntry stageEntry = new TransportMarketPriceEntry
@@ -149,7 +151,7 @@ namespace SB.Scripts
                     AccumulatedPriceMultiplier = currentEntry.GetAppliedMultiplier()
                 };
 
-                stageEntry.AccumulatedPriceMultiplier += stageEntry.GetStageMultiplier() - 1;
+                stageEntry.AccumulatedPriceMultiplier += Mathf.Max(0, stageEntry.GetStageMultiplier() - 1);
                 _cargoTypePriceRates[cargoType] = stageEntry;
             }
         }
@@ -180,14 +182,15 @@ namespace SB.Scripts
             Bus<GetMarketPriceEvent>.Raise(new GetMarketPriceEvent(_cargoTypePriceRates));
         }
 
-        private static float GetBonusChance(float luckPercent)
+        private float GetBonusChance(float luckPercent)
         {
-            return Mathf.Clamp01(luckPercent * 0.01f);
+            return Mathf.Clamp01(luckPercent * 0.01f * bonusChanceScale);
         }
 
         private void OnValidate()
         {
             _sellFailurePenaltyPercent = Mathf.Clamp(_sellFailurePenaltyPercent, 0f, 100f);
+            bonusChanceScale = Mathf.Clamp01(bonusChanceScale);
         }
     }
 }

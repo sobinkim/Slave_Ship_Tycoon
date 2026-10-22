@@ -1,22 +1,22 @@
 .survival-hud { position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
-.survival-header { position: absolute; top: 24px; left: 24px; right: 24px; padding: 18px 24px; background-color: var(--color-surface-overlay); border-radius: 8px; }
+.survival-header { position: absolute; top: 24px; left: 24px; right: 24px; padding: 18px 24px; background-color: var(--color-surface-overlay); border-radius: 0; }
 .survival-heading { flex-direction: row; align-items: center; }
-.survival-title { flex-grow: 1; font-size: 40px; -unity-font-style: bold; }
-.survival-wave { font-size: 34px; color: var(--color-accent); -unity-font-style: bold; }
-.survival-status { font-size: 25px; color: var(--color-text-secondary); margin-top: 4px; }
-.survival-stats { flex-direction: row; margin-top: 12px; }
-.survival-stat { flex-grow: 1; font-size: 25px; }
+.survival-title { flex-grow: 1; font-size: var(--ui-font-title); -unity-font-style: bold; }
+.survival-wave { font-size: var(--ui-font-value); color: var(--color-accent); -unity-font-style: bold; }
+.survival-status { font-size: var(--ui-font-caption); color: var(--color-text-secondary); margin-top: var(--ui-space-xs); }
+.survival-stats { flex-direction: row; margin-top: var(--ui-space-sm); }
+.survival-stat { flex-grow: 1; font-size: var(--ui-font-item); }
 .survival-gold { -unity-text-align: middle-right; color: var(--color-accent); }
-.survival-footer { position: absolute; bottom: 24px; left: 24px; right: 24px; padding: 20px 24px; background-color: var(--color-surface-overlay); border-radius: 8px; }
-.survival-tip { font-size: 30px; -unity-font-style: bold; margin-bottom: 14px; white-space: normal; }
+.survival-footer { position: absolute; bottom: 24px; left: 24px; right: 24px; padding: 20px 24px; background-color: var(--color-surface-overlay); border-radius: 0; }
+.survival-tip { font-size: var(--ui-font-body); -unity-font-style: bold; margin-bottom: var(--ui-space-sm); white-space: normal; }
 .survival-species { flex-direction: row; }
-.species-card { flex-grow: 1; flex-basis: 0; min-width: 0; align-items: center; padding: 8px 16px; margin: 0 6px; background-color: var(--color-surface-inset); border-radius: 6px; }
+.species-card { flex-grow: 1; flex-basis: 0; min-width: 0; align-items: center; padding: 8px 16px; margin: 0 6px; background-color: var(--color-surface-inset); border-radius: 0; }
 .species-image { width: 160px; height: 118px; -unity-background-scale-mode: scale-to-fit; }
 .species-glider { background-image: url("project://database/Assets/SB/Art/Sprites/SeaCreatures/ReefGlider_V4.png"); }
 .species-leviathan { background-image: url("project://database/Assets/SB/Art/Sprites/SeaCreatures/ReefbackLeviathan_V4.png"); }
-.species-name { font-size: 27px; -unity-font-style: bold; }
-.species-detail { font-size: 23px; color: var(--color-text-secondary); white-space: normal; -unity-text-align: middle-center; }
-.survival-help { margin-top: 12px; font-size: 23px; color: var(--color-text-secondary); white-space: normal; }
-.survival-result { font-size: 31px; -unity-font-style: bold; color: var(--color-status-danger); white-space: normal; margin-bottom: 12px; }
-.survival-footer .harbor-button { height: 68px; min-height: 68px; }
+.species-name { font-size: var(--ui-font-item); -unity-font-style: bold; }
+.species-detail { font-size: var(--ui-font-description); color: var(--color-text-secondary); white-space: normal; -unity-text-align: middle-center; }
+.survival-help { margin-top: var(--ui-space-sm); font-size: var(--ui-font-caption); color: var(--color-text-secondary); white-space: normal; }
+.survival-result { font-size: var(--ui-font-section); -unity-font-style: bold; color: var(--color-status-danger); white-space: normal; margin-bottom: var(--ui-space-sm); }
+.survival-footer .harbor-button { height: 80px; min-height: 80px; }
 .hidden { display: none; }

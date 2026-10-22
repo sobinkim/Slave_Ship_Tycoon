@@ -372,7 +372,7 @@ RectTransform:
   - {fileID: 8667200871195312128}
   - {fileID: 891455358428125671}
   - {fileID: 4510650937346940468}
-  m_Father: {fileID: 3695619464799290872}
+  m_Father: {fileID: 8920738194334762449}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -899,6 +899,7 @@ MonoBehaviour:
   allowsRuleFallback: 0
   ignoresCommanderTargetCommand: 1
   includesMainShipWithEscorts: 1
+  requiresEngagedSeaCreatures: 0
 --- !u!1 &3427343247254973710
 GameObject:
   m_ObjectHideFlags: 0
@@ -1319,6 +1320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 8667200871195312128}
   waterImpactPoint: {fileID: 891455358428125671}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &5828223753093222891
@@ -1626,6 +1628,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3695619464799290872}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6941269369907211201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8920738194334762449}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8920738194334762449
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6941269369907211201}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2790593257300907632}
+  m_Father: {fileID: 3695619464799290872}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7681173207735893605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1738,7 +1772,7 @@ Transform:
   m_GameObject: {fileID: 7750421112519495551}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.15433297, y: 0.071765676, z: 0}
+  m_LocalPosition: {x: 0.1495, y: 0.046, z: 0}
   m_LocalScale: {x: 2.181818, y: 2.1538463, z: 2.1538463}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1993,6 +2027,7 @@ GameObject:
   - component: {fileID: 286123842486684964}
   - component: {fileID: 8695711517438400655}
   - component: {fileID: 7327322109676210271}
+  - component: {fileID: 4648295448306023340}
   m_Layer: 0
   m_Name: EnemySmokeSupportShip
   m_TagString: Untagged
@@ -2013,7 +2048,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2790593257300907632}
+  - {fileID: 8920738194334762449}
   - {fileID: 6863386321736463042}
   - {fileID: 9064834257049385065}
   - {fileID: 7380583075280314369}
@@ -2182,6 +2217,25 @@ MonoBehaviour:
   _myShipType: 2
   _shipRole: 4
   canTargetProtectedShips: 1
+--- !u!114 &4648295448306023340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8403296639487321941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 7327322109676210271}
+  motionRoot: {fileID: 8920738194334762449}
+  shipAnimator: {fileID: 3142466597747699280}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &8761260865340571571
 GameObject:
   m_ObjectHideFlags: 0
@@ -2507,6 +2561,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackCooldown: 1
+  muzzleEffectPrefab: {fileID: 7335811388565860814, guid: ad9018d13e1309e4f89217da593f724d, type: 3}
+  muzzleEffectScale: 1
+  blocksFireThroughAlliedShips: 0
+  alliedHullBlockingRadius: 0.38
   projectilePrefab: {fileID: 2463016830211017476, guid: 74d05dbeafd68e146ae5451a791c13ac, type: 3}
   firePoints:
   - {fileID: 3618947279423196031}

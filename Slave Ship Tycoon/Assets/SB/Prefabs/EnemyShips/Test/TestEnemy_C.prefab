@@ -87,6 +87,7 @@ MonoBehaviour:
   allowsRuleFallback: 1
   ignoresCommanderTargetCommand: 0
   includesMainShipWithEscorts: 0
+  requiresEngagedSeaCreatures: 0
 --- !u!114 &422554676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,6 +223,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &376568510393654063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 138539874376854471}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &138539874376854471
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376568510393654063}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 407103196844750684}
+  m_Father: {fileID: 4832787000817559002}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1540060333775515753
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,7 +324,7 @@ RectTransform:
   - {fileID: 3985066106772176790}
   - {fileID: 186625034700226481}
   - {fileID: 6758065738185242884}
-  m_Father: {fileID: 4832787000817559002}
+  m_Father: {fileID: 138539874376854471}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -441,6 +474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 186625034700226481}
   waterImpactPoint: {fileID: 6758065738185242884}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &2045950636648998162
@@ -626,6 +660,7 @@ GameObject:
   - component: {fileID: 1376274702178296699}
   - component: {fileID: 5313056154382621155}
   - component: {fileID: 461471404412383011}
+  - component: {fileID: 3067383438432167343}
   m_Layer: 0
   m_Name: TestEnemy_C
   m_TagString: Untagged
@@ -649,7 +684,7 @@ Transform:
   - {fileID: 4413597037257105331}
   - {fileID: 3585760036782619853}
   - {fileID: 657586638355139986}
-  - {fileID: 407103196844750684}
+  - {fileID: 138539874376854471}
   - {fileID: 4391985456190113202}
   - {fileID: 1837602902500304333}
   - {fileID: 1463555195956650583}
@@ -829,6 +864,25 @@ MonoBehaviour:
   hookIcon: {fileID: 7560708605616552441}
   markerColor: {r: 1, g: 0.08, b: 0.08, a: 1}
   sortingOrderOffset: 20
+--- !u!114 &3067383438432167343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2555234268865658331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 1845999461184479991}
+  motionRoot: {fileID: 138539874376854471}
+  shipAnimator: {fileID: 1820595080938328916}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &2717084707407695136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1734,7 +1788,7 @@ Transform:
   m_GameObject: {fileID: 7719865439306910256}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.30099997, y: 0.065, z: 0}
+  m_LocalPosition: {x: -0.30099997, y: -0.02, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2001,6 +2055,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3348057075698838263}
     m_Modifications:
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: muzzleEffectPrefab
+      value: 
+      objectReference: {fileID: 7335811388565860814, guid: ad9018d13e1309e4f89217da593f724d, type: 3}
     - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
       propertyPath: 'firePoints.Array.data[0]'
       value: 

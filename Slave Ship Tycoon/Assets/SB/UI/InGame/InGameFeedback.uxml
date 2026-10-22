@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:Style src="../Shared/Styles/HarborTheme.uss" />
     <ui:Style src="InGameFeedback.uss" />
+    <ui:Style src="../Shared/ScreenEntryTransition.uss" />
     <ui:VisualElement class="harbor-root feedback-root" picking-mode="Ignore">
         <ui:VisualElement name="stagePopup" class="stage-popup hidden" picking-mode="Ignore">
             <ui:Label name="stageNumber" class="popup-stage" picking-mode="Ignore" />
@@ -44,5 +45,18 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="stageFade" class="stage-fade hidden" />
+        <ui:VisualElement name="entryTransition" class="entry-transition hidden">
+            <ui:VisualElement name="entryTopShutter" class="entry-shutter entry-top-shutter" picking-mode="Ignore">
+                <ui:VisualElement name="entryWarningBand" class="entry-warning-band" picking-mode="Ignore">
+                    <ui:Label name="entryWarning" class="entry-warning" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="entryBottomShutter" class="entry-shutter entry-bottom-shutter" picking-mode="Ignore">
+                <ui:VisualElement class="entry-heading" picking-mode="Ignore">
+                    <ui:VisualElement name="entryIcon" class="entry-icon hidden" picking-mode="Ignore" />
+                    <ui:Label name="entryCaption" class="entry-caption" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

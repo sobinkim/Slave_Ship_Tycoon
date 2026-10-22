@@ -1,0 +1,4 @@
+White hit+charge: Assets/SB/Prefabs/SeaCreatures/ReefGlider.prefab
+White hit+charge: Assets/SB/Prefabs/SeaCreatures/ReefbackLeviathan.prefab
+Removed background wave sprites=3: Assets/SB/Animations/Scenes/SampleScene.unity
+Removed background wave sprites=3: Assets/SB/Animations/Scenes/SeaCreatureTestScene.unity

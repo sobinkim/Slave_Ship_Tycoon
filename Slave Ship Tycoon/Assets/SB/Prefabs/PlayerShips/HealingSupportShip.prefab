@@ -34,6 +34,38 @@ Transform:
   - {fileID: 4150580239780519674}
   m_Father: {fileID: 5821724295774500919}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &80711913763954660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 799888949168823755}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &799888949168823755
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 80711913763954660}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 852451641285845915}
+  m_Father: {fileID: 1527038189886036454}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &492931911133060827
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +124,7 @@ MonoBehaviour:
   allowsRuleFallback: 0
   ignoresCommanderTargetCommand: 0
   includesMainShipWithEscorts: 0
+  requiresEngagedSeaCreatures: 0
 --- !u!1 &611273529967290086
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,7 +150,7 @@ Transform:
   m_GameObject: {fileID: 611273529967290086}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1552112, y: 0.07114422, z: 0}
+  m_LocalPosition: {x: 0.1536, y: 0.0661, z: 0}
   m_LocalScale: {x: 2.181818, y: 2.1538463, z: 2.1538463}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1191,6 +1224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 2249831608183950071}
   waterImpactPoint: {fileID: 2996716340296014293}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &3719809246924533914
@@ -1229,7 +1263,7 @@ RectTransform:
   - {fileID: 2249831608183950071}
   - {fileID: 2996716340296014293}
   - {fileID: 4920495803420723440}
-  m_Father: {fileID: 1527038189886036454}
+  m_Father: {fileID: 799888949168823755}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2002,6 +2036,7 @@ GameObject:
   - component: {fileID: 2972831997825975889}
   - component: {fileID: 5711172069264057737}
   - component: {fileID: 4795851533567043585}
+  - component: {fileID: 2521881966793237879}
   m_Layer: 0
   m_Name: HealingSupportShip
   m_TagString: Untagged
@@ -2022,7 +2057,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 852451641285845915}
+  - {fileID: 799888949168823755}
   - {fileID: 157067768837791996}
   - {fileID: 5821724295774500919}
   - {fileID: 7540651747574212213}
@@ -2206,6 +2241,25 @@ MonoBehaviour:
   hookIcon: {fileID: 919038291812248493}
   markerColor: {r: 1, g: 0.08, b: 0.08, a: 1}
   sortingOrderOffset: 20
+--- !u!114 &2521881966793237879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7621412389420006158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 7927930423618820082}
+  motionRoot: {fileID: 799888949168823755}
+  shipAnimator: {fileID: 8805291551024515112}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &7684223592381506047
 GameObject:
   m_ObjectHideFlags: 0
@@ -2590,6 +2644,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackCooldown: 1
+  muzzleEffectPrefab: {fileID: 7335811388565860814, guid: ad9018d13e1309e4f89217da593f724d, type: 3}
+  muzzleEffectScale: 1
+  blocksFireThroughAlliedShips: 0
+  alliedHullBlockingRadius: 0.38
   projectilePrefab: {fileID: 8859381280453540083, guid: b6ceb620f927db949bcf78410513732d, type: 3}
   firePoints:
   - {fileID: 2342595636898239713}

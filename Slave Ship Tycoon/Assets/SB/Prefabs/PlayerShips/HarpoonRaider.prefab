@@ -655,6 +655,7 @@ MonoBehaviour:
   allowsRuleFallback: 1
   ignoresCommanderTargetCommand: 0
   includesMainShipWithEscorts: 0
+  requiresEngagedSeaCreatures: 0
 --- !u!1 &2350193048589307581
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,6 +792,7 @@ GameObject:
   - component: {fileID: 236703540305841161}
   - component: {fileID: 1447886314397100597}
   - component: {fileID: 4697989180034185270}
+  - component: {fileID: 4292462549452767266}
   m_Layer: 0
   m_Name: HarpoonRaider
   m_TagString: Untagged
@@ -811,7 +813,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1469252187635749918}
+  - {fileID: 5462108443346815547}
   - {fileID: 6472165297393009357}
   - {fileID: 6410478748333426508}
   - {fileID: 5648407895672082940}
@@ -993,6 +995,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 1689721241314480839}
   attack: {fileID: 8651139714353317055}
+--- !u!114 &4292462549452767266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2953866507785636575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 1689721241314480839}
+  motionRoot: {fileID: 5462108443346815547}
+  shipAnimator: {fileID: 32967486094259620}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &3644115584710490542
 GameObject:
   m_ObjectHideFlags: 0
@@ -1482,7 +1503,7 @@ RectTransform:
   - {fileID: 2854482999635575894}
   - {fileID: 5097970833539728579}
   - {fileID: 1919837315766050055}
-  m_Father: {fileID: 2972453133516258590}
+  m_Father: {fileID: 5462108443346815547}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1611,7 +1632,7 @@ Transform:
   m_GameObject: {fileID: 6835403882418368273}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.343, y: -0.103, z: 0}
+  m_LocalPosition: {x: 0.3468, y: -0.104, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1897,6 +1918,38 @@ Transform:
   - {fileID: 2728251682582180734}
   m_Father: {fileID: 6410478748333426508}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7801882587243723983
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5462108443346815547}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5462108443346815547
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7801882587243723983}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1469252187635749918}
+  m_Father: {fileID: 2972453133516258590}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7931630070939697936
 GameObject:
   m_ObjectHideFlags: 0
@@ -2109,6 +2162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 2854482999635575894}
   waterImpactPoint: {fileID: 5097970833539728579}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &8450760431197288503
@@ -2410,6 +2464,10 @@ PrefabInstance:
       propertyPath: ballisticHitRadius
       value: 0.35
       objectReference: {fileID: 0}
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: muzzleEffectPrefab
+      value: 
+      objectReference: {fileID: 7335811388565860814, guid: ad9018d13e1309e4f89217da593f724d, type: 3}
     - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
       propertyPath: ballisticApexHeight
       value: 1.2

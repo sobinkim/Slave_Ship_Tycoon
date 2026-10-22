@@ -1,0 +1,159 @@
+.hud {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+
+}
+.currency-bar { position: absolute; top: 0; left: 0; right: 0; height: 64px; flex-direction: row; align-items: center;  padding: 4px 18px;   }
+.currency-slot { flex-grow: 1; flex-basis: 0; min-width: 0; flex-direction: row; align-items: center; padding: 0 10px; }
+.currency-copy { flex-grow: 1; min-width: 0; margin-left: 8px; flex-direction: row; align-items: center; }
+.currency-name { display: none; }
+.currency-amount { font-size: 30px;  margin: 0; padding: 0; overflow: hidden; text-overflow: ellipsis; }
+.currency-icon { width: 36px; height: 36px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; }
+.currency-slot > .currency-icon { width: 44px; height: 44px; }
+.route-card { position: absolute; top: 84px; left: 28px; right: 28px; min-height: 136px; padding: 14px 22px; flex-direction: row;   }
+.route-copy { flex-grow: 1; flex-basis: 0; justify-content: center; }
+.route-heading { flex-direction: row; align-items: center; }
+.route-heading-spacer { flex-grow: 1; min-width: 8px; }
+.route-number {   font-size: 23px; padding: 4px 18px; margin-right: 16px; }
+.route-title { font-size: 32px;  }
+.route-detail { font-size: 26px;  white-space: normal; margin-top: 6px; }
+.route-progress { flex-grow: 1; min-width: 0; font-size: 21px;  -unity-text-align: middle-right; margin: 0 0 0 18px; padding: 0; }
+.boss-entry { width: 270px; }
+.boss-entry > .harbor-button { height: 76px; margin-top: 0; }
+.small-text { font-size: 22px;  white-space: normal; }
+.boss-entry > .small-text { -unity-text-align: middle-center; }
+.route-card.is-transport { top: 72px; min-height: 0; padding: 0 10px;  }
+.route-card.is-transport > .route-copy { justify-content: flex-start; }
+.route-card.is-transport .route-heading { height: 32px; flex-shrink: 0; }
+.route-card.is-transport .route-title { flex-shrink: 1; min-width: 0; margin: 0; padding: 0; font-size: 26px;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;   }
+.route-card.is-transport .route-number { font-size: 19px; margin-right: 12px; padding: 0 8px;    }
+.route-card.is-transport .route-progress { flex-grow: 0; flex-shrink: 0; min-width: 120px; min-height: 28px; margin: 0 0 0 12px; padding: 0 8px; font-size: 22px;  -unity-text-align: middle-right;    }
+.route-card.is-transport .route-detail { display: none; }
+.route-card.is-transport .stage-track { height: 3px; margin-top: 3px;   }
+.transport-stops { display: none; }
+.transport-stop { min-width: 30px; height: 18px; margin: 0; padding: 0 7px; font-size: 16px;  -unity-text-align: middle-center;    }
+.transport-stop.is-port { min-width: 50px; }
+.transport-summary { flex-direction: row; align-items: center; }
+.transport-goal-card { width: 260px; flex-shrink: 0; margin-left: 20px; padding: 3px 10px; align-items: flex-end;   }
+.transport-goal-heading { flex-direction: row; align-items: center; }
+.transport-goal-title { margin: 0; padding: 0; font-size: 18px;  }
+.transport-beat, .transport-goal-breakdown, .transport-goal-hint { display: none; }
+.transport-goal-amount-row { flex-direction: row; align-items: center; min-height: 32px; }
+.transport-goal-icon { width: 28px; height: 28px; margin-right: 8px; }
+.transport-goal-value { flex-shrink: 0; margin: 0; padding: 0; font-size: 30px;   }
+.transport-cargo { margin-top: 8px; }
+.transport-items { flex-grow: 1; min-width: 0; flex-direction: row; flex-wrap: wrap; align-items: flex-start; justify-content: space-around; }
+.transport-item { flex-grow: 1; flex-basis: 0; min-width: 86px; align-items: center; margin: 0 3px; }
+.transport-tile { width: 56px; height: 56px; flex-shrink: 0; align-items: center; justify-content: center;       }
+.transport-icon-anchor { width: 50px; height: 50px; align-items: center; justify-content: center;   }
+.transport-icon { width: 50px; height: 50px; -unity-background-scale-mode: scale-to-fit;   }
+.is-market-reveal .transport-tile { width: 92px; height: 92px; }
+.is-market-reveal .transport-icon-anchor, .is-market-reveal .transport-icon { width: 82px; height: 82px; }
+.is-market-reveal .transport-item-name { display: flex; }
+.is-market-reveal .transport-goal-value { font-size: 36px; }
+.transport-halo { position: absolute; left: 3px; right: 3px; top: 3px; bottom: 3px;    opacity: 0; }
+.transport-ring { position: absolute; left: -8px; right: -8px; top: -8px; bottom: -8px;    opacity: 0; }
+.transport-spark { position: absolute; width: 6px; height: 6px;   }
+.transport-bonus-twinkle { position: absolute; left: 50%; top: 50%; width: 36px; height: 36px; opacity: 0;  }
+.transport-multiplier { position: absolute; right: -16px; bottom: -4px; min-width: 36px; height: 22px; margin: 0; padding: 0 4px; font-size: 18px;  -unity-text-align: middle-center;     }
+.transport-pop { position: absolute; left: -18px; right: -18px; top: 16px; margin: 0; padding: 0; font-size: 28px;  -unity-text-align: middle-center;    opacity: 0; }
+.transport-item-meta { height: 22px; margin-top: 2px; padding: 0 4px; flex-direction: row; align-items: center; justify-content: center; max-width: 100%; }
+.transport-item-name { display: none; min-width: 0; flex-shrink: 1; margin: 0 6px 0 0; padding: 0; font-size: 18px;  -unity-text-align: middle-center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.transport-quantity { flex-shrink: 0; margin: 0; padding: 0; font-size: 16px;  -unity-text-align: middle-center;   }
+.transport-item.is-dimmed { opacity: 0.35; }
+.transport-item.is-focused { opacity: 1; }
+.transport-item.is-charging .transport-halo { opacity: 0.8; }
+.transport-item.is-success .transport-halo {  opacity: 1; }
+
+.transport-item.is-failure .transport-halo {  opacity: 0.6; }
+.transport-item.is-bonus .transport-halo {  opacity: 0.65; }
+.transport-revenue { display: none; }
+.transport-revenue-title { display: none; }
+.transport-reward-rows { flex-direction: row; align-items: center; }
+.transport-reward { flex-grow: 1; flex-basis: 0; min-width: 0; height: 28px; flex-direction: row; align-items: center; padding: 1px 10px; margin: 0 3px;     }
+.transport-reward > .currency-icon { width: 28px; height: 28px; margin-right: 8px; }
+.transport-reward-icon-anchor { width: 28px; height: 28px; flex-shrink: 0; margin-right: 8px; align-items: center; justify-content: center; }
+.transport-reward-icon-anchor > .currency-icon { width: 28px; height: 28px; }
+.transport-reward-impact { position: absolute; left: -6px; right: -6px; top: -6px; bottom: -6px;    opacity: 0; }
+.transport-reward-value { flex-grow: 1; min-width: 0; margin: 0; padding: 0; font-size: 25px;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.transport-reward-delta { position: absolute; right: 8px; top: -18px; margin: 0; padding: 0; font-size: 21px;  opacity: 0;   }
+.transport-reveal { position: absolute; left: 16%; right: 16%; top: 100%; margin-top: 4px; padding: 5px 14px;   }
+.reveal-cargo-name { height: 22px; flex-shrink: 0; margin: 0; padding: 0; font-size: 20px;  -unity-text-align: middle-center;    }
+.reveal-rate { height: 46px; flex-shrink: 0; margin: 0; padding: 0; font-size: 38px;  -unity-text-align: middle-center;    }
+.reveal-multiplier { height: 24px; flex-shrink: 0; margin: 0; padding: 0; font-size: 20px; -unity-text-align: middle-center;    }
+.reveal-money-rows { flex-shrink: 0; flex-direction: row; justify-content: center; }
+.reveal-money-row { height: 28px; flex-shrink: 0; flex-direction: row; align-items: center; margin: 0 12px; }
+.reveal-money-icon { width: 28px; height: 28px; flex-shrink: 0; margin-right: 10px; -unity-background-scale-mode: scale-to-fit; }
+.reveal-money-before, .reveal-money-arrow, .reveal-money-after { display: none; }
+.reveal-money-delta { margin: 0; padding: 0; font-size: 22px;   white-space: nowrap;   }
+.transport-reveal.is-charging .reveal-rate { height: 62px; font-size: 56px;  }
+.transport-reveal.is-bonus .reveal-rate { height: 58px; font-size: 48px; }
+.transport-fx { position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+.transport-fly-icon { position: absolute; width: 22px; height: 22px; -unity-background-scale-mode: scale-to-fit; }
+.gain-logs { position: absolute; left: 28px; bottom: 51%; align-items: flex-start; }
+.gain-log { flex-direction: row; align-items: center; padding: 8px 14px; margin-top: 6px;  }
+.gain-log > .currency-icon { margin-right: 10px; }
+.gain-log > Label { font-size: 24px;  }
+.lower-panel-background { position: absolute; top: 51%; left: 0; right: 0; bottom: 0;   }
+.command-area { height: 216px; flex-shrink: 0; flex-direction: column-reverse; padding: 8px 20px;   }
+.command-toolbar { height: 56px; flex-shrink: 0; flex-direction: row; align-items: center; margin-top: 8px; }
+.command-status { flex-grow: 1; flex-basis: 0; min-width: 0; margin-right: 24px; padding: 5px 14px;    }
+.transport-return { width: 190px; min-height: 52px; height: 52px; margin: 0 12px 0 0; padding: 4px 10px; font-size: 22px; }
+.command-title-row { flex-direction: row; justify-content: space-between; }
+.command-title, .gauge-value { font-size: 22px; margin: 0; padding: 0;  }
+.gauge-track { height: 14px; margin-top: 4px;     overflow: hidden; }
+.gauge-fill { width: 0%; height: 100%;      }
+.auto-button { width: 164px; height: 52px; min-height: 52px; margin: 0; padding: 4px; font-size: 22px;  }
+.skill-scroll { flex-grow: 0; flex-shrink: 0; min-width: 0; min-height: 0; height: 128px; }
+.skill-scroll .unity-scroll-view__content-container { flex-direction: row; }
+.skill-bar { flex-direction: row; align-items: flex-start; }
+.skill-cell { width: 128px; margin-right: 14px; flex-shrink: 0; }
+.command-skill { width: 128px; height: 128px; min-height: 128px; flex-shrink: 0; margin: 0; padding: 6px;    overflow: hidden; }
+.command-skill:disabled { opacity: 0.65; }
+.command-skill.is-active {  opacity: 1; }
+.skill-icon { width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;  flex-shrink: 0; }
+.skill-empty-mark { position: absolute; left: 0; right: 0; top: 0; bottom: 0; font-size: 42px; -unity-text-align: middle-center; margin: 0;  }
+.skill-cooldown { position: absolute; left: 0; right: 0; top: 0; bottom: 0; -unity-text-align: middle-center; font-size: 36px;  margin: 0;    }
+.skill-cost { position: absolute; right: 4px; bottom: 8px; font-size: 20px; margin: 0; padding: 1px 6px;   }
+.skill-state { display: none; }
+.skill-charge-track { position: absolute; left: 0; right: 0; bottom: 0; height: 5px;  overflow: hidden; }
+.skill-charge-fill { height: 100%;  }
+.upgrade-panel { flex-grow: 1; flex-basis: 0; min-height: 0; padding: 16px 20px 8px 20px; }
+.panel-heading { height: 52px; flex-shrink: 0; flex-direction: row; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.panel-title { font-size: 28px;  margin: 0; padding: 0; }
+.upgrade-hint {  font-size: 20px; margin: 0; padding: 0; }
+.maintenance-scroll { flex-basis: 0; }
+.maintenance-scroll > .unity-scroll-view__vertical-scroller { width: 12px; margin-left: 8px; }
+.maintenance-scroll .unity-scroller__low-button, .maintenance-scroll .unity-scroller__high-button { display: none; }
+.upgrade-row { flex-shrink: 0; margin: 0 0 12px 0; padding: 16px 18px; height: 132px; flex-direction: row; align-items: center;      }
+.upgrade-copy { flex-grow: 1; flex-basis: 0; min-width: 0; margin-right: 18px; }
+.upgrade-heading { flex-direction: row; align-items: center; margin-bottom: 10px; }
+.upgrade-name { font-size: 29px;  margin: 0; padding: 0; }
+.upgrade-level { font-size: 20px;   padding: 4px 10px;  margin: 0 0 0 16px; }
+.upgrade-effect { font-size: 25px;  margin: 0; padding: 0; -unity-text-align: middle-left; }
+.upgrade-action { width: 220px; height: 96px; min-height: 96px; margin: 0; padding: 8px;    }
+.upgrade-cost { font-size: 26px;  -unity-text-align: middle-center; margin: 0; padding: 0;  }
+.upgrade-action-label { font-size: 20px; -unity-text-align: middle-center; margin: 4px 0 0 0; padding: 0;  }
+.upgrade-action:disabled { opacity: 1;   }
+.commander-settings { flex-grow: 1; flex-basis: 0; min-height: 0; overflow: hidden; padding: 12px 20px 4px 20px; }
+.loadout-scroll { height: 116px; min-height: 116px; flex-shrink: 0; margin-bottom: 8px; }
+.loadout-scroll .unity-scroll-view__content-container { flex-direction: row; }
+.commander-slots { flex-direction: row; }
+.loadout-slot { width: 108px; height: 108px; min-height: 108px; flex-shrink: 0; margin: 0 12px 0 0; padding: 4px 4px 26px 4px;    }
+.slot-number { position: absolute; top: 2px; left: 4px; font-size: 19px;  padding: 0; margin: 0; }
+.slot-caption { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; position: absolute; left: 0; right: 0; bottom: 2px; font-size: 20px; -unity-text-align: middle-center; padding: 0; margin: 0; }
+.skill-detail { flex-direction: row; align-items: center; flex-shrink: 0;   padding: 8px 12px; margin-bottom: 10px; }
+.selected-skill-name { font-size: 27px;  margin: 0; padding: 0; }
+.selected-skill-description { font-size: 21px;  white-space: normal; margin: 4px 0; padding: 0; }
+.skill-detail-copy { flex-grow: 1; flex-basis: 0; min-width: 0; margin-right: 16px; }
+.skill-detail-actions { width: 260px; flex-shrink: 0; }
+.skill-detail-actions > .harbor-button { height: 52px; min-height: 52px; font-size: 22px; margin: 4px 0; padding: 4px; }
+.skill-library-scroll { flex-basis: 0; }
+.skill-library { flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
+.library-skill { width: 23%; height: 156px; min-height: 156px; flex-shrink: 0; margin: 1%; padding: 8px 8px 46px 8px;    }
+.library-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; position: absolute; left: 4px; right: 4px; bottom: 26px; font-size: 23px; -unity-text-align: middle-center; margin: 0; padding: 0; }
+.library-badge { position: absolute; left: 4px; right: 4px; bottom: 4px; font-size: 19px;  -unity-text-align: middle-center; margin: 0; padding: 0; }
+.commander-settings > .small-text { height: 30px; flex-shrink: 0; font-size: 19px; padding: 0; margin: 4px 0 0 0; }
+.bottom-nav { height: 132px; flex-shrink: 0; flex-direction: row;  padding: 14px 16px;   }
+.hud .bottom-nav > .harbor-button { flex-grow: 1; flex-basis: 0; height: 100px; margin: 0 6px; font-size: 29px;       }
+.stage-track { height: 6px; margin-top: 8px;  }
+.stage-fill { height: 100%;  }

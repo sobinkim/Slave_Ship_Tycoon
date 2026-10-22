@@ -13,9 +13,12 @@ Shader "Fleet/Sea Creature Surface Body"
         _Waterline ("Local Water Height", Float) = -0.2
         _WaterTint ("Water Contact Tint", Color) = (0.15,0.56,0.6,0.65)
         _ContactDepth ("Contact Tint Depth", Float) = 0.07
-        [HDR] _HitEmissionColor ("Hit Emission Color", Color) = (1,0.86,0.56,1)
+        [HDR] _HitEmissionColor ("Hit Emission Color", Color) = (1,1,1,1)
         _HitEmissionIntensity ("Hit Emission Intensity", Range(0,8)) = 1.8
         _HitEmissionFlash ("Hit Emission Flash", Range(0,1)) = 0
+        [HDR] _ChargeEmissionColor ("Charge Emission Color", Color) = (1,1,1,1)
+        _ChargeEmissionIntensity ("Charge Emission Intensity", Range(0,2)) = 0.4
+        _ChargeEmissionFlash ("Charge Emission Flash", Range(0,1)) = 0
     }
     SubShader
     {
@@ -32,9 +35,11 @@ Shader "Fleet/Sea Creature Surface Body"
             sampler2D _MainTex;
             fixed4 _Color, _WaterTint;
             float4 _HitEmissionColor;
+            float4 _ChargeEmissionColor;
             float _SwimPhase, _SwimStrength, _TailStart, _TailBendMultiplier;
             float _SinkProgress, _SinkDistance, _Waterline, _ContactDepth;
             float _HitEmissionIntensity, _HitEmissionFlash;
+            float _ChargeEmissionIntensity, _ChargeEmissionFlash;
             v2f vert(appdata v)
             {
                 v2f o;
@@ -59,6 +64,11 @@ Shader "Fleet/Sea Creature Surface Body"
                 clip(depth);
                 float contact = 1 - smoothstep(0,max(0.001,_ContactDepth),depth);
                 color.rgb = lerp(color.rgb,_WaterTint.rgb,contact * _WaterTint.a);
+                // Charge anticipation lifts painted highlights without washing out the ink outline.
+                float luminance = dot(spriteColor.rgb,float3(0.2126,0.7152,0.0722));
+                float chargeMask = smoothstep(0.2,0.65,luminance);
+                color.rgb += _ChargeEmissionColor.rgb * _ChargeEmissionIntensity
+                    * saturate(_ChargeEmissionFlash) * chargeMask;
                 // Emit across the entire visible sprite, including its dark outline.
                 // Sprite alpha and the clipped waterline still define the visible silhouette.
                 color.rgb += _HitEmissionColor.rgb * _HitEmissionIntensity

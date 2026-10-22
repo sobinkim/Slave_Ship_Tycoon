@@ -1,0 +1,16 @@
+@import url("HarborTheme.uss");
+Button { -unity-text-align: middle-center; }
+Label { flex-shrink: 0; }
+.unity-scroll-view { flex-direction: column; }
+.unity-scroll-view__content-and-vertical-scroll-container { flex-direction: row; flex-grow: 1; min-height: 0; }
+.unity-scroll-view__content-viewport { flex-grow: 1; min-width: 0; overflow: hidden; }
+.unity-scroll-view__content-container { flex-shrink: 0; }
+.unity-scroller--vertical { flex-direction: column; width: 20px; }
+.unity-scroller--vertical > .unity-slider { flex-grow: 1; }
+.unity-scroller--vertical .unity-base-slider__input { flex-grow: 1; }
+.unity-scroller--vertical .unity-base-slider__tracker { width: 8px; align-self: center; background-color: var(--color-surface-inset); border-radius: 0; }
+.unity-scroller--vertical .unity-base-slider__dragger { width: 16px; min-height: 38px; background-color: var(--color-border); border-radius: 0; }
+.unity-scroller__low-button, .unity-scroller__high-button { display: none; }
+.unity-scroller--horizontal { display: none; }
+
+.unity-ui-document__root, .harbor-document { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }

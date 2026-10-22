@@ -1,27 +1,26 @@
 .feedback-root { position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
-.stage-popup { position: absolute; left: 100px; right: 100px; top: 30%; background-color: var(--color-surface-overlay); padding: 28px; border-top-width: 3px; border-bottom-width: 3px; border-color: var(--color-accent); }
-.popup-stage { font-size: 28px; color: var(--color-accent); -unity-text-align: middle-center; }
-.popup-result { font-size: 36px; white-space: normal; -unity-font-style: bold; -unity-text-align: middle-center; }
-.settlement-card { height: 74%; padding: 28px; background-color: var(--color-surface-raised); border-width: var(--border-control-width); border-color: var(--color-border); border-radius: 12px; }
-.settlement-card.is-settled { border-color: var(--color-accent); }
+.stage-popup { position: absolute; left: 100px; right: 100px; top: 30%;  padding: 28px;    }
+.popup-stage { font-size: var(--ui-font-description);  -unity-text-align: middle-center; margin: 0 0 8px; padding: 0; }
+.popup-result { font-size: var(--ui-font-title); white-space: normal;  -unity-text-align: middle-center; margin: 0; padding: 0; }
+.settlement-card { height: 74%; padding: var(--ui-space-lg);     }
 .settlement-content { flex-grow: 1; flex-basis: 0; min-height: 0; }
 .settlement-content > .unity-scroll-view__vertical-scroller { width: 12px; margin-left: 8px; }
-.settlement-eyebrow { font-size: 26px; color: var(--color-accent); -unity-text-align: middle-center; margin-bottom: 12px; }
-.settlement-goal { padding: 20px; margin-bottom: 18px; background-color: var(--color-surface-inset); border-width: var(--border-control-width); border-color: var(--color-accent); border-radius: 8px; align-items: center; }
-.settlement-goal-title { font-size: 27px; color: var(--color-text-secondary); white-space: normal; -unity-text-align: middle-center; }
-.settlement-goal-amount { font-size: 64px; color: var(--color-accent); -unity-font-style: bold; margin-top: 8px; margin-bottom: 6px; }
-.settlement-goal-caption { font-size: 24px; color: var(--color-text-secondary); }
-.settlement-breakdown { margin-bottom: 22px; }
-.settlement-breakdown-row { flex-direction: row; justify-content: space-between; padding: 5px 8px; }
-.settlement-breakdown-row > Label { font-size: 25px; color: var(--color-text-secondary); }
-.settlement-breakdown-row > .settlement-breakdown-value { color: var(--color-text-primary); -unity-font-style: bold; }
-.settlement-rewards-title { color: var(--color-text-secondary); font-size: 24px; margin-bottom: 10px; }
-.settlement-reward { flex-direction: row; justify-content: space-between; align-items: center; background-color: var(--color-surface-inset); padding: 16px 20px; margin-bottom: 10px; border-width: var(--border-control-width); border-color: var(--color-border); border-radius: 6px; }
-.settlement-reward.is-goal { border-color: var(--color-accent); }
-.settlement-reward-name { font-size: 27px; }
-.reward-amount { font-size: 36px; color: var(--color-accent); -unity-font-style: bold; }
-.settlement-status { font-size: 28px; color: var(--color-accent); -unity-font-style: bold; -unity-text-align: middle-center; margin-top: 8px; }
-.settlement-growth-hint { flex-shrink: 0; font-size: 25px; color: var(--color-text-secondary); white-space: normal; -unity-text-align: middle-center; margin-top: 24px; }
-.settlement-actions { margin-top: 10px; }
-.settlement-close { flex-shrink: 0; margin-top: 8px; height: 68px; min-height: 68px; color: var(--color-text-secondary); }
-.stage-fade { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: var(--color-surface-primary); }
+.settlement-eyebrow { font-size: var(--ui-font-caption);  -unity-text-align: middle-center; margin-bottom: 12px; margin: 0 0 16px; padding: 0; }
+.settlement-goal { padding: var(--ui-space-md); margin-bottom: var(--ui-space-md);      align-items: center; }
+.settlement-goal-title { font-size: var(--ui-font-body);  white-space: normal; -unity-text-align: middle-center; }
+.settlement-goal-amount { font-size: var(--ui-font-display);   margin-top: var(--ui-space-xs); margin-bottom: var(--ui-space-xs); }
+.settlement-goal-caption { font-size: var(--ui-font-caption);  }
+.settlement-breakdown { margin-bottom: var(--ui-space-md); }
+.settlement-breakdown-row { flex-direction: row; justify-content: space-between; padding: 8px; }
+.settlement-breakdown-row > Label { font-size: var(--ui-font-description); margin: 0; padding: 0; }
+.settlement-rewards-title {  font-size: var(--ui-font-body); margin-bottom: 10px; margin: 0 0 16px; padding: 0; }
+.settlement-reward { flex-direction: row; justify-content: space-between; align-items: center;  padding: 16px; margin-bottom: var(--ui-space-xs);     }
+.settlement-reward-name { font-size: var(--ui-font-body); margin: 0; padding: 0; }
+.reward-amount { font-size: var(--ui-font-value); margin: 0; padding: 0; }
+.settlement-status { font-size: var(--ui-font-body);   -unity-text-align: middle-center; margin-top: var(--ui-space-sm); }
+.settlement-growth-hint { flex-shrink: 0; font-size: var(--ui-font-caption);  white-space: normal; -unity-text-align: middle-center; margin-top: var(--ui-space-md); }
+.settlement-actions { margin-top: var(--ui-space-sm); }
+.settlement-close { flex-shrink: 0; margin-top: var(--ui-space-xs); height: 80px; min-height: 80px;  }
+.stage-fade { position: absolute; left: 0; right: 0; top: 0; bottom: 0;  }
+
+.settlement-breakdown-row > .settlement-breakdown-value { font-size: var(--ui-font-item); }

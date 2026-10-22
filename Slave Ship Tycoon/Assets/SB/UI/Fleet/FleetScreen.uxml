@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:Style src="../Shared/Styles/HarborTheme.uss" />
     <ui:Style src="FleetScreen.uss" />
-    <ui:VisualElement class="harbor-root screen">
+    <ui:VisualElement class="harbor-root screen fleet-screen">
         <ui:VisualElement class="screen-header">
             <ui:Label text="함대 편성" class="screen-title" />
             <ui:Button name="closeButton" text="닫기" class="harbor-button close-button" />
@@ -9,12 +9,15 @@
         <ui:Label text="편성 변경은 다음 전투부터 적용됩니다." class="subtitle" />
         <ui:VisualElement name="formationComparison" class="formation-comparison">
             <ui:VisualElement name="playerSide" class="formation-side">
-                <ui:Label name="playerTitle" text="아군 배치" class="side-title" />
+                <ui:VisualElement class="formation-heading">
+                    <ui:Label name="playerTitle" text="아군 배치" class="side-title" />
+                    <ui:Button name="removeAllButton" text="전체 편성 해제" class="harbor-button formation-clear-button" />
+                </ui:VisualElement>
                 <ui:VisualElement name="playerColumns" class="formation-columns" />
             </ui:VisualElement>
             <ui:Label text="›" class="comparison-arrow" />
             <ui:VisualElement name="enemySide" class="formation-side">
-                <ui:Label text="적 함대 · 공격 대상" class="side-title" />
+                <ui:Label text="적 함대" class="side-title" />
                 <ui:VisualElement name="enemyColumns" class="formation-columns" />
             </ui:VisualElement>
         </ui:VisualElement>
@@ -22,16 +25,13 @@
             <ui:Label name="attackName" text="함선을 선택하세요" class="attack-name" />
             <ui:Label name="attackDescription" class="attack-description" />
         </ui:VisualElement>
-        <ui:VisualElement class="fleet-controls">
-            <ui:Label name="inventoryTitle" text="보유 함선" class="section-title subtitle" />
-            <ui:Button name="removeAllButton" text="전체 편성 해제" class="harbor-button" />
-        </ui:VisualElement>
+        <ui:Label text="배치된 함선 더블 클릭 · 편성 해제" class="fleet-hint subtitle" />
         <ui:ScrollView name="inventoryScroll" class="harbor-scroll" mode="Vertical">
             <ui:VisualElement name="inventoryGrid" class="card-grid" />
         </ui:ScrollView>
         <ui:Label name="statusLabel" class="status" />
         <ui:VisualElement class="action-row">
-            <ui:Button name="mergeButton" text="함선 합성" class="harbor-button primary-button" />
+            <ui:Button name="mergeButton" text="함선 합성" class="harbor-button primary-button fleet-merge-button" />
             <ui:Button name="recruitButton" text="함선 모집" class="harbor-button" />
         </ui:VisualElement>
     </ui:VisualElement>

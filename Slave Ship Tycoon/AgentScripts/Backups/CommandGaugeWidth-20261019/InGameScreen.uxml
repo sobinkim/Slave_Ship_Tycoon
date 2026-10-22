@@ -1,0 +1,111 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Shared/Styles/HarborTheme.uss" />
+    <ui:Style src="InGameScreen.uss" />
+    <ui:VisualElement name="hud" class="harbor-root hud" picking-mode="Ignore">
+        <ui:VisualElement name="currencyBar" class="currency-bar" />
+        <ui:VisualElement name="routeCard" class="route-card">
+            <ui:VisualElement class="route-copy">
+                <ui:VisualElement class="route-heading">
+                    <ui:Label name="routeNumber" text="항로 01" class="route-number" />
+                    <ui:Label name="routeTitle" text="해적 해역" class="route-title" />
+                    <ui:VisualElement class="route-heading-spacer" picking-mode="Ignore" />
+                    <ui:Label name="stageProgress" class="route-progress hidden" />
+                </ui:VisualElement>
+                <ui:Label name="routeDetail" text="자동 약탈 중 · 화물을 모아 출항을 준비하세요" class="route-detail" />
+                <ui:VisualElement name="stageTrack" class="stage-track hidden" picking-mode="Ignore">
+                    <ui:VisualElement name="stageFill" class="stage-fill" picking-mode="Ignore" />
+                    <ui:VisualElement name="transportStops" class="transport-stops" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="transportCargo" class="transport-cargo hidden" picking-mode="Ignore">
+                    <ui:VisualElement class="transport-summary" picking-mode="Ignore">
+                    <ui:VisualElement name="transportItems" class="transport-items" picking-mode="Ignore" />
+                    <ui:VisualElement name="transportGoalCard" class="transport-goal-card" picking-mode="Ignore">
+                        <ui:VisualElement class="transport-goal-heading" picking-mode="Ignore">
+                            <ui:Label name="transportGoal" class="transport-goal-title" picking-mode="Ignore" />
+                            <ui:Label name="transportBeat" class="transport-beat" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="transport-goal-amount-row" picking-mode="Ignore">
+                            <ui:VisualElement name="transportGoalIcon" class="currency-icon transport-goal-icon" picking-mode="Ignore" />
+                            <ui:Label name="transportGoalValue" class="transport-goal-value" picking-mode="Ignore" />
+                            <ui:Label name="transportGoalBreakdown" class="transport-goal-breakdown" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:Label name="transportGoalHint" class="transport-goal-hint" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="transportRevenue" class="transport-revenue" picking-mode="Ignore">
+                        <ui:Label text="도착 시 예상 정산 · 실제 지급은 항구에서" class="transport-revenue-title" picking-mode="Ignore" />
+                        <ui:VisualElement name="transportRewardRows" class="transport-reward-rows" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="transportReveal" class="transport-reveal hidden" picking-mode="Ignore">
+                        <ui:Label name="revealCargoName" class="reveal-cargo-name" picking-mode="Ignore" />
+                        <ui:Label name="revealRate" text="..." class="reveal-rate" picking-mode="Ignore" />
+                        <ui:Label name="revealMultiplier" class="reveal-multiplier" picking-mode="Ignore" />
+                        <ui:VisualElement name="revealMoneyRows" class="reveal-money-rows" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="transportFx" class="transport-fx" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="bossEntry" class="boss-entry">
+                <ui:Button name="bossButton" text="보스 도전" class="harbor-button primary-button" />
+                <ui:Label name="bossHint" text="승리 시 운송 항로 개방" class="small-text" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="gainLogs" class="gain-logs" picking-mode="Ignore" />
+        <ui:VisualElement name="lowerPanelBackground" class="lower-panel-background" picking-mode="Ignore">
+            <ui:VisualElement class="command-area">
+                <ui:VisualElement class="command-toolbar">
+                    <ui:VisualElement class="command-status">
+                        <ui:VisualElement class="command-title-row">
+                            <ui:Label text="지휘력" class="command-title" />
+                            <ui:Label name="gaugeText" text="전투 대기" class="gauge-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="gauge-track"><ui:VisualElement name="gaugeFill" class="gauge-fill" /></ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Button name="transportReturn" text="파밍 복귀" tooltip="운송을 정박하고 파밍합니다. 누적 시세와 출항 장비는 유지됩니다." class="harbor-button transport-return hidden" />
+                    <ui:Button name="autoButton" text="AUTO OFF" class="harbor-button auto-button" />
+                </ui:VisualElement>
+                <ui:ScrollView name="skillScroll" class="skill-scroll" mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden">
+                    <ui:VisualElement name="skillBar" class="skill-bar" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="upgradePanel" class="upgrade-panel">
+                <ui:VisualElement class="panel-heading">
+                    <ui:Label text="함대 정비" class="panel-title" />
+                    <ui:Label name="upgradeHint" text="강화 버튼 길게 누르기 · 연속 강화" class="upgrade-hint" />
+                </ui:VisualElement>
+                <ui:ScrollView name="maintenanceScroll" class="harbor-scroll maintenance-scroll" mode="Vertical">
+                    <ui:VisualElement name="upgradeRows" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="commanderSettings" class="commander-settings hidden">
+                <ui:VisualElement class="panel-heading">
+                    <ui:Label text="지휘 스킬" class="panel-title" />
+                    <ui:Label text="슬롯 선택 → 스킬 선택 → 장착" class="upgrade-hint" />
+                </ui:VisualElement>
+                <ui:ScrollView class="loadout-scroll" mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden">
+                    <ui:VisualElement name="commanderSlots" class="commander-slots" />
+                </ui:ScrollView>
+                <ui:VisualElement class="skill-detail">
+                    <ui:VisualElement class="skill-detail-copy">
+                        <ui:Label name="selectedSkillName" class="selected-skill-name" />
+                        <ui:Label name="selectedSkillDescription" class="selected-skill-description" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="skill-detail-actions">
+                        <ui:Button name="equipSkillButton" text="장착" class="harbor-button primary-button" />
+                        <ui:Button name="removeSkillButton" text="선택 슬롯 해제" class="harbor-button" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:ScrollView name="skillLibraryScroll" class="harbor-scroll skill-library-scroll" mode="Vertical">
+                    <ui:VisualElement name="commanderRows" class="skill-library" />
+                </ui:ScrollView>
+                <ui:Label name="commanderStatus" class="small-text" />
+            </ui:VisualElement>
+            <ui:VisualElement class="bottom-nav">
+                <ui:Button name="upgradeNav" text="강화" class="harbor-button primary-button" />
+                <ui:Button name="skillsNav" text="스킬" class="harbor-button" />
+                <ui:Button name="fleetNav" text="함대" class="harbor-button" />
+                <ui:Button name="recruitNav" text="모집" class="harbor-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

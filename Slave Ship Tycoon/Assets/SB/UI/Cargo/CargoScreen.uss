@@ -1,50 +1,53 @@
-.cargo-screen { padding: 26px; }
-.cargo-section { flex-grow: 1; flex-basis: 0; min-height: 0; background-color: var(--color-surface-raised); padding: 14px; }
-.selected-section { flex-grow: 0; flex-shrink: 1; flex-basis: auto; }
-.selected-section > .harbor-scroll { flex-grow: 0; flex-shrink: 1; }
-.catalog-section { margin-top: 16px; }
-.cargo-heading { flex-direction: row; justify-content: space-between; align-items: center; }
-.cargo-heading > .section-title { margin-top: 0; }
-.capacity-text { font-size: 28px; color: var(--color-accent); }
-.capacity-track { height: 8px; margin-bottom: 14px; background-color: var(--color-border); }
-.capacity-fill { height: 100%; background-color: var(--color-action-hover); }
-.capacity-fill.is-overloaded { background-color: var(--color-status-danger); }
-.cargo-grid { flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
-.cargo-card { width: 48%; flex-shrink: 0; min-height: 328px; margin: 1%; padding: 14px; background-color: var(--color-surface-inset); border-width: var(--border-control-width); border-color: var(--color-border); border-radius: 8px; }
-.cargo-card-heading { flex-direction: row; }
-.cargo-icon { width: 104px; height: 104px; margin-right: 12px; -unity-background-scale-mode: scale-to-fit; }
-.cargo-card-copy { flex-grow: 1; flex-basis: 0; }
-.cargo-name { font-size: 28px; white-space: normal; -unity-font-style: bold; }
-.cargo-amount { font-size: 25px; color: var(--color-accent); }
-.small-text { color: var(--color-text-secondary); font-size: 22px; white-space: normal; }
-.cargo-rewards { min-height: 48px; font-size: 23px; color: var(--color-accent); white-space: normal; margin: 8px 0; }
-.cargo-actions { flex-direction: row; }
-.cargo-actions > .harbor-button { flex-grow: 1; flex-basis: 0; height: 64px; min-height: 64px; padding: 6px; font-size: 24px; }
-.cargo-empty { width: 23%; height: 140px; margin: 1%; font-size: 45px; min-height: 140px; flex-shrink: 0; }
-.reward-preview { padding: 14px 12px; margin-bottom: 14px; flex-shrink: 0; background-color: var(--color-surface-inset); border-radius: 8px; }
-.reward-heading { flex-direction: row; justify-content: space-between; align-items: center; margin: 0 8px 8px 8px; }
-.reward-title { font-size: 27px; -unity-font-style: bold; }
-.reward-heading > .small-text { font-size: 20px; }
+.cargo-screen {
+    --cargo-surface: #303030;
+    --cargo-divider: #646464;
+    --cargo-row-divider: #505050;
+    --cargo-muted: #BABABA;
+    --cargo-capacity: #DEDEDE;
+    --cargo-capacity-track: #515151;
+    --cargo-overload: #D85850;
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    padding: 36px 40px;
+    background-color: var(--cargo-surface);
+}
+.cargo-header { height: 96px; margin-bottom: 0; padding-bottom: 16px; }
+.cargo-header > .screen-title { font-size: var(--ui-font-title); margin: 0; padding: 0; }
+.cargo-header > .close-button { width: 136px; height: 72px; min-height: 72px; margin: 0; padding: 0; font-size: var(--ui-font-description); }
+.load-summary { flex-shrink: 0; padding: 24px 0; }
+.cargo-heading, .reward-heading, .catalog-heading { flex-direction: row; justify-content: space-between; align-items: center; }
+.cargo-section-title, .reward-title { font-size: var(--ui-font-item); margin: 0; padding: 0; }
+.capacity-text { font-size: var(--ui-font-value); margin: 0; padding: 0; }
+.capacity-track { height: 8px; margin-top: 16px; margin-bottom: 24px; background-color: var(--cargo-capacity-track); }
+.capacity-fill { height: 100%; background-color: var(--cargo-capacity); }
+.capacity-fill.is-overloaded { background-color: var(--cargo-overload); }
+.reward-heading { margin-bottom: 16px; }
+.cargo-hint { font-size: var(--ui-font-caption); color: var(--cargo-muted); margin: 0; padding: 0; }
 .reward-currencies { flex-direction: row; }
-.reward-currency { flex-grow: 1; flex-basis: 0; min-width: 0; padding: 8px; margin: 0 4px; border-width: var(--border-control-width); border-color: var(--color-border); border-radius: 6px; }
-.reward-name { font-size: 22px; color: var(--color-text-secondary); margin: 0; }
-.reward-value { color: var(--color-accent); font-size: 36px; -unity-font-style: bold; margin: 4px 0 0 0; padding: 0; }
-.reward-delta { height: 30px; font-size: 23px; -unity-font-style: bold; margin: 4px 0 0 0; padding: 0; opacity: 0; }
-.reward-currency.is-gaining { border-color: var(--color-grade-uncommon); background-color: var(--color-surface-raised); }
-.reward-currency.is-gaining > .reward-value { color: var(--color-text-primary); }
-.reward-currency.is-gaining > .reward-delta { color: var(--color-grade-uncommon); }
-.reward-currency.is-decreasing { border-color: var(--color-status-danger); }
-.reward-currency.is-decreasing > .reward-delta { color: var(--color-status-danger); }
-.cargo-screen > .status { min-height: 50px; }
-.cargo-screen > .harbor-button { flex-shrink: 0; }
-
-.cargo-slot, .cargo-empty { width: 23%; height: 140px; min-height: 140px; max-height: 140px; flex-shrink: 0; margin: 1%; }
-.cargo-slot { padding: 6px 8px 32px 8px; border-width: var(--border-control-width); border-radius: 6px; background-color: var(--color-surface-inset); }
-.cargo-slot-icon { width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit; }
-.cargo-slot-name { position: absolute; bottom: 4px; left: 4px; right: 4px; font-size: 21px; -unity-text-align: middle-center; margin: 0; padding: 0; }
-.cargo-slot-amount { position: absolute; top: 4px; right: 4px; font-size: 22px; -unity-font-style: bold; background-color: var(--color-surface-primary); color: var(--color-accent); margin: 0; padding: 2px 6px; }
-.cargo-slot-hint { font-size: 20px; margin: 0 0 8px 0; }
-.cargo-detail-overlay { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: var(--color-surface-overlay); justify-content: center; padding: 36px; }
-.cargo-detail-panel { background-color: var(--color-surface-primary); border-width: var(--border-control-width); border-color: var(--color-border); border-radius: 8px; padding: 24px; }
-.cargo-card.is-detail-card { width: 100%; margin: 0; min-height: 390px; }
-.is-detail-card .cargo-actions > .harbor-button { height: 80px; min-height: 80px; font-size: 28px; }
+.reward-currency { flex-grow: 1; flex-basis: 0; min-width: 0; flex-direction: row; align-items: center; padding-right: 18px; }
+.reward-currency-icon { width: 44px; height: 44px; margin-right: var(--ui-space-xs); flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; }
+.reward-value { flex-shrink: 1; min-width: 0; font-size: var(--ui-font-value); margin: 0; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.reward-delta { position: absolute; top: 100%; left: 52px; font-size: var(--ui-font-caption); margin: 0; padding: 0; opacity: 0; white-space: nowrap; color: var(--cargo-muted); }
+.catalog-heading { height: 72px; flex-shrink: 0; border-bottom-width: 0; }
+.cargo-catalog { flex-grow: 1; flex-basis: 0; min-height: 0; }
+.cargo-catalog > .unity-scroll-view__vertical-scroller { width: 12px; margin-left: 8px; }
+.cargo-list { flex-direction: column; }
+.cargo-card { flex-shrink: 0; min-height: 216px; padding: 16px 0; justify-content: center; border-top-width: 1px; border-top-color: var(--cargo-row-divider); }
+.cargo-card.is-first-cargo-card { border-top-width: 0; }
+.cargo-card-heading { flex-direction: row; align-items: center; }
+.cargo-icon { width: 96px; height: 96px; flex-shrink: 0; margin-right: 22px; -unity-background-scale-mode: scale-to-fit; }
+.cargo-card-copy { flex-grow: 1; flex-basis: 0; min-width: 0; margin-right: 16px; }
+.cargo-name { font-size: var(--ui-font-item); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; padding: 0; }
+.cargo-unit-weight { font-size: var(--ui-font-description); color: var(--cargo-muted); margin: 8px 0 0; padding: 0; }
+.cargo-actions { flex-direction: row; align-items: center; flex-shrink: 0; }
+.cargo-actions > .cargo-stepper { width: 88px; height: 88px; min-height: 88px; flex-shrink: 0; margin: 0; padding: 0; font-size: 44px; -unity-text-align: middle-center; }
+.cargo-amount { width: 76px; height: 88px; flex-shrink: 0; font-size: var(--ui-font-value); margin: 0; padding: 0; -unity-text-align: middle-center; }
+.cargo-card.is-empty .cargo-icon { opacity: 0.45; }
+.cargo-card.is-empty .cargo-amount { color: var(--cargo-muted); }
+.cargo-rewards { flex-direction: row; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+.cargo-reward-chip { flex-direction: row; align-items: center; margin-right: 24px; }
+.cargo-reward-icon { width: 32px; height: 32px; flex-shrink: 0; margin-right: var(--ui-space-xs); -unity-background-scale-mode: scale-to-fit; }
+.cargo-reward-value { font-size: var(--ui-font-body); margin: 0; padding: 0; white-space: nowrap; }
+.cargo-currency-fallback { font-size: var(--ui-font-caption); color: var(--cargo-muted); margin: 0 7px 0 0; padding: 0; }
+.cargo-footer { flex-shrink: 0; padding-top: 24px; }
+.cargo-status { min-height: 48px; font-size: var(--ui-font-description); color: var(--cargo-muted); margin: 0 0 8px; padding: 0; white-space: normal; }
+.cargo-footer > .harbor-button { width: 100%; height: 96px; min-height: 96px; margin: 0; padding: 0; font-size: var(--ui-font-item); }

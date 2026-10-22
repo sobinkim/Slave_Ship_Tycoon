@@ -1,0 +1,90 @@
+@import url("HarborMaterials.uss");
+.harbor-root {
+    --ui-font-display: 64px;
+    --ui-font-title: 44px;
+    --ui-font-section: 36px;
+    --ui-font-item: 32px;
+    --ui-font-value: 36px;
+    --ui-font-body: 28px;
+    --ui-font-description: 26px;
+    --ui-font-caption: 22px;
+    --ui-font-compact: 20px;
+    --ui-text-primary: #FFFFFF;
+    --ui-text-secondary: #BABABA;
+    --ui-space-xs: 8px;
+    --ui-space-sm: 16px;
+    --ui-space-md: 24px;
+    --ui-space-lg: 32px;
+    --ui-space-xl: 40px;
+
+    -unity-font-definition: url("project://database/Assets/SB/UI/Shared/Settings/HarborKorean.asset");
+    flex-grow: 1;
+
+    font-size: var(--ui-font-body);
+}
+.screen {
+    flex-grow: 1;
+
+    padding: var(--ui-space-lg);
+}
+.screen-header { flex-direction: row; align-items: center; height: 96px; flex-shrink: 0; margin-bottom: var(--ui-space-sm); }
+.screen-title { flex-grow: 1; font-size: var(--ui-font-title); margin: 0; padding: 0; min-width: 0; }
+.subtitle {  white-space: normal; font-size: var(--ui-font-caption); color: var(--ui-text-secondary); margin: 0 0 24px; padding: 0; }
+.section-title { font-size: var(--ui-font-section);  margin-top: var(--ui-space-md); margin-bottom: var(--ui-space-sm); padding: 0; color: var(--ui-text-primary); }
+.harbor-button {
+
+    margin: 4px;
+    padding: 12px 16px;
+    min-height: 72px;
+    height: 88px;
+    font-size: var(--ui-font-body);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+.harbor-button:disabled { opacity: 0.4; }
+.close-button { width: 150px; min-height: 72px; height: 72px; font-size: var(--ui-font-description); }
+.action-row { flex-direction: row; flex-shrink: 0; margin-top: var(--ui-space-sm); }
+.action-row > .harbor-button { flex-grow: 1; flex-basis: 0; }
+.status {  white-space: normal; min-height: 64px; margin-top: var(--ui-space-sm); font-size: var(--ui-font-description); }
+.card-grid { flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
+.ship-card {
+    width: 18.8%;
+    height: 280px;
+    margin: 0.6%;
+    padding: 12px 8px;
+
+    flex-shrink: 0;
+    align-items: stretch;
+}
+.ship-card:disabled { opacity: 0.4; }
+.ship-icon { flex-grow: 1; min-height: 70px; -unity-background-scale-mode: scale-to-fit; }
+.ship-name { white-space: normal; -unity-text-align: middle-center; font-size: var(--ui-font-description); margin: 8px 0 0; padding: 0; }
+.ship-grade { -unity-text-align: middle-center; font-size: var(--ui-font-caption); margin: 4px 0 0; padding: 0; }
+.ship-count { -unity-text-align: middle-center; font-size: var(--ui-font-body);  margin: 8px 0 0; padding: 0; white-space: normal; }
+.hidden { display: none; }
+.modal {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+
+    padding: 36px;
+    justify-content: center;
+}
+.modal-title { font-size: var(--ui-font-title);  -unity-text-align: middle-center; margin: 0 0 24px; padding: 0; }
+.modal-summary { font-size: var(--ui-font-description); white-space: normal; -unity-text-align: middle-center; margin: 0 0 24px; padding: 0; }
+.harbor-scroll { flex-grow: 1; min-height: 0; }
+.harbor-scroll > .unity-scroll-view__vertical-scroller { width: 20px; }
+
+/* Plain controls only. Screen layout lives in each feature stylesheet. */
+.harbor-root { color: #FFFFFF; }
+.screen, .modal, .recruitment-panel, .upgrade-panel, .commander-settings,
+.currency-bar, .bottom-nav, .settlement-card, .stage-popup, .route-card,
+.transport-goal-card, .command-status, .gain-log { background-color: #303030; }
+Button { background-color: #505050; color: #FFFFFF; border-width: 1px; border-color: #808080; border-radius: 0; }
+Button:hover { background-color: #606060; }
+Button:active { background-color: #404040; }
+Button:disabled { opacity: 0.4; }
+.is-selected, .ship-card.is-selected, .formation-slot.is-selected { border-width: 2px; border-color: #FFFFFF; }
+.gauge-track, .stage-track, .skill-charge-track { background-color: #404040; }
+.gauge-fill, .stage-fill, .skill-charge-fill { background-color: #B0B0B0; }
+.transport-halo, .transport-ring, .transport-spark, .transport-bonus-twinkle,
+.transport-reward-impact, .recruitment-card-flash, .recruitment-card-ring,
+.recruitment-screen-flash { visibility: hidden; }

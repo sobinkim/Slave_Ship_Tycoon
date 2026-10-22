@@ -145,7 +145,8 @@ namespace SB.Scripts
                     continue;
 
                 ArcProjectileAttackCompo weapon = enemy.GetCompo<ArcProjectileAttackCompo>();
-                if (weapon == null || !weapon.TryGetFirePosition(out Vector3 startPosition))
+                if (weapon == null) continue;
+                if (!weapon.TryGetFirePosition(out Vector3 startPosition))
                 {
                     Debug.LogError("Final salvo enemy requires an arc weapon with an assigned fire point.", enemy);
                     wasSalvoInterrupted = true;

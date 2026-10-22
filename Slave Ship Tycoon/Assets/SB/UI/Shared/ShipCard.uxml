@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:Button name="shipCard" class="ship-card">
+        <ui:Label name="shipSelectedMark" text="✓" class="ship-selected-mark" picking-mode="Ignore" />
         <ui:VisualElement name="shipIcon" class="ship-icon" picking-mode="Ignore" />
         <ui:Label name="shipName" class="ship-name" picking-mode="Ignore" />
         <ui:Label name="shipGrade" class="ship-grade" picking-mode="Ignore" />

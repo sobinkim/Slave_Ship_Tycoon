@@ -964,7 +964,6 @@ MonoBehaviour:
   kind: 0
   visual: {fileID: 3628633033257697443}
   bodyRenderer: {fileID: 8350979898127610623}
-  chargeWarning: {fileID: 6950091868694926304}
   surfacePresentation: {fileID: 2584245962593790767}
   artFacesRight: 0
   idleDriftAmplitude: 0.025
@@ -991,7 +990,6 @@ MonoBehaviour:
   shipContactRadius: 0.35
   bobAmplitude: 0.035
   deathSeconds: 0.65
-  warningColor: {r: 1, g: 0.38, b: 0.15, a: 0.4}
 --- !u!114 &6901367671440236009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1053,6 +1051,15 @@ MonoBehaviour:
   jawOpenDegrees: 18
   hitRecoilDistance: 0.05
   hitRecoilSeconds: 0.14
+  windupCompression: {x: 0.085, y: 0.025}
+  windupSinkDepth: 0.025
+  windupNoseDipDegrees: 2.5
+  chargeEmissionColor: {r: 1, g: 1, b: 1, a: 1}
+  chargeEmissionIntensity: 0.4
+  chargeFlashStartProgress: 0.7
+  chargeGatherDistance: 0.45
+  chargeGatherSpread: 0.22
+  chargeGatherOpacity: 0.65
   waterlineLocalY: -0.135
   waterTint: {r: 0.15, g: 0.56, b: 0.6, a: 0.65}
   foamFadeSeconds: 0.12
@@ -1083,7 +1090,7 @@ MonoBehaviour:
   waterChips: {fileID: 7986948918948327211}
   chipRenderer: {fileID: 5991748558815644650}
   emissionBodyParts: []
-  emissionColor: {r: 1, g: 0.86, b: 0.56, a: 1}
+  emissionColor: {r: 1, g: 1, b: 1, a: 1}
   emissionIntensity: 1.8
   emissionAttackSeconds: 0.02
   emissionReleaseSeconds: 0.14

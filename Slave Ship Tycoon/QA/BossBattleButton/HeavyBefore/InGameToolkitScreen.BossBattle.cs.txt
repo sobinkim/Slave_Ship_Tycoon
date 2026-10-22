@@ -1,0 +1,139 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace SB.UI.InGame
+{
+    public sealed partial class InGameToolkitScreen
+    {
+        private const float BossSwordRestAngle = 42f;
+        private const float BossFirstStrikePhase = 0.16f;
+        private const float BossSecondStrikePhase = 0.34f;
+
+        [Header("Boss button battle animation")]
+        [SerializeField, Min(0.5f), Tooltip("보스 버튼의 칼 두 번 맞부딪힘과 대기를 포함한 한 주기입니다. 일시정지 중에는 연출도 멈춥니다.")]
+        private float bossSwordCycleSeconds = 1.8f;
+        [SerializeField, Range(0f, 12f), Tooltip("교차한 칼이 맞부딪히고 튕길 때 움직이는 각도입니다.")]
+        private float bossSwordMotionDegrees = 5f;
+        [SerializeField, Min(0f), Tooltip("칼이 맞부딪힐 때 이동하는 UI Toolkit 논리 픽셀 거리입니다.")]
+        private float bossSwordRecoilPixels = 2.5f;
+        [SerializeField, Min(0.03f), Tooltip("각 맞부딪힘에서 교차점의 작은 불꽃이 보이는 시간입니다.")]
+        private float bossSwordImpactSeconds = 0.1f;
+
+        private Button bossBattleButton;
+        private VisualElement bossBattleOverlay;
+        private VisualElement bossSwordLeft;
+        private VisualElement bossSwordRight;
+        private VisualElement bossSwordImpact;
+        private bool bossBattlePresentationActive;
+        private float bossSwordCycleElapsed;
+
+        private void BindBossBattlePresentation()
+        {
+            ClearBossBattlePresentation();
+            if (root == null) return;
+            bossBattleButton = root.Q<Button>("bossButton");
+            bossBattleOverlay = root.Q("bossBattleOverlay");
+            bossSwordLeft = root.Q("bossSwordLeft");
+            bossSwordRight = root.Q("bossSwordRight");
+            bossSwordImpact = root.Q("bossSwordImpact");
+            ResetBossBattlePose();
+        }
+
+        private void RefreshBossBattlePresentation(bool isBossBattle)
+        {
+            bool show = isBossBattle && bossBattleButton != null && bossBattleOverlay != null &&
+                bossSwordLeft != null && bossSwordRight != null && bossSwordImpact != null;
+            if (show == bossBattlePresentationActive) return;
+            bossBattlePresentationActive = show;
+            bossSwordCycleElapsed = 0f;
+            bossBattleButton?.EnableInClassList("is-boss-battle", show);
+            bossBattleOverlay?.EnableInClassList("hidden", !show);
+            ResetBossBattlePose();
+        }
+
+        private void UpdateBossBattlePresentation()
+        {
+            if (!bossBattlePresentationActive || bossBattleOverlay == null || bossBattleOverlay.panel == null ||
+                Time.timeScale <= 0f) return;
+            for (VisualElement element = bossBattleOverlay; element != null; element = element.parent)
+            {
+                if (element.resolvedStyle.display == DisplayStyle.None ||
+                    element.resolvedStyle.visibility != Visibility.Visible || element.resolvedStyle.opacity <= 0f) return;
+            }
+
+            float cycleSeconds = Mathf.Max(0.5f, bossSwordCycleSeconds);
+            bossSwordCycleElapsed = Mathf.Repeat(bossSwordCycleElapsed + Time.unscaledDeltaTime, cycleSeconds);
+            float phase = bossSwordCycleElapsed / cycleSeconds;
+            float motion = EvaluateBossSwordMotion(phase);
+            float angle = BossSwordRestAngle + motion * bossSwordMotionDegrees;
+            float recoil = motion * bossSwordRecoilPixels;
+            bossSwordLeft.style.rotate = new Rotate(new Angle(-angle, AngleUnit.Degree));
+            bossSwordRight.style.rotate = new Rotate(new Angle(angle, AngleUnit.Degree));
+            bossSwordLeft.style.translate = new Translate(-recoil, recoil * 0.35f, 0f);
+            bossSwordRight.style.translate = new Translate(recoil, recoil * 0.35f, 0f);
+
+            float firstImpactAge = bossSwordCycleElapsed - cycleSeconds * BossFirstStrikePhase;
+            float secondImpactAge = bossSwordCycleElapsed - cycleSeconds * BossSecondStrikePhase;
+            float impactAge = secondImpactAge >= 0f ? secondImpactAge : firstImpactAge;
+            float impactSeconds = Mathf.Max(0.03f, bossSwordImpactSeconds);
+            bool hasImpact = impactAge >= 0f && impactAge < impactSeconds;
+            float impactProgress = hasImpact ? impactAge / impactSeconds : 0f;
+            bossSwordImpact.style.opacity = hasImpact ? 1f - impactProgress : 0f;
+            float impactScale = hasImpact ? Mathf.Lerp(0.7f, 1.4f, impactProgress) : 1f;
+            bossSwordImpact.style.scale = new Scale(new Vector3(impactScale, impactScale, 1f));
+        }
+
+        private static float EvaluateBossSwordMotion(float phase)
+        {
+            if (phase < 0.10f) return SmoothBossSwordMotion(0f, 1f, phase / 0.10f);
+            if (phase < BossFirstStrikePhase) return SmoothBossSwordMotion(1f, -0.65f,
+                (phase - 0.10f) / (BossFirstStrikePhase - 0.10f));
+            if (phase < 0.25f) return SmoothBossSwordMotion(-0.65f, 0.75f,
+                (phase - BossFirstStrikePhase) / (0.25f - BossFirstStrikePhase));
+            if (phase < BossSecondStrikePhase) return SmoothBossSwordMotion(0.75f, -0.5f,
+                (phase - 0.25f) / (BossSecondStrikePhase - 0.25f));
+            if (phase < 0.43f) return SmoothBossSwordMotion(-0.5f, 0.55f,
+                (phase - BossSecondStrikePhase) / (0.43f - BossSecondStrikePhase));
+            if (phase < 0.62f) return SmoothBossSwordMotion(0.55f, 0f, (phase - 0.43f) / 0.19f);
+            return 0f;
+        }
+
+        private static float SmoothBossSwordMotion(float from, float to, float progress)
+        {
+            return Mathf.Lerp(from, to, Mathf.SmoothStep(0f, 1f, progress));
+        }
+
+        private void ResetBossBattlePose()
+        {
+            if (bossSwordLeft != null)
+            {
+                bossSwordLeft.style.rotate = new Rotate(new Angle(-BossSwordRestAngle, AngleUnit.Degree));
+                bossSwordLeft.style.translate = new Translate(0f, 0f, 0f);
+            }
+            if (bossSwordRight != null)
+            {
+                bossSwordRight.style.rotate = new Rotate(new Angle(BossSwordRestAngle, AngleUnit.Degree));
+                bossSwordRight.style.translate = new Translate(0f, 0f, 0f);
+            }
+            if (bossSwordImpact != null)
+            {
+                bossSwordImpact.style.opacity = 0f;
+                bossSwordImpact.style.scale = new Scale(Vector3.one);
+            }
+        }
+
+        private void ClearBossBattlePresentation()
+        {
+            bossBattlePresentationActive = false;
+            bossSwordCycleElapsed = 0f;
+            bossBattleButton?.RemoveFromClassList("is-boss-battle");
+            bossBattleOverlay?.AddToClassList("hidden");
+            ResetBossBattlePose();
+            bossBattleButton = null;
+            bossBattleOverlay = null;
+            bossSwordLeft = null;
+            bossSwordRight = null;
+            bossSwordImpact = null;
+        }
+    }
+}

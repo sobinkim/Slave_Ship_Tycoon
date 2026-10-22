@@ -5,6 +5,8 @@ namespace SB.Scripts
     [DisallowMultipleComponent]
     public sealed class ShipWakeEffect : MonoBehaviour
     {
+        private bool sailingOverride;
+        public void SetSailingOverride(bool sailing) => sailingOverride = sailing;
         [Header("References")]
         [SerializeField] private Ship owner;
         [SerializeField] private Animator shipAnimator;
@@ -62,6 +64,7 @@ namespace SB.Scripts
 
         private void OnEnable()
         {
+            sailingOverride = false;
             visibility = 0f;
             rippleTime = 0f;
             if (wakeRenderer != null) wakeRenderer.enabled = false;
@@ -70,7 +73,8 @@ namespace SB.Scripts
 
         private void LateUpdate()
         {
-            bool isMoving = !owner.IsDead && shipAnimator.isActiveAndEnabled && shipAnimator.GetBool(moveHash);
+            bool isMoving = !owner.IsDead && shipAnimator.isActiveAndEnabled &&
+                (sailingOverride || shipAnimator.GetBool(moveHash));
             float fadeSeconds = isMoving ? fadeInSeconds : fadeOutSeconds;
             visibility = Mathf.MoveTowards(visibility, isMoving ? 1f : 0f,
                 Time.deltaTime / Mathf.Max(0.01f, fadeSeconds));

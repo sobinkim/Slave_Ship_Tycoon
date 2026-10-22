@@ -1,0 +1,53 @@
+.cargo-screen {
+    --cargo-surface: #303030;
+    --cargo-divider: #646464;
+    --cargo-row-divider: #505050;
+    --cargo-muted: #BABABA;
+    --cargo-capacity: #DEDEDE;
+    --cargo-capacity-track: #515151;
+    --cargo-overload: #D85850;
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    padding: 36px 40px;
+    background-color: var(--cargo-surface);
+}
+.cargo-header { height: 96px; margin-bottom: 0; padding-bottom: 16px; }
+.cargo-header > .screen-title { font-size: 40px; margin: 0; padding: 0; }
+.cargo-header > .close-button { width: 136px; height: 72px; min-height: 72px; margin: 0; padding: 0; font-size: 26px; }
+.load-summary { flex-shrink: 0; padding: 24px 0; }
+.cargo-heading, .reward-heading, .catalog-heading { flex-direction: row; justify-content: space-between; align-items: center; }
+.cargo-section-title, .reward-title { font-size: 28px; margin: 0; padding: 0; }
+.capacity-text { font-size: 36px; margin: 0; padding: 0; }
+.capacity-track { height: 8px; margin-top: 16px; margin-bottom: 24px; background-color: var(--cargo-capacity-track); }
+.capacity-fill { height: 100%; background-color: var(--cargo-capacity); }
+.capacity-fill.is-overloaded { background-color: var(--cargo-overload); }
+.reward-heading { margin-bottom: 16px; }
+.cargo-hint { font-size: 23px; color: var(--cargo-muted); margin: 0; padding: 0; }
+.reward-currencies { flex-direction: row; }
+.reward-currency { flex-grow: 1; flex-basis: 0; min-width: 0; flex-direction: row; align-items: center; padding-right: 18px; }
+.reward-currency-icon { width: 36px; height: 36px; margin-right: 10px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; }
+.reward-value { flex-shrink: 1; min-width: 0; font-size: 40px; margin: 0; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.reward-delta { position: absolute; top: 100%; left: 46px; font-size: 23px; margin: 0; padding: 0; opacity: 0; white-space: nowrap; color: var(--cargo-muted); }
+.catalog-heading { height: 72px; flex-shrink: 0; border-bottom-width: 0; }
+.cargo-catalog { flex-grow: 1; flex-basis: 0; min-height: 0; }
+.cargo-catalog > .unity-scroll-view__vertical-scroller { width: 12px; margin-left: 8px; }
+.cargo-list { flex-direction: column; }
+.cargo-card { flex-shrink: 0; min-height: 216px; padding: 16px 0; justify-content: center; border-top-width: 1px; border-top-color: var(--cargo-row-divider); }
+.cargo-card.is-first-cargo-card { border-top-width: 0; }
+.cargo-card-heading { flex-direction: row; align-items: center; }
+.cargo-icon { width: 96px; height: 96px; flex-shrink: 0; margin-right: 22px; -unity-background-scale-mode: scale-to-fit; }
+.cargo-card-copy { flex-grow: 1; flex-basis: 0; min-width: 0; margin-right: 16px; }
+.cargo-name { font-size: 32px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; padding: 0; }
+.cargo-unit-weight { font-size: 25px; color: var(--cargo-muted); margin: 8px 0 0; padding: 0; }
+.cargo-actions { flex-direction: row; align-items: center; flex-shrink: 0; }
+.cargo-actions > .cargo-stepper { width: 88px; height: 88px; min-height: 88px; flex-shrink: 0; margin: 0; padding: 0; font-size: 44px; -unity-text-align: middle-center; }
+.cargo-amount { width: 76px; height: 88px; flex-shrink: 0; font-size: 36px; margin: 0; padding: 0; -unity-text-align: middle-center; }
+.cargo-card.is-empty .cargo-icon { opacity: 0.45; }
+.cargo-card.is-empty .cargo-amount { color: var(--cargo-muted); }
+.cargo-rewards { flex-direction: row; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+.cargo-reward-chip { flex-direction: row; align-items: center; margin-right: 24px; }
+.cargo-reward-icon { width: 28px; height: 28px; flex-shrink: 0; margin-right: 7px; -unity-background-scale-mode: scale-to-fit; }
+.cargo-reward-value { font-size: 26px; margin: 0; padding: 0; white-space: nowrap; }
+.cargo-currency-fallback { font-size: 23px; color: var(--cargo-muted); margin: 0 7px 0 0; padding: 0; }
+.cargo-footer { flex-shrink: 0; padding-top: 24px; }
+.cargo-status { min-height: 48px; font-size: 25px; color: var(--cargo-muted); margin: 0 0 8px; padding: 0; white-space: normal; }
+.cargo-footer > .harbor-button { width: 100%; height: 94px; min-height: 94px; margin: 0; padding: 0; font-size: 30px; }

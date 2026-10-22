@@ -57,7 +57,8 @@ namespace SB.UI.InGame
             ShipCardPresentation.SetIcon(button.Q("icon"), skill != null ? skill.Icon : null);
             Label missing = button.Q<Label>("missingIcon");
             missing.text = skill != null ? skill.DisplayName : "+";
-            missing.style.fontSize = skill != null ? 22 : 42;
+            missing.EnableInClassList("skill-icon-fallback", skill != null);
+            button.EnableInClassList("has-text-icon", skill != null && skill.Icon == null);
             missing.EnableInClassList("hidden", skill != null && skill.Icon != null);
         }
         private void BuildSkills()

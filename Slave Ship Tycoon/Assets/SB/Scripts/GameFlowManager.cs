@@ -28,6 +28,23 @@ namespace SB.Scripts
         private int suspendedTransportChapter;
         private int suspendedTransportStage;
         private bool isChapterTransitionPending;
+        public bool IsPursuitActive { get; private set; }
+        public bool CanStartPursuit => !IsPursuitActive && !currentBattleIsBoss &&
+            !isChapterTransitionPending && currentRouteType == ChapterRouteType.Obtain;
+
+        public bool TryEnterPursuit()
+        {
+            if (!CanStartPursuit) return false;
+            CancelQueuedStageRestart();
+            IsPursuitActive = true;
+            return true;
+        }
+
+        public void LeavePursuit(bool resumeFarming)
+        {
+            IsPursuitActive = false;
+            if (resumeFarming) QueueStartStage();
+        }
 
         public bool HasSuspendedTransport => hasSuspendedTransport;
         public int SuspendedTransportChapter => suspendedTransportChapter;
@@ -45,7 +62,7 @@ namespace SB.Scripts
             chapter.RouteType == ChapterRouteType.Sell &&
             chapterDatabase.TryGetStage(suspendedTransportChapter, suspendedTransportStage, out StageEnemyLayout _);
 
-        public bool CanStartBossBattle => !hasSuspendedTransport && !isChapterTransitionPending &&
+        public bool CanStartBossBattle => !IsPursuitActive && !hasSuspendedTransport && !isChapterTransitionPending &&
             !currentBattleIsBoss && chapterDatabase != null &&
             chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer chapter) &&
             chapter.RouteType == ChapterRouteType.Obtain &&
@@ -79,6 +96,7 @@ namespace SB.Scripts
 
         public void StartStage()
         {
+            if (IsPursuitActive) return;
             if (chapterDatabase == null ||
                 chapterDatabase.TryGetChapter(currentChapter, out ChapterContainer chapter) == false)
             {
@@ -119,6 +137,7 @@ namespace SB.Scripts
 
         public void StartBossBattle()
         {
+            if (IsPursuitActive) return;
             if (currentBattleIsBoss || hasSuspendedTransport || isChapterTransitionPending)
                 return;
 
@@ -262,6 +281,7 @@ namespace SB.Scripts
 
         private void UpdateCurrentChapterData(StageBattleEndedEvent evt)
         {
+            if (IsPursuitActive) return;
             if (evt.IsClear)
             {
                 StageClear();
@@ -293,6 +313,7 @@ namespace SB.Scripts
         
         private void HandleAfterStageClear(AffterStageClearEvent evt)
         {
+            if (IsPursuitActive) return;
             isChapterTransitionPending = false;
             if (evt.ClearChapterType == ChapterRouteType.Sell)
             {

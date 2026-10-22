@@ -1,0 +1,39 @@
+.recruitment-root { flex-grow: 1; }
+.recruitment-panel {
+    position: absolute; left: 0; right: 0; top: 51%; bottom: 132px;
+     padding: 24px;
+
+    overflow: hidden;
+}
+.recruitment-panel > .screen-header { height: 80px; margin-bottom: var(--ui-space-sm); }
+.recruitment-panel .screen-title { min-width: 0; white-space: normal; font-size: var(--ui-font-title); }
+.recruitment-panel .close-button { flex-shrink: 0; margin: 0 0 0 16px; }
+.recruitment-toolbar { flex-direction: row; align-items: center; height: 56px; flex-shrink: 0; margin-bottom: var(--ui-space-sm);   }
+.recruitment-category { flex-grow: 1; flex-basis: 0; min-width: 0; font-size: var(--ui-font-item);  margin: 0; padding: 0; }
+.recruitment-balance { flex-shrink: 0; -unity-text-align: middle-right; font-size: var(--ui-font-value);  margin: 0 0 0 16px; padding: 0; }
+.recruitment-scroll { flex-basis: 0; }
+.recruitment-scroll > .unity-scroll-view__vertical-scroller { width: 12px; margin-left: 8px; }
+.recruitment-content { flex-direction: row; align-items: stretch; }
+.recruitment-guide { flex-grow: 0; flex-shrink: 0; flex-basis: 27%; min-width: 0; margin-right: var(--ui-space-sm); padding: var(--ui-space-sm);     }
+.guide-icon { height: 120px; flex-shrink: 0; margin-top: var(--ui-space-sm); margin-bottom: var(--ui-space-sm); -unity-background-scale-mode: scale-to-fit; }
+.guide-name {  font-size: var(--ui-font-body);  margin: 0; padding: 0; }
+.guide-text { min-width: 0; white-space: normal; font-size: var(--ui-font-caption); margin: 16px 0 0; padding: 0;  }
+.recruitment-cards { flex-grow: 1; flex-basis: 0; min-width: 0; }
+.recruitment-card {      padding: var(--ui-space-sm); }
+.recruitment-card-title { min-width: 0; white-space: normal; font-size: var(--ui-font-item);  margin: 0 0 8px 0; padding: 0; }
+.recruitment-card-description { min-width: 0; white-space: normal; font-size: var(--ui-font-description);  margin: 0 0 8px 0; padding: 0; }
+.recruitment-card-icon { height: 120px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; margin-bottom: var(--ui-space-sm); }
+.recruitment-actions { margin-top: 8px; }
+.recruitment-actions > .recruitment-button { height: 128px; min-height: 128px; min-width: 0; padding: 12px 8px; justify-content: center; align-items: stretch; }
+.recruitment-button > Label { min-width: 0; margin: 0; padding: 0; font-size: var(--ui-font-body); -unity-text-align: middle-center; white-space: normal; }
+.recruitment-button > .recruitment-cost {  margin-top: 8px; font-size: var(--ui-font-value); }
+.recruitment-cards > .status { min-height: 64px; min-width: 0; font-size: var(--ui-font-caption); margin: 16px 0; padding: 0; white-space: normal; }
+.recruitment-cards > .harbor-button { height: 80px; min-height: 80px; margin: 0; }
+.recruitment-result-grid .ship-card { width: 23.8%; height: 280px; }
+.recruitment-result-grid.single-reward { justify-content: center; }
+.recruitment-result-grid.single-reward .ship-card { width: 46%; height: 500px; }
+.recruitment-reward-card.recruitment-card-muted { opacity: 0.4; }
+.recruitment-card-flash, .recruitment-card-ring { position: absolute; left: 0; right: 0; top: 0; bottom: 0;  opacity: 0; }
+.recruitment-screen-flash { position: absolute; left: 0; right: 0; top: 0; bottom: 0;  opacity: 0; }
+
+.recruitment-root > .modal > .action-row > .harbor-button { min-height: 120px; height: 120px; }

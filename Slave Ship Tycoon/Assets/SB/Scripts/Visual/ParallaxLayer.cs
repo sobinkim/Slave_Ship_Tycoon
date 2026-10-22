@@ -23,6 +23,8 @@ namespace SB.Scripts
         private float currentScrollSpeed;
         private bool _isScrolling;
 
+        public float CurrentScrollSpeed => currentScrollSpeed;
+
         private void Awake()
         {
             currentScrollSpeed = dontCare ? idleScrollSpeed : 0f;

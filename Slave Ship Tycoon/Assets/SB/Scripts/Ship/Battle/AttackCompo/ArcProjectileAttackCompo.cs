@@ -70,12 +70,14 @@ namespace SB.Scripts.AttackCompo
                 return;
             }
 
-            if (TryGetFirePosition(out Vector3 startPosition) == false)
+            Transform firePoint = GetNextFirePoint();
+            if (firePoint == null)
             {
                 Debug.LogError($"{name} needs at least one fire point.", this);
                 return;
             }
 
+            Vector3 startPosition = firePoint.position;
             Vector3 targetImpactPosition = targetAnchors.HitPosition;
             Vector3 waterImpactPosition = targetAnchors.WaterImpactPosition;
 
@@ -115,6 +117,12 @@ namespace SB.Scripts.AttackCompo
                 ballisticDescentTimeMultiplier,
                 ballisticHitRadius,
                 ballisticTargetClearance);
+
+            Vector3 muzzleDirection = targetImpactPosition - startPosition;
+            if (projectile.TryPredictPosition(0f, out Vector3 nextPosition) &&
+                (nextPosition - startPosition).sqrMagnitude > Mathf.Epsilon)
+                muzzleDirection = nextPosition - startPosition;
+            PlayMuzzleEffect(firePoint, muzzleDirection);
         }
 
         public bool TryGetFirePosition(out Vector3 firePosition)

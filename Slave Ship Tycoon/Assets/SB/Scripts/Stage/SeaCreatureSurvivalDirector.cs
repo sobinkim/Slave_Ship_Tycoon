@@ -19,42 +19,39 @@ namespace SB.Scripts
         [SerializeField] private SeaCreatureEnemy swarmerPrefab;
         [SerializeField] private SeaCreatureEnemy chargerPrefab;
         [SerializeField] private Transform creatureRoot;
-        [SerializeField] private SeaVoyagePresentation voyagePresentation;
         [SerializeField] private SeaVoyageMotor voyageMotor;
         [SerializeField] private Camera battleCamera;
-        [SerializeField, Min(0.05f), Tooltip("앞 아군 함선이 이 반경으로 포격 경로를 가리면 후열 사격을 보류합니다.")]
-        private float alliedFireBlockRadius = 0.4f;
-        [SerializeField, Tooltip("우측 바깥의 진입 지점. 무리마다 무작위 지점을 사용합니다.")]
+        [SerializeField, Tooltip("���� �ٱ��� ���� ����. �������� ������ ������ ����մϴ�.")]
         private Transform[] entryPoints = Array.Empty<Transform>();
 
         [Header("Sailing and encounters")]
         [SerializeField] private bool startOnPlay = true;
-        [SerializeField, Tooltip("테스트 씬의 R 재출항 키입니다. 기존 챕터 흐름에 연결할 때는 끕니다.")]
+        [SerializeField, Tooltip("�׽�Ʈ ���� R ������ Ű�Դϴ�. ���� é�� �帧�� ������ ���� ���ϴ�.")]
         private bool allowRestartShortcut = true;
         [SerializeField, Min(1)] private int rewardChapter = 1;
-        [SerializeField, Min(1), Tooltip("각 무리의 첫 웨이브에 배치하는 크리쳐 수입니다.")]
+        [SerializeField, Min(1), Tooltip("�� ������ ù ���̺꿡 ��ġ�ϴ� ũ���� ���Դϴ�.")]
         private int initialCreatures = 6;
         [SerializeField, Min(1)] private int maximumAlive = 16;
-        [SerializeField, Min(0.1f), Tooltip("항해 단계에서 함대와 카메라가 실제로 전진하는 초당 거리입니다. 교전 중에는 정지합니다.")]
+        [SerializeField, Min(0.1f), Tooltip("���� �ܰ迡�� �Դ�� ī�޶� ������ �����ϴ� �ʴ� �Ÿ��Դϴ�. ���� �߿��� �����մϴ�.")]
         private float cruiseSpeed = 1.5f;
-        [SerializeField, Min(0.1f), Tooltip("한 무리를 모두 격파한 뒤 다음 무리를 전방에 배치하기까지 이동하는 거리입니다.")]
+        [SerializeField, Min(0.1f), Tooltip("�� ������ ��� ������ �� ���� ������ ���濡 ��ġ�ϱ���� �̵��ϴ� �Ÿ��Դϴ�.")]
         private float groupSpacing = 2.85f;
-        [SerializeField, Min(0.1f), Tooltip("가장 앞선 살아 있는 호위함과 전방 크리쳐 사이의 거리가 이 값에 도달하면 함대를 멈춥니다.")]
+        [SerializeField, Min(0.1f), Tooltip("���� �ռ� ��� �ִ� ȣ���԰� ���� ũ���� ������ �Ÿ��� �� ���� �����ϸ� �Դ븦 ����ϴ�.")]
         private float encounterStartDistance = 2f;
         [Header("Waves in each encounter")]
         [SerializeField, Min(1)] private int wavesPerEncounter = 3;
-        [SerializeField, Min(0), Tooltip("다음 웨이브마다 첫 웨이브 수에 추가하는 크리쳐 수입니다.")]
+        [SerializeField, Min(0), Tooltip("���� ���̺긶�� ù ���̺� ���� �߰��ϴ� ũ���� ���Դϴ�.")]
         private int groupSize = 2;
-        [SerializeField, Range(0.01f, 1f), Tooltip("현재 웨이브의 예정 개체 중 이 비율을 처치하면 남은 적과 겹쳐 다음 웨이브가 합류합니다.")]
+        [SerializeField, Range(0.01f, 1f), Tooltip("���� ���̺��� ���� ��ü �� �� ������ óġ�ϸ� ���� ���� ���� ���� ���̺갡 �շ��մϴ�.")]
         private float nextWaveKillRatio = 0.7f;
-        [SerializeField, Min(0f), Tooltip("마지막 웨이브를 포함한 모든 적이 가라앉은 뒤 재항해까지 기다리는 시간입니다.")]
+        [SerializeField, Min(0f), Tooltip("������ ���̺긦 ������ ��� ���� ������� �� �����ر��� ��ٸ��� �ð��Դϴ�.")]
         private float waveDelaySeconds = 0.6f;
         [Header("Reinforcement entrance")]
-        [SerializeField, Min(0.1f), Tooltip("몸체 전체가 화면 오른쪽 밖에 있도록 추가하는 여유 거리입니다.")]
+        [SerializeField, Min(0.1f), Tooltip("��ü ��ü�� ȭ�� ������ �ۿ� �ֵ��� �߰��ϴ� ���� �Ÿ��Դϴ�.")]
         private float reinforcementOffscreenPadding = 0.5f;
-        [SerializeField, Min(0f), Tooltip("화면 밖에서 출발 위치를 앞뒤로 분산하는 거리입니다.")]
+        [SerializeField, Min(0f), Tooltip("ȭ�� �ۿ��� ��� ��ġ�� �յڷ� �л��ϴ� �Ÿ��Դϴ�.")]
         private float reinforcementEntryDepth = 0.8f;
-        [SerializeField, Min(0.1f), Tooltip("증원이 화면 안으로 헤엄쳐 들어오는 속도입니다. 진입 후에는 각 크리쳐의 전투 속도를 사용합니다.")]
+        [SerializeField, Min(0.1f), Tooltip("������ ȭ�� ������ ����� ������ �ӵ��Դϴ�. ���� �Ŀ��� �� ũ������ ���� �ӵ��� ����մϴ�.")]
         private float reinforcementEntrySpeed = 2.2f;
         [SerializeField, Range(0f, 1f)] private float chargerChance = 0.2f;
         [SerializeField] private Vector2 verticalBounds = new Vector2(-0.15f, 3.1f);
@@ -80,18 +77,12 @@ namespace SB.Scripts
 
         private readonly struct FleetCombatSettings
         {
-            private readonly Base_ShipAttackCompo weapon;
-            private readonly bool blocksAllies;
-            private readonly float blockRadius;
             private readonly TargetSelector selector;
             private readonly TargetSelectionMode selectionMode;
             private readonly bool requiresEngagement;
 
             public FleetCombatSettings(Ship ship)
             {
-                weapon = ship.GetCompo<Base_ShipAttackCompo>();
-                blocksAllies = weapon != null && weapon.BlocksFireThroughAlliedShips;
-                blockRadius = weapon != null ? weapon.AlliedHullBlockingRadius : 0f;
                 selector = ship.GetCompo<TargetSelector>();
                 selectionMode = selector != null ? selector.SelectionMode : default;
                 requiresEngagement = selector != null && selector.RequiresEngagedSeaCreatures;
@@ -99,7 +90,6 @@ namespace SB.Scripts
 
             public void Restore()
             {
-                if (weapon != null) weapon.ConfigureFireOcclusion(blocksAllies, blockRadius);
                 if (selector == null) return;
                 selector.SetSelectionMode(selectionMode);
                 selector.SetRequiresEngagedSeaCreatures(requiresEngagement);
@@ -201,6 +191,7 @@ namespace SB.Scripts
                 currentWaveCreatures.Add(creature);
                 creature.Engage();
             }
+            SetFleetMovement(false);
             Bus<StopEncounterSequence>.Raise(new StopEncounterSequence());
         }
 
@@ -230,6 +221,7 @@ namespace SB.Scripts
             Wave = 0;
             Phase = SeaVoyagePhase.Sailing;
             spawnRemaining = groupSpacing;
+            SetFleetMovement(true);
             Bus<StartEncounterSequence>.Raise(new StartEncounterSequence());
         }
 
@@ -327,6 +319,9 @@ namespace SB.Scripts
             spawnRemaining = groupSpacing;
             SpawnGroup(initialCreatures, false);
             PublishBattle(mainShip, escorts);
+            // Battle initialization puts ships in Idle. Resume Move afterwards so
+            // both routes use the prefab's animation and ShipWakeEffect.
+            SetFleetMovement(true);
             Bus<StartEncounterSequence>.Raise(new StartEncounterSequence());
         }
 
@@ -338,7 +333,6 @@ namespace SB.Scripts
             {
                 fleetTargets.Add(new SeaCreatureTarget(escort));
                 fleetCombatSettings.Add(new FleetCombatSettings(escort));
-                escort.GetCompo<Base_ShipAttackCompo>()?.ConfigureFireOcclusion(true, alliedFireBlockRadius);
                 TargetSelector selector = escort.GetCompo<TargetSelector>();
                 if (selector != null && selector.Team == TargetTeam.Opponent)
                 {
@@ -347,8 +341,13 @@ namespace SB.Scripts
                     selector.SetRequiresEngagedSeaCreatures(true);
                 }
             }
+        }
 
-            if (voyagePresentation != null) voyagePresentation.BindFleet(fleetTargets);
+        private void SetFleetMovement(bool isMoving)
+        {
+            foreach (SeaCreatureTarget member in fleetTargets)
+                if (member.IsAlive)
+                    member.Ship.ChangeState(isMoving ? ShipStateType.Move : ShipStateType.Idle);
         }
 
         private void PublishBattle(MainShip mainShip, List<Ship> escorts)
@@ -460,8 +459,8 @@ namespace SB.Scripts
             pendingWaveSpawns = 0;
             dyingCreatures.Clear();
             RestoreFleetCombatSettings();
+            if (wasRunning) SetFleetMovement(false);
             fleetTargets.Clear();
-            if (voyagePresentation != null) voyagePresentation.BindFleet(fleetTargets);
             if (voyageMotor != null && wasRunning) voyageMotor.SetDistance(0f);
             if (wasRunning) Bus<StopEncounterSequence>.Raise(new StopEncounterSequence());
         }
@@ -501,3 +500,4 @@ namespace SB.Scripts
         }
     }
 }
+

@@ -1,0 +1,45 @@
+.formation-comparison { flex-direction: row; height: 650px; flex-shrink: 0; }
+.formation-side { flex-grow: 1; flex-basis: 0; min-width: 0; }
+.side-title { font-size: var(--ui-font-item); margin-bottom: var(--ui-space-sm); -unity-text-align: middle-center; }
+.formation-columns { flex-direction: row; flex-grow: 1; min-height: 0; }
+.formation-column { flex-grow: 1; flex-basis: 0; min-width: 0; margin: 3px; }
+.column-title { -unity-text-align: middle-center; font-size: var(--ui-font-description); height: 40px; flex-shrink: 0; margin: 0; padding: 0; }
+.formation-cells { flex-grow: 1; }
+.formation-slot {
+    flex-grow: 1; flex-basis: 0; min-height: 0; margin: 4px 0;
+    padding: 6px;
+
+}
+.formation-slot.grade-common { border-color: var(--color-grade-common); }
+.formation-slot.grade-uncommon { border-color: var(--color-grade-uncommon); }
+.formation-slot.grade-rare { border-color: var(--color-grade-rare); }
+.formation-slot.grade-epic { border-color: var(--color-grade-epic); }
+.formation-slot.grade-legendary { border-color: var(--color-grade-legendary); }
+.formation-slot.is-selected.grade-common { border-color: var(--color-grade-common); }
+.formation-slot.is-selected.grade-uncommon { border-color: var(--color-grade-uncommon); }
+.formation-slot.is-selected.grade-rare { border-color: var(--color-grade-rare); }
+.formation-slot.is-selected.grade-epic { border-color: var(--color-grade-epic); }
+.formation-slot.is-selected.grade-legendary { border-color: var(--color-grade-legendary); }
+.formation-slot .ship-icon { min-height: 20px; }
+.formation-slot .ship-name { font-size: 24px; }
+.formation-slot .ship-count { font-size: var(--ui-font-description); }
+.fleet-inventory-card > .ship-icon {
+    width: 128px; height: 128px; min-height: 128px; flex-grow: 0; flex-shrink: 0;
+    align-self: center; background-color: #3D3D3D; border-width: 2px;
+}
+.fleet-inventory-card.grade-common > .ship-icon { border-color: var(--color-grade-common); }
+.fleet-inventory-card.grade-uncommon > .ship-icon { border-color: var(--color-grade-uncommon); }
+.fleet-inventory-card.grade-rare > .ship-icon { border-color: var(--color-grade-rare); }
+.fleet-inventory-card.grade-epic > .ship-icon { border-color: var(--color-grade-epic); }
+.fleet-inventory-card.grade-legendary > .ship-icon { border-color: var(--color-grade-legendary); }
+.comparison-arrow { width: 38px; flex-shrink: 0; -unity-text-align: middle-center;  font-size: 38px; }
+.enemy-column {    padding: 8px; }
+.enemy-marker { flex-grow: 1; flex-basis: 0; -unity-text-align: middle-center;  font-size: 32px; }
+.attack-details {    padding: var(--ui-space-md); margin-top: var(--ui-space-md); flex-shrink: 0; }
+.attack-name { font-size: var(--ui-font-item); margin: 0; padding: 0; }
+.attack-description { font-size: var(--ui-font-description); white-space: normal; margin: 8px 0 0; padding: 0; }
+.fleet-controls { flex-direction: row; flex-shrink: 0; align-items: center; }
+.fleet-controls > .subtitle { flex-grow: 1; margin-bottom: 0; }
+.fleet-controls > .harbor-button { min-height: 60px; font-size: var(--ui-font-body); }
+
+.fleet-controls > .subtitle { min-width: 0; -unity-text-align: middle-left; }

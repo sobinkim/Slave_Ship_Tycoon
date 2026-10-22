@@ -20,7 +20,8 @@
         </ui:VisualElement>
         <ui:VisualElement name="materialSlots" class="material-slots" />
         <ui:Label name="statusLabel" class="status" />
-        <ui:Label text="보유 함선 · 편성 중인 함선은 재료에서 제외됩니다." class="section-title" />
+        <ui:Label text="보유 함선" class="section-title" />
+        <ui:Label text="편성 중인 함선은 재료에서 제외됩니다." class="subtitle" />
         <ui:ScrollView class="harbor-scroll" mode="Vertical">
             <ui:VisualElement name="inventoryGrid" class="card-grid" />
         </ui:ScrollView>

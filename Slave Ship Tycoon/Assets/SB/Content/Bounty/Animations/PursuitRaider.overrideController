@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PursuitRaider
+  m_Controller: {fileID: 9100000, guid: 15f157ed78e722c4d99c7bd2ea0c3377, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: bf4282234318e8e4aa886ef3a79361df, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6fb732bca4cf7354a96892702f6b948a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 23d423260d2f6f34daa54d65af981024, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 9dfaf446a724be14a94f17762ff3aea1, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 3a271e1688803944ebdd79283700f130, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: c8509263897c4c148880c5cb1841c2e2, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a85e89ff766f4f04a85d5de0e62ecdc5, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 927f1b375edb64b4fbe627262f7ccd38, type: 2}

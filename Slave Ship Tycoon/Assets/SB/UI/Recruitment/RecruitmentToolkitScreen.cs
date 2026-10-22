@@ -29,9 +29,8 @@ namespace SB.UI.Recruitment
         [SerializeField] private PannelManager panelManager;
         [SerializeField] private VisualTreeAsset cardTemplate;
         [SerializeField] private Sprite recruitmentIcon;
-        [Header("Recruitment")]
-        [SerializeField, Min(1), Tooltip("기존 모집 화면에서 사용하던 묶음 모집 횟수")]
-        private int multiCount = 11;
+        [SerializeField, Min(1), Tooltip("묶음 모집 횟수")]
+        private int multiSummonCount = 15;
         [Header("Reveal timing (unscaled seconds)")]
         [SerializeField, Min(0.01f)] private float revealSeconds = 0.12f;
         [SerializeField, Min(0f)] private float cardDelaySeconds = 0.025f;
@@ -65,6 +64,7 @@ namespace SB.UI.Recruitment
         private Label statusLabel;
         private Coroutine revealRoutine;
         private bool isBusy;
+        private int lastSummonCount;
 
         public event Action<bool> OpenStateChanged;
 
@@ -88,17 +88,15 @@ namespace SB.UI.Recruitment
             root.Q<Button>("closeButton").clicked += Close;
             root.Q<Button>("singleButton").clicked += SummonSingle;
             root.Q<Button>("multiButton").clicked += SummonMulti;
-            root.Q<Button>("repeatButton").clicked += SummonMulti;
             root.Q<Button>("skipButton").clicked += SkipReveal;
             root.Q<Button>("confirmButton").clicked += Confirm;
+            root.Q<Button>("repeatButton").clicked += RepeatLastRecruitment;
             root.Q<Button>("formationButton").clicked += OpenFormation;
             root.Q<Button>("resultFormationButton").clicked += OpenFormation;
-            ShipCardPresentation.SetIcon(root.Q("guideIcon"), recruitmentIcon);
             ShipCardPresentation.SetIcon(root.Q("recruitmentIcon"), recruitmentIcon);
-            root.Q<Label>("multiTitle").text = $"{multiCount}회 모집";
             Bus<CurrencyChangedEvent>.OnEvent += OnCurrencyChanged;
             panelManager.PanelChanged += OnPanelChanged;
-            statusLabel.text = "새 함선은 함대에 배치하면 다음 전투부터 합류합니다.";
+            statusLabel.text = string.Empty;
             Refresh();
             OpenStateChanged?.Invoke(true);
         }
@@ -116,9 +114,9 @@ namespace SB.UI.Recruitment
             if (root.Q<Button>("closeButton") is Button closeButtonBinding) closeButtonBinding.clicked -= Close;
             if (root.Q<Button>("singleButton") is Button singleButtonBinding) singleButtonBinding.clicked -= SummonSingle;
             if (root.Q<Button>("multiButton") is Button multiButtonBinding) multiButtonBinding.clicked -= SummonMulti;
-            if (root.Q<Button>("repeatButton") is Button repeatButtonBinding) repeatButtonBinding.clicked -= SummonMulti;
             if (root.Q<Button>("skipButton") is Button skipButtonBinding) skipButtonBinding.clicked -= SkipReveal;
             if (root.Q<Button>("confirmButton") is Button confirmButtonBinding) confirmButtonBinding.clicked -= Confirm;
+            if (root.Q<Button>("repeatButton") is Button repeatButtonBinding) repeatButtonBinding.clicked -= RepeatLastRecruitment;
             if (root.Q<Button>("formationButton") is Button formationButtonBinding) formationButtonBinding.clicked -= OpenFormation;
             if (root.Q<Button>("resultFormationButton") is Button resultFormationButtonBinding) resultFormationButtonBinding.clicked -= OpenFormation;
         }
@@ -146,22 +144,26 @@ namespace SB.UI.Recruitment
             if (root == null) return;
             long balance = currencyManager.GetCurrency(gachaManager.CurrencyType);
             string unit = CurrencyTextFormatter.FormatName(gachaManager.CurrencyType);
-            long multiCost = (long)gachaManager.SummonCost * multiCount;
-            root.Q<Label>("balanceLabel").text = $"보유 {unit}  {CurrencyTextFormatter.Format(balance)}";
             root.Q<Label>("singleCost").text = $"{gachaManager.SummonCost:N0} {unit}";
+            long multiCost = (long)gachaManager.SummonCost * multiSummonCount;
+            root.Q<Label>("multiTitle").text = $"{multiSummonCount}회 모집";
             root.Q<Label>("multiCost").text = $"{multiCost:N0} {unit}";
             bool canSummon = gachaManager.CanSummon(out EscortGachaFailureReason failure);
             root.Q<Button>("singleButton").SetEnabled(!isBusy && canSummon);
             root.Q<Button>("multiButton").SetEnabled(!isBusy && canSummon && balance >= multiCost);
-            root.Q<Button>("repeatButton").SetEnabled(!isBusy && canSummon && balance >= multiCost);
-            root.Q<Button>("repeatButton").text = $"{multiCount}회 다시 모집\n{multiCost:N0} {unit}";
+            int repeatCount = Mathf.Max(1, lastSummonCount);
+            long repeatCost = (long)gachaManager.SummonCost * repeatCount;
+            root.Q<Label>("repeatTitle").text = $"{repeatCount}회 다시 모집";
+            root.Q<Label>("repeatCost").text = $"{repeatCost:N0} {unit}";
+            root.Q<Button>("repeatButton").SetEnabled(!isBusy && canSummon && balance >= repeatCost);
             if (!canSummon && !isBusy)
                 statusLabel.text = failure == EscortGachaFailureReason.InsufficientCurrency
                     ? "모집 재화가 부족해요. 운송 정산으로 모아보세요." : "모집 설정을 확인해주세요.";
         }
 
         private void SummonSingle() => Recruit(1);
-        private void SummonMulti() => Recruit(multiCount);
+        private void SummonMulti() => Recruit(multiSummonCount);
+        private void RepeatLastRecruitment() => Recruit(lastSummonCount > 0 ? lastSummonCount : 1);
 
         private void Recruit(int count)
         {
@@ -175,6 +177,7 @@ namespace SB.UI.Recruitment
                 return;
             }
             isBusy = true;
+            lastSummonCount = count;
             var recruitedRewards = new List<EscortGachaResult>(count);
             for (int i = 0; i < count; i++)
             {
@@ -186,8 +189,9 @@ namespace SB.UI.Recruitment
             rewards.AddRange(recruitedRewards);
             rewardCards.Clear();
             resultGrid.Clear();
-            resultGrid.EnableInClassList("single-reward", rewards.Count == 1);
-            root.Q<Label>("resultSummary").text = $"호위선 {rewards.Count}척 입항 · 미편성 상태입니다.\n함대에 배치하면 다음 전투부터 합류합니다.";
+            root.Q<Label>("resultSummary").text = rewards.Count == 1
+                ? "새 호위선 1척이 합류했습니다.\n함대에 배치하면 다음 전투부터 출전합니다."
+                : $"새 호위선 {rewards.Count}척이 합류했습니다.\n함대에 배치하면 다음 전투부터 출전합니다.";
             foreach (EscortGachaResult reward in rewards)
             {
                 Button card = ShipCardPresentation.Create(cardTemplate, resultGrid);

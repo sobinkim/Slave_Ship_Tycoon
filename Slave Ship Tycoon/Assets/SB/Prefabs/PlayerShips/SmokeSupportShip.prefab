@@ -452,6 +452,7 @@ GameObject:
   - component: {fileID: 5577225048317639727}
   - component: {fileID: 7252057840025524036}
   - component: {fileID: 5373535480359775285}
+  - component: {fileID: 7923391651648542287}
   m_Layer: 0
   m_Name: SmokeSupportShip
   m_TagString: Untagged
@@ -472,7 +473,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5558968980102974848}
+  - {fileID: 5333579813990970740}
   - {fileID: 6623876371023692505}
   - {fileID: 2467552879557985979}
   - {fileID: 1426198980438660074}
@@ -640,6 +641,25 @@ MonoBehaviour:
   hookIcon: {fileID: 6387616126414973643}
   markerColor: {r: 1, g: 0.08, b: 0.08, a: 1}
   sortingOrderOffset: 20
+--- !u!114 &7923391651648542287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782489262917530473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 1930741244424682533}
+  motionRoot: {fileID: 5333579813990970740}
+  shipAnimator: {fileID: 5217828882331546118}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &1215897993913475234
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,6 +1233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 1436714413942412939}
   waterImpactPoint: {fileID: 471701002345317147}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &3785003595534294575
@@ -1675,7 +1696,7 @@ RectTransform:
   - {fileID: 1436714413942412939}
   - {fileID: 471701002345317147}
   - {fileID: 5651095144546278938}
-  m_Father: {fileID: 7897273449304516480}
+  m_Father: {fileID: 5333579813990970740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1833,6 +1854,7 @@ MonoBehaviour:
   allowsRuleFallback: 0
   ignoresCommanderTargetCommand: 1
   includesMainShipWithEscorts: 0
+  requiresEngagedSeaCreatures: 0
 --- !u!1 &6579038564704171501
 GameObject:
   m_ObjectHideFlags: 0
@@ -2475,11 +2497,43 @@ Transform:
   m_GameObject: {fileID: 8469940827071840251}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1552112, y: 0.07114422, z: 0}
+  m_LocalPosition: {x: 0.1552112, y: 0.0467, z: 0}
   m_LocalScale: {x: 2.181818, y: 2.1538463, z: 2.1538463}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5558968980102974848}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9181310026460255497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5333579813990970740}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5333579813990970740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9181310026460255497}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5558968980102974848}
+  m_Father: {fileID: 7897273449304516480}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5526965070707018241
 PrefabInstance:
@@ -2564,6 +2618,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackCooldown: 1
+  muzzleEffectPrefab: {fileID: 7335811388565860814, guid: ad9018d13e1309e4f89217da593f724d, type: 3}
+  muzzleEffectScale: 1
+  blocksFireThroughAlliedShips: 0
+  alliedHullBlockingRadius: 0.38
   projectilePrefab: {fileID: 2463016830211017476, guid: 74d05dbeafd68e146ae5451a791c13ac, type: 3}
   firePoints:
   - {fileID: 6204817147698197773}

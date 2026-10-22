@@ -1,0 +1,7 @@
+Sky/sea layout adjustment
+Scene: Assets/SB/Animations/Scenes/SampleScene.unity
+Horizon: 0.8 world units lower; original sky top and sea bottom retained.
+Player fleet: lowered to fit the smaller sea area; row spacing reduced for lower HUD clearance.
+Enemy fleet and creature entries: lowered with matching creature vertical bounds (-0.7, 2.3).
+Validation: runtime Game View inspected; scene changes limited to local positions/scales and creature verticalBounds.
+Existing runtime issue: MerchantLedger needs an icon.

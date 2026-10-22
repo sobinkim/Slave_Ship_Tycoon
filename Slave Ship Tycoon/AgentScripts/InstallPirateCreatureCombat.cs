@@ -95,7 +95,6 @@ public static class InstallPirateCreatureCombat
         Assign(director, "battleCamera", camera);
         Assign(director, "creatureRoot", root.transform.Find("Creatures"));
         Assign(director, "voyageMotor", motor);
-        Assign(director, "voyagePresentation", root.GetComponentInChildren<SeaVoyagePresentation>(true));
         SetBool(director, "startOnPlay", false);
         SetBool(director, "allowRestartShortcut", false);
         Assign(motor, "fleetSpawnRoot", mainSpawn.parent);

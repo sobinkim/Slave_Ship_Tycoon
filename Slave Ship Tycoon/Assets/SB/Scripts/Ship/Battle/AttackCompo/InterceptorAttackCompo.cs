@@ -130,6 +130,7 @@ namespace SB.Scripts.AttackCompo
                 return;
             }
             ShotsFired++;
+            PlayMuzzleEffect(firePoint, meetingPoint - firePoint.position);
             selectedProjectile = null;
         }
 

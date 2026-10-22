@@ -1,0 +1,118 @@
+@import url("HarborMaterials.uss");
+:root {
+    --border-control-width: 2px;
+    --border-selected-width: 4px;
+    --color-surface-primary: #11191E;
+    --color-surface-raised: #202A30;
+    --color-surface-overlay: rgba(15, 22, 27, 0.94);
+    --color-surface-modal: #0D151A;
+    --color-surface-command: #151E24;
+    --color-surface-log: rgba(12, 19, 24, 0.88);
+    --color-surface-inset: #0D151A;
+    --color-hud-card: #192329;
+    --color-hud-card-hover: #253139;
+    --color-metal-edge-dark: #29353C;
+    --color-gauge-surface: #151E24;
+    --color-gauge-track: #0A1115;
+    --color-border: #303C43;
+    --color-text-primary: #CBD2D6;
+    --color-text-secondary: #929EA6;
+    --color-action-primary: #8B7950;
+    --color-action-hover: #A08D63;
+    --color-action-pressed: #625437;
+    --color-button-secondary: #202A30;
+    --color-button-hover: #2C3941;
+    --color-text-on-action: #DCE2E5;
+    --color-accent: #B7A37A;
+    --color-target: #253139;
+    --color-resource-gold: #E7B252;
+    --color-resource-diamond: #61B2D0;
+    --color-resource-emerald: #E58A36;
+    --color-status-danger: #E57763;
+    --color-grade-common: #AD9A81;
+    --color-grade-uncommon: #E58A36;
+    --color-grade-rare: #5C93AF;
+    --color-grade-epic: #AE7598;
+    --color-grade-legendary: #E7B252;
+}
+.harbor-root {
+    -unity-font-definition: url("project://database/Assets/SB/UI/Shared/Settings/HarborKorean.asset");
+    flex-grow: 1;
+    color: var(--color-text-primary);
+    font-size: 26px;
+}
+.screen {
+    flex-grow: 1;
+    background-color: var(--color-surface-primary);
+    padding: 28px;
+}
+.screen-header { flex-direction: row; align-items: center; height: 86px; flex-shrink: 0; }
+.screen-title { flex-grow: 1; font-size: 38px; -unity-font-style: bold; }
+.subtitle { color: var(--color-text-secondary); white-space: normal; margin-bottom: 16px; }
+.section-title { font-size: 28px; -unity-font-style: bold; margin-top: 16px; margin-bottom: 12px; }
+.harbor-button {
+    background-color: var(--color-button-secondary);
+    color: var(--color-text-primary);
+    border-width: var(--border-control-width);
+    border-color: var(--color-border);
+    border-radius: 0;
+    margin: 4px;
+    padding: 12px;
+    min-height: 72px;
+    height: 80px;
+    font-size: 26px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+.harbor-button:hover { background-color: var(--color-button-hover); }
+.harbor-button:active { background-color: var(--color-surface-inset); }
+.harbor-button:disabled { opacity: 0.4; }
+.primary-button { background-color: var(--color-target); border-color: var(--color-accent); color: var(--color-accent); }
+.primary-button:hover { background-color: var(--color-button-hover); color: var(--color-text-on-action); }
+.primary-button:active { background-color: var(--color-surface-inset); }
+.close-button { width: 150px; min-height: 60px; height: 64px; font-size: 24px; }
+.action-row { flex-direction: row; flex-shrink: 0; margin-top: 12px; }
+.action-row > .harbor-button { flex-grow: 1; flex-basis: 0; }
+.status { color: var(--color-text-secondary); white-space: normal; min-height: 70px; margin-top: 12px; font-size: 24px; }
+.card-grid { flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
+.ship-card {
+    width: 18.8%;
+    height: 242px;
+    margin: 0.6%;
+    padding: 10px 6px;
+    background-color: var(--color-surface-raised);
+    border-width: var(--border-control-width);
+    border-color: var(--color-border);
+    border-radius: 0;
+    color: var(--color-text-primary);
+    flex-shrink: 0;
+    align-items: stretch;
+}
+.ship-card:hover { background-color: var(--color-surface-inset); }
+.ship-card:disabled { opacity: 0.4; }
+.ship-card.is-selected { border-width: var(--border-selected-width); border-color: var(--color-accent); background-color: var(--color-target); }
+.ship-icon { flex-grow: 1; min-height: 70px; -unity-background-scale-mode: scale-to-fit; }
+.ship-name { white-space: normal; -unity-text-align: middle-center; font-size: 23px; margin-top: 5px; }
+.ship-grade { -unity-text-align: middle-center; font-size: 22px; margin-top: 4px; }
+.ship-count { -unity-text-align: middle-center; font-size: 21px; color: var(--color-text-secondary); margin-top: 4px; }
+.grade-common { border-color: var(--color-grade-common); }
+.grade-uncommon { border-color: var(--color-grade-uncommon); }
+.grade-rare { border-color: var(--color-grade-rare); }
+.grade-epic { border-color: var(--color-grade-epic); }
+.grade-legendary { border-color: var(--color-grade-legendary); }
+.grade-common > .ship-grade { color: var(--color-grade-common); }
+.grade-uncommon > .ship-grade { color: var(--color-grade-uncommon); }
+.grade-rare > .ship-grade { color: var(--color-grade-rare); }
+.grade-epic > .ship-grade { color: var(--color-grade-epic); }
+.grade-legendary > .ship-grade { color: var(--color-grade-legendary); }
+.hidden { display: none; }
+.modal {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    background-color: var(--color-surface-modal);
+    padding: 36px;
+    justify-content: center;
+}
+.modal-title { font-size: 42px; -unity-font-style: bold; -unity-text-align: middle-center; margin-bottom: 20px; }
+.modal-summary { font-size: 26px; white-space: normal; -unity-text-align: middle-center; margin-bottom: 26px; }
+.harbor-scroll { flex-grow: 1; min-height: 0; }
+.harbor-scroll > .unity-scroll-view__vertical-scroller { width: 20px; }

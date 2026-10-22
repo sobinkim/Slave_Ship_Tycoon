@@ -8,8 +8,8 @@ Label { flex-shrink: 0; }
 .unity-scroller--vertical { flex-direction: column; width: 20px; }
 .unity-scroller--vertical > .unity-slider { flex-grow: 1; }
 .unity-scroller--vertical .unity-base-slider__input { flex-grow: 1; }
-.unity-scroller--vertical .unity-base-slider__tracker { width: 8px; align-self: center; background-color: var(--color-surface-inset); border-radius: 4px; }
-.unity-scroller--vertical .unity-base-slider__dragger { width: 16px; min-height: 38px; background-color: var(--color-border); border-radius: 7px; }
+.unity-scroller--vertical .unity-base-slider__tracker { width: 8px; align-self: center; background-color: #404040; border-radius: 0; }
+.unity-scroller--vertical .unity-base-slider__dragger { width: 16px; min-height: 38px; background-color: #B0B0B0; border-radius: 0; }
 .unity-scroller__low-button, .unity-scroller__high-button { display: none; }
 .unity-scroller--horizontal { display: none; }
 

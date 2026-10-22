@@ -15,7 +15,7 @@ Sprite Editor 스킬이 요구하는 `ISpriteFrameEditCapability`가 현재 Unit
 
 | Inspector 항목 | 값 | 용도 |
 |---|---:|---|
-| Emission Color | (1, 0.86, 0.56, 1) | 따뜻한 아이보리 발광색 |
+| Emission Color | (1, 1, 1, 1) | 흰색 발광색 |
 | Emission Intensity | 1.8 | 가산 이미션 강도 |
 | Emission Attack Seconds | 0.02 | 최대 밝기까지 걸리는 시간 |
 | Emission Release Seconds | 0.14 | 원래 밝기로 돌아오는 시간 |

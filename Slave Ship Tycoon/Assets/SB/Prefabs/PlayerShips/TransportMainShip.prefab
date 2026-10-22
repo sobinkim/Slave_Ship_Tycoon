@@ -343,7 +343,7 @@ RectTransform:
   - {fileID: 7867726762135015236}
   - {fileID: 3036215740307880526}
   - {fileID: 8728963552335312444}
-  m_Father: {fileID: 6178072938525391995}
+  m_Father: {fileID: 1198087357954150892}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -595,6 +595,7 @@ GameObject:
   - component: {fileID: 4992098020431622879}
   - component: {fileID: 4475098825315137424}
   - component: {fileID: 2607850046378914409}
+  - component: {fileID: 8470250565430241261}
   m_Layer: 0
   m_Name: TransportMainShip
   m_TagString: Untagged
@@ -615,7 +616,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3817402577497854931}
+  - {fileID: 1198087357954150892}
   - {fileID: 7677627085342001811}
   - {fileID: 8661913468681897579}
   - {fileID: 293367087629720320}
@@ -870,6 +871,25 @@ MonoBehaviour:
         m_CallState: 2
   shakeDistanceUnits: 0.08
   shakeDurationSeconds: 0.15
+--- !u!114 &8470250565430241261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3063899851137766203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 5945312968777696837}
+  motionRoot: {fileID: 1198087357954150892}
+  shipAnimator: {fileID: 3209640250054236849}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &3400172804406024944
 GameObject:
   m_ObjectHideFlags: 0
@@ -1578,6 +1598,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 2829838843372682626}
   waterImpactPoint: {fileID: 7867726762135015236}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &4807812250760322819
@@ -2374,6 +2395,38 @@ Transform:
   - {fileID: 2487865043481941730}
   - {fileID: 4884587308207286683}
   m_Father: {fileID: 3817402577497854931}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8462633889607357094
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1198087357954150892}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1198087357954150892
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8462633889607357094}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3817402577497854931}
+  m_Father: {fileID: 6178072938525391995}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8901885196788520500
 GameObject:

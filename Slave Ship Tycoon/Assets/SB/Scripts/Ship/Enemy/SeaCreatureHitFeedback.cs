@@ -20,7 +20,7 @@ namespace SB.Scripts
         [Header("Body hit emission")]
         [SerializeField, Tooltip("몸체 외에 함께 발광할 꼬리/지느러미/턱. 물살과 그림자는 제외합니다.")]
         private SpriteRenderer[] emissionBodyParts = new SpriteRenderer[0];
-        [SerializeField, ColorUsage(true, true)] private Color emissionColor = new Color(1f, 0.86f, 0.56f, 1f);
+        [SerializeField, ColorUsage(true, true)] private Color emissionColor = Color.white;
         [SerializeField, Min(0f)] private float emissionIntensity = 1.8f;
         [SerializeField, Min(0.001f), Tooltip("실제 피해를 받은 뒤 발광이 최대가 되는 시간")]
         private float emissionAttackSeconds = 0.02f;

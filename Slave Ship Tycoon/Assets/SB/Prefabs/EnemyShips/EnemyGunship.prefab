@@ -403,6 +403,7 @@ MonoBehaviour:
   allowsRuleFallback: 1
   ignoresCommanderTargetCommand: 0
   includesMainShipWithEscorts: 0
+  requiresEngagedSeaCreatures: 0
 --- !u!1 &2885943835207139438
 GameObject:
   m_ObjectHideFlags: 0
@@ -743,6 +744,7 @@ GameObject:
   - component: {fileID: 8733642333840333854}
   - component: {fileID: 1833399329492783241}
   - component: {fileID: 3259515473819612312}
+  - component: {fileID: 5580322621291844990}
   m_Layer: 0
   m_Name: EnemyGunship
   m_TagString: Untagged
@@ -763,7 +765,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3628633033257697443}
+  - {fileID: 8106777514566427385}
   - {fileID: 2610787130641832409}
   - {fileID: 2231192607920315531}
   - {fileID: 8275472251920375203}
@@ -946,6 +948,25 @@ MonoBehaviour:
   _myShipType: 2
   _shipRole: 2
   canTargetProtectedShips: 0
+--- !u!114 &5580322621291844990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4077594484564584940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f3ae689ee55545b8a3b7f4f27bf9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 3259515473819612312}
+  motionRoot: {fileID: 8106777514566427385}
+  shipAnimator: {fileID: 5860350428691425047}
+  rollDegrees: 3
+  cycleSeconds: 3.2
+  heaveAmplitude: 0.018
+  blendInSeconds: 0.35
 --- !u!1 &4091022322853805432
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,7 +1027,7 @@ Transform:
   m_GameObject: {fileID: 4202350177990388282}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3293461, y: -0.02631579, z: 0}
+  m_LocalPosition: {x: 0.3293461, y: -0.023, z: 0}
   m_LocalScale: {x: 2.181818, y: 2.1538463, z: 2.1538463}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1545,7 +1566,7 @@ RectTransform:
   - {fileID: 7035946412210630443}
   - {fileID: 6153478150375370934}
   - {fileID: 9051313352965724593}
-  m_Father: {fileID: 6280159476926361709}
+  m_Father: {fileID: 8106777514566427385}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1748,6 +1769,38 @@ Transform:
   - {fileID: 6314320929259810144}
   m_Father: {fileID: 3628633033257697443}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6519068069807634327
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8106777514566427385}
+  m_Layer: 0
+  m_Name: BuoyancyMotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8106777514566427385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6519068069807634327}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3628633033257697443}
+  m_Father: {fileID: 6280159476926361709}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6649952735684523916
 GameObject:
   m_ObjectHideFlags: 0
@@ -1914,6 +1967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoint: {fileID: 8698072693267821712}
   waterImpactPoint: {fileID: 7035946412210630443}
+  trackMovementDuringFlight: 0
   hitOffset: {x: 0, y: 0, z: 0}
   waterImpactOffset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &7874250988135235498
@@ -2639,6 +2693,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8633470965202431413}
     m_Modifications:
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: travelMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
+      propertyPath: muzzleEffectPrefab
+      value: 
+      objectReference: {fileID: 7335811388565860814, guid: ad9018d13e1309e4f89217da593f724d, type: 3}
     - target: {fileID: 5290103432590804653, guid: 37c702585956be74c9bc976d16eb950f, type: 3}
       propertyPath: 'firePoints.Array.data[0]'
       value: 

@@ -29,6 +29,8 @@ namespace SB.UI.InGame
         private float transportSpecialGainBaseMultiple = 30f;
         [SerializeField, Min(0), Tooltip("한 번의 운송에서 크게 강조할 특별 시세 결과의 최대 횟수입니다. 0이면 일반 연출만 사용합니다.")]
         private int transportSpecialResultsPerVoyage = 1;
+        [SerializeField, Min(0f), Tooltip("시세 결과 연출 종료 후 도착 예상액을 펼쳐 두는 시간입니다. 마우스가 위에 있거나 클릭으로 고정하면 계속 표시합니다.")]
+        private float transportRevenueHoldSeconds = 1.5f;
         [Header("Transport effects (unscaled seconds)")]
         [SerializeField, Min(0.01f)] private float cargoResolveSeconds = 0.28f;
         [SerializeField, Min(0.01f)] private float currencyFlightSeconds = 0.24f;
@@ -45,10 +47,11 @@ namespace SB.UI.InGame
         private sealed class TransportItemView
         {
             public CargoData cargo;
-            public VisualElement cell, anchor, icon, halo, ring;
+            public VisualElement cell, value, anchor, icon, halo, ring;
             public Label multiplier, pop;
             public readonly List<VisualElement> twinkles = new List<VisualElement>();
             public int appliedMultiplier = 1;
+            public TransportReelView reel;
         }
         private sealed class TransportRewardView
         {
@@ -133,6 +136,10 @@ namespace SB.UI.InGame
         private Coroutine transportInitializeRoutine, transportRevealRoutine;
         private bool transportInitialized;
         private int transportSpecialResultsPlayed;
+        private VisualElement transportRevenueHoverRoot;
+        private Button transportRevenueToggle;
+        private bool transportRevenueHovered, transportRevenuePinned, transportRevenueAutomatic;
+        private IVisualElementScheduledItem transportRevenueClose;
         private CurrencyType activeTransportGoalCurrency;
 
         public bool IsTransportBonusPlaying => transportRevealRoutine != null || pendingMarketPrices.Count > 0;
@@ -164,7 +171,13 @@ namespace SB.UI.InGame
 
         private void BindTransportPresentation()
         {
+            UnbindTransportRevenue();
             transportCargoRoot = root.Q("transportCargo");
+            transportRevenueHoverRoot = root.Q("routeCard");
+            transportRevenueToggle = root.Q<Button>("transportRevenueToggle");
+            transportRevenueHoverRoot.RegisterCallback<PointerEnterEvent>(OnTransportRevenueEnter);
+            transportRevenueHoverRoot.RegisterCallback<PointerLeaveEvent>(OnTransportRevenueLeave);
+            transportRevenueToggle.clicked += ToggleTransportRevenue;
             transportItemsRoot = root.Q("transportItems");
             transportFx = root.Q("transportFx");
             transportReveal = root.Q("transportReveal");
@@ -218,12 +231,56 @@ namespace SB.UI.InGame
             ClearTransportPresentation();
         }
 
+        private void UnbindTransportRevenue()
+        {
+            transportRevenueClose?.Pause();
+            transportRevenueClose = null;
+            transportRevenueHoverRoot?.UnregisterCallback<PointerEnterEvent>(OnTransportRevenueEnter);
+            transportRevenueHoverRoot?.UnregisterCallback<PointerLeaveEvent>(OnTransportRevenueLeave);
+            if (transportRevenueToggle != null) transportRevenueToggle.clicked -= ToggleTransportRevenue;
+            transportRevenueHoverRoot = null;
+            transportRevenueToggle = null;
+        }
+
+        private void OnTransportRevenueEnter(PointerEnterEvent evt)
+        {
+            if (evt.pointerType != UnityEngine.UIElements.PointerType.mouse) return;
+            transportRevenueHovered = true;
+            RefreshTransportRevenueExpansion();
+        }
+
+        private void OnTransportRevenueLeave(PointerLeaveEvent evt)
+        {
+            if (evt.pointerType != UnityEngine.UIElements.PointerType.mouse) return;
+            transportRevenueHovered = false;
+            RefreshTransportRevenueExpansion();
+        }
+
+        private void ToggleTransportRevenue()
+        {
+            transportRevenuePinned = !transportRevenuePinned;
+            RefreshTransportRevenueExpansion();
+        }
+
+        private void RefreshTransportRevenueExpansion()
+        {
+            bool expanded = transportRevenueHovered || transportRevenuePinned || transportRevenueAutomatic;
+            transportCargoRoot?.EnableInClassList("is-revenue-expanded", expanded);
+            if (transportRevenueToggle == null) return;
+            transportRevenueToggle.text = expanded ? "도착 예상 ▴" : "도착 예상 ▾";
+            transportRevenueToggle.EnableInClassList("is-pinned", transportRevenuePinned);
+            transportRevenueToggle.tooltip = transportRevenuePinned ? "클릭하면 펼침 고정 해제" : "마우스를 올려 확인 · 클릭하면 펼침 고정";
+        }
+
         private void ClearTransportPresentation()
         {
             if (transportInitializeRoutine != null) StopCoroutine(transportInitializeRoutine);
             if (transportRevealRoutine != null) StopCoroutine(transportRevealRoutine);
             transportInitializeRoutine = transportRevealRoutine = null;
             transportInitialized = false;
+            transportRevenueClose?.Pause();
+            transportRevenueHovered = transportRevenuePinned = transportRevenueAutomatic = false;
+            RefreshTransportRevenueExpansion();
             transportSpecialResultsPlayed = 0;
             pendingMarketPrices.Clear(); currencyFlights.Clear(); transportSparks.Clear(); transportItems.Clear();
             transportItemsRoot?.Clear(); transportFx?.Clear();
@@ -264,17 +321,20 @@ namespace SB.UI.InGame
                 var icon = TransportElement("transport-icon");
                 ShipCardPresentation.SetIcon(icon, cargo.Item.Icon);
                 var multiplier = TransportLabel("×1", "transport-multiplier");
+                multiplier.tooltip = "누적 시세 배율";
                 var pop = TransportLabel("", "transport-pop");
-                anchor.Add(halo); anchor.Add(ring); anchor.Add(icon); anchor.Add(multiplier);
+                anchor.Add(halo); anchor.Add(ring); anchor.Add(icon);
                 tile.Add(anchor); tile.Add(pop); cell.Add(tile);
+                var value = TransportElement("transport-item-value");
+                value.Add(multiplier);
+                cell.Add(value);
                 var meta = TransportElement("transport-item-meta");
-                meta.Add(TransportLabel(cargo.Item.DisplayName, "transport-item-name"));
-                meta.Add(TransportLabel($"×{cargo.Amount:N0}", "transport-quantity"));
+                meta.Add(TransportLabel($"{cargo.Amount:N0}개", "transport-quantity"));
                 cell.Add(meta);
                 transportItemsRoot.Add(cell);
                 var itemView = new TransportItemView
                 {
-                    cargo = new CargoData { Item = cargo.Item, Amount = cargo.Amount }, cell = cell,
+                    cargo = new CargoData { Item = cargo.Item, Amount = cargo.Amount }, cell = cell, value = value,
                     anchor = anchor, icon = icon, halo = halo, ring = ring,
                     multiplier = multiplier, pop = pop
                 };
@@ -285,6 +345,7 @@ namespace SB.UI.InGame
                     itemView.twinkles.Add(twinkle);
                 }
                 transportItems.Add(itemView);
+                itemView.reel = CreateTransportReel(itemView);
             }
             isRouteDirty = true;
             transportInitializeRoutine = StartCoroutine(InitializeTransportValues());
@@ -332,7 +393,7 @@ namespace SB.UI.InGame
             transportRevealRoutine = null;
         }
 
-        private IEnumerator RevealTransportSnapshot(Dictionary<ETransportItemType, TransportMarketPriceEntry> prices)
+        private IEnumerator RevealLegacyTransportSnapshot(Dictionary<ETransportItemType, TransportMarketPriceEntry> prices)
         {
             Dictionary<CurrencyType, long> before = CalculateTransportRewards();
             Dictionary<CurrencyType, long> after = CalculateTransportRewards(prices);
@@ -387,6 +448,9 @@ namespace SB.UI.InGame
                 if (!resolved && elapsed >= resolveAt)
                 {
                     resolved = true;
+                    transportRevenueClose?.Pause();
+                    transportRevenueAutomatic = true;
+                    RefreshTransportRevenueExpansion();
                     // Apply the whole display snapshot together. Flights are feedback, never payment.
                     foreach (CargoReveal reveal in reveals) reveal.view.appliedMultiplier = reveal.target;
                     ShowTransportReveal(before, after, special, true);
@@ -476,6 +540,11 @@ namespace SB.UI.InGame
             }
             transportReveal.AddToClassList("hidden");
             transportCargoRoot.RemoveFromClassList("is-market-reveal");
+            transportRevenueClose = transportCargoRoot.schedule.Execute(() =>
+            {
+                transportRevenueAutomatic = false;
+                RefreshTransportRevenueExpansion();
+            }).StartingIn((long)(transportRevenueHoldSeconds * 1000));
             transportGoalValue.style.scale = transportGoalIcon.style.scale = new Scale(Vector3.one);
         }
 
@@ -667,9 +736,9 @@ namespace SB.UI.InGame
             reward.value.text = reward.displayed < CompactBalanceThreshold ? reward.displayed.ToString("N0") : CurrencyTextFormatter.Format(reward.displayed);
             reward.container.tooltip = CurrencyTextFormatter.FormatName(reward.currency) + " " + reward.displayed.ToString("N0");
         }
-        private void AnimateTransportRewards(float deltaTime)
+        private void AnimateTransportRewards(float deltaTime, float durationOverride = -1f)
         {
-            float seconds = Mathf.Max(0.01f, transportCountSeconds);
+            float seconds = Mathf.Max(0.01f, durationOverride >= 0 ? durationOverride : transportCountSeconds);
             foreach (TransportRewardView reward in transportRewards)
             {
                 reward.countElapsed += deltaTime;
@@ -714,7 +783,7 @@ namespace SB.UI.InGame
                 if (item.cargo.Item.Rewards != null)
                     foreach (var entry in item.cargo.Item.Rewards)
                         if (entry.CurrencyType == reward.currency && entry.CurrencyAmount > 0) contributes = true;
-                if (!contributes || reward.currency != TransportGoalCurrency) continue;
+                if (!contributes) continue;
                 for (int packet = 0; packet < reveal.streamCount; packet++)
                 {
                     var icon = TransportElement("transport-fly-icon");
@@ -726,7 +795,7 @@ namespace SB.UI.InGame
                         icon = icon, reward = reward,
                         from = transportFx.WorldToLocal(item.icon.worldBound.center) +
                             new Vector2(Mathf.Sin(packet * 2.4f) * 12, Mathf.Cos(packet * 2.4f) * 8),
-                        to = transportFx.WorldToLocal(transportGoalIcon.worldBound.center),
+                        to = transportFx.WorldToLocal(reward.icon.worldBound.center),
                         startedAt = elapsed + packet * interval, bend = 30 + packet * 6
                     });
                 }
@@ -740,6 +809,7 @@ namespace SB.UI.InGame
                 CurrencyFlight flight = currencyFlights[i];
                 if (elapsed < flight.startedAt) continue;
                 float p = Mathf.Clamp01((elapsed - flight.startedAt) / duration);
+                flight.to = transportFx.WorldToLocal(flight.reward.icon.worldBound.center);
                 float eased = p * p;
                 Vector2 position = Vector2.Lerp(flight.from, flight.to, eased);
                 position.y -= Mathf.Sin(p * Mathf.PI) * flight.bend;

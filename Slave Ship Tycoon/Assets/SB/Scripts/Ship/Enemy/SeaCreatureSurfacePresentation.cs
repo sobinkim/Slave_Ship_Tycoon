@@ -46,6 +46,20 @@ namespace SB.Scripts
         [SerializeField, Min(0f)] private float hitRecoilDistance = 0.05f;
         [SerializeField, Min(0.01f)] private float hitRecoilSeconds = 0.14f;
 
+        [Header("Charge anticipation")]
+        [SerializeField, Tooltip("준비 동작에서 줄일 몸 길이와 늘릴 높이의 비율입니다.")]
+        private Vector2 windupCompression = new Vector2(0.085f, 0.025f);
+        [SerializeField, Min(0f)] private float windupSinkDepth = 0.025f;
+        [SerializeField, Range(0f, 8f)] private float windupNoseDipDegrees = 2.5f;
+        [SerializeField, ColorUsage(true, true)] private Color chargeEmissionColor = Color.white;
+        [SerializeField, Range(0f, 2f)] private float chargeEmissionIntensity = 0.4f;
+        [SerializeField, Range(0f, 0.95f), Tooltip("준비 동작 중 마지막 한 번의 발광이 시작되는 진행 비율입니다.")]
+        private float chargeFlashStartProgress = 0.7f;
+        [SerializeField, Min(0f), Tooltip("머리 앞 포말로 모여드는 물살의 추가 거리입니다.")]
+        private float chargeGatherDistance = 0.45f;
+        [SerializeField, Min(0f)] private float chargeGatherSpread = 0.22f;
+        [SerializeField, Range(0f, 1f)] private float chargeGatherOpacity = 0.65f;
+
         [Header("Water surface")]
         [SerializeField, Tooltip("Water height in this creature root's local coordinates. Tune to the submerged edge of the art.")]
         private float waterlineLocalY = -0.13f;
@@ -65,6 +79,9 @@ namespace SB.Scripts
         private static readonly int SinkDistanceId = Shader.PropertyToID("_SinkDistance");
         private static readonly int WaterlineId = Shader.PropertyToID("_Waterline");
         private static readonly int WaterTintId = Shader.PropertyToID("_WaterTint");
+        private static readonly int ChargeEmissionColorId = Shader.PropertyToID("_ChargeEmissionColor");
+        private static readonly int ChargeEmissionIntensityId = Shader.PropertyToID("_ChargeEmissionIntensity");
+        private static readonly int ChargeEmissionFlashId = Shader.PropertyToID("_ChargeEmissionFlash");
 
         private PoseCache visualPose;
         private PoseCache tailPose;
@@ -151,6 +168,7 @@ namespace SB.Scripts
             public readonly bool HasSwim;
             public readonly bool HasSink;
             public readonly bool HasWaterTint;
+            public readonly bool HasChargeEmission;
 
             public BodyCache(SpriteRenderer renderer)
             {
@@ -161,6 +179,8 @@ namespace SB.Scripts
                 HasSink = material != null && material.HasProperty(SinkProgressId) && material.HasProperty(SinkDistanceId)
                     && material.HasProperty(WaterlineId);
                 HasWaterTint = material != null && material.HasProperty(WaterTintId);
+                HasChargeEmission = material != null && material.HasProperty(ChargeEmissionColorId)
+                    && material.HasProperty(ChargeEmissionIntensityId) && material.HasProperty(ChargeEmissionFlashId);
             }
         }
 
@@ -227,11 +247,15 @@ namespace SB.Scripts
             if (facingDirection.sqrMagnitude > 0.001f) facing = facingDirection.normalized;
             bool dying = state == SeaCreatureState.Dying;
             bool charging = state == SeaCreatureState.Charging;
+            bool windingUp = state == SeaCreatureState.WindingUp;
+            float anticipation = windingUp ? Mathf.SmoothStep(0f, 1f, progress) : 0f;
+            float stillness = 1f - anticipation * 0.9f;
             float speed = Mathf.Clamp01(waterVelocity.magnitude / fullStrokeSpeed);
             float activity = charging ? 1f : speed;
             float sink = dying ? Mathf.SmoothStep(0f, 1f, progress) : 0f;
             animationTime += delta;
             float frequency = Mathf.Lerp(idleCyclesPerSecond, swimCyclesPerSecond, activity);
+            frequency *= Mathf.Lerp(1f, 0.35f, anticipation);
             if (charging) frequency *= 1.65f;
             strokePhase += delta * frequency * Mathf.PI * 2f;
             float phase = strokePhase + phaseRadians;
@@ -251,25 +275,25 @@ namespace SB.Scripts
             float stroke = Mathf.Sin(phase);
             float breath = Mathf.Sin(animationTime * idleCyclesPerSecond * Mathf.PI * 2f + phaseRadians);
             Vector2 localFacing = transform.InverseTransformDirection(facing);
-            Vector3 offset = Vector3.up * (breath * bobAmplitude * (1f - sink));
-            Vector2 scale = new Vector2(1f + breath * breathingScale, 1f - breath * breathingScale * 0.6f);
+            Vector3 offset = Vector3.up * (breath * bobAmplitude * (1f - sink) * stillness);
+            Vector2 scale = new Vector2(1f + breath * breathingScale * stillness, 1f - breath * breathingScale * 0.6f * stillness);
             float pitch = facing.y * Mathf.Sign(facing.x) * bodyPitchDegrees;
-            pitch += stroke * bodyPitchDegrees * 0.35f * (1f - sink);
+            pitch += stroke * bodyPitchDegrees * 0.35f * (1f - sink) * stillness;
             float jaw = 0f;
 
-            if (state == SeaCreatureState.WindingUp)
+            if (windingUp)
             {
-                float anticipation = Mathf.SmoothStep(0f, 1f, progress);
                 offset -= (Vector3)localFacing * (windupPullbackDistance * anticipation);
-                scale += new Vector2(-0.1f, 0.08f) * anticipation;
-                pitch += Mathf.Sin(phase * 2f) * 1.2f * anticipation;
-                jaw = anticipation * 0.35f;
+                offset.y -= windupSinkDepth * anticipation;
+                scale += new Vector2(-windupCompression.x, windupCompression.y) * anticipation;
+                pitch -= Mathf.Sign(facing.x) * windupNoseDipDegrees * anticipation;
+                jaw = anticipation * 0.2f;
             }
             else if (state == SeaCreatureState.Biting)
             {
                 float lunge = Mathf.Sin(Mathf.Clamp01((progress - 0.12f) / 0.88f) * Mathf.PI);
-                float anticipation = Mathf.Sin(Mathf.Clamp01(progress / 0.18f) * Mathf.PI);
-                offset += (Vector3)localFacing * (lunge * biteLungeDistance - anticipation * windupPullbackDistance * 0.4f);
+                float biteAnticipation = Mathf.Sin(Mathf.Clamp01(progress / 0.18f) * Mathf.PI);
+                offset += (Vector3)localFacing * (lunge * biteLungeDistance - biteAnticipation * windupPullbackDistance * 0.4f);
                 scale += new Vector2(lunge * 0.07f, -lunge * 0.06f);
                 jaw = Mathf.Sin(Mathf.Clamp01(progress / 0.7f) * Mathf.PI);
             }
@@ -297,14 +321,17 @@ namespace SB.Scripts
             visualRoot.localPosition = visualPose.Position + offset;
             visualRoot.localRotation = visualPose.Rotation * Quaternion.Euler(0f, 0f, pitch);
             visualRoot.localScale = Vector3.Scale(visualPose.Scale, new Vector3(scale.x * mirror, scale.y, 1f));
-            AnimatePart(tailPose, stroke * tailSwingDegrees * Mathf.Lerp(0.35f, 1f, activity) * (1f - sink));
-            AnimatePart(finPose, Mathf.Sin(phase - 1.1f) * finSwingDegrees * (1f - sink));
+            AnimatePart(tailPose, stroke * tailSwingDegrees * Mathf.Lerp(0.35f, 1f, activity) * (1f - sink) * stillness);
+            AnimatePart(finPose, Mathf.Sin(phase - 1.1f) * finSwingDegrees * (1f - sink) * stillness);
             AnimatePart(jawPose, jaw * jawOpenDegrees * (1f - sink));
 
             float bend = charging ? chargeBendStrength : Mathf.Lerp(idleBendStrength, swimBendStrength, activity);
-            ApplyBodyMaterial(body, phase, bend * (1f - sink), sink, false);
-            foreach (BodyCache part in parts) ApplyBodyMaterial(part, phase, bend * (1f - sink), sink, false);
-            UpdateSurface(state, delta, phase, speed, localFacing, sink, hit);
+            bend *= Mathf.Lerp(1f, 0.25f, anticipation);
+            float chargePulse = windingUp ? Mathf.Sin(Mathf.InverseLerp(chargeFlashStartProgress, 1f, progress) * Mathf.PI) : 0f;
+            chargePulse *= chargePulse;
+            ApplyBodyMaterial(body, phase, bend * (1f - sink), sink, false, chargePulse);
+            foreach (BodyCache part in parts) ApplyBodyMaterial(part, phase, bend * (1f - sink), sink, false, chargePulse);
+            UpdateSurface(state, delta, phase, speed, localFacing, sink, hit, progress);
         }
 
         private float FacingSign(Vector2 direction) => artFacesRight == (direction.x >= 0f) ? 1f : -1f;
@@ -314,7 +341,7 @@ namespace SB.Scripts
             if (pose.Transform != null) pose.Transform.localRotation = pose.Rotation * Quaternion.Euler(0f, 0f, degrees);
         }
 
-        private void ApplyBodyMaterial(BodyCache cached, float phase, float bend, float sink, bool reset)
+        private void ApplyBodyMaterial(BodyCache cached, float phase, float bend, float sink, bool reset, float chargePulse = 0f)
         {
             SpriteRenderer renderer = cached.Renderer;
             if (renderer == null) return;
@@ -325,7 +352,7 @@ namespace SB.Scripts
                 tint.a = cached.Tint.a * (1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.65f, 1f, sink)));
                 renderer.color = tint;
             }
-            if (!cached.HasSwim && !cached.HasSink && !cached.HasWaterTint) return;
+            if (!cached.HasSwim && !cached.HasSink && !cached.HasWaterTint && !cached.HasChargeEmission) return;
             // Preserve unrelated per-renderer overrides and the normal hit tint from ShipHullFeedback.
             renderer.GetPropertyBlock(properties);
             if (cached.HasSwim)
@@ -341,12 +368,19 @@ namespace SB.Scripts
                 properties.SetFloat(SinkDistanceId, sinkDistance);
             }
             if (cached.HasWaterTint) properties.SetColor(WaterTintId, waterTint);
+            if (cached.HasChargeEmission)
+            {
+                properties.SetColor(ChargeEmissionColorId, chargeEmissionColor);
+                properties.SetFloat(ChargeEmissionIntensityId, chargeEmissionIntensity);
+                properties.SetFloat(ChargeEmissionFlashId, chargePulse);
+            }
             renderer.SetPropertyBlock(properties);
         }
 
         private void UpdateSurface(SeaCreatureState state, float delta, float phase, float speed,
-            Vector2 direction, float sink, float hit)
+            Vector2 direction, float sink, float hit, float progress)
         {
+            bool windingUp = state == SeaCreatureState.WindingUp;
             float visible = 1f - sink;
             float agitation = state == SeaCreatureState.Charging ? 1f
                 : state == SeaCreatureState.Biting ? 0.85f : state == SeaCreatureState.WindingUp ? 0.25f : speed;
@@ -370,14 +404,32 @@ namespace SB.Scripts
                 Vector3 position = bow.Pose.Position;
                 position.x *= FacingSign(direction);
                 bow.Pose.Transform.localPosition = position;
+                bow.Pose.Transform.localRotation = bow.Pose.Rotation;
                 bow.Pose.Transform.localScale = Vector3.Scale(bow.Pose.Scale,
                     new Vector3(1f + agitation * 0.2f, 1f + Mathf.Sin(phase * 1.4f) * 0.08f, 1f));
                 bow.SetOpacity(foamVisibility * (0.7f + Mathf.Sin(phase) * 0.15f));
+                if (windingUp)
+                {
+                    float load = Mathf.SmoothStep(0f, 1f, progress);
+                    bow.Pose.Transform.localPosition = new Vector3(0f, waterlineLocalY, position.z)
+                        + (Vector3)direction * Mathf.Abs(bow.Pose.Position.x);
+                    bow.Pose.Transform.localRotation = bow.Pose.Rotation * Quaternion.Euler(0f, 0f,
+                        Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+                    bow.Pose.Transform.localScale = Vector3.Scale(bow.Pose.Scale,
+                        new Vector3(Mathf.Lerp(0.7f, 1.35f, load), 0.75f, 1f));
+                    bow.SetOpacity(chargeGatherOpacity * load * visible);
+                }
             }
             for (int i = 0; i < foam.Length; i++)
             {
                 SurfaceCache fleck = foam[i];
                 if (fleck.Renderer == null) continue;
+                if (windingUp)
+                {
+                    GatherChargeWater(fleck, i, direction, progress, visible);
+                    continue;
+                }
+                fleck.Pose.Transform.localRotation = fleck.Pose.Rotation;
                 float age = Mathf.Repeat(animationTime / wakeCycleSeconds + (float)i / foam.Length, 1f);
                 Vector2 spread = new Vector2(-direction.y, direction.x) * ((i % 2 == 0 ? -1f : 1f) * wakeSpread * age);
                 Vector3 origin = fleck.Pose.Position;
@@ -389,11 +441,28 @@ namespace SB.Scripts
             }
             if (ripple.Renderer != null)
             {
-                float progress = Mathf.Clamp01(rippleAge / rippleSeconds);
-                float scale = 1f + progress * rippleExpansion;
+                float rippleProgress = Mathf.Clamp01(rippleAge / rippleSeconds);
+                float scale = 1f + rippleProgress * rippleExpansion;
                 ripple.Pose.Transform.localScale = Vector3.Scale(ripple.Pose.Scale, new Vector3(scale, scale, 1f));
-                ripple.SetOpacity(Mathf.Sin(progress * Mathf.PI) * (1f - progress));
+                ripple.SetOpacity(Mathf.Sin(rippleProgress * Mathf.PI) * (1f - rippleProgress));
             }
+        }
+
+        private void GatherChargeWater(SurfaceCache fleck, int index, Vector2 direction, float progress, float visible)
+        {
+            float flow = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.05f + index * 0.06f, 0.94f, progress));
+            float band = foam.Length > 1 ? 2f * index / (foam.Length - 1f) - 1f : 0f;
+            float bowDistance = bow.Renderer != null ? Mathf.Abs(bow.Pose.Position.x) : 0f;
+            float distance = Mathf.Lerp(bowDistance + chargeGatherDistance * (1f + index * 0.12f), bowDistance * 0.85f, flow);
+            Vector2 perpendicular = new Vector2(-direction.y, direction.x);
+            Vector3 surface = new Vector3(0f, waterlineLocalY, fleck.Pose.Position.z);
+            fleck.Pose.Transform.localPosition = surface + (Vector3)direction * distance
+                + (Vector3)perpendicular * (band * chargeGatherSpread * (1f - flow));
+            fleck.Pose.Transform.localRotation = fleck.Pose.Rotation * Quaternion.Euler(0f, 0f,
+                Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+            fleck.Pose.Transform.localScale = Vector3.Scale(fleck.Pose.Scale,
+                new Vector3(Mathf.Lerp(1.6f, 0.75f, flow), Mathf.Lerp(0.7f, 0.4f, flow), 1f));
+            fleck.SetOpacity(chargeGatherOpacity * Mathf.Sin(flow * Mathf.PI) * visible);
         }
 
         private void RestoreTransforms()

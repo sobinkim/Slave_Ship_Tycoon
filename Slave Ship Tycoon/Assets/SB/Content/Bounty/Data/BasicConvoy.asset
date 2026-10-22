@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a16a4795a17b8ba499c9be963a24f3ce, type: 3}
+  m_Name: BasicConvoy
+  m_EditorClassIdentifier: 
+  chapter: 1
+  stage: 1
+  enemySlots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 1344595175179000617, guid: b8a74736c641ba1428f9597ce3097556, type: 3}
+  - {fileID: 1782653694049083418, guid: 17c5bd6951245f54bae222c5405bee91, type: 3}
+  - {fileID: 8507885324456781492, guid: 033093f4eeffc814890fb933dee15f10, type: 3}
+  - {fileID: 3462524815539215047, guid: 3defd5eadef1def45b8b746d9cb4ae78, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

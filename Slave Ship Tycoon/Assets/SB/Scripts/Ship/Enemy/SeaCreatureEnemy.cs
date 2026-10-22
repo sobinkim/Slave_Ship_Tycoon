@@ -25,7 +25,6 @@ namespace SB.Scripts
         [SerializeField] private SeaCreatureKind kind;
         [SerializeField] private Transform visual;
         [SerializeField] private SpriteRenderer bodyRenderer;
-        [SerializeField] private SpriteRenderer chargeWarning;
         [SerializeField] private SeaCreatureSurfacePresentation surfacePresentation;
         [SerializeField, Tooltip("원본 그림의 머리가 오른쪽을 향할 때 켭니다.")]
         private bool artFacesRight;
@@ -60,7 +59,6 @@ namespace SB.Scripts
         [Header("Presentation")]
         [SerializeField, Min(0f)] private float bobAmplitude = 0.035f;
         [SerializeField, Min(0.01f)] private float deathSeconds = 0.28f;
-        [SerializeField] private Color warningColor = new Color(1f, 0.38f, 0.15f, 0.4f);
 
         private IReadOnlyList<SeaCreatureTarget> fleet;
         private IReadOnlyList<SeaCreatureEnemy> creatures;
@@ -130,7 +128,6 @@ namespace SB.Scripts
             ChargeCount = 0;
             chargeVictims.Clear();
             if (bodyRenderer != null) bodyRenderer.color = Color.white;
-            if (chargeWarning != null) chargeWarning.enabled = false;
             ResetVisual();
             surfacePresentation?.ResetPresentation(Vector2.left);
         }
@@ -171,7 +168,6 @@ namespace SB.Scripts
         {
             State = SeaCreatureState.Dying;
             deathElapsed = 0f;
-            if (chargeWarning != null) chargeWarning.enabled = false;
         }
 
         protected override void Update()
@@ -222,11 +218,9 @@ namespace SB.Scripts
                     break;
                 case SeaCreatureState.WindingUp:
                     stateRemaining -= delta;
-                    UpdateWarning();
                     if (stateRemaining <= 0f)
                     {
                         State = SeaCreatureState.Charging;
-                        if (chargeWarning != null) chargeWarning.enabled = false;
                     }
                     break;
                 case SeaCreatureState.Charging:
@@ -293,7 +287,6 @@ namespace SB.Scripts
                 chargeVictims.Clear();
                 State = SeaCreatureState.WindingUp;
                 ChargeCount++;
-                UpdateWarning();
                 return;
             }
             if (distance <= biteRange)
@@ -370,20 +363,6 @@ namespace SB.Scripts
                 chargeCooldown = chargeCooldownSeconds;
                 encounterPosition = transform.position;
             }
-        }
-
-        private void UpdateWarning()
-        {
-            if (chargeWarning == null) return;
-            chargeWarning.enabled = true;
-            chargeWarning.transform.position = transform.position + chargeDirection * (chargeDistance * 0.5f);
-            chargeWarning.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(chargeDirection.y, chargeDirection.x) * Mathf.Rad2Deg);
-            Vector3 spriteSize = chargeWarning.sprite.bounds.size;
-            chargeWarning.transform.localScale = new Vector3(chargeDistance / spriteSize.x,
-                bodyRadius * 1.3f / spriteSize.y, 1f);
-            Color tint = warningColor;
-            tint.a *= 0.65f + Mathf.Sin(Time.time * 20f) * 0.25f;
-            chargeWarning.color = tint;
         }
 
         private void UpdateVisual()
@@ -473,7 +452,6 @@ namespace SB.Scripts
             entrySwimSpeed = 0f;
             fleet = null;
             creatures = null;
-            if (chargeWarning != null) chargeWarning.enabled = false;
             ResetVisual();
             surfacePresentation?.ResetPresentation(Vector2.left);
         }

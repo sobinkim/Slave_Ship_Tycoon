@@ -14,6 +14,11 @@ namespace SB.UI.Fleet
     [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
     public sealed class FleetToolkitScreen : MonoBehaviour
     {
+        private static readonly string[] GradeClasses =
+        {
+            "grade-common", "grade-uncommon", "grade-rare", "grade-epic", "grade-legendary"
+        };
+
         [Header("References")]
         [SerializeField] private UIDocument document;
         [SerializeField] private PlayerFleetManager fleetManager;
@@ -98,7 +103,7 @@ namespace SB.UI.Fleet
             playerRoot.Clear();
             enemyRoot.Clear();
             for (int i = 0; i < fleetManager.FormationSlotCount; i++) slots.Add(null);
-            screen.Q<Label>("playerTitle").text = $"아군 배치 · 호위선 {fleetManager.FormationSlotCount}칸";
+            screen.Q<Label>("playerTitle").text = "아군 배치";
 
             for (int columnIndex = 0; columnIndex < PlayerFleetLoadout.ColumnCount; columnIndex++)
             {
@@ -140,6 +145,11 @@ namespace SB.UI.Fleet
                         slots[slotIndex] = slot;
                         int capturedIndex = slotIndex;
                         slot.clicked += () => SelectSlot(capturedIndex);
+                        slot.RegisterCallback<ClickEvent>(evt =>
+                        {
+                            if (evt.button == 0 && evt.clickCount == 2)
+                                RemoveEscort(capturedIndex);
+                        });
                     }
                 }
 
@@ -182,7 +192,7 @@ namespace SB.UI.Fleet
         {
             if (selectedEscort != null) { PlaceSelected(slotIndex); return; }
             selectedSlotIndex = selectedSlotIndex == slotIndex ? -1 : slotIndex;
-            statusLabel.text = selectedSlotIndex >= 0 ? $"{slotIndex + 1}번 슬롯 · 보유 함선을 누르면 배치됩니다." : string.Empty;
+            statusLabel.text = selectedSlotIndex >= 0 ? "함선을 선택하면 이 칸에 배치됩니다." : string.Empty;
             Refresh();
         }
 
@@ -198,7 +208,17 @@ namespace SB.UI.Fleet
             }
             selectedEscort = null;
             selectedSlotIndex = -1;
-            statusLabel.text = $"{ship.DisplayName} · {slotIndex + 1}번 슬롯 배치\n다음 전투부터 적용됩니다.";
+            statusLabel.text = $"{ship.DisplayName} 배치 · 다음 전투부터 적용됩니다.";
+            Refresh();
+        }
+
+        private void RemoveEscort(int slotIndex)
+        {
+            EscortShipData ship = fleetManager.GetFormationAt(slotIndex);
+            if (ship == null || !fleetManager.TryRemoveEscort(slotIndex)) return;
+            selectedSlotIndex = -1;
+            selectedEscort = null;
+            statusLabel.text = $"{ship.DisplayName} 편성 해제 · 다음 전투부터 적용됩니다.";
             Refresh();
         }
 
@@ -215,30 +235,34 @@ namespace SB.UI.Fleet
         private void Refresh()
         {
             if (screen == null || fleetManager == null) return;
-            if (selectedEscort != null && fleetManager.GetOwnedCount(selectedEscort) <= 0) selectedEscort = null;
+            if (selectedEscort != null && fleetManager.GetUnequippedCount(selectedEscort) <= 0) selectedEscort = null;
             for (int i = 0; i < slots.Count; i++)
             {
                 EscortShipData ship = fleetManager.GetFormationAt(i);
                 ShipCardPresentation.SetIcon(slots[i].Q("shipIcon"), ship != null ? ship.Icon : null);
-                slots[i].Q<Label>("shipName").text = ship != null ? ship.DisplayName : "비어 있음";
-                slots[i].Q<Label>("shipCount").text = $"{i + 1}";
+                slots[i].Q<Label>("shipName").text = ship != null ? string.Empty : "비어 있음";
+                slots[i].Q<Label>("shipCount").text = string.Empty;
+                for (int gradeIndex = 0; gradeIndex < GradeClasses.Length; gradeIndex++)
+                    slots[i].EnableInClassList(GradeClasses[gradeIndex], ship != null && (int)ship.Grade == gradeIndex);
                 slots[i].EnableInClassList("is-selected", selectedSlotIndex == i);
             }
             var snapshots = fleetManager.GetOwnershipSnapshot();
             foreach (var card in inventoryCards.Values) card.AddToClassList("hidden");
             foreach (var snapshot in snapshots)
             {
+                if (snapshot.UnequippedCount <= 0) continue;
                 EscortShipData ship = snapshot.ShipData;
                 if (!inventoryCards.TryGetValue(ship, out Button card))
                 {
                     card = ShipCardPresentation.Create(cardTemplate, inventoryGrid);
+                    card.AddToClassList("fleet-inventory-card");
+                    card.Q("shipIcon").Add(card.Q<Label>("shipCount"));
                     card.clicked += () => SelectEscort(ship);
                     inventoryCards.Add(ship, card);
                 }
                 card.RemoveFromClassList("hidden");
-                ShipCardPresentation.Bind(card, ship, $"대기 {snapshot.UnequippedCount:N0} / 보유 {snapshot.OwnedCount:N0}", selectedEscort == ship);
+                ShipCardPresentation.Bind(card, ship, snapshot.UnequippedCount.ToString("N0"), selectedEscort == ship);
             }
-            screen.Q<Label>("inventoryTitle").text = $"보유 함선 · {snapshots.Length}종";
             bool hasEscorts = false;
             for (int i = 0; i < fleetManager.FormationSlotCount; i++)
                 hasEscorts |= fleetManager.GetFormationAt(i) != null;
