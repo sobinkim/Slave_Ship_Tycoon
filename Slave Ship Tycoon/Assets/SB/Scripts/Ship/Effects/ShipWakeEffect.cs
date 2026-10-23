@@ -7,6 +7,44 @@ namespace SB.Scripts
     {
         private bool sailingOverride;
         public void SetSailingOverride(bool sailing) => sailingOverride = sailing;
+        private bool hasWaterPresentation;
+        private Material originalWakeMaterial;
+        private Material[] originalFoamMaterials;
+        private Color waterTint = Color.white;
+        private float waterMotionMultiplier = 1f;
+        private float foamTime;
+        private static readonly int wakeRoleId = Shader.PropertyToID("_WakeRole");
+        private static readonly int wakeTimeId = Shader.PropertyToID("_WakeTime");
+        private static readonly int wakeSeedId = Shader.PropertyToID("_WakeSeed");
+        private MaterialPropertyBlock wakeProperties;
+
+        public void SetWaterPresentation(Material material, Color tint, float motionMultiplier)
+        {
+            ResetWaterPresentation();
+            originalWakeMaterial = wakeRenderer != null ? wakeRenderer.sharedMaterial : null;
+            originalFoamMaterials = new Material[trailingFoam.Length];
+            for (int i = 0; i < trailingFoam.Length; i++)
+            {
+                if (trailingFoam[i] == null) continue;
+                originalFoamMaterials[i] = trailingFoam[i].sharedMaterial;
+                if (material != null) trailingFoam[i].sharedMaterial = material;
+            }
+            if (wakeRenderer != null && material != null) wakeRenderer.sharedMaterial = material;
+            waterTint = tint;
+            waterMotionMultiplier = Mathf.Max(.01f, motionMultiplier);
+            hasWaterPresentation = true;
+        }
+
+        public void ResetWaterPresentation()
+        {
+            if (!hasWaterPresentation) return;
+            if (wakeRenderer != null) wakeRenderer.sharedMaterial = originalWakeMaterial;
+            for (int i = 0; i < trailingFoam.Length; i++)
+                if (trailingFoam[i] != null) trailingFoam[i].sharedMaterial = originalFoamMaterials[i];
+            waterTint = Color.white;
+            waterMotionMultiplier = 1f;
+            hasWaterPresentation = false;
+        }
         [Header("References")]
         [SerializeField] private Ship owner;
         [SerializeField] private Animator shipAnimator;
@@ -44,6 +82,7 @@ namespace SB.Scripts
         private void Awake()
         {
             baseScale = transform.localScale;
+            wakeProperties = new MaterialPropertyBlock();
             isInitialized = true;
             moveHash = Animator.StringToHash(moveParameter);
             if (owner == null || shipAnimator == null || wakeRenderer == null)
@@ -67,6 +106,7 @@ namespace SB.Scripts
             sailingOverride = false;
             visibility = 0f;
             rippleTime = 0f;
+            foamTime = 0f;
             if (wakeRenderer != null) wakeRenderer.enabled = false;
             HideTrailingFoam();
         }
@@ -79,14 +119,25 @@ namespace SB.Scripts
             visibility = Mathf.MoveTowards(visibility, isMoving ? 1f : 0f,
                 Time.deltaTime / Mathf.Max(0.01f, fadeSeconds));
             rippleTime += Time.deltaTime * rippleCyclesPerSecond * Mathf.PI * 2f;
+            foamTime += Time.deltaTime * waterMotionMultiplier;
             float ripple = Mathf.Sin(rippleTime);
             transform.localScale = Vector3.Scale(baseScale,
                 new Vector3(1f + ripple * rippleScaleAmount, 1f - ripple * rippleScaleAmount, 1f));
-            Color tint = foamColor;
+            Color tint = foamColor * waterTint;
             tint.a *= visibility * (1f - rippleOpacityAmount * (ripple * 0.5f + 0.5f));
             wakeRenderer.color = tint;
             wakeRenderer.enabled = visibility > 0f;
+            SetWaveProperties(wakeRenderer, 0f, 0f);
             UpdateTrailingFoam();
+        }
+
+        private void SetWaveProperties(SpriteRenderer renderer, float role, float seed)
+        {
+            renderer.GetPropertyBlock(wakeProperties);
+            wakeProperties.SetFloat(wakeRoleId, role);
+            wakeProperties.SetFloat(wakeTimeId, foamTime);
+            wakeProperties.SetFloat(wakeSeedId, seed);
+            renderer.SetPropertyBlock(wakeProperties);
         }
 
         private void UpdateTrailingFoam()
@@ -95,16 +146,17 @@ namespace SB.Scripts
             {
                 SpriteRenderer foam = trailingFoam[i];
                 if (foam == null) continue;
-                float phase = Mathf.Repeat(Time.time / foamCycleSeconds + (float)i / trailingFoam.Length, 1f);
+                float phase = Mathf.Repeat(foamTime / foamCycleSeconds + (float)i / trailingFoam.Length, 1f);
                 Vector2 localPosition = foamStartLocalPosition + foamTravelLocalOffset * phase;
                 Vector2 localScale = Vector2.Lerp(foamStartLocalScale, foamEndLocalScale, phase);
                 foam.transform.localPosition = new Vector3(localPosition.x, localPosition.y, 0f);
                 foam.transform.localScale = new Vector3(localScale.x, localScale.y, 1f);
-                Color tint = foamColor;
+                Color tint = foamColor * waterTint;
                 // 양 끝을 투명하게 만들어 위치가 되돌아오는 순간을 숨깁니다.
                 tint.a *= visibility * trailingFoamOpacity * Mathf.Sin(phase * Mathf.PI);
                 foam.color = tint;
                 foam.enabled = visibility > 0f;
+                SetWaveProperties(foam, 1f, i * 2.37f);
             }
         }
 
@@ -116,6 +168,7 @@ namespace SB.Scripts
 
         private void OnDisable()
         {
+            ResetWaterPresentation();
             visibility = 0f;
             if (wakeRenderer != null) wakeRenderer.enabled = false;
             HideTrailingFoam();

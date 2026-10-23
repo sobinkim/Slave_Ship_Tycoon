@@ -9,26 +9,12 @@
         <ui:Button name="pursuitRetreat" text="철수" class="harbor-button pursuit-retreat" />
       </ui:VisualElement>
       <ui:VisualElement class="pursuit-progress-row" picking-mode="Ignore">
-        <ui:VisualElement class="pursuit-track">
-          <ui:VisualElement name="escapeFill" class="pursuit-fill" />
-          <ui:VisualElement name="escapeShip" class="pursuit-ship" />
+        <ui:VisualElement class="gauge-track pursuit-track">
+          <ui:VisualElement name="escapeFill" class="gauge-fill pursuit-fill" />
         </ui:VisualElement>
         <ui:Label text="목적지" class="pursuit-destination" />
       </ui:VisualElement>
-      <ui:Label name="pursuitHint" text="메인 해적선을 목적지 도착 전에 격침하세요" class="pursuit-hint" picking-mode="Ignore" />
-      <ui:Button name="pursuitQuickRetry" text="이 편성으로 재도전" class="harbor-button pursuit-hidden" />
-    </ui:VisualElement>
-    <ui:VisualElement name="pursuitResult" class="pursuit-result pursuit-hidden">
-      <ui:VisualElement class="harbor-panel pursuit-result-card">
-        <ui:VisualElement name="mainPiratePortrait" class="pursuit-portrait" picking-mode="Ignore" />
-        <ui:Label name="pursuitResultTitle" text="현상금 획득" class="pursuit-result-title" />
-        <ui:Label name="pursuitResultDetail" class="pursuit-result-detail" />
-        <ui:Label name="pursuitReward" class="pursuit-reward" />
-        <ui:Button name="pursuitRetry" text="다시 추적" class="harbor-button primary-button" />
-        <ui:Button name="pursuitFormation" text="편성 변경" class="harbor-button" />
-        <ui:Button name="pursuitNext" text="다른 호위 편성 추적" class="harbor-button" />
-        <ui:Button name="pursuitReturn" text="파밍으로 복귀" class="harbor-button" />
-      </ui:VisualElement>
+      <ui:Label name="pursuitHint" text="목적지 도착 전 메인 해적선 격침" class="pursuit-hint" picking-mode="Ignore" />
     </ui:VisualElement>
   </ui:VisualElement>
 </ui:UXML>

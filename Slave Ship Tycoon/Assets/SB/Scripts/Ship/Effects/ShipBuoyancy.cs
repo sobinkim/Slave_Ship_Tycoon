@@ -13,6 +13,8 @@ namespace SB.Scripts
         [Header("Water motion")]
         [SerializeField, Range(0f, 8f), Tooltip("살아 있는 함선이 좌우로 기울어지는 최대 각도입니다.")]
         private float rollDegrees = 3f;
+        [SerializeField, Min(1f), Tooltip("MOVE 상태에서 좌우 기울기를 키우는 배율입니다.")]
+        private float movingRollMultiplier = 2f;
         [SerializeField, Min(0.5f), Tooltip("좌우로 한 번 왕복하는 시간입니다. 함선별로 시작 위상을 나눕니다.")]
         private float cycleSeconds = 3.2f;
         [SerializeField, Min(0f), Tooltip("수면을 타며 위아래로 움직이는 로컬 거리입니다.")]
@@ -23,7 +25,9 @@ namespace SB.Scripts
         private Vector3 baseLocalPosition;
         private Quaternion baseLocalRotation;
         private int deadHash;
+        private int moveHash;
         private bool hasDeadParameter;
+        private bool hasMoveParameter;
         private bool initialized;
         private float phaseOffset;
         private float phase;
@@ -42,8 +46,12 @@ namespace SB.Scripts
             baseLocalPosition = motionRoot.localPosition;
             baseLocalRotation = motionRoot.localRotation;
             deadHash = Animator.StringToHash("Dead");
+            moveHash = Animator.StringToHash("MOVE");
             foreach (AnimatorControllerParameter parameter in shipAnimator.parameters)
+            {
                 hasDeadParameter |= parameter.nameHash == deadHash && parameter.type == AnimatorControllerParameterType.Bool;
+                hasMoveParameter |= parameter.nameHash == moveHash && parameter.type == AnimatorControllerParameterType.Bool;
+            }
             uint hash = unchecked((uint)GetInstanceID() * 2654435761u);
             phaseOffset = (hash & 0xffffu) / 65536f * Mathf.PI * 2f;
             initialized = true;
@@ -72,7 +80,9 @@ namespace SB.Scripts
             float blend = blendInSeconds > 0f
                 ? Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(blendElapsed / blendInSeconds)) : 1f;
             float wave = phase * Mathf.PI * 2f + phaseOffset;
-            float roll = Mathf.Sin(wave) * rollDegrees * blend;
+            float movementMultiplier = hasMoveParameter && shipAnimator.GetBool(moveHash)
+                ? movingRollMultiplier : 1f;
+            float roll = Mathf.Sin(wave) * rollDegrees * movementMultiplier * blend;
             float heave = Mathf.Sin(wave + Mathf.PI * 0.5f) * heaveAmplitude * blend;
             motionRoot.localPosition = baseLocalPosition + Vector3.up * heave;
             motionRoot.localRotation = baseLocalRotation * Quaternion.Euler(0f, 0f, roll);

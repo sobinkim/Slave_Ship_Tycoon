@@ -13,9 +13,9 @@ namespace SB.Scripts.Projectiles
         [SerializeField, Min(.01f)] private float missGraceSeconds = .15f;
         [Header("Successful interception shake")]
         [SerializeField, Min(0f), Tooltip("요격 성공 시 화면이 움직이는 최대 월드 거리")]
-        private float successShakeDistanceUnits = .065f;
+        private float successShakeDistanceUnits = .03f;
         [SerializeField, Min(0f), Tooltip("요격 성공 시 화면 흔들림 시간")]
-        private float successShakeDurationSeconds = .2f;
+        private float successShakeDurationSeconds = .14f;
 
         private BaseProjectile target;
         private int targetGeneration;

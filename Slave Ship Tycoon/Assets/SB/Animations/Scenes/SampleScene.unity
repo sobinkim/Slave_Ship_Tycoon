@@ -11666,8 +11666,6 @@ MonoBehaviour:
   document: {fileID: 310225665}
   entryDocument: {fileID: 362552026}
   pursuit: {fileID: 1332720173}
-  panelManager: {fileID: 260899614}
-  mainPiratePortrait: {fileID: 21300000, guid: 7d83469f834fb6544ac22c5633332f59, type: 3}
 --- !u!114 &310225665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29633,7 +29631,7 @@ GameObject:
   m_Component:
   - component: {fileID: 836288813}
   m_Layer: 0
-  m_Name: PursuitCameraPose
+  m_Name: NightBackgroundOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34049,13 +34047,13 @@ MonoBehaviour:
   - {fileID: 1644985578}
   - {fileID: 624616126}
   - {fileID: 563417917}
-  scrollSpeed: 0.12
-  idleScrollSpeed: 0.025
+  scrollSpeed: 0.144
+  idleScrollSpeed: 0
   speedChangeSeconds: 1.2
   spriteWidth: 16.52
   leftResetX: -23.92
   scrollReference: {fileID: 0}
-  dontCare: 1
+  dontCare: 0
   alternateMirroredTiles: 1
 --- !u!1 &956081469
 GameObject:
@@ -46488,6 +46486,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bbb9ef6dbc648414ebd38706133cabe0, type: 2}
   defaultPursuit: 0
   encounterTimeoutSeconds: 15
+  resultReturnSeconds: 1.8
 --- !u!114 &1332720174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46500,8 +46499,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a948c752b7727c94aa5ea2aa17fc1820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleCamera: {fileID: 519420031}
-  pursuitCameraPose: {fileID: 836288813}
   farmingBackground: {fileID: 1424863257}
   pursuitBackground: {fileID: 906237531}
   pursuitLayers:
@@ -46509,6 +46506,16 @@ MonoBehaviour:
   - {fileID: 954343926}
   - {fileID: 2049016690}
   shipNightTint: {r: 0.55, g: 0.67, b: 0.85, a: 1}
+  nightWakeMaterial: {fileID: 2100000, guid: aab6d7a92ea832040b80a41beddd1eb1, type: 2}
+  nightWaterContactMaterial: {fileID: 2100000, guid: d5dfbb069c70dad42a69f1f5363f5364, type: 2}
+  wakeTint: {r: 0.48, g: 0.6, b: 0.7, a: 0.65}
+  wakeMotionMultiplier: 2.8
+  seaRenderers:
+  - {fileID: 867555649}
+  - {fileID: 1892606655}
+  - {fileID: 1689590687}
+  seaFlowSpeed: 8
+  accelerationSeconds: 0.45
 --- !u!4 &1332720175
 Transform:
   m_ObjectHideFlags: 0
@@ -63842,13 +63849,13 @@ MonoBehaviour:
   - {fileID: 1112554775}
   - {fileID: 1136323261}
   - {fileID: 828889384}
-  scrollSpeed: 0.3
-  idleScrollSpeed: 0.045
+  scrollSpeed: 1.2
+  idleScrollSpeed: 0
   speedChangeSeconds: 1.2
   spriteWidth: 16.52
   leftResetX: -23.92
   scrollReference: {fileID: 0}
-  dontCare: 1
+  dontCare: 0
   alternateMirroredTiles: 1
 --- !u!1 &1804975600
 GameObject:
@@ -70859,7 +70866,7 @@ MonoBehaviour:
   - {fileID: 867555648}
   - {fileID: 1892606654}
   - {fileID: 1689590686}
-  scrollSpeed: 1.4
+  scrollSpeed: 0
   idleScrollSpeed: 0
   speedChangeSeconds: 0.7
   spriteWidth: 16.52

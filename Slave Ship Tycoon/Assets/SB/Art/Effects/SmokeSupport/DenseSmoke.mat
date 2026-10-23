@@ -27,7 +27,7 @@ Material:
     m_Floats:
     - _DensityContrast: 1.1
     - _EdgeSoftness: 0.022
-    - _Opacity: 0.46
+    - _Opacity: 0.72
     - _OutlineWidth: 0.045
     - _RollSpeed: 0.22
     m_Colors:

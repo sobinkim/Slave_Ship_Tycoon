@@ -1,23 +1,12 @@
-.pursuit-host, .pursuit-root { position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
-.pursuit-root { --pursuit-surface: rgba(20, 30, 48, 0.92); --pursuit-ink: #F5E6BD; --pursuit-track: #303E50; --pursuit-progress: #D6AB64; --pursuit-danger: #E36A57; }
+.pursuit-root { position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
 .pursuit-hidden { display: none; }
-.pursuit-hud { position: absolute; top: 72px; left: 24px; right: 24px; padding: 12px 18px; background-color: var(--pursuit-surface); }
+.pursuit-hud { position: absolute; top: 72px; left: 24px; right: 24px; padding: 8px 16px; background-color: #303030; }
 .pursuit-heading { flex-direction: row; align-items: center; }
-.pursuit-title { flex-grow: 1; font-size: 28px; color: var(--pursuit-ink); }
-.pursuit-time { font-size: 28px; color: var(--pursuit-ink); margin-right: 12px; }
-.pursuit-retreat { min-height: 42px; min-width: 76px; font-size: 23px; }
-.pursuit-progress-row { flex-direction: row; align-items: center; margin-top: 12px; margin-bottom: 8px; }
-.pursuit-track { height: 14px; flex-grow: 1; margin-right: 14px; background-color: var(--pursuit-track); }
-.pursuit-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background-color: var(--pursuit-progress); }
-.pursuit-ship { position: absolute; left: 0; top: -19px; width: 58px; height: 46px; -unity-background-scale-mode: scale-to-fit; }
-.pursuit-destination { font-size: 23px; color: var(--pursuit-ink); }
-.pursuit-hint { font-size: 23px; color: #D0D7E1; white-space: normal; }
-.pursuit-danger .pursuit-fill { background-color: var(--pursuit-danger); }
-.pursuit-danger .pursuit-time { color: var(--pursuit-danger); }
-.pursuit-result { position: absolute; left: 0; right: 0; top: 0; bottom: 0; justify-content: center; align-items: center; background-color: rgba(8, 12, 20, 0.66); }
-.pursuit-result-card { width: 86%; max-width: 780px; padding: 24px; background-color: var(--pursuit-surface); }
-.pursuit-portrait { height: 172px; -unity-background-scale-mode: scale-to-fit; }
-.pursuit-result-title { font-size: 38px; color: var(--pursuit-ink); -unity-text-align: middle-center; margin-top: 10px; }
-.pursuit-result-detail { font-size: 26px; white-space: normal; -unity-text-align: middle-center; margin-top: 12px; }
-.pursuit-reward { font-size: 28px; color: var(--pursuit-ink); -unity-text-align: middle-center; margin-top: 10px; margin-bottom: 16px; }
-.pursuit-result-card > .harbor-button { margin-top: 10px; min-height: 66px; font-size: 27px; }
+.pursuit-title { flex-grow: 1; font-size: var(--ui-font-body); margin: 0; padding: 0; }
+.pursuit-time { font-size: var(--ui-font-description); margin: 0 16px 0 8px; padding: 0; }
+.pursuit-retreat { min-height: 56px; height: 56px; min-width: 88px; font-size: var(--ui-font-description); margin: 0; padding: 8px 16px; }
+.pursuit-progress-row { flex-direction: row; align-items: center; margin-top: 8px; margin-bottom: 8px; }
+.pursuit-track { height: 10px; flex-grow: 1; margin-right: 16px; }
+.pursuit-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; }
+.pursuit-destination { font-size: var(--ui-font-compact); color: var(--ui-text-secondary); margin: 0; padding: 0; }
+.pursuit-hint { font-size: var(--ui-font-caption); color: var(--ui-text-secondary); white-space: normal; margin: 0; padding: 0; }

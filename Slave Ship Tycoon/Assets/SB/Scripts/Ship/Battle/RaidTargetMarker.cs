@@ -50,6 +50,11 @@ namespace SB.Scripts
         private void LateUpdate()
         {
             if (ship.IsDead) Clear();
+            if (ship.IsDead || ship.myShipData.ShipType == ShipType.Enemy)
+            {
+                hookIcon.enabled = false;
+                return;
+            }
             hookIcon.enabled = attackers.Count > 0 && hull.enabled;
             if (!hookIcon.enabled) return;
             hookIcon.sortingLayerID = hull.sortingLayerID;

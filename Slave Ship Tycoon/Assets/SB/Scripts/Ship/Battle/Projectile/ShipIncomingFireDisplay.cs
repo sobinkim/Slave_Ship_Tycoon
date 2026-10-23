@@ -90,7 +90,7 @@ namespace SB.Scripts.Projectiles
                 countLabel.text = "×<mspace=0.6em>" + displayedCount + "</mspace>";
             }
             countLabel.enabled = incoming.Count > 0;
-            waterDecal.enabled = alpha > 0f && hull.enabled;
+            waterDecal.enabled = ship.myShipData.ShipType != ShipType.Enemy && alpha > 0f && hull.enabled;
             if (!waterDecal.enabled) return;
             waterDecal.sortingLayerID = hull.sortingLayerID;
             waterDecal.sortingOrder = hull.sortingOrder + decalSortingOffset;

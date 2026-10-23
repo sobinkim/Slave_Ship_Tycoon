@@ -9,6 +9,14 @@ Shader "Fleet/Ship Cloth Waterline"
         _SinkProgress ("Sink Progress", Range(0,1)) = 0
         _SinkDistance ("Sink Distance (Visual Local Units)", Float) = 0.9
         _Waterline ("Waterline (Visual Local Y)", Float) = -0.27
+        [PerRendererData] _SurfaceSubmersion ("Surface Submersion", Range(0,1)) = 0
+        [PerRendererData] _SurfacePlane ("Surface Plane In Hull Coordinates", Vector) = (0,1,0.4,0)
+        [PerRendererData] _SurfaceParams ("Contact Depth, Fade Depth, Wave Height", Vector) = (0.055,0.025,0.008,0)
+        [PerRendererData] _SurfaceTint ("Surface Water Tint", Color) = (0.2,0.52,0.57,0.55)
+        [Header(Hit Emission)]
+        [PerRendererData][HDR] _HitEmissionColor ("Hit Emission Color", Color) = (1,1,1,1)
+        [PerRendererData] _HitEmissionIntensity ("Hit Emission Intensity", Range(0,8)) = 1.8
+        [PerRendererData] _HitEmissionFlash ("Hit Emission Flash", Range(0,1)) = 0
         [Header(Cloth Motion)]
         _FlutterStrength ("State Flutter Strength", Range(0,1.5)) = 0.8
         _FlutterSpeed ("Wind Cycles Per Second", Range(0.1,4)) = 1.2
@@ -40,11 +48,15 @@ Shader "Fleet/Ship Cloth Waterline"
             #pragma target 3.0
             #include "UnityCG.cginc"
             struct appdata { float4 vertex : POSITION; float2 uv : TEXCOORD0; fixed4 color : COLOR; };
-            struct v2f { float4 vertex : SV_POSITION; float2 uv : TEXCOORD0; fixed4 color : COLOR; float localY : TEXCOORD1; float2 cloth : TEXCOORD2; };
+            struct v2f { float4 vertex : SV_POSITION; float2 uv : TEXCOORD0; fixed4 color : COLOR; float2 localXY : TEXCOORD1; float2 cloth : TEXCOORD2; float worldX : TEXCOORD3; };
             sampler2D _MainTex;
             fixed4 _Color;
             fixed4 _EnvironmentTint;
-            float _SinkProgress, _SinkDistance, _Waterline;
+            float _SinkProgress, _SinkDistance, _Waterline, _SurfaceSubmersion;
+            float4 _SurfacePlane, _SurfaceParams;
+            fixed4 _SurfaceTint;
+            fixed4 _HitEmissionColor;
+            float _HitEmissionIntensity, _HitEmissionFlash;
             float _SpriteAlphaCutoff;
             float _FlutterStrength, _FlutterSpeed, _FlutterPhase, _FlagAmplitude, _SailAmplitude, _SailFootLift;
             float4 _FlagBounds, _FlagPoleTip, _SailTop, _SailBottom, _ClothCanvas, _ClothTransform, _ClothUvScale;
@@ -55,7 +67,8 @@ Shader "Fleet/Ship Cloth Waterline"
                 o.cloth = hullPosition / _ClothCanvas.xy + _ClothCanvas.zw;
                 o.cloth.y = 1 - o.cloth.y;
                 v.vertex.y -= _SinkProgress * _SinkDistance;
-                o.localY = v.vertex.y;
+                o.localXY = v.vertex.xy;
+                o.worldX = mul(unity_ObjectToWorld, v.vertex).x;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
                 o.color = v.color * _Color;
@@ -88,12 +101,24 @@ Shader "Fleet/Ship Cloth Waterline"
             }
             fixed4 frag(v2f i) : SV_Target
             {
-                if (_SinkProgress > 0.0001) clip(i.localY - _Waterline);
+                // Normal sailing uses an authored shallow surface; retain the original sinking fallback.
+                if (_SurfaceSubmersion < 0.5 && _SinkProgress > 0.0001) clip(i.localXY.y - _Waterline);
                 float2 displacement = ClothDisplacement(i.cloth);
                 float2 uv = i.uv - float2(displacement.x, -displacement.y) * _ClothUvScale.xy;
                 fixed4 sprite = tex2D(_MainTex, uv);
                 clip(sprite.a - _SpriteAlphaCutoff);
                 fixed4 result = sprite * i.color;
+                if (_SurfaceSubmersion > 0.5)
+                {
+                    float wave = sin(i.worldX * 14 + _Time.y * 2.4) * _SurfaceParams.z;
+                    float depth = dot(float3(i.localXY, 1), _SurfacePlane.xyz) - wave;
+                    float fade = max(0.001, _SurfaceParams.y);
+                    clip(depth + fade);
+                    float contact = 1 - smoothstep(0, max(0.001, _SurfaceParams.x), depth);
+                    result.rgb = lerp(result.rgb, _SurfaceTint.rgb, contact * _SurfaceTint.a);
+                    result.a *= smoothstep(-fade, 0, depth);
+                }
+                result.rgb += _HitEmissionColor.rgb * _HitEmissionIntensity * saturate(_HitEmissionFlash) * sprite.a;
                 result.rgb *= _EnvironmentTint.rgb;
                 return result;
             }

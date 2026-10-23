@@ -213,3 +213,5 @@ MonoBehaviour:
   impactEffect: {fileID: 3122523862955808858, guid: b6e3bb959dab686489fa1dcd38bb7d59, type: 3}
   hitRadius: 0.09
   missGraceSeconds: 0.15
+  successShakeDistanceUnits: 0.03
+  successShakeDurationSeconds: 0.14

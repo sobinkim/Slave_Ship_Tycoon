@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1a4a94fce9418194ca1715a17d4cc07a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -76,11 +76,11 @@ SpriteRenderer:
   m_SortingLayerID: 628891709
   m_SortingLayer: 2
   m_SortingOrder: -2
-  m_Sprite: {fileID: 21300000, guid: 2e2d530cf1f824f4f8a68f0140f179a7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 823d198d8f1c56e4e95f33d120f15d13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 1
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 1.2066667, y: 0.4024186}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -458,6 +458,7 @@ GameObject:
   - component: {fileID: 594835411408444494}
   - component: {fileID: 6176999940171500051}
   - component: {fileID: 2338309968175369121}
+  - component: {fileID: 8604002302007973639}
   m_Layer: 0
   m_Name: EnemyHarpoonRaider
   m_TagString: Untagged
@@ -680,6 +681,26 @@ MonoBehaviour:
   cycleSeconds: 3.2
   heaveAmplitude: 0.018
   blendInSeconds: 0.35
+--- !u!114 &8604002302007973639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3121079573975891931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d7ade7c2ef14e58981af7f4e7d60164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 0}
+  emissionRenderers:
+  - {fileID: 3892361369428444242}
+  - {fileID: 5961867817273976504}
+  emissionColor: {r: 1, g: 1, b: 1, a: 1}
+  emissionIntensity: 1.8
+  attackSeconds: 0.02
+  releaseSeconds: 0.14
 --- !u!1 &3193792263461154314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1741,7 +1762,7 @@ Transform:
   m_GameObject: {fileID: 5782629921510648887}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.027, y: -0.381, z: 0}
+  m_LocalPosition: {x: 0.027, y: -0.23831429, z: 0}
   m_LocalScale: {x: 0.793, y: 0.26, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1816,6 +1837,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 6176999940171500051}
   contactRenderer: {fileID: 1986579472610211472}
+  hullRenderer: {fileID: 3892361369428444242}
+  surfaceLocalY: -0.30071428
+  contactTintDepth: 0.055
+  edgeFadeDepth: 0.025
+  surfaceWaveHeight: 0.008
+  waterTint: {r: 0.2, g: 0.52, b: 0.57, a: 0.55}
   fadeOutSeconds: 0.3
 --- !u!1 &5819603972281740210
 GameObject:
@@ -1907,7 +1934,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1a4a94fce9418194ca1715a17d4cc07a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1928,11 +1955,11 @@ SpriteRenderer:
   m_SortingLayerID: 628891709
   m_SortingLayer: 2
   m_SortingOrder: -2
-  m_Sprite: {fileID: 21300000, guid: 2e2d530cf1f824f4f8a68f0140f179a7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 823d198d8f1c56e4e95f33d120f15d13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 1
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 1.2066667, y: 0.4024186}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -2431,7 +2458,7 @@ Transform:
   m_GameObject: {fileID: 8683918404793286512}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.259, y: -0.368, z: 0}
+  m_LocalPosition: {x: 0.259, y: -0.2907143, z: 0}
   m_LocalScale: {x: 1.0200001, y: 1.05, z: 1.4}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2462,7 +2489,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1a4a94fce9418194ca1715a17d4cc07a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2482,12 +2509,12 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 628891709
   m_SortingLayer: 2
-  m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: 2e2d530cf1f824f4f8a68f0140f179a7, type: 3}
+  m_SortingOrder: -2
+  m_Sprite: {fileID: 21300000, guid: 823d198d8f1c56e4e95f33d120f15d13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.8}
   m_FlipX: 1
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 1.2066667, y: 0.4024186}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0

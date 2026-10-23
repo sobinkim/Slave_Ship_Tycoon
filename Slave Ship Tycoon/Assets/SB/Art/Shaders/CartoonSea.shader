@@ -19,6 +19,7 @@ Shader "Fleet/Cartoon Sea"
         _SwaySpeed ("Wave Sway Speed", Range(0,3)) = 1.4
         _SwayAmount ("Wave Sway Amount", Range(0,0.3)) = 0.12
         _CurrentSpeed ("Broad Current Speed", Range(0,2)) = 0.45
+        [PerRendererData] _TravelOffset ("Sailing Distance", Float) = 0
         _SwellScale ("Large Wave Size", Range(0.5,2)) = 1
         _SwellStrength ("Large Wave Shading", Range(0,1)) = 0.5
         _WaveLifetime ("Wave Lifetime (Seconds)", Range(3,14)) = 7
@@ -57,6 +58,7 @@ Shader "Fleet/Cartoon Sea"
             float _HorizonY, _DepthHeight, _BandStrength;
             float _RippleOpacity, _RippleDensity, _RippleScale, _RippleLength, _RippleThickness, _RippleSpeed;
             float _SwaySpeed, _SwayAmount, _CurrentSpeed;
+            float _TravelOffset;
             float _SwellScale, _SwellStrength, _WaveLifetime, _FoamOpacity;
 
             v2f vert(appdata v)
@@ -131,15 +133,17 @@ Shader "Fleet/Cartoon Sea"
                 float perspective = lerp(0.55, 1.0, depth);
                 float3 water = lerp(_FarColor.rgb, _NearColor.rgb, smoothstep(0.0, 1.0, depth));
                 float time = _Time.y;
+                float2 travelWorld = i.worldXY;
+                travelWorld.x += _TravelOffset * lerp(0.35, 1.0, depth);
                 float currentPhase = time * _CurrentSpeed;
-                float current = sin(i.worldXY.y * 2.6 - currentPhase
-                    + sin(i.worldXY.x * 0.7 - currentPhase * 0.6) * 0.7) * 0.65;
-                current += sin(i.worldXY.y * 4.1 + i.worldXY.x * 0.45
+                float current = sin(travelWorld.y * 2.6 - currentPhase
+                    + sin(travelWorld.x * 0.7 - currentPhase * 0.6) * 0.7) * 0.65;
+                current += sin(travelWorld.y * 4.1 + travelWorld.x * 0.45
                     - currentPhase * 0.73) * 0.35;
                 water += current * _BandStrength * float3(0.4, 0.7, 0.8);
 
                 // Both wave layers share a continuous world-space sway, across mirrored parallax tiles.
-                float2 world = i.worldXY;
+                float2 world = travelWorld;
                 world.y += sin(world.x * 1.3 - time * _SwaySpeed) * _SwayAmount * 0.34 * motionFade;
                 world.x += sin(world.y * 1.7 - time * _SwaySpeed * 0.73) * _SwayAmount * 0.2 * motionFade;
                 // Apply perspective around the camera so sailing distance cannot shear the wave field.

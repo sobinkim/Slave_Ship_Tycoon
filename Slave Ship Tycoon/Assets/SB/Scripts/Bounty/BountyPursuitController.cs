@@ -21,12 +21,15 @@ namespace SB.Scripts.Bounty
         [SerializeField] private BountyPursuitDefinition[] pursuits = Array.Empty<BountyPursuitDefinition>();
         [SerializeField] private int defaultPursuit;
         [SerializeField, Min(1f)] private float encounterTimeoutSeconds = 15f;
+        [SerializeField, Min(0f), Tooltip("성공·실패 안내 후 원래 해역으로 자동 복귀하는 시간입니다. 철수는 즉시 복귀합니다.")]
+        private float resultReturnSeconds = 1.8f;
 
         private readonly List<Ship> playerShips = new List<Ship>();
         private readonly List<ShipWakeEffect> sailingWakes = new List<ShipWakeEffect>();
         private readonly Dictionary<Vector2Int, float> previousHealth = new Dictionary<Vector2Int, float>();
         private float previousMainHealth = 1f;
         private float enteringSeconds;
+        private float resultSeconds;
         private EntityHealth targetHealth;
         private Enemy target;
         private int selectedPursuit;
@@ -148,9 +151,9 @@ namespace SB.Scripts.Bounty
 
         public void Retreat()
         {
-            if (State != PursuitState.Chasing) return;
+            if (!IsActive) return;
             Result = PursuitResult.Retreated;
-            battleManager.EndPursuit(false);
+            ReturnToFarming();
         }
 
         private void RestoreFarmingHealth(StageBattleInitializedEvent evt)
@@ -176,6 +179,12 @@ namespace SB.Scripts.Bounty
 
         private void LateUpdate()
         {
+            if (State == PursuitState.Result)
+            {
+                resultSeconds += Time.deltaTime;
+                if (resultSeconds >= resultReturnSeconds) ReturnToFarming();
+                return;
+            }
             if (State == PursuitState.Entering)
             {
                 enteringSeconds += Time.deltaTime;
@@ -205,6 +214,7 @@ namespace SB.Scripts.Bounty
                     if (ship is MainShip && ship.IsDead) Result = PursuitResult.MainShipLost;
             }
             State = PursuitState.Result;
+            resultSeconds = 0f;
             StopWakes();
             environment.SetScrolling(false);
             if (Result == PursuitResult.Success && Definition.DiamondReward > 0)

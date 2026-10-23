@@ -1,6 +1,4 @@
-using SB.Scripts;
 using SB.Scripts.Bounty;
-using SB.Scripts.Visual;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,36 +10,38 @@ namespace SB.UI.Bounty
         [SerializeField] private UIDocument document;
         [SerializeField] private UIDocument entryDocument;
         [SerializeField] private BountyPursuitController pursuit;
-        [SerializeField] private PannelManager panelManager;
-        [SerializeField] private Sprite mainPiratePortrait;
         private VisualElement root;
         private VisualElement mainRoot;
+        private VisualElement hud;
+        private VisualElement fill;
+        private Label title;
+        private Label time;
+        private Label hint;
         private Button entry;
+        private Button retreat;
         private bool wasActive;
-        private bool editingFormation;
         private float availableAt;
         private DisplayStyle previousBossDisplay;
         private DisplayStyle previousBountyDisplay;
 
         private void OnEnable()
         {
-            if (document == null || entryDocument == null || pursuit == null || panelManager == null)
-            { Debug.LogError("현상금 UI의 Document, Pursuit, Panel Manager를 연결하세요.", this); return; }
+            if (document == null || entryDocument == null || pursuit == null)
+            { Debug.LogError("현상금 UI의 Document, Entry Document, Pursuit를 연결하세요.", this); return; }
             root = document.rootVisualElement;
             mainRoot = entryDocument.rootVisualElement;
             root.Q("pursuitRoot").pickingMode = PickingMode.Ignore;
             root.Q("pursuitRoot").parent.pickingMode = PickingMode.Ignore;
+            hud = root.Q("pursuitHud");
+            fill = root.Q("escapeFill");
+            title = root.Q<Label>("pursuitTitle");
+            time = root.Q<Label>("escapeTime");
+            hint = root.Q<Label>("pursuitHint");
             entry = mainRoot.Q<Button>("bountyButton");
+            retreat = root.Q<Button>("pursuitRetreat");
             availableAt = Time.unscaledTime + .35f;
             entry.clicked += Enter;
-            root.Q<Button>("pursuitRetreat").clicked += pursuit.Retreat;
-            root.Q<Button>("pursuitRetry").clicked += Retry;
-            root.Q<Button>("pursuitQuickRetry").clicked += Retry;
-            root.Q<Button>("pursuitFormation").clicked += EditFormation;
-            root.Q<Button>("pursuitNext").clicked += Next;
-            root.Q<Button>("pursuitReturn").clicked += Return;
-            root.Q("mainPiratePortrait").style.backgroundImage = new StyleBackground(mainPiratePortrait);
-            root.Q("escapeShip").style.backgroundImage = new StyleBackground(mainPiratePortrait);
+            retreat.clicked += pursuit.Retreat;
             pursuit.Changed += Refresh;
             Refresh();
         }
@@ -51,31 +51,16 @@ namespace SB.UI.Bounty
             if (root == null) return;
             pursuit.Changed -= Refresh;
             entry.clicked -= Enter;
-            root.Q<Button>("pursuitRetreat").clicked -= pursuit.Retreat;
-            root.Q<Button>("pursuitRetry").clicked -= Retry;
-            root.Q<Button>("pursuitQuickRetry").clicked -= Retry;
-            root.Q<Button>("pursuitFormation").clicked -= EditFormation;
-            root.Q<Button>("pursuitNext").clicked -= Next;
-            root.Q<Button>("pursuitReturn").clicked -= Return;
+            retreat.clicked -= pursuit.Retreat;
             RestoreEntries();
             root = null;
         }
 
         private void Enter() { if (Time.unscaledTime >= availableAt) pursuit.EnterDefault(); }
-        private void Retry() { editingFormation = false; panelManager.ClickPanelButton(PanelType.Upgrade); pursuit.Retry(); Refresh(); }
-        private void Next() { editingFormation = false; pursuit.TryNextConvoy(); Refresh(); }
-        private void Return() { editingFormation = false; pursuit.ReturnToFarming(); }
-        private void EditFormation()
-        {
-            editingFormation = true;
-            root.Q("pursuitResult").AddToClassList("pursuit-hidden");
-            panelManager.ClickPanelButton(PanelType.Fleet);
-            Refresh();
-        }
 
         private void RestoreEntries()
         {
-            if (!wasActive || root == null) return;
+            if (!wasActive) return;
             mainRoot.Q("bossEntry").style.display = previousBossDisplay;
             mainRoot.Q("bountyEntry").style.display = previousBountyDisplay;
             wasActive = false;
@@ -95,32 +80,34 @@ namespace SB.UI.Bounty
             }
             if (!active) RestoreEntries();
             root.Q("pursuitRoot").EnableInClassList("pursuit-hidden", !active);
-            bool result = pursuit.State == PursuitState.Result;
-            root.Q("pursuitResult").EnableInClassList("pursuit-hidden", !result || editingFormation);
-            root.Q("pursuitQuickRetry").EnableInClassList("pursuit-hidden", !result || !editingFormation);
-            root.Q<Button>("pursuitRetreat").SetEnabled(pursuit.State == PursuitState.Chasing);
-            if (!active) return;
-            root.Q<Label>("pursuitTitle").text = "현상금 추적 · " + pursuit.Definition.DisplayName;
-            if (!result) return;
-            bool won = pursuit.Result == PursuitResult.Success;
-            root.Q<Label>("pursuitResultTitle").text = won ? "메인 해적선 격침!" : pursuit.Result == PursuitResult.Escaped ? "해적선 도주" : pursuit.Result == PursuitResult.MainShipLost ? "본함 침몰" : "추적 중단";
-            root.Q<Label>("pursuitResultDetail").text = won ? $"목적지 도착 {Mathf.CeilToInt(pursuit.RemainingSeconds)}초 전 격침" : $"메인 해적선 잔여 체력 {Mathf.CeilToInt(pursuit.TargetHealthRatio * 100)}%\n함선을 다시 편성하고 도전하세요";
-            root.Q<Label>("pursuitReward").text = won ? $"현상금 · 다이아 {pursuit.Definition.DiamondReward:N0}" : "";
-            root.Q("pursuitNext").EnableInClassList("pursuit-hidden", pursuit.PursuitCount < 2);
+            retreat.SetEnabled(active);
+            if (active) RefreshProgress();
         }
 
         private void Update()
         {
             if (root == null) return;
             entry.SetEnabled(pursuit.CanEnter);
-            if (!pursuit.IsActive) return;
+            if (pursuit.IsActive) RefreshProgress();
+        }
+
+        private void RefreshProgress()
+        {
+            title.text = "현상금 추적";
+            fill.style.width = Length.Percent(pursuit.Progress * 100);
+            if (pursuit.State == PursuitState.Result)
+            {
+                bool won = pursuit.Result == PursuitResult.Success;
+                time.text = "해역 복귀 중";
+                hint.text = won ? $"메인 해적선 격침 · 다이아 {pursuit.Definition.DiamondReward:N0} 획득"
+                    : pursuit.Result == PursuitResult.Escaped ? "해적선 도주 · 원래 해역으로 복귀합니다"
+                    : "본함 침몰 · 원래 해역으로 복귀합니다";
+                return;
+            }
             int seconds = Mathf.CeilToInt(pursuit.RemainingSeconds);
-            root.Q<Label>("escapeTime").text = pursuit.State == PursuitState.Entering ? "추적 준비" : $"도주까지 {seconds / 60:00}:{seconds % 60:00}";
-            root.Q("escapeFill").style.width = Length.Percent(pursuit.Progress * 100);
-            float width = root.Q("escapeFill").parent.resolvedStyle.width;
-            root.Q("escapeShip").style.left = Mathf.Max(0, width - 58) * pursuit.Progress;
-            root.Q("pursuitHud").EnableInClassList("pursuit-danger", seconds <= 10);
-            root.Q<Label>("pursuitHint").text = pursuit.State == PursuitState.Entering ? "해적 함대 발견 · 함대 진입 중" : $"메인 해적선 HP {Mathf.CeilToInt(pursuit.TargetHealthRatio * 100)}% · 목적지 도착 전 격침";
+            time.text = pursuit.State == PursuitState.Entering ? "추적 시작" : $"도주까지 {seconds / 60:00}:{seconds % 60:00}";
+            hint.text = pursuit.State == PursuitState.Entering ? "해적 함대에 접근 중"
+                : $"메인 해적선 HP {Mathf.CeilToInt(pursuit.TargetHealthRatio * 100)}% · 목적지 도착 전 격침";
         }
     }
 }

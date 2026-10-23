@@ -497,7 +497,7 @@ Transform:
   m_GameObject: {fileID: 1879539044867048464}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.237, y: -0.449, z: 0}
+  m_LocalPosition: {x: 0.237, y: -0.42052943, z: 0}
   m_LocalScale: {x: 1.19, y: 1.12, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -528,7 +528,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1a4a94fce9418194ca1715a17d4cc07a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -548,12 +548,12 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 628891709
   m_SortingLayer: 2
-  m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: 2e2d530cf1f824f4f8a68f0140f179a7, type: 3}
+  m_SortingOrder: -2
+  m_Sprite: {fileID: 21300000, guid: 823d198d8f1c56e4e95f33d120f15d13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.8}
   m_FlipX: 1
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 1.2066667, y: 0.4024186}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -926,7 +926,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1a4a94fce9418194ca1715a17d4cc07a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -947,11 +947,11 @@ SpriteRenderer:
   m_SortingLayerID: 628891709
   m_SortingLayer: 2
   m_SortingOrder: -2
-  m_Sprite: {fileID: 21300000, guid: 2e2d530cf1f824f4f8a68f0140f179a7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 823d198d8f1c56e4e95f33d120f15d13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 1
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 1.2066667, y: 0.4024186}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -1229,7 +1229,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1a4a94fce9418194ca1715a17d4cc07a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1250,11 +1250,11 @@ SpriteRenderer:
   m_SortingLayerID: 628891709
   m_SortingLayer: 2
   m_SortingOrder: -2
-  m_Sprite: {fileID: 21300000, guid: 2e2d530cf1f824f4f8a68f0140f179a7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 823d198d8f1c56e4e95f33d120f15d13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 1
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 1.2066667, y: 0.4024186}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -1519,6 +1519,7 @@ GameObject:
   - component: {fileID: 3381800001168109361}
   - component: {fileID: 1260669491459143875}
   - component: {fileID: 5947228111751199706}
+  - component: {fileID: 1380302454809790983}
   m_Layer: 0
   m_Name: EnemyIroncladDefender
   m_TagString: Untagged
@@ -1744,6 +1745,26 @@ MonoBehaviour:
   cycleSeconds: 3.2
   heaveAmplitude: 0.018
   blendInSeconds: 0.35
+--- !u!114 &1380302454809790983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6515725724500752351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d7ade7c2ef14e58981af7f4e7d60164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 0}
+  emissionRenderers:
+  - {fileID: 2688530020689007330}
+  - {fileID: 4899113050511633196}
+  emissionColor: {r: 1, g: 1, b: 1, a: 1}
+  emissionIntensity: 1.8
+  attackSeconds: 0.02
+  releaseSeconds: 0.14
 --- !u!1 &6545719974307281582
 GameObject:
   m_ObjectHideFlags: 0
@@ -2209,7 +2230,7 @@ Transform:
   m_GameObject: {fileID: 8233429847207953881}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.082, y: -0.499, z: 0}
+  m_LocalPosition: {x: 0.082, y: -0.36812943, z: 0}
   m_LocalScale: {x: 0.8398, y: 0.26, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2284,6 +2305,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 1260669491459143875}
   contactRenderer: {fileID: 8844788914093801764}
+  hullRenderer: {fileID: 2688530020689007330}
+  surfaceLocalY: -0.43052942
+  contactTintDepth: 0.055
+  edgeFadeDepth: 0.025
+  surfaceWaveHeight: 0.008
+  waterTint: {r: 0.2, g: 0.52, b: 0.57, a: 0.55}
   fadeOutSeconds: 0.3
 --- !u!1 &8665696185453142035
 GameObject:
