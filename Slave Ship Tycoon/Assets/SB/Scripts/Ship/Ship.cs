@@ -61,6 +61,20 @@ namespace SB.Scripts
         public bool IsDirectTargetProtected => effectReceiver != null && effectReceiver.BlocksDirectTargeting;
 
         public MyShipData myShipData;
+        public bool HasSailingPresentationOverride { get; private set; }
+        public float SailingPresentationStrength { get; private set; }
+
+        public void SetSailingPresentation(float strength)
+        {
+            HasSailingPresentationOverride = true;
+            SailingPresentationStrength = Mathf.Clamp01(strength);
+        }
+
+        public void ClearSailingPresentation()
+        {
+            HasSailingPresentationOverride = false;
+            SailingPresentationStrength = 0f;
+        }
         public ShipStatCompo ShipStatCompo => _shipStatCompo;
         public int SpawnGeneration { get; private set; }
         public Projectiles.SmokeCloudEffect SmokeCloud { get; internal set; }
@@ -165,6 +179,7 @@ namespace SB.Scripts
 
         public virtual void OnSpawnedFromPool()
         {
+            ClearSailingPresentation();
             SmokeCloud?.Release();
             unchecked
             {
@@ -204,6 +219,7 @@ namespace SB.Scripts
 
         public virtual void OnDespawnedToPool()
         {
+            ClearSailingPresentation();
             SmokeCloud?.Release();
             ClearCommanderTargetCommand();
             GetCompo<ShipCombatStatCompo>()?.ClearCommanderModifiers();

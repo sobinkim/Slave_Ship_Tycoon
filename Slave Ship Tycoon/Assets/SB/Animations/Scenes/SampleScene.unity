@@ -2353,6 +2353,7 @@ MonoBehaviour:
   - {fileID: 1438913884}
   - {fileID: 827384771}
   scrollSpeed: 2.6
+  scrollShaderWaves: 1
   idleScrollSpeed: 0
   speedChangeSeconds: 0.7
   spriteWidth: 16.52
@@ -10004,7 +10005,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyFleetRoot: {fileID: 233292875}
   enemyFleetRootDestination: {fileID: 1084722715}
+  parallaxLayers: {fileID: 1424863259}
   moveSpeed: 1.2
+  transportEntrySeconds: 1.1
+  bossEntrySeconds: 1.7
+  accelerationSeconds: 0.2
+  arrivalBlendSeconds: 0.4
+  bossEscortLeadSeconds: 0.25
+  bossEscortEntryOffsetX: 2.6
   scatterOffsetXRange: {x: 0.1, y: 1.05}
   scatterOffsetY: 0.22
   regroupStartDistance: 0.85
@@ -31897,6 +31905,7 @@ MonoBehaviour:
   chargerPrefab: {fileID: 7646846519640180237, guid: 9b62fe0dd3c47b547aec122962359b54, type: 3}
   creatureRoot: {fileID: 1041620098}
   voyageMotor: {fileID: 890307664}
+  parallaxLayers: {fileID: 1424863259}
   battleCamera: {fileID: 519420031}
   entryPoints:
   - {fileID: 257870420}
@@ -31910,12 +31919,13 @@ MonoBehaviour:
   initialCreatures: 5
   maximumAlive: 14
   cruiseSpeed: 2.8
-  groupSpacing: 2.8
+  groupSpacing: 1.4
   encounterStartDistance: 2
+  sailingBlendSeconds: 0.4
   wavesPerEncounter: 3
   groupSize: 2
   nextWaveKillRatio: 0.7
-  waveDelaySeconds: 0.3
+  waveDelaySeconds: 0.08
   reinforcementOffscreenPadding: 0.5
   reinforcementEntryDepth: 0.8
   reinforcementEntrySpeed: 2.2
@@ -34048,6 +34058,7 @@ MonoBehaviour:
   - {fileID: 624616126}
   - {fileID: 563417917}
   scrollSpeed: 0.144
+  scrollShaderWaves: 0
   idleScrollSpeed: 0
   speedChangeSeconds: 1.2
   spriteWidth: 16.52
@@ -38825,6 +38836,7 @@ MonoBehaviour:
   chapterDatabase: {fileID: 11400000, guid: 3e1fc3c7aad843268b9b457c0f246af1, type: 2}
   cargoManager: {fileID: 569745095}
   transportPresentation: {fileID: 362552025}
+  stageSpawner: {fileID: 1420217861}
 --- !u!4 &1126650130
 Transform:
   m_ObjectHideFlags: 0
@@ -46514,7 +46526,7 @@ MonoBehaviour:
   - {fileID: 867555649}
   - {fileID: 1892606655}
   - {fileID: 1689590687}
-  seaFlowSpeed: 8
+  seaFlowSpeed: 3.8999999
   accelerationSeconds: 0.45
 --- !u!4 &1332720175
 Transform:
@@ -57732,6 +57744,7 @@ MonoBehaviour:
   - {fileID: 1420256738}
   - {fileID: 1974215886}
   scrollSpeed: 0.35
+  scrollShaderWaves: 0
   idleScrollSpeed: 0.045
   speedChangeSeconds: 1.2
   spriteWidth: 16.52
@@ -63850,6 +63863,7 @@ MonoBehaviour:
   - {fileID: 1136323261}
   - {fileID: 828889384}
   scrollSpeed: 1.2
+  scrollShaderWaves: 0
   idleScrollSpeed: 0
   speedChangeSeconds: 1.2
   spriteWidth: 16.52
@@ -70499,6 +70513,7 @@ MonoBehaviour:
   - {fileID: 301173768}
   - {fileID: 408402805}
   scrollSpeed: 0.05
+  scrollShaderWaves: 0
   idleScrollSpeed: 0.025
   speedChangeSeconds: 1.2
   spriteWidth: 16.52
@@ -70867,6 +70882,7 @@ MonoBehaviour:
   - {fileID: 1892606654}
   - {fileID: 1689590686}
   scrollSpeed: 0
+  scrollShaderWaves: 0
   idleScrollSpeed: 0
   speedChangeSeconds: 0.7
   spriteWidth: 16.52

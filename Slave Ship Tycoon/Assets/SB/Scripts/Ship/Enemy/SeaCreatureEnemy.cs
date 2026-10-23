@@ -30,6 +30,8 @@ namespace SB.Scripts
         private bool artFacesRight;
         [SerializeField, Min(0f), Tooltip("조우 전에는 항로 위에 머무릅니다. 이 값은 그 자리에서 움직이는 유영 폭입니다.")]
         private float idleDriftAmplitude = 0.025f;
+        [SerializeField, Min(0f), Tooltip("첫 조우 전 항로를 향해 천천히 다가오는 속도입니다. 기존 수면 물살도 이동에 반응합니다.")]
+        private float encounterDriftSpeed = 0.35f;
         [SerializeField, Min(1f)] private float maxHealth = 20f;
 
         [Header("Swimming and bite")]
@@ -214,6 +216,7 @@ namespace SB.Scripts
                     if (Mathf.Approximately(entryPosition.x, entryDestinationX)) Engage();
                     break;
                 case SeaCreatureState.Cruising:
+                    encounterPosition += Vector3.left * (encounterDriftSpeed * delta);
                     transform.position = encounterPosition + Vector3.up * (Mathf.Sin(Time.time + swimPhase) * idleDriftAmplitude);
                     break;
                 case SeaCreatureState.WindingUp:

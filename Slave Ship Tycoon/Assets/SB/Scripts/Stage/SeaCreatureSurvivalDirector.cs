@@ -20,6 +20,7 @@ namespace SB.Scripts
         [SerializeField] private SeaCreatureEnemy chargerPrefab;
         [SerializeField] private Transform creatureRoot;
         [SerializeField] private SeaVoyageMotor voyageMotor;
+        [SerializeField] private ParallaxLayerManager parallaxLayers;
         [SerializeField] private Camera battleCamera;
         [SerializeField, Tooltip("���� �ٱ��� ���� ����. �������� ������ ������ ����մϴ�.")]
         private Transform[] entryPoints = Array.Empty<Transform>();
@@ -38,6 +39,10 @@ namespace SB.Scripts
         private float groupSpacing = 2.85f;
         [SerializeField, Min(0.1f), Tooltip("���� �ռ� ��� �ִ� ȣ���԰� ���� ũ���� ������ �Ÿ��� �� ���� �����ϸ� �Դ븦 ����ϴ�.")]
         private float encounterStartDistance = 2f;
+        [SerializeField, Min(0.01f), Tooltip("항해 시작과 조우 정지에 사용하는 속도 전환 시간입니다.")]
+        private float sailingBlendSeconds = 0.4f;
+        private float sailingSpeed;
+        private bool brakingForEncounter;
         [Header("Waves in each encounter")]
         [SerializeField, Min(1)] private int wavesPerEncounter = 3;
         [SerializeField, Min(0), Tooltip("���� ���̺긶�� ù ���̺� ���� �߰��ϴ� ũ���� ���Դϴ�.")]
@@ -159,11 +164,18 @@ namespace SB.Scripts
 
         private void UpdateSailing()
         {
-            float distance = cruiseSpeed * Time.deltaTime;
-            if (TryGetWaitingCreatureX(out float creatureX) && TryGetFrontFleetX(out float frontX))
-                distance = Mathf.Min(distance, Mathf.Max(0f, creatureX - frontX - encounterStartDistance));
+            bool hasApproach = TryGetWaitingCreatureX(out float creatureX) && TryGetFrontFleetX(out _);
+            float remaining = float.PositiveInfinity;
+            if (hasApproach && TryGetFrontFleetX(out float frontX))
+                remaining = Mathf.Max(0f, creatureX - frontX - encounterStartDistance);
+            float stoppingDistance = sailingSpeed * sailingBlendSeconds * 0.5f;
+            brakingForEncounter |= hasApproach && remaining <= stoppingDistance;
+            sailingSpeed = Mathf.MoveTowards(sailingSpeed, brakingForEncounter ? 0f : cruiseSpeed,
+                cruiseSpeed * Time.deltaTime / Mathf.Max(0.01f, sailingBlendSeconds));
+            float distance = Mathf.Min(sailingSpeed * Time.deltaTime, remaining);
             DistanceTravelled += distance;
             voyageMotor.SetDistance(DistanceTravelled);
+            ApplySailingPresentation(sailingSpeed / cruiseSpeed);
 
             if (activeCreatures.Count == 0)
             {
@@ -171,8 +183,7 @@ namespace SB.Scripts
                 if (spawnRemaining <= 0f) SpawnGroup(initialCreatures, false);
             }
 
-            if (TryGetWaitingCreatureX(out creatureX) && TryGetFrontFleetX(out frontX) &&
-                creatureX - frontX <= encounterStartDistance + 0.001f)
+            if (hasApproach && brakingForEncounter && sailingSpeed <= 0f)
                 BeginCombat();
         }
 
@@ -192,6 +203,9 @@ namespace SB.Scripts
                 creature.Engage();
             }
             SetFleetMovement(false);
+            ApplySailingPresentation(0f);
+            foreach (SeaCreatureTarget member in fleetTargets)
+                member.Ship?.ClearSailingPresentation();
             Bus<StopEncounterSequence>.Raise(new StopEncounterSequence());
         }
 
@@ -212,7 +226,8 @@ namespace SB.Scripts
                 return;
             }
 
-            if (Wave < wavesPerEncounter || pendingWaveSpawns > 0 || activeCreatures.Count > 0 || dyingCreatures.Count > 0) return;
+            // Sinking bodies keep their pool lifetime while the next departure starts.
+            if (Wave < wavesPerEncounter || pendingWaveSpawns > 0 || activeCreatures.Count > 0) return;
             waveTransitionRemaining -= Time.deltaTime;
             if (waveTransitionRemaining > 0f) return;
 
@@ -220,6 +235,8 @@ namespace SB.Scripts
             EncounterCount++;
             Wave = 0;
             Phase = SeaVoyagePhase.Sailing;
+            sailingSpeed = 0f;
+            brakingForEncounter = false;
             spawnRemaining = groupSpacing;
             SetFleetMovement(true);
             Bus<StartEncounterSequence>.Raise(new StartEncounterSequence());
@@ -316,6 +333,8 @@ namespace SB.Scripts
 
             IsRunning = true;
             Phase = SeaVoyagePhase.Sailing;
+            sailingSpeed = 0f;
+            brakingForEncounter = false;
             spawnRemaining = groupSpacing;
             SpawnGroup(initialCreatures, false);
             PublishBattle(mainShip, escorts);
@@ -348,6 +367,13 @@ namespace SB.Scripts
             foreach (SeaCreatureTarget member in fleetTargets)
                 if (member.IsAlive)
                     member.Ship.ChangeState(isMoving ? ShipStateType.Move : ShipStateType.Idle);
+        }
+
+        private void ApplySailingPresentation(float strength)
+        {
+            parallaxLayers?.SetTravelStrength(strength);
+            foreach (SeaCreatureTarget member in fleetTargets)
+                if (member.IsAlive) member.Ship.SetSailingPresentation(strength);
         }
 
         private void PublishBattle(MainShip mainShip, List<Ship> escorts)
@@ -460,6 +486,8 @@ namespace SB.Scripts
             dyingCreatures.Clear();
             RestoreFleetCombatSettings();
             if (wasRunning) SetFleetMovement(false);
+            if (wasRunning) ApplySailingPresentation(0f);
+            foreach (SeaCreatureTarget member in fleetTargets) member.Ship?.ClearSailingPresentation();
             fleetTargets.Clear();
             if (voyageMotor != null && wasRunning) voyageMotor.SetDistance(0f);
             if (wasRunning) Bus<StopEncounterSequence>.Raise(new StopEncounterSequence());

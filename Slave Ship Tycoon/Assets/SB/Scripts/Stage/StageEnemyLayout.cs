@@ -12,10 +12,13 @@ namespace SB.Scripts
 
         [SerializeField, Min(1)] private int chapter = 1;
         [SerializeField, Min(1)] private int stage = 1;
+        [SerializeField, Range(-1, SlotCount - 1), Tooltip("보스 조우에서 먼저 보여줄 본체의 슬롯입니다. -1이면 본체 강조 없이 함대가 진입합니다.")]
+        private int encounterFocusSlot = -1;
         [SerializeField, Tooltip("행 우선 12칸: 각 행은 전열, 중열, 후열 순서입니다. 비워 둔 칸은 생성하지 않습니다.")] private Enemy[] enemySlots = new Enemy[SlotCount];
 
         public int Chapter => chapter;
         public int Stage => stage;
+        public int EncounterFocusSlot => encounterFocusSlot;
 
         public int EnemyCount
         {

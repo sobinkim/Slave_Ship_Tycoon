@@ -195,7 +195,7 @@ namespace SB.UI.Recruitment
             foreach (EscortGachaResult reward in rewards)
             {
                 Button card = ShipCardPresentation.Create(cardTemplate, resultGrid);
-                ShipCardPresentation.Bind(card, reward.InitialReward, "새 함선");
+                ShipCardPresentation.Bind(card, reward.InitialReward, string.Empty);
                 card.AddToClassList("recruitment-reward-card");
                 card.pickingMode = PickingMode.Ignore;
                 card.focusable = false;
@@ -286,7 +286,7 @@ namespace SB.UI.Recruitment
                 yield return RevealPromotionFailure(card);
                 yield break;
             }
-            ShipCardPresentation.Bind(card.Root, promoted, "새 함선");
+            ShipCardPresentation.Bind(card.Root, promoted, string.Empty);
             elapsed = 0f;
             while (elapsed < promotionBurstSeconds)
             {
@@ -345,7 +345,7 @@ namespace SB.UI.Recruitment
             for (int i = 0; i < rewardCards.Count; i++)
             {
                 EscortGachaResult reward = rewards[i];
-                ShipCardPresentation.Bind(rewardCards[i].Root, reward.Reward, "새 함선");
+                ShipCardPresentation.Bind(rewardCards[i].Root, reward.Reward, string.Empty);
             }
             ResetRevealEffects();
             isBusy = false;

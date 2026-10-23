@@ -27,6 +27,7 @@ namespace SB.Scripts.Bounty
         private readonly List<ShipLightingState> shipLighting = new List<ShipLightingState>();
         private readonly List<RendererMaterialState> waterContacts = new List<RendererMaterialState>();
         private readonly List<ShipWakeEffect> waterWakes = new List<ShipWakeEffect>();
+        private readonly List<ShipBuoyancy> sailingBuoyancies = new List<ShipBuoyancy>();
         private MaterialPropertyBlock lightingProperties;
         private MaterialPropertyBlock seaProperties;
         private float seaDistance;
@@ -72,6 +73,11 @@ namespace SB.Scripts.Bounty
                 wake.SetWaterPresentation(nightWakeMaterial, wakeTint, wakeMotionMultiplier);
                 waterWakes.Add(wake);
             }
+            foreach (ShipBuoyancy buoyancy in ship.GetComponentsInChildren<ShipBuoyancy>(true))
+            {
+                buoyancy.SetSailingSpeedOverride(currentFlowSpeed);
+                sailingBuoyancies.Add(buoyancy);
+            }
         }
 
         public void RestoreShipLighting()
@@ -91,6 +97,9 @@ namespace SB.Scripts.Bounty
             foreach (ShipWakeEffect wake in waterWakes)
                 if (wake != null) wake.ResetWaterPresentation();
             waterWakes.Clear();
+            foreach (ShipBuoyancy buoyancy in sailingBuoyancies)
+                if (buoyancy != null) buoyancy.ClearSailingSpeedOverride();
+            sailingBuoyancies.Clear();
         }
 
         public void Enter()
@@ -118,6 +127,8 @@ namespace SB.Scripts.Bounty
                 seaFlowSpeed * Time.deltaTime / Mathf.Max(.01f, accelerationSeconds));
             seaDistance += currentFlowSpeed * Time.deltaTime;
             SetSeaDistance(seaDistance);
+            foreach (ShipBuoyancy buoyancy in sailingBuoyancies)
+                if (buoyancy != null) buoyancy.SetSailingSpeedOverride(currentFlowSpeed);
         }
 
         private void SetSeaDistance(float distance)

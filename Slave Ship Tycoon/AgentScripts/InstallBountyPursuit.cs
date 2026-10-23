@@ -46,7 +46,6 @@ public static class InstallBountyPursuit
         var flow = SceneObject<GameFlowManager>();
         var battle = SceneObject<BattleManager>();
         var currencies = SceneObject<CurrencyManager>();
-        var panel = SceneObject<PannelManager>();
         var hud = SceneObject<SB.UI.InGame.InGameToolkitScreen>();
         var existing = scene.GetRootGameObjects().FirstOrDefault(x => x.name == "BountyPursuit");
         if (existing != null) throw new InvalidOperationException("BountyPursuit already exists; update its explicit references instead of duplicating it.");
@@ -54,10 +53,9 @@ public static class InstallBountyPursuit
         Undo.RegisterCreatedObjectUndo(root, "Install bounty pursuit");
         var env = root.AddComponent<BountyNightEnvironment>();
         var controller = root.AddComponent<BountyPursuitController>();
-        var camera = Camera.main;
-        var pose = new GameObject("PursuitCameraPose").transform;
-        pose.SetParent(root.transform, false);
-        pose.position = new Vector3(.86f, -.65f, -10f);
+        var origin = new GameObject("NightBackgroundOrigin").transform;
+        origin.SetParent(root.transform, false);
+        origin.position = new Vector3(.86f, -.65f, -10f);
         var originalBackground = scene.GetRootGameObjects().SelectMany(x => x.GetComponentsInChildren<Transform>(true))
             .First(t => t.name == "BackgroundRoot").gameObject;
         var night = Object.Instantiate(originalBackground, root.transform);
@@ -88,13 +86,13 @@ public static class InstallBountyPursuit
                 var t = sprites.GetArrayElementAtIndex(i).objectReferenceValue as Transform;
                 if (t == null) continue;
                 var position = t.position;
-                position.x = pose.position.x + (i - 1) * width;
+                position.x = origin.position.x + (i - 1) * width;
                 t.position = position;
                 var renderer = t.GetComponent<SpriteRenderer>();
                 if (renderer == null) continue;
                 renderer.sharedMaterial = layer.name.Contains("Sea") ? sea : layer.name.Contains("Sky") ? sky : islands;
             }
-            Set(layer, "leftResetX", pose.position.x - width * 1.5f);
+            Set(layer, "leftResetX", origin.position.x - width * 1.5f);
             Set(layer, "scrollReference", null);
             Set(layer, "scrollSpeed", layer.name.Contains("Sea") ? 1.4f : layer.name.Contains("Sky") ? .12f : .3f);
         }
@@ -113,8 +111,6 @@ public static class InstallBountyPursuit
             renderer.color = new Color(.73f, .83f, .9f, .85f);
         }
         night.SetActive(false);
-        Set(env, "battleCamera", camera);
-        Set(env, "pursuitCameraPose", pose);
         Set(env, "farmingBackground", originalBackground);
         Set(env, "pursuitBackground", night);
         SetArray(env, "pursuitLayers", night.GetComponentsInChildren<ParallaxLayer>(true));
@@ -134,8 +130,6 @@ public static class InstallBountyPursuit
         Set(ui, "document", document);
         Set(ui, "entryDocument", hud.GetComponent<UIDocument>());
         Set(ui, "pursuit", controller);
-        Set(ui, "panelManager", panel);
-        Set(ui, "mainPiratePortrait", AssetDatabase.LoadAssetAtPath<Sprite>(Art + "MainPirate.png"));
         EditorUtility.SetDirty(controller);
         AssetDatabase.SaveAssets();
         EditorSceneManager.MarkSceneDirty(scene);
@@ -159,8 +153,6 @@ public static class InstallBountyPursuit
         Set(ui, "document", document);
         Set(ui, "entryDocument", hud.GetComponent<UIDocument>());
         Set(ui, "pursuit", SceneObject<BountyPursuitController>());
-        Set(ui, "panelManager", SceneObject<PannelManager>());
-        Set(ui, "mainPiratePortrait", AssetDatabase.LoadAssetAtPath<Sprite>(Art + "MainPirate.png"));
         var prefab = PrefabUtility.LoadPrefabContents(Folder + "/Prefabs/MainPirate.prefab");
         try
         {

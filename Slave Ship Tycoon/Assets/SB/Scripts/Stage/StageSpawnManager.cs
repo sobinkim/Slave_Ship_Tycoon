@@ -38,9 +38,18 @@ namespace SB.Scripts
         private Ship[] spawnedEscortShipsBySlot = Array.Empty<Ship>();
         private int spawnedPlayerFleetVersion = -1;
         private bool shouldResetPlayerFleetOnNextBattle;
+        private readonly List<Ship> departureShips = new List<Ship>();
 
         public PlayerFleetLoadout PlayerFleetLoadout => runtimePlayerFleetLoadout;
         public PlayerFleetUpgradeProvider PlayerFleetUpgradeProvider => playerFleetUpgradeProvider;
+
+        public void PlayTransportDeparture()
+        {
+            CollectPlayerShips(departureShips);
+            stageEncounterDirector?.PlayDeparturePreview(departureShips);
+        }
+
+        public void CancelTransportDeparture() => stageEncounterDirector?.CancelDeparturePreview();
 
         public void CollectPlayerShips(List<Ship> ships)
         {
@@ -121,7 +130,16 @@ namespace SB.Scripts
             }
 
             Bus<StageBattleInitializedEvent>.Raise(new StageBattleInitializedEvent(battleSpawnData));
-            stageEncounterDirector.PlayEncounterSequence(battleSpawnData);
+            chapterDatabase.TryGetChapter(chapter, out ChapterContainer currentChapter);
+            bool isTransport = currentChapter != null && currentChapter.RouteType == ChapterRouteType.Sell;
+            bool showBossEntrance = isBossBattle || (isTransport && currentChapter.IsFinalStage(stage));
+            Enemy focus = null;
+            if (showBossEntrance && chapterDatabase.TryGetBattleLayout(chapter, stage, isBossBattle, out StageEnemyLayout layout))
+                foreach (Enemy enemy in spawnedEnemies)
+                    if (enemy.myShipData.SpawnSlot.y * StageEnemyLayout.ColumnCount + enemy.myShipData.SpawnSlot.x == layout.EncounterFocusSlot)
+                        focus = enemy;
+            stageEncounterDirector.PlayEncounterSequence(battleSpawnData,
+                showBossEntrance ? EncounterPresentation.Boss : isTransport ? EncounterPresentation.Transport : EncounterPresentation.Standard, focus);
         }
 
         public void SpawnStageEnemies(int chapter, int stage)
@@ -149,7 +167,7 @@ namespace SB.Scripts
             foreach (Ship ship in escorts) ship.GetCompo<SB.Core.EntityHealth>()?.ResetHealth();
             battle = new BattleSpawnData(mainShip, escorts, new StageEnemySpawnData(enemies));
             Bus<StageBattleInitializedEvent>.Raise(new StageBattleInitializedEvent(battle));
-            stageEncounterDirector.PlayEncounterSequence(battle);
+            stageEncounterDirector.PlayEncounterSequence(battle, EncounterPresentation.Pursuit);
             return true;
         }
 

@@ -116,8 +116,10 @@ namespace SB.Scripts
             bool isMoving = !owner.IsDead && shipAnimator.isActiveAndEnabled &&
                 (sailingOverride || shipAnimator.GetBool(moveHash));
             float fadeSeconds = isMoving ? fadeInSeconds : fadeOutSeconds;
-            visibility = Mathf.MoveTowards(visibility, isMoving ? 1f : 0f,
-                Time.deltaTime / Mathf.Max(0.01f, fadeSeconds));
+            visibility = !owner.IsDead && owner.HasSailingPresentationOverride && !sailingOverride
+                ? owner.SailingPresentationStrength
+                : Mathf.MoveTowards(visibility, isMoving ? 1f : 0f,
+                    Time.deltaTime / Mathf.Max(0.01f, fadeSeconds));
             rippleTime += Time.deltaTime * rippleCyclesPerSecond * Mathf.PI * 2f;
             foamTime += Time.deltaTime * waterMotionMultiplier;
             float ripple = Mathf.Sin(rippleTime);

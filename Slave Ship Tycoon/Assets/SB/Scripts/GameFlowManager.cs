@@ -18,6 +18,8 @@ namespace SB.Scripts
         private CargoManager cargoManager;
         [SerializeField, Tooltip("운송 화물의 시세 연출을 마친 뒤 다음 전투를 시작합니다.")]
         private SB.UI.InGame.InGameToolkitScreen transportPresentation;
+        [SerializeField, Tooltip("시세 연출 중 다음 항로의 출항 연출을 진행할 함대 스포너입니다.")]
+        private StageSpawnManager stageSpawner;
         private int currentChapter = 1;
         private int currentStage = 1;
         private StageRoomType currentStageType;
@@ -357,6 +359,7 @@ namespace SB.Scripts
 
         private void CancelQueuedStageRestart()
         {
+            stageSpawner?.CancelTransportDeparture();
             if (_stageRestartRoutine == null)
                 return;
 
@@ -367,6 +370,9 @@ namespace SB.Scripts
         private IEnumerator StartStageNextFrame()
         {
             yield return null;
+            if (currentRouteType == ChapterRouteType.Sell && transportPresentation != null &&
+                transportPresentation.isActiveAndEnabled && transportPresentation.IsTransportBonusPlaying)
+                stageSpawner?.PlayTransportDeparture();
             while (Time.timeScale == 0f ||
                 (currentRouteType == ChapterRouteType.Sell && transportPresentation != null &&
                 transportPresentation.isActiveAndEnabled && transportPresentation.IsTransportBonusPlaying))
